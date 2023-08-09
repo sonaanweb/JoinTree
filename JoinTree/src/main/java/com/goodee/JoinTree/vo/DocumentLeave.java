@@ -7,6 +7,7 @@ public class DocumentLeave {
 	private int docLeaveNo;
 	private int docCategoryNo;
 	private int empNo;
+	private String docLeaveTitle;
 	private String docLeaveCategoryName;
 	private String docCategoryName;
 	private String docLeaveStartDate;

@@ -7,6 +7,7 @@ public class DocumentAbsence {
 	private int docAbsenceNo;
 	private int docCategoryNo;
 	private int empNo;
+	private String docAbsenceTitle;
 	private String docAbsenceStartDate;
 	private String docAbsenceEndDate;
 	private String docAbsenceReason;

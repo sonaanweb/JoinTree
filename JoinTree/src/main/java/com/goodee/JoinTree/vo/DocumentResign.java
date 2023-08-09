@@ -7,6 +7,7 @@ public class DocumentResign {
 	private int docResignNo;
 	private int docCategoryNo;
 	private int empNo;
+	private String docResignTitle;
 	private String docResignDate;
 	private String docResignReason;
 	private String writer;

@@ -7,6 +7,7 @@ public class DocumentReshuffle {
 	private int docReshuffleNo;
 	private int docCategoryNo;
 	private int empNo;
+	private String docReshuffleTitle;
 	private String docReshuffleDate;
 	private String docReshuffleTask;
 	private String docReshuffleResult;

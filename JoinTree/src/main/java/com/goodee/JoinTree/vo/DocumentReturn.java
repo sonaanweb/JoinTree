@@ -7,6 +7,7 @@ public class DocumentReturn {
 	private int docReturnNo;
 	private int docCategoryNo;
 	private int empNo;
+	private String docAbsenceTitle;
 	private String docAbsenceStartDate;
 	private String docAbsenceEndDate;
 	private String docAbsenceReason;
