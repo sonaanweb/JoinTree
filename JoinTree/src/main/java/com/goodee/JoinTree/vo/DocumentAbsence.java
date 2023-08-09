@@ -14,7 +14,7 @@ public class DocumentAbsence {
 	private String docLeaveTel;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docAbsenceStatus;
 	private String createdate;
 	private String updatedate;
