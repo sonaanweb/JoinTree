@@ -16,7 +16,7 @@ public class DocumentReshuffle {
 	private String docReshuffleReason;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docReshuffleStatus;
 	private String createdate;
 	private String updatedate;

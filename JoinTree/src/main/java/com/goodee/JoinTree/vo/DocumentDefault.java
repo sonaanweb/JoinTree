@@ -11,7 +11,7 @@ public class DocumentDefault {
 	private String docDefaultContent;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docDefaultStatus;
 	private String createdate;
 	private String updatedate;

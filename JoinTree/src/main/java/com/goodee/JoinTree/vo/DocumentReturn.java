@@ -14,7 +14,7 @@ public class DocumentReturn {
 	private String docReturnDate;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docReturnStatus;
 	private String createdate;
 	private String updatedate;

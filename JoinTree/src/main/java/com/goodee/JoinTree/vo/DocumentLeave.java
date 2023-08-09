@@ -17,7 +17,7 @@ public class DocumentLeave {
 	private String docLeaveTel;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docLeaveStatus;
 	private String createdate;
 	private String updatedate;

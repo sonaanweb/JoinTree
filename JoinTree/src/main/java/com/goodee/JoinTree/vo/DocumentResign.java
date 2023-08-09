@@ -12,7 +12,7 @@ public class DocumentResign {
 	private String docResignReason;
 	private String writer;
 	private String reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docResignStatus;
 	private String createdate;
 	private String updatedate;
