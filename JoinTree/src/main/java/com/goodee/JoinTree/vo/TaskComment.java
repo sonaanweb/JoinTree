@@ -3,15 +3,13 @@ package com.goodee.JoinTree.vo;
 import lombok.Data;
 
 @Data
-public class Board {
+public class TaskComment {
 
-	private int boardNo;
+	private int taskCommentNo;
+	private int taskNo;
 	private int empNo;
-	private int boardCategory;
-	private String boardTitle;
-	private String boardContent;
-	private String boardPinned;
-	private int boardCount;
+	private int commentGroupNo;
+	private String taskCommentContent;
 	private String createdate;
 	private String updatedate;
 	private int createId;

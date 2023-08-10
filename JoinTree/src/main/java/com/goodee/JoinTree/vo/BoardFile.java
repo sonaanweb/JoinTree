@@ -3,15 +3,13 @@ package com.goodee.JoinTree.vo;
 import lombok.Data;
 
 @Data
-public class Board {
+public class BoardFile {
 
 	private int boardNo;
-	private int empNo;
-	private int boardCategory;
-	private String boardTitle;
-	private String boardContent;
-	private String boardPinned;
-	private int boardCount;
+	private String boardOriginFilename;
+	private String boardSaveFilename;
+	private String boardFiletype;
+	private long boardFilesize;
 	private String createdate;
 	private String updatedate;
 	private int createId;
