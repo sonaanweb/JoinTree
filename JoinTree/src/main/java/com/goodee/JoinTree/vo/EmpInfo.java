@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class EmpInfo {
 	private int empNo;
-	private int position;
-	private int dept;
+	private String position;
+	private String dept;
 	private String empName;
 	private String empAddress;
 	private String empPhone;

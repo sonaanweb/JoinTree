@@ -6,7 +6,7 @@ import lombok.Data;
 public class Schedule {
 	private int scheduleNo;
 	private int empNo;
-	private int scheduleCategory;
+	private String scheduleCategory;
 	private String scheduleTitle;
 	private String scheduleContent;
 	private String scheduleLocation;

@@ -8,7 +8,7 @@ public class Comment {
 	private int commentNo;
 	private int boardNo;
 	private int empNo;
-	private int  commentGroupNo;
+	private int commentGroupNo;
 	private String commentContent;
 	private String createdate;
 	private String updatedate;

@@ -7,7 +7,7 @@ public class DocumentDefault {
 
 	private int docNo;
 	private int empMo;
-	private int doc;
+	private String doc;
 	private String docDefaultTitle;
 	private String docDefaultContent;
 	private String writer;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AccountList {
 	private int empNo;
-	private int empActive;
+	private String active;
 	private String empPw;
 	private String creatdate;
 	private String updatedate;

@@ -6,7 +6,7 @@ import lombok.Data;
 public class CompanyCar {
 
 	private int carNo;
-	private int equipCategory;
+	private String equipCategory;
 	private String carType;
 	private int carCapacity;
 	private String carStatus;

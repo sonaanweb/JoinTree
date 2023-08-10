@@ -11,6 +11,7 @@ public class LeaveRecode {
 	private String leaveEndDate;
 	private double leavePeriodDate;
 	private String leaveReason;
+	private String leaveType;
 	private String createdate;
 	private String updatedate;
 	private int createId;

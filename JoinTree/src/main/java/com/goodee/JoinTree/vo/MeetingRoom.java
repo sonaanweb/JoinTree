@@ -6,12 +6,12 @@ import lombok.Data;
 public class MeetingRoom {
 
 	private int roomNo;
-	private int equipCategory;
+	private String equipCategory;
 	private String roomName;
 	private int roomCapacity;
 	private String roomStatus;
 	private String createdate;
 	private String updatedate;
-	private String createId;
-	private String updateId;
+	private int createId;
+	private int updateId;
 }

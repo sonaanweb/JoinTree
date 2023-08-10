@@ -6,10 +6,11 @@ import lombok.Data;
 public class Commute {
 	private int commuteNo;
 	private int empNo;
-	private int commute;
+	private String commute;
 	private String empOnOffDate;
 	private String empOnTime;
 	private String empOffTime;
+	private String empStatus;
 	private String createdate;
 	private String updatedate;
 	private int createId;

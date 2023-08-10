@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class ReshuffleHistory {
 	private int empNo;
-	private int departNo;
-	private int position;
+	private String departNo;
+	private String position;
 	private int departBeforeNo;
 	private int positionBeforeLevel;
 	private String creatdate;
