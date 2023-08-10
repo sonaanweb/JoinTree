@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.DocumentMapper">
+	<insert id="insertDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		INSERT INTO document_default(
+			doc_category_no,
+			emp_no,
+			doc_default_title,
+			doc_default_content,
+			writer,
+			reference,
+			receiver_team,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)
+		VALUES(
+			#{docCategoryNo},
+			#{empNo},
+			#{docDefaultTitle},
+			#{docDefaultContent},
+			#{writer},
+			#{reference},
+			#{receiverTeam},
+			now(),
+			now(),
+			#{createId},
+			#{updateId}
+		)
+	</insert>
+	
+	<select id="selectDocDefaultOne"
+		parameterType="int"
+		resultType="com.goodee.JoinTree.vo.DocumentDefault">
+		SELECT 
+			doc_default_no docDefaultNo,
+			doc_category_no docCategoryNo,
+			emp_no empNo,
+			doc_default_title docDefaultTitle,
+			doc_default_content docDefaultContent,
+			writer,
+			reference,
+			doc_default_status docDefaultStatus,
+			receiver_team receiverTeam,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM
+			document_default
+			
+		WHERE doc_default_no = #{docDefaultNo}
+		
+	</select>
+
+</mapper>
