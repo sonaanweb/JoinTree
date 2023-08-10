@@ -3,13 +3,13 @@ package com.goodee.JoinTree.vo;
 import lombok.Data;
 
 @Data
-public class CommunityComment {
+public class Comment {
 
 	private int commentNo;
 	private int boardNo;
 	private int empNo;
 	private int  commentGroupNo;
-	private String commCommentContent;
+	private String commentContent;
 	private String createdate;
 	private String updatedate;
 	private int createId;
