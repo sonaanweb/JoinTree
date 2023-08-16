@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.EmpInfoMapper">
+	<!-- 비밀번호 변경  -->
+	<update id="modifyPw" parameterType="com.goodee.JoinTree.vo.AccountList">
+		UPDATE account_list 
+		SET emp_pw = PASSWORD(#{newPw}), 
+			updatedate = NOW(), 
+			update_id = #{empNo}
+		WHERE emp_no = #{empNo} AND emp_pw = PASSWORD(#{empPw})
+	</update>
+	
+	<!-- 나의 정보 조회 -->
+	
+	<!-- 비밀번호 체크 -->
+	<select id="selectCheckPw" >
+		SELECT COUNT(*)
+		FROM account_list
+		WHERE emp_no = #{empNo} AND emp_pw = PASSWORD(#{empPw})
+	</select>
+	
+	<!-- 나의 정보 수정 -->
+
+
+
+
+</mapper>
