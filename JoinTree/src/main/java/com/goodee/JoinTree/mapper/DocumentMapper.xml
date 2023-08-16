@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.DocumentMapper">
-	<insert id="insertDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+<!-- 	<insert id="insertDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
 		INSERT INTO document_default(
 			doc_category_no,
 			emp_no,
@@ -52,6 +52,6 @@
 			
 		WHERE doc_default_no = #{docDefaultNo}
 		
-	</select>
+	</select> -->
 
 </mapper>
