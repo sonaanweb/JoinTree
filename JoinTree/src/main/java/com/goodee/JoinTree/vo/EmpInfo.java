@@ -6,7 +6,9 @@ import lombok.Data;
 public class EmpInfo {
 	private int empNo;
 	private String position;
+	private String positionName; // 코드 join용
 	private String dept;
+	private String deptName; // 코드 join용
 	private String empName;
 	private String empAddress;
 	private String empPhone;

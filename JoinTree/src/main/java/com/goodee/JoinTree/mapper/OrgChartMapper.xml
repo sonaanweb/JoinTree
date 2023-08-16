@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.OrgChartMapper">
+
+	<!-- 공통코드 중 부서코드 출력 -->
+	<select id="selectOrgDept"
+			resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code, 
+			code_name codeName
+		FROM common_code
+		WHERE 
+			up_code = 'D02'; <!-- 공통코드에서 부서코드가 D02 -->
+	</select>
+	
+	<!-- 코드테이블과 부서테이블을 조인하여 부서에 맞는 직원정보 출력 -->
+	<select id="selectOrgEmp"
+			parameterType="com.goodee.JoinTree.vo.EmpInfo"
+			resultType="com.goodee.JoinTree.vo.EmpInfo">
+		SELECT 
+		    dept.code dept, 
+		    dept.code_name deptName,
+		    e.position position,
+		    position.code_name positionName,
+		    e.emp_name empName,
+		    e.emp_no empNo
+		FROM common_code dept
+		CROSS JOIN 
+			common_code position
+		INNER JOIN 
+			emp_info e ON (dept.code = e.dept AND position.code = e.position)
+		WHERE 
+			dept.code = #{dept};
+	</select>
+</mapper>

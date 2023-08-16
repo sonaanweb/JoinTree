@@ -14,7 +14,6 @@ import com.goodee.JoinTree.vo.CommonCode;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Controller
 public class CodeController {
 	@Autowired // 의존성 주입
@@ -23,7 +22,7 @@ public class CodeController {
 	String yellow = "\u001B[33m";
 	String reset = "\u001B[0m";
 	
-	// 상위 코드 목록을 하위코드 목록으로 전달하는 컨트롤러
+	// 상위 코드 목록을 전달하는 컨트롤러
 	@GetMapping("code/codeList")
 	public String upCodeInfo(Model model
 						) {

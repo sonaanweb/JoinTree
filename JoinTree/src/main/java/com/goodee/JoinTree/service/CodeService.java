@@ -15,12 +15,13 @@ public class CodeService {
 	
 	// 공통코드 중 상위코드 출력
 	public List<CommonCode> selectUpCode() {
+		// db에서 가져온 상위 코드 조회
         List<CommonCode> upCodeList = codeMapper.selectUpCode();
 
 		return upCodeList;
 	}
 	
-	// 상위코드에 해당하는 하위코드만 리스트 출력 -> 리스트로
+	// 상위코드에 해당하는 하위코드만 리스트 출력
 	public List<CommonCode> selectChildCode(String upCode) {
 		// db에서 가져온 하위 코드 조회
         List<CommonCode> childCodeList = codeMapper.selectChildCode(upCode);
@@ -39,5 +40,3 @@ public class CodeService {
 		return codeMapper.modifyCommonCode(commenCode);
 	}
 }
-
-// 전체코드 추가

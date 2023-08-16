@@ -85,7 +85,7 @@
 					console.log("Response Data:", data);
 			
 					const childCodes = $(".childCodes");
-					childCodes.empty();
+					childCodes.empty(); // 초기화
 					
 					data.forEach(function(childCode) {
 						const row = $("<tr>"); // 열 변경
