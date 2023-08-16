@@ -9,7 +9,7 @@ public class CompanyCar {
 	private String equipCategory;
 	private String carType;
 	private int carCapacity;
-	private String carStatus;
+	private String ynStatus;
 	private String carNoPlate;
 	private String createdate;
 	private String updatedate;
