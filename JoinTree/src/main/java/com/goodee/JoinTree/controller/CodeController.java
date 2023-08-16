@@ -2,10 +2,12 @@ package com.goodee.JoinTree.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,6 +16,7 @@ import com.goodee.JoinTree.vo.CommonCode;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class CodeController {
 	@Autowired // 의존성 주입
@@ -48,4 +51,26 @@ public class CodeController {
 	    // @ResponseBody로 인해 호출 시 하위 코드 목록을 JSON 형태로 응답
         return childCodeList;
     }
+	
+	// 공통코드 추가
+	@PostMapping("code/addCommonCode")
+	@ResponseBody
+	public String addCommonCode(CommonCode commonCode, 
+			@RequestParam(name = "upCode") String upCode, 
+			@RequestParam(name = "code") String code,
+			@RequestParam(name = "codeName") String codeName ) {
+
+		// log.debug(yellow + "upCode:" + upCode + reset); 
+		// log.debug(yellow + "code:" + code + reset); 
+		// log.debug(yellow + "codeName:" + codeName + reset); 
+		int row = codeService.addCommonCode(commonCode);
+		
+		if(row < 1) {// 실패
+			return "실패";
+		}
+		
+		return "success";
+	}
+
+
 }

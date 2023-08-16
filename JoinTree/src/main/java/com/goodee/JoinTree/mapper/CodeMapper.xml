@@ -58,7 +58,7 @@
 			#{code},
 			#{upCode},
 			#{codeName},
-			#{status},
+			'Y',
 			NOW(),
 			NOW(),
 			#{createId},

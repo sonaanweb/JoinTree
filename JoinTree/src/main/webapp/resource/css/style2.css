@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.wrapper{
+	display: flex;
+}
+.up-code {
+	border: 1px solid #999;
+	width: 500px;
+}
+.child-code {
+	border: 1px solid #999;
+	width: 500px;
+}
+.child-code th, .child-code tr td {
+	width: 30%;
+}
+.add-code {
+	margin-top: 20px;
+	border: 1px solid #999;
+	width: 1000px;
+}
+.add-code button {
+	text-align: right;
+}
+.uppercase-text {
+	text-transform: uppercase;
+}

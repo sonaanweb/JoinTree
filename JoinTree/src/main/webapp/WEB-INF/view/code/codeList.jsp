@@ -68,6 +68,8 @@
     }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="/resource/css/style.css">
+<link rel="stylesheet" href="/resource/css/style2.css">
 <script>
 	$(document).ready(function() {
 		// upCodeLink 클릭시 비동기로 childCodeList에서 값을 가져와서 보여줌 
@@ -108,54 +110,134 @@
 				},
 				// 에러 발생시
 				error: function(jqXHR, textStatus, errorThrown) {
-				console.log("Error:", textStatus, errorThrown);
+					console.log("Error:", textStatus, errorThrown);
 				}
 			});
 		}); // upCodeLink 끝
+		
+		// 코드 추가 클릭시 비동기로 값을 저장
+	    $("#addCodeLink").on("click", function() {
+	    	let upCode = $("#upCode").val().toUpperCase().trim();
+			let code = $("#code").val().toUpperCase().trim();
+			let codeName = $("#codeName").val().trim();
+			
+			// 빈값 검사
+			if (!upCode || !code || !codeName) {
+			    alert("상위코드, 코드, 코드명을 모두 입력해주세요.");
+			} else {
+				$.ajax({
+					url: '/code/addCommonCode',
+					type: "POST",
+					data: {
+						upCode : upCode,
+						code : code,
+						codeName : codeName
+					},
+					success: function(response) {
+						console.log("response:", response);
+						// 추가된 값 확인
+						if (response === "success") {
+							// 성공적인 응답 처리
+							alert("공통 코드가 추가되었습니다.");
+							// 새로운 코드 행 추가
+							const newRow = $("<tr>");
+							newRow.append($("<td>").text(code));
+							newRow.append($("<td>").text(codeName));
+							newRow.append($("<td>").html( // 토글
+								'<label class="switch">' +
+								'<input type="checkbox" class="toggleSwitch">' +
+								'<span class="slider round"></span>' +
+								'</label>'
+							))
+							// 추가된 행을 테이블에 삽입
+							$("#childCodes").append(newRow);
+						} else {
+							// 실패한 응답 처리
+							alert("요청이 실패하였습니다.");
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				         
+				});
+			}
+		});
 	});
 </script>
 <body>
 <div>	
-	<div style="float: left;">
-		<table border="1">
-			<thead>
-				<tr>
-					<th>상위코드</th>
-					<th>상위코드명</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="up" items="${upCodeList}">
+	<div class="wrapper">
+		<div class="up-code">
+			<table class="table table-bordered">
+				<thead>
 					<tr>
-						<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
-						<td>
-							<a href="#" class="upCodeLink" data-code="${up.code}">${up.code}</a>
-						</td>
-						<td>
-							<a href="#" class="upCodeLink" data-code="${up.code}">${up.codeName}</a>
-						</td>
+						<th>상위코드</th>
+						<th>상위코드명</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<c:forEach var="up" items="${upCodeList}">
+						<tr>
+							<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
+							<td>
+								<a href="#" class="upCodeLink" data-code="${up.code}">${up.code}</a>
+							</td>
+							<td>
+								<a href="#" class="upCodeLink" data-code="${up.code}">${up.codeName}</a>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="child-code">
+			<table id="childCodes" class="table table-bordered">
+				<thead>
+					<tr>
+						<th>코드</th>
+						<th>코드명</th>
+						<th>사용여부</th>
+					</tr>
+				</thead>
+				
+				<tbody class="childCodes">
+					<!-- 하위 코드들이 여기에 동적으로 추가 됨 -->
+				</tbody>
+			</table>
+		</div>
 	</div>
 	
-	<div style="float: left; margin-left:10px;">
-		<table border="1" id="childCodes">
-			<thead>
-				<tr>
-					<th>코드</th>
-					<th>코드명</th>
-					<!-- 사용여부는 y/n으로 변경예정 -->
-					<th>사용여부</th>
-				</tr>
-			</thead>
-			
-			<tbody class="childCodes">
-				<!-- 하위 코드들이 여기에 동적으로 추가 됨 -->
-			</tbody>
-		</table>
+	<div class="add-code">
+		<h1>코드 추가하기</h1>
+		
+			<button type="button" id="addCodeLink" class="btn btn-success left">추가</button>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>상위코드</th>
+						<th>코드</th>
+						<th>코드명</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td> 
+							<input type="text" id="upCode" class="uppercase-text">
+						</td>
+						<td> 
+							<input type="text" id="code" class="uppercase-text">
+						</td>
+						<td> 
+							<input type="text" id="codeName">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		 <div id="responseMessage"></div>
 	</div>
+	
 </div>
 </body>
 </html>
