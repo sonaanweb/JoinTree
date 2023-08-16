@@ -49,7 +49,7 @@
 						// AJAX 요청을 통해 인증 여부 확인
 						$.ajax({
 							type: "POST", 
-							url: "/resetPw",
+							url: "/login/resetPw",
 							data: {
 								empNo: empNo, 
 								juminNo: juminNo
@@ -100,7 +100,7 @@
 			<a href="/home">홈</a>
 		</div>
 		
-		<form action="/resetPw" method="post">
+		<form action="/login/resetPw" method="post">
 			<div>
 				<label for="empNo">사번</label>
 				<input type="number" name="empNo" id="empNo">
@@ -114,7 +114,7 @@
 			<button type="button" id="authBtn">인증</button>
 		</form>
 				
-		<form action="/resetPw/reset" method="post" id="reset">
+		<form action="/login/resetPw/reset" method="post" id="reset">
 			<input type="hidden" name="empNo" id="empNoHidden" value="">
 			<div id="resetPwSection" style="display: none;">
 				<div>

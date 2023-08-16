@@ -21,7 +21,7 @@
 		<h1>home</h1>
 		<c:if test="${loginAccount.empNo eq null}">
 			<div>
-				<a href="/login">로그인</a>
+				<a href="/login/login">로그인</a>
 			</div>
 		</c:if>
 		<c:if test="${loginAccount.empNo ne null}">

@@ -32,7 +32,7 @@ public class LoginController {
 	private LoginService loginService;
 	
 	// 로그인 페이지로 이동
-	@GetMapping("/login")
+	@GetMapping("/login/login")
 	public String login(HttpServletRequest request) {
 		// loginId(쿠키)가 있는지 확인하여 그 값을 request 속성에 저장
 		Cookie[] cookies = request.getCookies();
@@ -46,11 +46,11 @@ public class LoginController {
 			}
 		}
 		
-		return "login";
+		return "/login/login";
 	}
 	
 	// 로그인 액션
-	@PostMapping("/login")
+	@PostMapping("/login/login")
 
 	public String login(HttpSession session, HttpServletRequest request,
 				  HttpServletResponse response,
@@ -101,7 +101,7 @@ public class LoginController {
 				
 		} else {
 			msg = URLEncoder.encode("아이디 또는 비밀번호를 확인해주세요.", "UTF-8");
-			return "redirect:/login?msg="+ msg; // 로그인 실패 시 로그인 페이지로 이동
+			return "redirect:/login/login?msg="+ msg; // 로그인 실패 시 로그인 페이지로 이동
 		}
 		
 		// model.addAttribute(empPw);
@@ -113,19 +113,19 @@ public class LoginController {
 		session.invalidate();
 		
 		String msg = URLEncoder.encode("로그아웃 되었습니다.", "UTF-8");
-		return "redirect:/login?msg=" + msg; // login.jsp로 이동
+		return "redirect:/login/login?msg=" + msg; // login.jsp로 이동
 		// return "redirect:/login";
 	}
 	
 	// 비밀번호 분실 - 재설정 페이지로 이동
-	@GetMapping("/resetPw")
+	@GetMapping("/login/resetPw")
 	public String resetPw() {
 		
-		return "resetPw";
+		return "login/resetPw";
 	}
 	
 	// 사번, 주민번호 체크
-	@PostMapping("/resetPw")
+	@PostMapping("/login/resetPw")
 	@ResponseBody // 메소드 반환값을 HTTP응답 본문으로 사용
 	public String checkEmpNoJumin(@RequestParam("empNo") int empNo, @RequestParam("juminNo") String juminNo) throws UnsupportedEncodingException { 
 		int row = loginService.selectEmpNoJumin(empNo, juminNo);
@@ -139,18 +139,18 @@ public class LoginController {
 	}
 	
 	// 사번, 주민번호 체크 후 비밀번호 변경
-    @PostMapping("/resetPw/reset")
+    @PostMapping("/login/resetPw/reset")
     public String resetPassword(@RequestParam("empNo") int empNo, @RequestParam("newPw") String newPw) throws UnsupportedEncodingException {
     	int row = loginService.modifyForgetPw(empNo, newPw);
     	log.debug(CYAN + row + " <-- row(LoginController-modifyForgetPw)" + RESET);
     	
     	if (row == 1) {
     		msg = URLEncoder.encode("비밀번호가 변경되었습니다. 다시 로그인 후 이용 가능합니다.", "UTF-8");
-    		return "redirect:/login?msg=" + msg;
+    		return "redirect:/login/login?msg=" + msg;
     		
     	} else {
     		msg = URLEncoder.encode("비밀번호 변경 실패. 관리자에게 문의해주세요.", "UTF-8");
-    		return "redirect:/resetPw?msg=" + msg;
+    		return "redirect:/login/resetPw?msg=" + msg;
     	}
     }
     

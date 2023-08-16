@@ -29,7 +29,7 @@
 			<a href="/home">홈</a>
 		</div>
 		
-	    <form action="/login" method="post">
+	    <form action="/login/login" method="post">
 	        <label for="empNo">Employee Number:</label>
 	        <input type="number" id="empNo" name="empNo" value="${loginId}" required><br>
 	        
@@ -42,7 +42,7 @@
 	        <button type="submit">Login</button>
    		</form>
 		<div>
-			<a href="/resetPw">비밀번호를 잊으셨나요?</a>
+			<a href="/login/resetPw">비밀번호를 잊으셨나요?</a>
 		</div>
 	</body>
 </html>
