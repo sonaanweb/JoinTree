@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.EmpManageMapper">
+	
+	<!-- 부서 코드 조회 -->
+	<select id="selectDeptCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'D02'
+	</select>
+	
+	<!-- 부서별 사원 수 조회 -->
+	<select id="selectDeptEmpCnt"
+			parameterType="java.util.Map" resultType="int">
+		SELECT 
+			COUNT(dept) 
+		FROM emp_info 
+		WHERE dept = #{getDept} AND YEAR(emp_hire_date) = #{currentYear}
+	</select>
+	
+	<!-- 직급 코드 조회 -->
+	<select id="selectPositionCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'P01'
+	</select>
+	
+	<!-- 사원 상태 코드 조회 -->
+	<select id="selectActiveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'A01'
+	</select>
+	
+	<!-- 사원 등록 -->
+	<insert id="addEmpInfo" parameterType="java.util.Map">
+		INSERT INTO emp_info (
+			emp_no, 
+			position, 
+			dept, 
+			emp_name, 
+			emp_address, 
+			emp_phone, 
+			emp_jumin_no, 
+			emp_extension_no, 
+			emp_hire_date, 
+			emp_last_date, 
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+			)
+		VALUES (
+			#{empNo}, 
+			#{position}, 
+			#{dept}, 
+			#{empName}, 
+			#{empAddress}, 
+			#{empPhone}, 
+			#{empJuminNo}, 
+			#{empExtensionNo}, 
+			#{empHireDate}, 
+			NULL, 
+			NOW(), 
+			NOW(), 
+			#{createId}, 
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 계정 등록 -->
+	<insert id="addAccount" parameterType="com.goodee.JoinTree.vo.AccountList">
+		INSERT INTO account_list (
+			emp_no, 
+			active, 
+			emp_pw, 
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+			)
+		VALUES (
+			#{empNo}, 
+			'A0101', 
+			PASSWORD('1234'), 
+			NOW(), 
+			NOW(), 
+			#{createId}, 
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 인사이동 이력 등록 -->
+	<insert id="addReshuffleHistory" parameterType="com.goodee.JoinTree.vo.ReshuffleHistory">
+		INSERT INTO reshuffle_history (
+			emp_no,
+			depart_no, 
+			position,
+			depart_before_no,
+			position_before_level,
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+			)
+		VALUES (
+			#{empNo}, 
+			#{departNo}, 
+			#{position},
+			NULL,
+			NULL,
+			NOW(), 
+			NOW(), 
+			#{createId}, 
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 사원 목록 조회 -->
+	<select id="searchEmpList"
+			parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			e.emp_no empNo, 
+			e.emp_name empName, 
+			e.emp_hire_date empHireDate,
+			dc.code_name dept,
+			pc.code_name position,
+			ac.code_name active
+		FROM emp_info e LEFT OUTER JOIN account_list a
+		ON e.emp_no = a.emp_no
+		INNER JOIN common_code ac
+		ON a.active = ac.code
+		INNER JOIN common_code dc
+		ON e.dept = dc.code
+		INNER JOIN common_code pc
+		ON e.position = pc.code
+		WHERE
+			1=1
+			<if test="empNo != null">
+		    	AND e.emp_no = #{empNo}
+		    </if>
+		    <if test="empName != null">
+		    	AND e.emp_name = #{empName}
+		    </if>
+		    <if test="startEmpHireDate != null and endEmpHireDate != null">
+		    	AND e.emp_hire_date BETWEEN #{startEmpHireDate} AND #{endEmpHireDate}
+		    </if>
+		    <if test="dept != null">
+		     	AND dc.code_name = #{dept}
+		    </if>
+		    <if test="position != null">
+		    	AND pc.code_name = #{position}
+		    </if>
+		    <if test="active != null">
+		    	AND ac.code_name = #{active}
+		    </if>
+		    <if test="empNo == null and empName == null and startEmpHireDate == null and endEmpHireDate == null and dept == null and position == null and active == null">
+	        	AND 1=1
+	        </if>   
+		ORDER BY e.emp_no
+	</select>
+	
+</mapper>
