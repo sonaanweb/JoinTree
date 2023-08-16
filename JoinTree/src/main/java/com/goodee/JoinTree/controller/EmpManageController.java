@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodee.JoinTree.service.EmpManageService;
+import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 
 import lombok.extern.slf4j.Slf4j;
@@ -80,8 +81,8 @@ public class EmpManageController {
 								 HttpSession session,
 								 @RequestParam Map<String, Object> empInfo) {
 		
-		/* 세션에서 사번 가져오기
-		Object loginAccount = (Object)session.getAttribute("loginAccount");
+		//세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
 		
 		// 기본값 설정
 		int createId = 0; 
@@ -92,10 +93,6 @@ public class EmpManageController {
 			createId = loginAccount.getEmpNo();
 			updateId = loginAccount.getEmpNo();
 		}
-		*/
-		
-		int createId = 20230001;
-		int updateId = 20230001;
 		
 		// createId, updateId를 empInfo에 추가
 		empInfo.put("createId", createId);

@@ -17,7 +17,7 @@
 		SELECT 
 			COUNT(dept) 
 		FROM emp_info 
-		WHERE dept = #{getDept} AND YEAR(emp_hire_date) = #{currentYear}
+		WHERE dept = #{dept} AND YEAR(emp_hire_date) = #{currentYear}
 	</select>
 	
 	<!-- 직급 코드 조회 -->

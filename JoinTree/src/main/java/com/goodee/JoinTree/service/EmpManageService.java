@@ -51,8 +51,9 @@ public class EmpManageService {
 		// 사번 생성(현재 연도 + 부서코드 + 부서별 입사순서) 총 8자리
 		// 현재 연도
 		Calendar calendar = Calendar.getInstance(); // Calendar API
-		int currentYear = calendar.get(Calendar.YEAR) * 10000; // 현재 연도. 자리 수를 맞추기 위해 * 10000
-		System.out.println(currentYear + "<-- EmpManageService currentYear");
+		int currentYear = calendar.get(Calendar.YEAR); // 현재 연도
+		int empNoYear = currentYear * 10000; // 자리 수를 맞추기 위해 * 10000
+		System.out.println(empNoYear + "<-- EmpManageService empNoYear");
 		
 		// 부서코드 번호
 		String dept = (String)empInfo.get("dept"); // empInfo에 저장된 dept
@@ -66,6 +67,7 @@ public class EmpManageService {
 		currentYearDeptCnt.put("dept", dept); // 부서코드
 		
 		int deptEmpCnt = empManageMapper.selectDeptEmpCnt(currentYearDeptCnt) + 1; // 부서별 인원수 + 1
+		System.out.println(deptEmpCnt + "<-- EmpManageService deptEmpCnt");
 		
 		// deptEmpCnt 포멧한 문자열 담을 변수 초기화
 		String formatDeptEmpCnt = null;
@@ -78,7 +80,7 @@ public class EmpManageService {
 		}
 		
 		// 최종 사번
-		int empNo = currentYear + deptNo + Integer.parseInt(formatDeptEmpCnt);
+		int empNo = empNoYear + deptNo + Integer.parseInt(formatDeptEmpCnt);
 		System.out.println(empNo + "<-- EmpManageService empNo");
 		
 		// 주소
