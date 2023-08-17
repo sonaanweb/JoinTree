@@ -5,12 +5,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/resource/jquery.treeview.css" />
-<link rel="stylesheet" href="/resource/screen.css" />
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
-<script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
+<!-- jQuery 라이브러리 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- 부트스트랩 CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+  
+  <!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- jQuery 트리뷰 및 쿠키 라이브러리 -->
+  <script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
+  <script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
+  
+  <!-- 기타 스타일 시트 -->
+  <link rel="stylesheet" href="/resource/jquery.treeview.css">
+  <link rel="stylesheet" href="/resource/screen.css">
 <script>
 	$(document).ready(function() {
 		// 트리뷰 초기 설정
@@ -32,32 +42,121 @@
 						const empNo = emp.empNo;
 						const empDept = emp.dept;
 						const empPosition = emp.positionName;
-						const li = '<li><a href="#" data-no="'+ empNo +'" class="file code">' + empName + "(" + empNo +  ", " + empPosition + ")" + '</a></li>';
+						const li = 
+							'<li><a href="#" data-no="'+ empNo +'" data-name="'+ empName +'" data-position="'+ empPosition +'" class="file code">' + empName + " " + empPosition + "(" + empNo + ")" + '</a></li>';
 						deptLi.find("ul").append(li); // ul을 찾아서 li를 추가
 					});
 				}
 			});
 		});
-		// 사원 클릭 시 이벤트 추가
-		// 온클릭으로 클래스가 .file.code를 가진 a태그를 찾아 처리
-	    $("body").on("click", ".file.code", function() {
-	        const empNo = $(this).data("no"); // data-no 속성 값을 가져옴
-	        // 클릭한 사원의 empNo를 이용하여 원하는 동작을 수행
-	        alert("선택한 사원번호: " + empNo);
+	 	// modalBtn 클릭 시 모달 띄우기
+		$("#modalBtn").on("click", function() {
+			$("#myModal").modal("show");
+		});
+	      
+	   	// 클릭한 li 값에 따라 처리
+		const selectedEmps = []; // 선택한 부서 번호를 저장하는 배열
+		
+		$("body").on("click", ".file.code", function() {
+	        const selectedEmpNo = $(this).data("no");
+	        const selectedEmpName = $(this).data("name");
+	        const selectedEmpPosition = $(this).data("position");
+	        
+	        if (!selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")") && selectedEmps.length < 2) {
+	            selectedEmps.push(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")"); // 한 번에 추가
+
+	          // 선택한 번호 저장
+	          updateSelectEmp(); // selectEmp 업데이트
+	          // 모달 닫기
+	          $("#myModal").modal("hide");
+	        } else if (selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")")) {
+	          alert("이미 선택한 번호입니다.");
+	        } else {
+	          alert("최대 두 명까지만 선택 가능합니다.");
+	        }
+		
+	      });
+	     //삭제
+		$("#deleteSelectedBtn").on("click", function() {
+	        const checkedCheckboxes = $(".empCheckbox:checked");
+	        checkedCheckboxes.each(function() {
+	          const selectedEmp = $(this).data("no");
+	          const index = selectedEmps.indexOf(selectedEmp);
+	          if (index !== -1) {
+	            selectedEmps.splice(index, 1); // 선택한 번호 삭제
+	          }
+	        });
+	        updateSelectEmp(); // selectEmp 업데이트
+	      });
+		
+		// 선택한 사원을 위로 이동하는 기능 추가
+	    $("#moveUpBtn").on("click", function() {
+	      const selectedIndex = selectedEmps.length - 1;
+	      if (selectedIndex > 0) {
+	        const temp = selectedEmps[selectedIndex];
+	        selectedEmps[selectedIndex] = selectedEmps[selectedIndex - 1];
+	        selectedEmps[selectedIndex - 1] = temp;
+	        updateSelectEmp();
+	      }
 	    });
-	});
+
+	    // 선택한 사원을 아래로 이동하는 기능 추가
+	    $("#moveDownBtn").on("click", function() {
+	      const selectedIndex = selectedEmps.length - 1;
+	      if (selectedIndex >= 0 && selectedIndex < selectedEmps.length - 1) {
+	        const temp = selectedEmps[selectedIndex];
+	        selectedEmps[selectedIndex] = selectedEmps[selectedIndex + 1];
+	        selectedEmps[selectedIndex + 1] = temp;
+	        updateSelectEmp();
+	      }
+	    });
+	      
+	      // selectEmp 업데이트 함수
+	      function updateSelectEmp() {
+	    	  const selectEmp = $("#selectEmp");
+	    	  selectEmp.empty();
+	    	  for (const emp of selectedEmps) {
+	    	    const selectedEmpItem =  '<div class="selectedEmp">'+ emp +'<input type="checkbox" class="empCheckbox" data-no="'+ emp +'"></div>';
+	          selectEmp.append(selectedEmpItem);
+	        }
+	      }
+	    
+	}); // 제일 처음
 </script>
 </head>
 <body>
-    <ul id="codeList">
-        <c:forEach var="dept" items="${deptList}">
-            <li>
-                <span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
-                <ul>
-                    <!-- 여기에 데이터를 추가하는 부분 -->
-                </ul>
-            </li>
-        </c:forEach>
-    </ul>
+	<div>
+	<button type="button" id="modalBtn">결재선</button>	
+	</div>
+	
+	<div class="modal" id="myModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">결재선</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+				<div class="modal-body">
+					<ul id="codeList">
+						<c:forEach var="dept" items="${deptList}">
+							<li>
+								<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
+								<ul>
+								<!-- 여기에 데이터를 추가하는 부분 -->
+								</ul>
+							</li>
+						</c:forEach>
+					</ul>	
+				</div>
+			</div>
+		</div>
+	</div>
+    
+	<div id="selectEmp" style="border: 1px solid #999; width:200px; height: 200px;"><!-- 여기에 데이터를 추가하는 부분 --></div>
+	<button type="button" id="deleteSelectedBtn">삭제</button>
+	<button type="button" id="moveUpBtn">위로</button>
+	<button type="button" id="moveDownBtn">아래로</button>
+    	
 </body>
 </html>
