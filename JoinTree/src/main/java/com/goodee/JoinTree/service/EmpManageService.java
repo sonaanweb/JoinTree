@@ -53,21 +53,21 @@ public class EmpManageService {
 		Calendar calendar = Calendar.getInstance(); // Calendar API
 		int currentYear = calendar.get(Calendar.YEAR); // 현재 연도
 		int empNoYear = currentYear * 10000; // 자리 수를 맞추기 위해 * 10000
-		System.out.println(empNoYear + "<-- EmpManageService empNoYear");
+		log.debug(empNoYear+"<-- EmpManageService empNoYear");
 		
 		// 부서코드 번호
 		String dept = (String)empInfo.get("dept"); // empInfo에 저장된 dept
 		System.out.println(dept+"<-- dept");
 		int deptNo = Integer.parseInt(dept.substring(dept.length() -1)) * 100; // 코드의 마지막 번호 추출. 자리 수를 맞추기 위해 * 100
-		System.out.println(deptNo + "<-- EmpManageService deptNo");
+		log.debug(deptNo+"<-- EmpManageService deptNo");
 		
 		// 현재 연도 부서별 입사순서
 		Map<String, Object> currentYearDeptCnt = new HashMap<String, Object>(); // 요청 매개값 Map 저장
 		currentYearDeptCnt.put("currentYear", currentYear); // 현재 연도
 		currentYearDeptCnt.put("dept", dept); // 부서코드
 		
-		int deptEmpCnt = empManageMapper.selectDeptEmpCnt(currentYearDeptCnt) + 1; // 부서별 인원수 + 1
-		System.out.println(deptEmpCnt + "<-- EmpManageService deptEmpCnt");
+		int deptEmpCnt = empManageMapper.selectDeptEmpCnt(currentYearDeptCnt) + 1; // 부서별 인원수 + 1System.out.println(deptEmpCnt + "<-- EmpManageService deptEmpCnt");
+		log.debug(deptEmpCnt+"<-- EmpManageService deptEmpCnt");
 		
 		// deptEmpCnt 포멧한 문자열 담을 변수 초기화
 		String formatDeptEmpCnt = null;
@@ -81,7 +81,7 @@ public class EmpManageService {
 		
 		// 최종 사번
 		int empNo = empNoYear + deptNo + Integer.parseInt(formatDeptEmpCnt);
-		System.out.println(empNo + "<-- EmpManageService empNo");
+		log.debug(empNo+"<-- EmpManageService empNo");
 		
 		// 주소
 		String zip = (String)empInfo.get("zip");
@@ -90,6 +90,7 @@ public class EmpManageService {
 		String add3 = (String)empInfo.get("add3");
 		// 주소 합쳐서 저장
 		String empAddress = String.join("-", zip, add1, add2, add3);
+		log.debug(empAddress+"<-- EmpManageService empAddress");
 		
 		// 연락처
 		String empPhone1 = (String)empInfo.get("empPhone1");
@@ -97,12 +98,14 @@ public class EmpManageService {
 		String empPhone3 = (String)empInfo.get("empPhone3");
 		// 연락처 합쳐서 저장
 		String empPhone = String.join("-", empPhone1, empPhone2, empPhone3);
+		log.debug(empPhone+"<-- EmpManageService empPhone");
 		
 		// 주민번호
 		String empJuminNo1 = (String)empInfo.get("empJuminNo1");
 		String empJuminNo2 = (String)empInfo.get("empJuminNo2");
 		// 주민번호 합쳐서 저장
 		String empJuminNo = String.join("-", empJuminNo1, empJuminNo2);
+		log.debug(empJuminNo+"<-- EmpManageService empJuminNo");
 		
 		// empInfo 값 저장(사번, 주소, 연락처, 주민번호)
 		empInfo.put("empNo", empNo);
@@ -113,6 +116,7 @@ public class EmpManageService {
 		
 		// 사원정보 등록
 		int addEmpInfoRow = empManageMapper.addEmpInfo(empInfo);
+		log.debug(addEmpInfoRow+"<-- EmpManageService addEmpInfoRow");
 		
 		// vo AccountList 값 저장
 		AccountList accountList = new AccountList();
@@ -130,32 +134,32 @@ public class EmpManageService {
 		
 		// addEmpInfoRow 값의 따른 분기
 		if(addEmpInfoRow == 0) {
-			System.out.println(addEmpInfoRow + "<-- EmpManageService addEmpInfoRow 회원 등록 실패");
+			log.debug(addEmpInfoRow+"<-- EmpManageService addEmpInfoRow 회원 등록 실패");
 		} else if(addEmpInfoRow == 1) {
 			System.out.println(addEmpInfoRow + "<-- EmpManageService addEmpInfoRow 회원 등록 성공");
 			
 			// 계정 등록
 			int addAccountRow = empManageMapper.addAccount(accountList);
 			if(addAccountRow == 0) {
-				System.out.println(addAccountRow + "<-- EmpManageService addAccountRow 계정 등록 실패");
+				log.debug(addAccountRow+"<-- EmpManageService addAccountRow 계정 등록 실패");
 			} else if(addAccountRow == 1) {
-				System.out.println(addAccountRow + "<-- EmpManageService addAccountRow 계정 등록 성공");
+				log.debug(addAccountRow+"<-- EmpManageService addAccountRow 계정 등록 성공");
 			} else {
-				System.out.println(addAccountRow + "<-- EmpManageService error addAccountRow");
+				log.debug(addAccountRow+"<-- EmpManageService error addAccountRow");
 			}
 			
 			// 인사이동 이력 등록
 			int addreshuffleHistoryRow = empManageMapper.addReshuffleHistory(reshuffleHistory);
 			if(addreshuffleHistoryRow == 0) {
-				System.out.println(addreshuffleHistoryRow + "<-- EmpManageService addreshuffleHistoryRow 인사이동이력 등록 실패");
+				log.debug(addreshuffleHistoryRow+"<-- EmpManageService addreshuffleHistoryRow 인사이동이력 등록 실패");
 			} else if(addreshuffleHistoryRow == 1) {
-				System.out.println(addreshuffleHistoryRow + "<-- EmpManageService addreshuffleHistoryRow 인사이동이력 등록 성공");
+				log.debug(addreshuffleHistoryRow+"<-- EmpManageService addreshuffleHistoryRow 인사이동이력 등록 성공");
 			} else {
-				System.out.println(addreshuffleHistoryRow + "<-- EmpManageService error addreshuffleHistoryRow");
+				log.debug(addreshuffleHistoryRow+"<-- EmpManageService error addreshuffleHistoryRow");
 			}
 			
 		} else {
-			System.out.println(addEmpInfoRow + "<-- EmpManageService error addEmpInfoRow");
+			log.debug(addEmpInfoRow+"<-- EmpManageService error addEmpInfoRow");
 		}
 		
 		return addEmpInfoRow;
@@ -164,8 +168,16 @@ public class EmpManageService {
 	// 사원 목록 조회
 	public List<Map<String, Object>> searchEmpList(Map<String, Object> searchEmpList) {
 		
+		// 사번(empNo) 형 변환
+		String empNoStr = String.valueOf(searchEmpList.get("empNo"));
+		int empNo = 0;
+		if(empNoStr != null && !empNoStr.isEmpty()) {
+			empNo = Integer.parseInt(empNoStr);
+		}
+		searchEmpList.put("empNo", empNo);
+		
 		List<Map<String, Object>> searchEmpListResult = empManageMapper.searchEmpList(searchEmpList);
-		System.out.println(searchEmpListResult + "<-- EmpManageService searchEmpListResult");
+		log.debug(searchEmpListResult+"<-- EmpManageService searchEmpListResult");
 		return searchEmpListResult;
 	}
 

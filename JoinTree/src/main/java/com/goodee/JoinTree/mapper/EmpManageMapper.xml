@@ -142,28 +142,33 @@
 		ON e.position = pc.code
 		WHERE
 			1=1
-			<if test="empNo != null">
+			<if test="empNo !=null and empNo != 0">
 		    	AND e.emp_no = #{empNo}
 		    </if>
-		    <if test="empName != null">
+		    <if test="empName != null and empName != ''">
 		    	AND e.emp_name = #{empName}
 		    </if>
-		    <if test="startEmpHireDate != null and endEmpHireDate != null">
+		    <if test="startEmpHireDate != null and endEmpHireDate != null and startEmpHireDate != '' and endEmpHireDate != ''">
 		    	AND e.emp_hire_date BETWEEN #{startEmpHireDate} AND #{endEmpHireDate}
 		    </if>
-		    <if test="dept != null">
-		     	AND dc.code_name = #{dept}
+		    <if test="dept != null and dept != ''">
+		     	AND dc.code = #{dept}
 		    </if>
-		    <if test="position != null">
-		    	AND pc.code_name = #{position}
+		    <if test="position != null and position != ''">
+		    	AND pc.code = #{position}
 		    </if>
-		    <if test="active != null">
-		    	AND ac.code_name = #{active}
+		    <if test="active !=null and active != ''">
+		    	AND ac.code = #{active}
 		    </if>
-		    <if test="empNo == null and empName == null and startEmpHireDate == null and endEmpHireDate == null and dept == null and position == null and active == null">
+		    <if test="(empNo != null and empNo != 0)
+              		   and (empName != null and empName != '')
+			           and (startEmpHireDate != null and endEmpHireDate != ''and startEmpHireDate != '' and endEmpHireDate != '')
+			           and (dept != null and dept != '')
+			           and (position != null and position != '')
+			           and (active != null and active != '')">
 	        	AND 1=1
 	        </if>   
-		ORDER BY e.emp_no
+		ORDER BY e.dept DESC, e.emp_no ASC
 	</select>
 	
 </mapper>

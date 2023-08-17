@@ -70,10 +70,10 @@
 			</div>
 			<div>
 				<div>상태</div>
-				<select id="searchActiveCategory" name="active">
-					<option id="searchActive" value=null>선택하세요</option>
+				<select id="searchActive" name="active">
+					<option value="">선택하세요</option>
 					<c:forEach var="a" items="${activeCodeList}">
-						<option id="searchActive" value="${a.code}">${a.codeName}</option>
+						<option value="${a.code}">${a.codeName}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -84,19 +84,19 @@
 			</div>
 			<div>
 				<div>부서</div>
-				<select id="searchDeptCategory" name="dept">
-					<option id="searchDept" value=null>선택하세요</option>
+				<select id="searchDept" name="dept">
+					<option value="">선택하세요</option>
 					<c:forEach var="d" items="${deptCodeList}">
-						<option id="searchDept" value="${d.code}">${d.codeName}</option>
+						<option value="${d.code}">${d.codeName}</option>
 					</c:forEach>
 				</select>
 			</div>
 			<div>
 				<div>직급</div>
-				<select id="searchPositionCategory" name="position">
-					<option id="searchPosition" value=null>선택하세요</option>
+				<select id="searchPosition" name="position">
+					<option value="">선택하세요</option>
 					<c:forEach var="p" items="${positionCodeList}">
-						<option id="searchPosition" value="${p.code}">${p.codeName}</option>
+						<option value="${p.code}">${p.codeName}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -122,6 +122,10 @@
 		
 		</tbody>
 	</table>
+	
+	
+	<!-- 페이지 네비게이션 -->
+	
 	
 	<!-- 사원등록 모달창 -->
 	<div id="addEmpModal" class="modal">
@@ -272,13 +276,13 @@
 	 $(document).ready(function(){
 	     // 초기 검색 조건 설정
 	     let searchEmpList = {
-	         empNo: null,
-	         empName: null,
-	         active: null,
-	         startEmpHireDate: null,
-	         endEmpHireDate: null,
-	         dept: null,
-	         position: null
+	         empNo: '',
+	         empName: '',
+	         active: '',
+	         startEmpHireDate: '',
+	         endEmpHireDate: '',
+	         dept: '',
+	         position: ''
 	     };
 	 
      // 초기 검색 실행
@@ -314,8 +318,7 @@
 					searchEmpList: JSON.stringify(searchEmpList)
 				},
 				success: function(data){
-					 alert(JSON.stringify(data));
-					// 데이터를 테이블에 적용하는 로직
+					// 데이터를 테이블에 적용하는 함수
 			        updateTableWithData(data);
 				},
 				error: function(){
