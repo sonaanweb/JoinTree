@@ -9,7 +9,7 @@ public class MeetingRoom {
 	private String equipCategory;
 	private String roomName;
 	private int roomCapacity;
-	private String ynStatus;
+	private String roomStatus;
 	private String createdate;
 	private String updatedate;
 	private int createId;

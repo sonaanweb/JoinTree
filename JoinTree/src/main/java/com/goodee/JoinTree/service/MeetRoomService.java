@@ -18,4 +18,14 @@ public class MeetRoomService {
 	public List<MeetingRoom> getMeetRoomList(Map<String, Object> map) {
         return meetRoomMapper.selectMeetRoomAll(map);
     }
+	
+	// 회의실 추가 메서드
+	public int addMeetRoom(MeetingRoom meetingRoom) {
+        return meetRoomMapper.insertMeetRoom(meetingRoom);
+    }
+	
+	// 회의실 수정 메서드
+	public void modifyMeetRoom(MeetingRoom meetingRoom) { //메서드 이름이랑 db mapper이름 혼동 주의
+	    meetRoomMapper.updateMeetRoom(meetingRoom);
+	}
 }
