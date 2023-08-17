@@ -51,10 +51,38 @@
 	                alert(msg);
 	            }
 	            
-	            // 모달 창 닫기
+	            let isTimerRunning = false;
+	            let interval;
+	            
+	            // 모달창 띄우기
+		        function showModal() {
+		            // TODO: 세션 연장 알림 및 버튼 표시 로직 구현
+		             $('#extensionModal').css('display', 'block'); // 세션 연장 알림 모달 표시
+		            // 5분 남았습니다. 로그인 시간을 연장하시겠습니까?
+		            // 예 / 아니오 버튼 모달 필요
+		        }
+	            
+	            // 모달창 닫기
 	            $('.close').click(function () {
 	               $('#extensionModal').css('display', 'none'); // 세션 연장 알림 모달도 닫음
 	            });
+	            
+	            function resetTimer(newDuration) {
+	            	clearInterval(interval); // 기존 타이머 중지
+	                startTimer(newDuration); // 새로운 타이머 시작
+	            	
+	/* 	                interval = setInterval(function () {
+	                    // 타이머 로직 (기존 코드 그대로 유지)
+	                    
+	                    if (--timer === 5 * 60) { // 5분(300초) 남았을 때
+	                        showModal(); // 세션 연장 알림, 연장 모달 출력
+	                    } else if (timer < 0) {
+	                        clearInterval(interval);
+	                        showSessionExpirationAlert(); // 세션 만료 알림
+	                        window.location.href = "/myJoinTree/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
+	                    }
+	                }, 1000); */
+	            }
 	            
 	            // 세션 연장 알림 모달 "예" 버튼 클릭 시
 	            $('#extensionYesBtn').click(function () {
@@ -67,31 +95,40 @@
 					        clearInterval(interval); // 이전 타이머 중지
 					        
 					        // 세션 연장 요청 보내기
-					        extendSessionOnServer();
+					        extendSessionAndResetTimer(30 * 60); // 분 * 초 // 세션 연장 및 타이머 재시작
 					   }
 	               
 	               // 연장 처리 후 다시 타이머 시작
 	               startTimer(sessionDuration);
 	            });
 	            
-	            function extendSessionOnServer() {
+	            // 세션 연장 및 새로운 타이머 시작 함수
+	            function extendSessionAndResetTimer(newDuration) {
 	                $.ajax({
-	                    url: '/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
+	                    url: '/myJoinTree/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
 	                    type: 'POST', 
 	                    success: function(response) {
-	                        if (response.success) {
+	                        if (response === "success") {
 	                            // 세션 연장 처리가 성공적으로 완료되면 다시 타이머 시작
-	                            startTimer(response.newSessionDuration);
+	                            // startTimer(response.newSessionDuration);
+	                            
+	                            // 세션 연장 처리가 성공적으로 완료되면 타이머 및 세션 연장
+	                            // resetTimer(newDuration);
+	                    
+	                            startTimer(newDuration);
 	                        } else {
 	                            // 세션 연장 처리가 실패한 경우 처리
 	                            // 예를 들어, 오류 메시지 출력 등의 작업 수행
 	                            alert("세션이 연장되지 않았습니다.");
+	                            isTimerRunning = false; // 실패한 경우 다시 실행 가능하도록 플래그 변경
 	                        }
 	                    },
 	                    error: function(xhr, status, error) {
 	                        // AJAX 요청 실패 시 처리
 	                        console.error(error);
 	                        alert("서버 오류 발생");
+	                        
+	                        // clearInterval(interval); // 에러 발생 시 타이머 중지
 	                    }
 	                });
 	            }
@@ -100,16 +137,16 @@
 	            $('#extensionNoBtn').click(function () {
 	               $('#extensionModal').css('display', 'none'); // 세션 연장 알림 모달 닫은 후 별도 처리 없음
 	            });
-	            
-	            function showModal() {
-	               $('#extensionModal').css('display', 'block'); // 세션 연장 알림 모달 표시
-	            }
 	        	           
 		        const timerElement = $("#timer");
-		    	
+		    
+		        const sessionDuration = 30 * 60; // 분 * 초 -> 세션 기본값인 30분 설정
+		        // 초기 타이머 시작
+		        startTimer(sessionDuration);
+		        
 		        function startTimer(duration) {
 		            let timer = duration, minutes, seconds;
-		            const interval = setInterval(function () {
+		            interval = setInterval(function () {
 		                minutes = parseInt(timer / 60, 10);
 		                seconds = parseInt(timer % 60, 10);
 		
@@ -128,17 +165,7 @@
 			            }
 			        }, 1000);
 			    }
-		
-		        const sessionDuration = 30 * 60; // 분 * 초 -> 세션 기본값인 30분 설정
-		        startTimer(sessionDuration); 
-		        
-		        function showModal() {
-		            // TODO: 세션 연장 알림 및 버튼 표시 로직 구현
-		             $('#extensionModal').css('display', 'block'); // 세션 연장 알림 모달 표시
-		            // 5분 남았습니다. 로그인 시간을 연장하시겠습니까?
-		            // 예 / 아니오 버튼 모달 필요
-		        }
-
+				
 		        function showSessionExpirationAlert() {
 		            // TODO: 세션 만료 알림 및 세션 연장 버튼 표시 로직 구현
 		        	alert("세션이 만료되었습니다. 다시 로그인해주세요.");
@@ -171,6 +198,56 @@
 			현재 사용자 : ${empName}
 			<%-- 현재 로그인 아이디: ${loginAccount.empNo} --%>
 		</div>
+		
+		<table border="1">
+			<tr>
+				<td>사원이미지</td>
+				<td>
+					${empInfo.empSaveImgName}
+					<%-- <img src="이미지파일경로/${empInfo.empSaveImgName}" alt="Employee Image"> --%>
+				</td>
+			</tr>
+			<tr>
+				<td>사번</td>
+				<td>${empInfo.empNo}</td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td>${empInfo.empName}</td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td>${empInfo.empAddress}</td>
+			</tr>
+			<tr>
+				<td>주민등록번호</td>
+				<td>${empInfo.empJuminNo}</td>
+			</tr>
+			<tr>
+				<td>연락처</td>
+				<td>${empInfo.empPhone}</td>
+			</tr>
+			<tr>
+				<td>내선번호</td>
+				<td>${empInfo.empExtensionNo}</td>
+			</tr>
+			<tr>
+				<td>부서</td>
+				<td>${empInfo.dept}</td>
+			</tr>
+			<tr>
+				<td>직급</td>
+				<td>${empInfo.position}</td>
+			</tr>
+			<tr>
+				<td>입사일</td>
+				<td>${empInfo.empHireDate}</td>
+			</tr>
+			<tr>
+				<td>정보수정일</td>
+				<td>${empInfo.updatedate}</td>
+			</tr>
+		</table>
 		
 		<div>
 			<a href="/empInfo/checkPw">정보 수정</a>

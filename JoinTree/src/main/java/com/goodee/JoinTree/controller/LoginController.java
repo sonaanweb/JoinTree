@@ -157,11 +157,18 @@ public class LoginController {
 	@PostMapping("/extendSession")
 	@ResponseBody // 메소드 반환값을 HTTP응답 본문으로 사용
 	public String extendSession(HttpSession session) {
-		// 현재 세션의 만료 시간을 가져와 연장할 만큼 추가
-	    int currentMaxInactiveInterval = session.getMaxInactiveInterval();
-	    int extendedMaxInactiveInterval = currentMaxInactiveInterval + 1800; // 30분 (초 단위)
-	    session.setMaxInactiveInterval(extendedMaxInactiveInterval);
-		
-		return "success";
+	    try {
+	    	// 현재 세션의 만료 시간을 가져와 연장할 만큼 추가
+		    int currentMaxInactiveInterval = session.getMaxInactiveInterval();
+		    int extendedMaxInactiveInterval = currentMaxInactiveInterval + 1800; // 30분 (초 단위)
+		    session.setMaxInactiveInterval(extendedMaxInactiveInterval);
+		    log.debug(CYAN + "세션 연장 성공(LoginController)" + RESET);
+		    
+		    return "success";
+	    } catch (Exception e) {
+	    	log.debug(CYAN + "세션 연장 실패(LoginController)" + RESET);
+	    	
+	        return "error"; // 실패 시 오류 메시지 반환
+	    }
 	}
 }
