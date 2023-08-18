@@ -56,30 +56,43 @@ public class EmpManageController {
 	// 검색별 사원 리스트 조회
 	@GetMapping("/empManage/searchEmpList")
 	@ResponseBody
-	public List<Map<String, Object>> searchEmpList(@RequestParam(name = "searchEmpList") String searchEmpList) {
+	public Map<String, Object> searchEmpList(@RequestParam(name = "searchEmpList") String searchEmpList,
+	 									     @RequestParam(name = "paging") String paging) {
 		
-		// JSON 형식의 검색 조건을 Map으로 반환
 		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> searchEmpListMap = null;
-		try {
-			searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
-			log.debug(searchEmpListMap+"<-- EmpManageController searchEmpListMap");
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		} 
+		Map<String, Object> searchEmpListResult = null;
 		
-		// 검색 결과
-		List<Map<String, Object>> searchEmpListResult = empManageService.searchEmpList(searchEmpListMap);
-		log.debug(searchEmpListResult+"<-- EmpManageController searchEmpListResult");
+		try {
+	        Map<String, Object> searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
+	        Map<String, Integer> pagingMap = objectMapper.readValue(paging, new TypeReference<Map<String, Integer>>(){});
+	        
+	        // 검색, 페이징 리스트
+	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, pagingMap);
+	        
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	        
+	    } 
 		
 		return searchEmpListResult;
 	}
 	
+	// 사원 상세정보 조회
+	@GetMapping("/empManage/selctEmpOne")
+	@ResponseBody
+	public Map<String, Object> selectEmpOne(@RequestParam(name="empNo") int empNo) {
+		
+		Map<String, Object> selectEmpOne = empManageService.selectEmpOne(empNo);
+		log.debug(selectEmpOne+"<-- EmpManageController selectEmpOne");
+		
+		return selectEmpOne;
+	}
+	
 	// 사원 계정, 정보, 인사이동 이력 등록
 	@PostMapping("/empManage/addEmp")
-	public String addAccountList(Model model,
-								 HttpSession session,
-								 @RequestParam Map<String, Object> empInfo) {
+	public String addEmpInfo(Model model,
+							 HttpSession session,
+							 @RequestParam Map<String, Object> empInfo) {
 		
 		//세션에서 사번 가져오기
 		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
@@ -112,6 +125,15 @@ public class EmpManageController {
 		
 		return "redirect:/empManage/selectEmpList";
 		
+	}
+	
+	// 사원 계정, 정보, 인사이동 이력 수정
+	@PostMapping("/empManage/modifyEmp")
+	public String modifyEmpInfo(Model model,
+								HttpSession session,
+								@RequestParam Map<String, Object> empInfo) {
+	
+		return "";
 	}
 	
 }

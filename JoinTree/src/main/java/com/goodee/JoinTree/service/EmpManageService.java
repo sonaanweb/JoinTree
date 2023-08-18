@@ -66,7 +66,7 @@ public class EmpManageService {
 		currentYearDeptCnt.put("currentYear", currentYear); // 현재 연도
 		currentYearDeptCnt.put("dept", dept); // 부서코드
 		
-		int deptEmpCnt = empManageMapper.selectDeptEmpCnt(currentYearDeptCnt) + 1; // 부서별 인원수 + 1System.out.println(deptEmpCnt + "<-- EmpManageService deptEmpCnt");
+		int deptEmpCnt = empManageMapper.selectDeptEmpCnt(currentYearDeptCnt) + 1; // 부서별 인원수 + 1
 		log.debug(deptEmpCnt+"<-- EmpManageService deptEmpCnt");
 		
 		// deptEmpCnt 포멧한 문자열 담을 변수 초기화
@@ -166,21 +166,72 @@ public class EmpManageService {
 	}
 	
 	// 사원 목록 조회
-	public List<Map<String, Object>> searchEmpList(Map<String, Object> searchEmpList) {
+	public Map<String, Object> searchEmpList(Map<String, Object> searchEmpListMap, Map<String, Integer> pagingMap) {
 		
 		// 사번(empNo) 형 변환
-		String empNoStr = String.valueOf(searchEmpList.get("empNo"));
+		String empNoStr = String.valueOf(searchEmpListMap.get("empNo"));
 		int empNo = 0;
 		if(empNoStr != null && !empNoStr.isEmpty()) {
 			empNo = Integer.parseInt(empNoStr);
 		}
-		searchEmpList.put("empNo", empNo);
 		
-		List<Map<String, Object>> searchEmpListResult = empManageMapper.searchEmpList(searchEmpList);
-		log.debug(searchEmpListResult+"<-- EmpManageService searchEmpListResult");
+		// 반환값1 (검색 조건 별 행의 수)
+		int searchEmpListCnt = empManageMapper.searchEmpListCnt(searchEmpListMap);
+		log.debug(searchEmpListCnt+"<-- EmpManageService searchEmpListCnt");
+		
+		// 페이징
+		int currentPage = (int) pagingMap.get("currentPage");
+		int rowPerPage = (int) pagingMap.get("rowPerPage");
+		
+		// 시작 행번호
+		int beginRow = (currentPage-1)*rowPerPage;
+		
+		// 마지막 페이지
+		int lastPage = searchEmpListCnt / rowPerPage;
+		if(searchEmpListCnt % rowPerPage !=0) {
+			lastPage +=1;
+		}
+		
+		// 페이지 블럭
+		int currentblock = 0; // 현제 페이지 블럭(currentPage / pageLength)
+		int pageLength = 10; // 현제 페이지 블럭의 들어갈 페이지 수
+		if(currentPage % pageLength == 0) {
+			currentblock = currentPage / pageLength;
+		} else {
+			currentblock = (currentPage / pageLength) +1;
+		}
+		
+		int startPage = (currentblock -1) * pageLength +1; // 블럭의 시작페이지
+		int endPage = startPage + pageLength -1; // 블럭의 마지막 페이지
+		if(endPage > lastPage) {
+			endPage = lastPage;
+		}
+		
+		// searchEmpList Map에 값 저장
+		searchEmpListMap.put("empNo", empNo);
+		searchEmpListMap.put("beginRow", beginRow);
+		searchEmpListMap.put("rowPerPage", rowPerPage);
+		
+		// 반환값2 (검색 조건 별 리스트)
+		List<Map<String, Object>> searchEmpListByPage = empManageMapper.searchEmpList(searchEmpListMap);
+		log.debug(searchEmpListByPage+"<-- EmpManageService searchEmpListByPage");
+		
+		HashMap<String, Object> searchEmpListResult = new HashMap<>();
+		searchEmpListResult.put("searchEmpListByPage", searchEmpListByPage);
+		searchEmpListResult.put("startPage", startPage);
+		searchEmpListResult.put("endPage", endPage);
+		searchEmpListResult.put("lastPage", lastPage);
+		searchEmpListResult.put("pageLength", pageLength);
+		
 		return searchEmpListResult;
 	}
+	
+	// 사원정보 상세조회
+	public Map<String, Object> selectEmpOne(int empNo) {
+		
+		Map<String, Object> selectEmpOne = empManageMapper.selectEmpOne(empNo);
+		log.debug(selectEmpOne+"<-- EmpManageService selectEmpOne");
+		return selectEmpOne;
+	}
 
-	
-	
 }

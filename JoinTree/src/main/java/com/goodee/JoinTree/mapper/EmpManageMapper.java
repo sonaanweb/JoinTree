@@ -33,6 +33,12 @@ public interface EmpManageMapper {
 	
 	// 검색별 사원 조회
 	List<Map<String, Object>> searchEmpList(Map<String, Object> searchEmpList);
+	
+	// 검색 조건별 행의 수
+	int searchEmpListCnt(Map<String, Object> searchEmpList);
+	
+	// 사원 상세정보 조회
+	Map<String, Object> selectEmpOne(int empNo);
 
 	
 }

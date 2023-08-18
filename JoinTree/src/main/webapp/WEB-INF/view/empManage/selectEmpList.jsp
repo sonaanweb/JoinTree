@@ -5,57 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>selectEmpList</title>
-<style>
-	/* 모달 */
-	.modal {
-		display: none;
-		position: fixed;
-		z-index: 1;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		background-color: rgba(0, 0, 0, 0.4);
-	}
-	
-	.modal-content {
-		background-color: #fefefe;
-		margin: 15% auto;
-		padding: 20px;
-		border: 1px solid #888;
-		width: 30%;
-	}
-	.modal-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	}
-	
-	.modal-header h4 {
-	    margin: 0;
-	}
-	
-	.close {
-	    font-size: 28px;
-	    font-weight: bold;
-	    cursor: pointer;
-	}
-	
-	/* 정렬 */	
-	.text-center{
-		display: flex;
-    	justify-content: center;
-	}
-</style>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-</script>
 <body>
 	<div>
-		<button type="button" id="addEmpModalBtn"> 사원등록</button>
+		<button type="button" id="addEmpModalBtn" data-bs-toggle="modal" data-bs-target="#addEmpModal"> 사원등록</button>
 	</div>
 	<!-- 검색별 조회 -->
 	<div>
@@ -125,95 +83,176 @@
 	
 	
 	<!-- 페이지 네비게이션 -->
+	<div id="pagination">
+		
+	</div>
 	
-	
-	<!-- 사원등록 모달창 -->
-	<div id="addEmpModal" class="modal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4>사원 등록</h4>
-				<span class="close">&times;</span>
-			</div>
-			<div class="modal-body">
-				<form id="addEmpForm" method="post">
-					<div>
-						<div>사원명</div>
-						<input type="text" id="empName" name="empName">
-					</div>
-					<div>
-						<div>주민번호</div>
-						<input type="text" id="empJuminNo1" name="empJuminNo1"> &#45; 
-						<input type="text" id="empJuminNo2" name="empJuminNo2">
-					</div>
-					<div>
-						<div>연락처</div>
-						<input type="text" id="empPhone1" name="empPhone1"> &#45; 
-						<input type="text" id="empPhone2" name="empPhone2"> &#45; 
-						<input type="text" id="empPhone3" name="empPhone3">
-					</div>
-					<div>
-						<div>주소</div>
+	<!-- 사원 등록 모달창 -->
+	<div class="modal" id="addEmpModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">사원 등록</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form id="addEmpForm" method="post">
 						<div>
-							<input type="text" name="zip" id="sample6_postcode" placeholder="우편번호">
+							<div>사원명</div>
+							<input type="text" id="empName" name="empName">
 						</div>
 						<div>
-							<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-primary">
+							<div>주민번호</div>
+							<input type="text" id="empJuminNo1" name="empJuminNo1"> &#45; 
+							<input type="text" id="empJuminNo2" name="empJuminNo2">
 						</div>
 						<div>
-							<input type="text" name="add1" id="sample6_address" placeholder="주소" class="form-control">
-							<input type="text" name="add2" id="sample6_detailAddress" placeholder="상세주소" class="form-control">
-							<input type="text" name="add3" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
+							<div>연락처</div>
+							<input type="text" id="empPhone1" name="empPhone1"> &#45; 
+							<input type="text" id="empPhone2" name="empPhone2"> &#45; 
+							<input type="text" id="empPhone3" name="empPhone3">
 						</div>
-					</div>
-					<div>
-						<div>부서</div>
-						<select id="deptCategory" name="dept">
-							<c:forEach var="d" items="${deptCodeList}">
-								<option id="dept" value="${d.code}">${d.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<div>직급</div>
-						<select id="positionCategory" name="position">
-							<c:forEach var="p" items="${positionCodeList}">
-								<option id="position" value="${p.code}">${p.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<div>내선번호</div>
-						<input type="text" id="empExtensionNo" name="empExtensionNo">
-					</div>
-					<div>
-						<div>입사일</div>
-						<input type="date" id="empHireDate" name="empHireDate">
-					</div>
-					<div class="text-center">
-						<button type="button" id="addEmpBtn">등록</button>
-					</div>
-				</form>
+						<div>
+							<div>주소</div>
+							<div>
+								<input type="text" name="zip" id="sample6_postcode" placeholder="우편번호">
+							</div>
+							<div>
+								<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-primary">
+							</div>
+							<div>
+								<input type="text" name="add1" id="sample6_address" placeholder="주소" class="form-control">
+								<input type="text" name="add2" id="sample6_detailAddress" placeholder="상세주소" class="form-control">
+								<input type="text" name="add3" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
+							</div>
+						</div>
+						<div>
+							<div>부서</div>
+							<select id="deptCategory" name="dept">
+								<c:forEach var="d" items="${deptCodeList}">
+									<option id="dept" value="${d.code}">${d.codeName}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div>
+							<div>직급</div>
+							<select id="positionCategory" name="position">
+								<c:forEach var="p" items="${positionCodeList}">
+									<option id="position" value="${p.code}">${p.codeName}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div>
+							<div>내선번호</div>
+							<input type="text" id="empExtensionNo" name="empExtensionNo">
+						</div>
+						<div>
+							<div>입사일</div>
+							<input type="date" id="empHireDate" name="empHireDate">
+						</div>
+						<div class="text-center">
+							<button type="button" id="addEmpBtn">등록</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
+	
+	<!-- 사원 상세정보 모달창 -->
+	<div class="modal" id="selectEmpOneModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">사원 상세 정보</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form id="modifyEmpForm" method="post">
+						<div>
+							<div id="empImgOne">
+								<img alt="" src="#">
+							</div>
+						</div>
+						<div>
+							<div>사원명</div>
+							<div>
+								<span id="empNameOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>주민번호</div>
+							<div>
+								<span id="empJuminNoOne"></span> 
+							</div>  
+						</div>
+						<div>
+							<div>연락처</div>
+							<div>
+								<span id="empPhoneOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>주소</div>
+							<div>
+								<span id="empoAddressOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>부서</div>
+							<div>
+								<span id="deptOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>직급</div>
+							<div>
+								<span id="positionOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>내선번호</div>
+							<div>
+								<span id="empExtensionNoOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>입사일</div>
+							<div>
+								<span id="empHireDateOne"></span>
+							</div>
+						</div>
+						<div>
+							<div>퇴사일</div>
+							<div>
+								<span id="empLastDateOne"></span>
+							</div>
+						</div>
+						<div class="text-center">
+							<button type="button" id="modifyEmpBtn">수정</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
 </body>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script>
-	
-	
-	// 사원 등록 모달 창 열기
-	$('#addEmpModalBtn').click(function () {
-		$('#addEmpModal').css('display', 'block');
-	});
-	
-	// 모달 창 닫기
-	$('.close').click(function () {
-		$('#addEmpModal').css('display', 'none');
-	});
 	
 	// addEmpBtn click
 	$('#addEmpBtn').on('click', function(){
-		
 		
 		// 값 유효성 검사 후 signUpAction.jsp 이동
 	    let addEmpUrl = '/empManage/addEmp';
@@ -272,24 +311,39 @@
 	
 	
 	 //검색 조건별 사원 목록 출력
-	 // 페이지 로드 될 때 자동 초기 검색
 	 $(document).ready(function(){
-	     // 초기 검색 조건 설정
-	     let searchEmpList = {
-	         empNo: '',
-	         empName: '',
-	         active: '',
-	         startEmpHireDate: '',
-	         endEmpHireDate: '',
-	         dept: '',
-	         position: ''
-	     };
-	 
-     // 초기 검색 실행
-     searchEmpListResults(searchEmpList);
-     
- 	 // 검색 폼 제출 이벤트
+	    
+		// 페이지 로드 시 초기 검색 및 페이징 설정
+		let initialPageInfo = goToPage(); // 기본값으로 초기화
+		let searchEmpList = initialPageInfo.searchEmpList;
+		let paging = initialPageInfo.paging;
+		 
+		// 검색, 페이징 실행 함수
+		function searchEmpListResults(searchEmpList, paging){
+			$.ajax({
+				url: '/empManage/searchEmpList',
+				type: 'GET',
+				data: {
+					// 검색조건 객체를 JSON으로 변환
+					searchEmpList: JSON.stringify(searchEmpList),
+					paging: JSON.stringify(paging)
+				},
+				success: function(data){
+					console.log(data);
+					// 데이터를 테이블에 적용하는 함수
+			        updateTableWithData(data),
+			        updatePagination(data);
+				},
+				error: function(){
+					alert("잘못된 요청입니다");
+				}
+			});
+		}
+		
+		// 검색 폼 제출 이벤트
 		$('#searchEmpListBtn').click(function(){
+			// currentPage 값이 없을 경우 기본값 1로 설정
+	    	let currentPage = 1;
 			
 			// 검색 조건
 			let searchEmpList = {
@@ -303,39 +357,94 @@
 			};
 			
 			// 페이징 설정
+			let paging = {
+				currentPage: currentPage, // 현제 페이지 번호
+				rowPerPage: 10 // 한 페이지당 행의 수
+			};	
 			
-			// Ajax 요청 함수 호출
-			searchEmpListResults(searchEmpList);
+			// 검색, 페이징 실행 함수
+			searchEmpListResults(searchEmpList, paging);
 		});
 		
-		// Ajax 요청 및 처리 함수
-		function searchEmpListResults(searchEmpList){
-			$.ajax({
-				url: '/empManage/searchEmpList',
-				method: 'GET',
-				data: {
-					// 검색조건 객체를 JSON으로 변환
-					searchEmpList: JSON.stringify(searchEmpList)
-				},
-				success: function(data){
-					// 데이터를 테이블에 적용하는 함수
-			        updateTableWithData(data);
-				},
-				error: function(){
-					
-				}
-			});
+		// 페이지 이동 함수
+		function goToPage(page){
+	    	// currentPage 값이 없을 경우 기본값 1로 설정
+	    	let currentPage = page || 1;
+	    	
+	    	// 초기 검색 조건 설정
+		     let searchEmpList = {
+		         empNo: '',
+		         empName: '',
+		         active: '',
+		         startEmpHireDate: '',
+		         endEmpHireDate: '',
+		         dept: '',
+		         position: ''
+		     };
+		     
+		  	// 페이징 설정
+			let paging = {
+				currentPage: currentPage, // 현제 페이지 번호
+				rowPerPage: 10 // 한 페이지당 행의 수
+		 	};
+			
+		  	// 검색, 페이징 실행 함수
+		  	searchEmpListResults(searchEmpList, paging);
+			
+		  	// 초기 실행 시 searchEmpList와 paging을 객체로 묶어서 반환
+		  	return {
+		  		searchEmpList: searchEmpList,
+		  		paging: paging
+		  	}; 	
+	    } 
+     
+		// 페이지 네비게이션 수정 함수
+		function updatePagination(data){
+			let pagination = $('#pagination');
+			pagination.empty();
+			
+			// 이전 페이지 버튼
+			if(data.startPage > 1){
+				let prevButton = $('<button class="page-btn">').text('이전');
+	            prevButton.click(function() {
+	                goToPage(data.startPage - data.pageLength);
+	            });
+	            pagination.append(prevButton);
+			}
+			
+			// 페이지 버튼 생성
+			for(let i = data.startPage; i <= data.endPage; i++){
+				const page = i;
+				let pageButton = $('<button class="page-btn">').text(i);
+		        pageButton.click(function(){
+		        	goToPage(page);
+		        });
+		        pagination.append(pageButton);
+			}
+			
+			// 다음 페이지 버튼
+			if(data.endPage < data.lastPage){
+				let nextButton = $('<button class="page-btn">').text('다음');
+	            nextButton.click(function() {
+	                goToPage(data.endPage + data.pageLength);
+	            });
+	            pagination.append(nextButton);
+			}
 		}
 		
+		// 테이블 데이터 수정 함수
 		function updateTableWithData(data) {
 		    // data는 서버에서 반환된 JSON 데이터
+		    // data 객체 속성에 접근하여 값 추출
+		    let empList = data.searchEmpListByPage;
+		    
 		    // 테이블의 tbody를 선택하고 초기화
 		    let tbody = $('#tableBody');
 		    tbody.empty();
 	
 		    // data의 길이만큼 테이블 행을 추가
-		    for (let i = 0; i < data.length; i++) {
-		        let emp = data[i];
+		    for (let i = 0; i < empList.length; i++) {
+		        let emp = empList[i];
 		        let row = $('<tr>');
 		        row.append($('<td>').text(emp.empNo));
 		        row.append($('<td>').text(emp.empName));
@@ -347,8 +456,58 @@
 		    }
 		}
 	
- 	});
-	
-	
+		});
+	 
+	 	// 사원 상제정보
+	 	$('#tableBody').on('click', 'tr', function(){
+	 		// empNo의 값이 들어있는 첫 번째 열의 값을 가져온다
+	 		let empNo = $(this).find('td:eq(0)').text();
+	 		$.ajax({
+	 			url: '/empManage/selctEmpOne',
+	 			type: 'GET',
+	 			data: {empNo: empNo},
+	 			success: function(data){
+	 				
+	 				console.log(data);
+	 				let empInfo = data;
+	 				
+	 	            // empInfo의 값을 해당 위치에 삽입
+	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
+	 	            $('#empNameOne').text(empInfo.empName);
+	 	            $('#empJuminNoOne').text(empInfo.empJuminNo);
+	 	            $('#empPhoneOne').text(empInfo.empPhone);
+	 	            $('#empoAddressOne').text(empInfo.empAddress);
+	 	            $('#deptOne').text(empInfo.dept);
+	 	            $('#positionOne').text(empInfo.position);
+	 	            $('#empExtensionNoOne').text(empInfo.empExtensionNo);
+	 	            $('#empHireDateOne').text(empInfo.empHireDate);
+	 	            $('#empLastDateOne').text(empInfo.empLastDate);
+	 	            
+	 	            // 이미지 유무에 따른 분기
+	 	            if (empInfo.empSaveImgName !== null && empInfo.empSaveImgName !== "null") {
+	                    $('#empImgOne img').attr('src', empInfo.empSaveImgName);
+	                } else {
+	                    // 이미지가 없는 경우 처리
+	                    //$('#empImgOne img').attr('src', '#');
+	                    $('#empImgOne').text('사진 정보 없음');
+	                }
+	 	            
+	 	            // 퇴사일 분기
+	 	            if (empInfo.empLastDate) {
+	                    $('#empLastDateOne').text(empInfo.empLastDate);
+	                } else {
+	                    $('#empLastDateOne').text('퇴사일 정보 없음');
+	                }
+
+	 	            // 모달 열기
+	 	            $('#selectEmpOneModal').modal('show');
+
+	 			},
+	 			error: function(){
+	 				console.log("잘못된 요청입니다");
+				}
+	 		});
+	 	});
+
 </script>
 </html>

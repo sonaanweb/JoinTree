@@ -169,6 +169,65 @@
 	        	AND 1=1
 	        </if>   
 		ORDER BY e.dept DESC, e.emp_no ASC
+		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
+	<!-- 검색 조건별 행의 수 -->
+	<select id="searchEmpListCnt"
+			parameterType="java.util.Map" resultType="int">
+			
+		SELECT COUNT(*)
+		FROM emp_info e LEFT OUTER JOIN account_list a
+		ON e.emp_no = a.emp_no
+		WHERE
+			1=1
+			<if test="empNo !=null and empNo != 0">
+		    	AND e.emp_no = #{empNo}
+		    </if>
+		    <if test="empName != null and empName != ''">
+		    	AND e.emp_name = #{empName}
+		    </if>
+		    <if test="startEmpHireDate != null and endEmpHireDate != null and startEmpHireDate != '' and endEmpHireDate != ''">
+		    	AND e.emp_hire_date BETWEEN #{startEmpHireDate} AND #{endEmpHireDate}
+		    </if>
+		    <if test="dept != null and dept != ''">
+		     	AND e.dept = #{dept}
+		    </if>
+		    <if test="position != null and position != ''">
+		    	AND e.position = #{position}
+		    </if>
+		    <if test="active !=null and active != ''">
+		    	AND a.active = #{active}
+		    </if>	
+	</select>
+	
+	<!-- 사원 상세정보 조회 -->
+	<select id="selectEmpOne"
+			parameterType="int" resultType="java.util.Map">
+			
+		SELECT 
+			e.emp_no empNo,
+			e.emp_name empName,
+			e.emp_address empAdderss,
+			e.emp_phone empPhone,
+			e.emp_jumin_no empJuminNo,
+			e.emp_extension_no empExtensionNo, 
+			e.emp_hire_date empHireDate,
+			e.emp_last_date empLastDate,
+			dc.code_name dept,
+			pc.code_name position,
+			ac.code_name active,
+			IFNULL(ei.emp_save_img_name, 'null') empSaveImgName
+		FROM emp_info e LEFT OUTER JOIN account_list a
+		ON e.emp_no = a.emp_no
+		LEFT OUTER JOIN emp_info_img ei
+		ON e.emp_no = ei.emp_no
+		INNER JOIN common_code ac
+		ON a.active = ac.code
+		INNER JOIN common_code dc
+		ON e.dept = dc.code
+		INNER JOIN common_code pc
+		ON e.position = pc.code
+		WHERE e.emp_no = #{empNo}	
+	</select>
 </mapper>
