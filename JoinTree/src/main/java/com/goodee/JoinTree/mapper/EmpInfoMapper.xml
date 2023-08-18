@@ -11,6 +11,22 @@
 	</update>
 	
 	<!-- 나의 정보 조회 -->
+	<select id="selectEmpOne" resultType="java.util.Map">
+		SELECT
+			e.emp_no empNo, 
+			pc.code_name position, 
+			dc.code_name dept, 
+			e.emp_name empName, e.emp_address empAddress, e.emp_phone empPhone, 
+			e.emp_jumin_no empJuminNo, e.emp_extension_no empExtensionNo, e.emp_hire_date empHireDate, e.updatedate, 
+			COALESCE(ei.emp_save_img_name, '이미지 없음') empSaveImgName
+		FROM emp_info e LEFT OUTER JOIN emp_info_img ei
+		ON e.emp_no = ei.emp_no 
+		INNER JOIN common_code dc
+		ON e.dept = dc.code
+		INNER JOIN common_code pc
+		ON e.position = pc.code
+		WHERE e.emp_no = #{empNo}
+	</select>
 	
 	<!-- 비밀번호 체크 -->
 	<select id="selectCheckPw" >
@@ -20,8 +36,14 @@
 	</select>
 	
 	<!-- 나의 정보 수정 -->
-
-
-
-
+	<update id="modifyEmp" parameterType="java.util.Map">
+		UPDATE emp_info
+		SET emp_name = #{empName}, 
+			emp_address = #{empAddress}, 
+			emp_jumin_no = #{empJuminNo},
+			emp_phone = #{empPhone}, 
+			updatedate = NOW(), 
+			update_id = #{empNo}
+		WHERE emp_no = #{empNo}
+	</update>
 </mapper>
