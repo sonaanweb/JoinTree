@@ -6,114 +6,133 @@
 <meta charset="UTF-8">
 <title>[경영지원]회의실 관리</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<!--------- 관리 회의실 리스트 ---------->
-	<a href="/equipment/addMeetRoom">추가</a>
-	<table>
-		<thead><!-- 열 제목 -->
-			<tr>
-				<td>회의실 번호</td>
-				<td>기자재카테고리</td><!-- 추후 view에서 삭제 -->
-				<td>회의실이름</td>
-				<td>수용인원</td>
-				<td>사용여부</td>
-			</tr>
-		</thead>
-		<tbody>
-		    <c:forEach var="m" items="${meetRoomList}">
-		        <tr data-roomNo="${m.roomNo}" class="data-row"> <!-- 데이터 식별 -->
-		            <td>${m.roomNo}</td>
-		            <td>${m.equipCategory}</td>
-		            <td>
-		                <span class="normal">${m.roomName}</span>
-		                <input type="text" class="edit-input" name="editedRoomName" value="${m.roomName}" style="display: none;">
-		            </td>
-		            <td>
-		                <span class="normal">${m.roomCapacity}명</span>
-		                <input type="text" class="edit-input" name="editedRoomCapacity" value="${m.roomCapacity}" style="display: none;">
-		            </td>
-		            <td>
-		                <span class="normal">
-		                    <c:choose>
-		                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
-		                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
-		                    </c:choose>
-		                </span>
-						<select class="edit-select" name="editedRoomStatus" style="display: none;">
-						    <c:choose>
-						        <c:when test="${m.roomStatus == 1}">
-						            <option value="1" selected>사용가능</option>
-						            <option value="0">사용불가</option>
-						        </c:when>
-						        <c:otherwise>
-						            <option value="1">사용가능</option>
-						            <option value="0" selected>사용불가</option>
-						        </c:otherwise>
-						    </c:choose>
-						</select>
-		            </td>
-		            <td>
-		                <button class="edit-button" data-roomNo="${m.roomNo}">수정</button>
-		                <button class="save-button" data-roomNo="${m.roomNo}" style="display: none;">저장</button>
-		            </td>
-		        </tr>
-		    </c:forEach>
-		</tbody>
-	</table>
+<!-- 관리 회의실 리스트 -->
+<a href="/equipment/addMeetRoom">추가</a>
+<table>
+    <thead>
+        <tr>
+            <td>회의실 번호</td>
+            <td>기자재카테고리</td>
+            <td>회의실이름</td>
+            <td>수용인원</td>
+            <td>사용여부</td>
+            <td>수정</td>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="m" items="${meetRoomList}">
+            <tr>
+                <td id="roomNo">${m.roomNo}</td>
+                <td id="equipCategory">${m.equipCategory}</td>
+                <td id="roomName">${m.roomName}</td>
+                <td id="roomCapacity">${m.roomCapacity}명</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
+                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
+                    </c:choose>
+                </td>
+                <td>
+                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}" data-equip-category="${m.equipCategory}" data-room-name="${m.roomName}" data-room-capacity="${m.roomCapacity}" data-room-status="${m.roomStatus}">수정</button>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+<!-- 수정 모달창 -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                	<!-- hidden : roomNo, Category -->
+                    <input type="hidden" id="modalRoomNo" name="roomNo">
+                    <input type="hidden" id="modalCate" name="equipCategory">
+                    <div class="mb-3">
+                        <label for="modalRoomName" class="form-label">회의실 이름</label>
+                        <input type="text" class="form-control" id="modalRoomName" name="roomName">
+                        <div class="check" id="rn_check"></div><!-- 회의실명 중복일 시 -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalRoomCapacity" class="form-label">수용 인원</label>
+                        <input type="number" class="form-control" id="modalRoomCapacity" name="roomCapacity">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalRoomStatus" class="form-label">사용 여부</label>
+                        <select class="form-control" id="modalRoomStatus" name="roomStatus">
+                            <option value="1">사용가능</option>
+                            <option value="0">사용불가</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">수정</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    const dataRows = document.querySelectorAll('.data-row'); // tr 내로 묶인 data-row 요소 모두 선택
-    
-    dataRows.forEach(row => {
-        const editButton = row.querySelector('.edit-button');
-        const saveButton = row.querySelector('.save-button');
-        const normalCells = row.querySelectorAll('.normal');
-        const editInputs = row.querySelectorAll('.edit-input');
-        const editSelects = row.querySelectorAll('.edit-select');
-        
-        // 수정 버튼을 클릭했을 때
-        editButton.addEventListener('click', function() {
-        	// 목록 조회시 나타났던 데이터를 숨김
-            normalCells.forEach(cell => cell.style.display = 'none');
-         	// 수정용 입력 필드와 선택 필드 표시
-            editInputs.forEach(input => input.style.display = 'block');
-            editSelects.forEach(select => select.style.display = 'block');
-         	// 수정 버튼을 숨기고 저장 버튼 표시
-            editButton.style.display = 'none';
-            saveButton.style.display = 'block';
-        });
-        
-     	// 수정된 데이터를 서버로 전송하는 로직
-        saveButton.addEventListener('click', function() {
+    $(document).ready(function () {
+        $(".editButton").click(function () {
+            const roomNo = $(this).data("room-no");
+            const equipCategory = $(this).data("equip-category");
+            const roomName = $(this).data("room-name");
+            const roomCapacity = $(this).data("room-capacity");
+            const roomStatus = $(this).data("room-status");
+
+            $("#modalRoomNo").val(roomNo);
+            $("#modalCate").val(equipCategory);
+            $("#modalRoomName").val(roomName);
+            $("#modalRoomCapacity").val(roomCapacity);
+            $("#modalRoomStatus").val(roomStatus);
+
+            // 모달창 열기
+            $("#updateModal").modal("show");
             
-            // 일반 데이터를 표시하고     
-            normalCells.forEach(cell => cell.style.display = 'block');
-         	// 수정용 입력 필드와 선택 필드를 숨김 ( 위와 반대 )
-            editInputs.forEach(input => input.style.display = 'none');
-            editSelects.forEach(select => select.style.display = 'none');
             
-         	// 저장 버튼을 숨기고 수정 버튼을 표시
-            editButton.style.display = 'block';
-            saveButton.style.display = 'none';
+            // 모달 창이 닫힐 때 메시지 초기화
+            $("#updateModal").on("hidden.bs.modal", function () {
+                $("#rn_check").text("");
+            });
             
-            const roomNo = row.getAttribute('data-roomNo');
-            const editedRoomName = row.querySelector('input[name="editedRoomName"]').value;
-            const editedRoomCapacity = row.querySelector('input[name="editedRoomCapacity"]').value;
-            const editedRoomStatus = row.querySelector('select[name="editedRoomStatus"]').value;
-            
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/equipment/meetRoomList', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // 서버로부터 응답을 받았을 때의 로직
-                    // 예를 들어, 성공 시 메시지를 표시하거나 다시 목록으로 리다이렉트 등
-                    console.log('데이터가 수정되었습니다.');
-                    location.reload(); // 수정 후 새로고침
+            // ajax 사용하여 비동기방식으로 수정  
+            $("#updateForm").submit(function (event) {
+                event.preventDefault();
+                
+                // 공백 검사
+                if ($("#modalRoomName").val() === '') {
+                    $("#rn_check").text("공백은 입력 불가능합니다");
+                    $("#rn_check").css("color", "red");
+                    $("#modalRoomName").focus();
+                    return; // 검사 통과하지 않으면 중단
                 }
-            };
-            const formData = `roomNo=${roomNo}&editedRoomName=${editedRoomName}&editedRoomCapacity=${editedRoomCapacity}&editedRoomStatus=${editedRoomStatus}`;
-            xhr.send(formData);
+
+                const formData = $(this).serialize(); // 폼 데이터 시리얼라이즈
+                const url = "/equipment/meetRoomList"; // 수정 처리를 위한 URL
+				
+                $.ajax({
+                    type: "POST", //HTTP 요청 방식(서버에 데이터를 넘기는 방식)
+                    url: url,
+                    data: formData, 
+                    success: function (data) { //success = 콜백함수
+                    	// 회의실 수정 성공
+                        alert("수정이 완료되었습니다.");
+                        location.reload(); // 새로고침
+                    },
+                    error: function () { //error = 콜백함수
+                    	// 실패 시엔 alert창만 띄우고 새로고침 되지 않음
+                        alert("수정에 실패하였습니다.");
+                    }
+                });
+            });
         });
     });
 </script>

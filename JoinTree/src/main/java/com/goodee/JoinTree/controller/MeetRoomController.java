@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.goodee.JoinTree.service.MeetRoomService;
@@ -27,7 +28,7 @@ public class MeetRoomController {
 	@Autowired
 	private MeetRoomService meetRoomService;
 	
-	// 회의실 목록 Controller ----------------------------
+	// 회의실 목록 조회
 	@GetMapping("/equipment/meetRoomList")
 	public String meetRoomList(Model model, 
 			@RequestParam(name="equip_category",defaultValue = "E0101") String equipCategory){
@@ -43,8 +44,7 @@ public class MeetRoomController {
 	}
 	// ------------------------------------------------
 	
-	// 회의실 추가 Controller ----------------------------
-	
+	/* 회의실 추가 Controller ----------------------------
     @GetMapping("/equipment/addMeetRoom")
     public String addMeetRoom() {
         return "/equipment/addMeetRoom";
@@ -70,15 +70,14 @@ public class MeetRoomController {
         return "redirect:/equipment/meetRoomList";
     }
     
-    // 회의실 수정 Cotroller --------------------------------
-    
+    // 회의실 수정 Controller --------------------------------
     @PostMapping("/equipment/meetRoomList")
-    public String updateMeetRoom(MeetingRoom meetingRoom) {
-        // 서비스 계층을 통해 데이터베이스에서 해당 레코드 업데이트 수행
+    public String updateMeetRoom(MeetingRoom meetingRoom) { // 회의실 객체 그대로
         meetRoomService.modifyMeetRoom(meetingRoom);
-
-        // 업데이트 후 리다이렉트 또는 다른 작업 수행
+        log.debug(Sona+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RESET);
         return "redirect:/equipment/meetRoomList";
-    }
+    } */
+    
+    // 회의실 삭제 Controller
 	
 }

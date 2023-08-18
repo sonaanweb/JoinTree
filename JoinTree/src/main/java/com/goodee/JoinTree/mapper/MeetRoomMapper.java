@@ -24,4 +24,7 @@ public interface MeetRoomMapper {
 	// 회의실 수정 메서드
 	void updateMeetRoom(MeetingRoom meetingRoom);
 	
+	// 회의실 이름 중복검사 메서드
+	int cntRoomName(String roomName);
+	
 }
