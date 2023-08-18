@@ -59,7 +59,7 @@
 		            // TODO: 세션 연장 알림 및 버튼 표시 로직 구현
 		             $('#extensionModal').css('display', 'block'); // 세션 연장 알림 모달 표시
 		            // 5분 남았습니다. 로그인 시간을 연장하시겠습니까?
-		            // 예 / 아니오 버튼 모달 필요
+		            // 예 / 아니오 버튼 모달
 		        }
 	            
 	            // 모달창 닫기
@@ -70,18 +70,6 @@
 	            function resetTimer(newDuration) {
 	            	clearInterval(interval); // 기존 타이머 중지
 	                startTimer(newDuration); // 새로운 타이머 시작
-	            	
-	/* 	                interval = setInterval(function () {
-	                    // 타이머 로직 (기존 코드 그대로 유지)
-	                    
-	                    if (--timer === 5 * 60) { // 5분(300초) 남았을 때
-	                        showModal(); // 세션 연장 알림, 연장 모달 출력
-	                    } else if (timer < 0) {
-	                        clearInterval(interval);
-	                        showSessionExpirationAlert(); // 세션 만료 알림
-	                        window.location.href = "/myJoinTree/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
-	                    }
-	                }, 1000); */
 	            }
 	            
 	            // 세션 연장 알림 모달 "예" 버튼 클릭 시
@@ -105,16 +93,10 @@
 	            // 세션 연장 및 새로운 타이머 시작 함수
 	            function extendSessionAndResetTimer(newDuration) {
 	                $.ajax({
-	                    url: '/myJoinTree/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
+	                    url: '/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
 	                    type: 'POST', 
 	                    success: function(response) {
 	                        if (response === "success") {
-	                            // 세션 연장 처리가 성공적으로 완료되면 다시 타이머 시작
-	                            // startTimer(response.newSessionDuration);
-	                            
-	                            // 세션 연장 처리가 성공적으로 완료되면 타이머 및 세션 연장
-	                            // resetTimer(newDuration);
-	                    
 	                            startTimer(newDuration);
 	                        } else {
 	                            // 세션 연장 처리가 실패한 경우 처리
@@ -128,7 +110,6 @@
 	                        console.error(error);
 	                        alert("서버 오류 발생");
 	                        
-	                        // clearInterval(interval); // 에러 발생 시 타이머 중지
 	                    }
 	                });
 	            }
@@ -161,7 +142,7 @@
 			            } else if (timer < 0) {
 			                clearInterval(interval);
 			                showSessionExpirationAlert(); // 세션 만료 알림
-			                window.location.href = "/myJoinTree/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
+			                window.location.href = "/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
 			            }
 			        }, 1000);
 			    }
@@ -203,7 +184,8 @@
 			<tr>
 				<td>사원이미지</td>
 				<td>
-					${empInfo.empSaveImgName}
+					<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
+					<%-- ${empInfo.empSaveImgName} --%>
 					<%-- <img src="이미지파일경로/${empInfo.empSaveImgName}" alt="Employee Image"> --%>
 				</td>
 			</tr>
@@ -245,7 +227,8 @@
 			</tr>
 			<tr>
 				<td>정보수정일</td>
-				<td>${empInfo.updatedate}</td>
+				<td>${empInfo.updatedate.toString().substring(0, 19)}</td> <!--timestamp이므로 String 변환 후 자르기  -->
+				<%-- <td>${empInfo.updatedate}</td> --%>
 			</tr>
 		</table>
 		
