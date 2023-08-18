@@ -208,7 +208,7 @@
 		SELECT 
 			e.emp_no empNo,
 			e.emp_name empName,
-			e.emp_address empAdderss,
+			e.emp_address empAddress,
 			e.emp_phone empPhone,
 			e.emp_jumin_no empJuminNo,
 			e.emp_extension_no empExtensionNo, 
