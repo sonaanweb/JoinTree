@@ -175,8 +175,8 @@
 				</div>
 			
 				<!-- Modal body -->
-				<div class="modal-body">
-					<form id="modifyEmpForm" method="post">
+				<div class="modal-body" id="empOneModalBody">
+					<div>
 						<div>
 							<div id="empImgOne">
 								<img alt="" src="#">
@@ -239,7 +239,7 @@
 						<div class="text-center">
 							<button type="button" id="modifyEmpBtn">수정</button>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -313,37 +313,22 @@
 	 //검색 조건별 사원 목록 출력
 	 $(document).ready(function(){
 	    
-		// 페이지 로드 시 초기 검색 및 페이징 설정
-		let initialPageInfo = goToPage(); // 기본값으로 초기화
-		let searchEmpList = initialPageInfo.searchEmpList;
-		let paging = initialPageInfo.paging;
-		 
-		// 검색, 페이징 실행 함수
-		function searchEmpListResults(searchEmpList, paging){
-			$.ajax({
-				url: '/empManage/searchEmpList',
-				type: 'GET',
-				data: {
-					// 검색조건 객체를 JSON으로 변환
-					searchEmpList: JSON.stringify(searchEmpList),
-					paging: JSON.stringify(paging)
-				},
-				success: function(data){
-					console.log(data);
-					// 데이터를 테이블에 적용하는 함수
-			        updateTableWithData(data),
-			        updatePagination(data);
-				},
-				error: function(){
-					alert("잘못된 요청입니다");
-				}
-			});
-		}
+		// 페이지 로드 시 초기화
+		searchEmpListResults();
 		
-		// 검색 폼 제출 이벤트
+		// 검색 버튼 클릭 이벤트
 		$('#searchEmpListBtn').click(function(){
-			// currentPage 값이 없을 경우 기본값 1로 설정
-	    	let currentPage = 1;
+			searchEmpListResults();
+		});
+		
+		// 페이지 이동 버튼 클릭 이벤트
+		$('#pagination').on('click','.page-btn',function(){
+			let page = $(this).text();
+			goToPage(page);
+		});
+		
+		// 검색 및 페이지 데이터 수정 함수
+		function searchEmpListResults(page =1){
 			
 			// 검색 조건
 			let searchEmpList = {
@@ -356,46 +341,33 @@
 				position: $('#searchPosition').val()
 			};
 			
-			// 페이징 설정
-			let paging = {
-				currentPage: currentPage, // 현제 페이지 번호
-				rowPerPage: 10 // 한 페이지당 행의 수
-			};	
-			
-			// 검색, 페이징 실행 함수
-			searchEmpListResults(searchEmpList, paging);
-		});
+			// 데이터 조회
+			$.ajax({
+				url: '/empManage/searchEmpList',
+				type: 'GET',
+				data: {
+					// 검색조건 객체를 JSON으로 변환
+					searchEmpList: JSON.stringify(searchEmpList),
+					currentPage: page,
+					rowPerPage: 10 
+				},
+				success: function(data){
+					console.log(data);
+			        updateTableWithData(data), // 테이블 데이터 수정 함수
+			        updatePagination(data); // 페이지네이션 데이터 수정 함수
+				},
+				error: function(){
+					console.log(data);
+					alert("잘못된 요청입니다");
+				}
+			});
+		}
 		
 		// 페이지 이동 함수
 		function goToPage(page){
-	    	// currentPage 값이 없을 경우 기본값 1로 설정
-	    	let currentPage = page || 1;
-	    	
-	    	// 초기 검색 조건 설정
-		     let searchEmpList = {
-		         empNo: '',
-		         empName: '',
-		         active: '',
-		         startEmpHireDate: '',
-		         endEmpHireDate: '',
-		         dept: '',
-		         position: ''
-		     };
-		     
-		  	// 페이징 설정
-			let paging = {
-				currentPage: currentPage, // 현제 페이지 번호
-				rowPerPage: 10 // 한 페이지당 행의 수
-		 	};
 			
-		  	// 검색, 페이징 실행 함수
-		  	searchEmpListResults(searchEmpList, paging);
-			
-		  	// 초기 실행 시 searchEmpList와 paging을 객체로 묶어서 반환
-		  	return {
-		  		searchEmpList: searchEmpList,
-		  		paging: paging
-		  	}; 	
+			// 검색 및 페이지 데이터 수정 함수
+		  	searchEmpListResults(page);
 	    } 
      
 		// 페이지 네비게이션 수정 함수
@@ -462,52 +434,55 @@
 	 	$('#tableBody').on('click', 'tr', function(){
 	 		// empNo의 값이 들어있는 첫 번째 열의 값을 가져온다
 	 		let empNo = $(this).find('td:eq(0)').text();
-	 		$.ajax({
-	 			url: '/empManage/selctEmpOne',
-	 			type: 'GET',
-	 			data: {empNo: empNo},
-	 			success: function(data){
-	 				
-	 				console.log(data);
-	 				let empInfo = data;
-	 				
-	 	            // empInfo의 값을 해당 위치에 삽입
-	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
-	 	            $('#empNameOne').text(empInfo.empName);
-	 	            $('#empJuminNoOne').text(empInfo.empJuminNo);
-	 	            $('#empPhoneOne').text(empInfo.empPhone);
-	 	            $('#empoAddressOne').text(empInfo.empAddress);
-	 	            $('#deptOne').text(empInfo.dept);
-	 	            $('#positionOne').text(empInfo.position);
-	 	            $('#empExtensionNoOne').text(empInfo.empExtensionNo);
-	 	            $('#empHireDateOne').text(empInfo.empHireDate);
-	 	            $('#empLastDateOne').text(empInfo.empLastDate);
-	 	            
-	 	            // 이미지 유무에 따른 분기
-	 	            if (empInfo.empSaveImgName !== null && empInfo.empSaveImgName !== "null") {
-	                    $('#empImgOne img').attr('src', empInfo.empSaveImgName);
-	                } else {
-	                    // 이미지가 없는 경우 처리
-	                    //$('#empImgOne img').attr('src', '#');
-	                    $('#empImgOne').text('사진 정보 없음');
-	                }
-	 	            
-	 	            // 퇴사일 분기
-	 	            if (empInfo.empLastDate) {
-	                    $('#empLastDateOne').text(empInfo.empLastDate);
-	                } else {
-	                    $('#empLastDateOne').text('퇴사일 정보 없음');
-	                }
+	 		   
+               // 상세 정보 가져오기
+               $.ajax({
+   	 			url: '/empManage/selctEmpOne',
+   	 			type: 'GET',
+   	 			data: {empNo: empNo},
+   	 			success: function(data){
+   	 				
+   	 				console.log(data);
+   	 				let empInfo = data;
+   	 				
+   	 	            // empInfo의 값을 해당 위치에 삽입
+   	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
+   	 	            $('#empNameOne').text(empInfo.empName);
+   	 	            $('#empJuminNoOne').text(empInfo.empJuminNo);
+   	 	            $('#empPhoneOne').text(empInfo.empPhone);
+   	 	            $('#empoAddressOne').text(empInfo.empAddress);
+   	 	            $('#deptOne').text(empInfo.dept);
+   	 	            $('#positionOne').text(empInfo.position);
+   	 	            $('#empExtensionNoOne').text(empInfo.empExtensionNo);
+   	 	            $('#empHireDateOne').text(empInfo.empHireDate);
+   	 	            
+   	 	            // 이미지 유무에 따른 분기
+   	 	            if (empInfo.empSaveImgName) {
+   	                    //$('#empImgOne img').attr('src', empInfo.empSaveImgName);
+   	 	            	$('#empImgOne').text('사진 정보 있음');
+   	                } else {
+   	                    // 이미지가 없는 경우 처리
+   	                    //$('#empImgOne img').attr('src', '#');
+   	                    $('#empImgOne').text('사진 정보 없음');
+   	                }
+   	 	            
+   	 	            // 퇴사일 분기
+   	 	            if (empInfo.empLastDate) {
+   	                    $('#empLastDateOne').text(empInfo.empLastDate);
+   	                } else {
+   	                    $('#empLastDateOne').text('퇴사일 정보 없음');
+   	                }
+   	 	            
+   	 	            // 모달창 열기
+   	 	        	$('#selectEmpOneModal').modal('show');
 
-	 	            // 모달 열기
-	 	            $('#selectEmpOneModal').modal('show');
-
-	 			},
-	 			error: function(){
-	 				console.log("잘못된 요청입니다");
-				}
-	 		});
-	 	});
+   	 			},
+   	 			error: function(){
+   	 				console.log("잘못된 요청입니다");
+   				}
+   	 		});
+		});
+	 	
 
 </script>
 </html>

@@ -217,7 +217,7 @@
 			dc.code_name dept,
 			pc.code_name position,
 			ac.code_name active,
-			IFNULL(ei.emp_save_img_name, 'null') empSaveImgName
+			ei.emp_save_img_name empSaveImgName
 		FROM emp_info e LEFT OUTER JOIN account_list a
 		ON e.emp_no = a.emp_no
 		LEFT OUTER JOIN emp_info_img ei

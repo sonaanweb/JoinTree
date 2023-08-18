@@ -50,9 +50,9 @@ public class EmpManageService {
 		
 		// 사번 생성(현재 연도 + 부서코드 + 부서별 입사순서) 총 8자리
 		// 현재 연도
-		Calendar calendar = Calendar.getInstance(); // Calendar API
-		int currentYear = calendar.get(Calendar.YEAR); // 현재 연도
-		int empNoYear = currentYear * 10000; // 자리 수를 맞추기 위해 * 10000
+		String empHireDate = (String)empInfo.get("empHireDate"); // 입사일 추출
+		String currentYear = empHireDate.substring(0,4); // 현재 연도만 문자열 자르기
+		int empNoYear = Integer.parseInt(currentYear) * 10000; // int 형 변환 후 자리 수를 맞추기 위해 * 10000
 		log.debug(empNoYear+"<-- EmpManageService empNoYear");
 		
 		// 부서코드 번호

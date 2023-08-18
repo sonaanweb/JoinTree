@@ -57,15 +57,19 @@ public class EmpManageController {
 	@GetMapping("/empManage/searchEmpList")
 	@ResponseBody
 	public Map<String, Object> searchEmpList(@RequestParam(name = "searchEmpList") String searchEmpList,
-	 									     @RequestParam(name = "paging") String paging) {
+			 								 @RequestParam(name = "currentPage") int currentPage,
+			 								 @RequestParam(name = "rowPerPage") int rowPerPage) {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> searchEmpListResult = null;
 		
+		// paging 요청값 map에 저장
+		Map<String, Integer> pagingMap = new HashMap<>();
+		pagingMap.put("currentPage", currentPage);
+		pagingMap.put("rowPerPage", rowPerPage);
+		
 		try {
 	        Map<String, Object> searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
-	        Map<String, Integer> pagingMap = objectMapper.readValue(paging, new TypeReference<Map<String, Integer>>(){});
-	        
 	        // 검색, 페이징 리스트
 	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, pagingMap);
 	        
