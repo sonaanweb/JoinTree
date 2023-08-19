@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReshuffleHistory {
+	private int reshuffle_history_no;
 	private int empNo;
 	private String departNo;
 	private String position;
