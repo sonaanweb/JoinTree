@@ -11,8 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.MeetRoomService;
 import com.goodee.JoinTree.vo.MeetingRoom;
@@ -28,10 +29,11 @@ public class MeetRoomController {
 	@Autowired
 	private MeetRoomService meetRoomService;
 	
+	// 아이디 세션 검사 추후 추가 예정
 	// 회의실 목록 조회
 	@GetMapping("/equipment/meetRoomList")
 	public String meetRoomList(Model model, 
-			@RequestParam(name="equip_category",defaultValue = "E0101") String equipCategory){
+			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
 		
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("equipCategory", equipCategory);
@@ -44,7 +46,7 @@ public class MeetRoomController {
 	}
 	// ------------------------------------------------
 	
-	/* 회의실 추가 Controller ----------------------------
+	// 회의실 추가
     @GetMapping("/equipment/addMeetRoom")
     public String addMeetRoom() {
         return "/equipment/addMeetRoom";
@@ -69,15 +71,27 @@ public class MeetRoomController {
         
         return "redirect:/equipment/meetRoomList";
     }
+    // ------------------------------------------------
     
-    // 회의실 수정 Controller --------------------------------
+    // 회의실 수정 액션(post)
     @PostMapping("/equipment/meetRoomList")
     public String updateMeetRoom(MeetingRoom meetingRoom) { // 회의실 객체 그대로
         meetRoomService.modifyMeetRoom(meetingRoom);
         log.debug(Sona+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RESET);
         return "redirect:/equipment/meetRoomList";
-    } */
+    }
+    // ------------------------------------------------
     
-    // 회의실 삭제 Controller
+    // 회의실 추가 & 수정시 회의실명 중복 검사
+    @PostMapping("/equipment/cntRoomName")
+    public @ResponseBody int checkRoomName(@RequestBody String roomName) {
+    	MeetingRoom meetingRoom = new MeetingRoom();
+    	meetingRoom.setRoomName(roomName);
+        int cnt = meetRoomService.getRoomNameCnt(meetingRoom);
+        log.debug(Sona+"MeetRoomController.cnt: "+cnt+RESET);
+        return cnt;
+    }
+    
+    // 회의실 삭제
 	
 }

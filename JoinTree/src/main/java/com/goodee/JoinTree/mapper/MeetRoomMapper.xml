@@ -3,8 +3,9 @@
 <mapper namespace="com.goodee.JoinTree.mapper.MeetRoomMapper">
 
 	<!-- 회의실 이름 중복검사 -->
-	<select id="cntRoomName" parameterType="String" resultType="int">
-    	SELECT COUNT(*)
+	<select id="selectRoomName" resultType="int">
+    	SELECT
+    	COUNT(*)
     	FROM meeting_room
     	WHERE room_name = #{roomName}
 	</select>

@@ -26,11 +26,11 @@
     <tbody>
         <c:forEach var="m" items="${meetRoomList}">
             <tr>
-                <td id="roomNo">${m.roomNo}</td>
-                <td id="equipCategory">${m.equipCategory}</td>
-                <td id="roomName">${m.roomName}</td>
-                <td id="roomCapacity">${m.roomCapacity}명</td>
-                <td>
+                <td class="roomNo">${m.roomNo}</td>
+                <td class="equipCategory">${m.equipCategory}</td>
+                <td class="roomName">${m.roomName}</td>
+                <td class="roomCapacity">${m.roomCapacity}명</td>
+                <td class="roomStatus">
                     <c:choose>
                         <c:when test="${m.roomStatus == 1}">사용가능</c:when>
                         <c:when test="${m.roomStatus == 0}">사용불가</c:when>
@@ -53,13 +53,13 @@
             </div>
             <div class="modal-body">
                 <form id="updateForm">
-                	<!-- hidden : roomNo, Category -->
+                    <!-- hidden : roomNo, Category -->
                     <input type="hidden" id="modalRoomNo" name="roomNo">
                     <input type="hidden" id="modalCate" name="equipCategory">
                     <div class="mb-3">
                         <label for="modalRoomName" class="form-label">회의실 이름</label>
                         <input type="text" class="form-control" id="modalRoomName" name="roomName">
-                        <div class="check" id="rn_check"></div><!-- 회의실명 중복일 시 -->
+                        <div class="check" id="rn_check"></div><!-- 회의실명 중복, 공백일 시 -->
                     </div>
                     <div class="mb-3">
                         <label for="modalRoomCapacity" class="form-label">수용 인원</label>
@@ -78,7 +78,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
         $(".editButton").click(function () {
@@ -90,46 +89,56 @@
 
             $("#modalRoomNo").val(roomNo);
             $("#modalCate").val(equipCategory);
+
+            // 모달 창 내의 input 요소에 값 설정
             $("#modalRoomName").val(roomName);
             $("#modalRoomCapacity").val(roomCapacity);
             $("#modalRoomStatus").val(roomStatus);
 
-            // 모달창 열기
+            // 모달 창 열기
             $("#updateModal").modal("show");
-            
-            
-            // 모달 창이 닫힐 때 메시지 초기화
+           
+            // 메시지 rn_check 초기화
             $("#updateModal").on("hidden.bs.modal", function () {
                 $("#rn_check").text("");
             });
-            
-            // ajax 사용하여 비동기방식으로 수정  
+
+            // 폼 제출 이벤트 핸들러
             $("#updateForm").submit(function (event) {
                 event.preventDefault();
-                
+
                 // 공백 검사
-                if ($("#modalRoomName").val() === '') {
+                if ($("#modalRoomName").val().trim() === '') {
                     $("#rn_check").text("공백은 입력 불가능합니다");
                     $("#rn_check").css("color", "red");
                     $("#modalRoomName").focus();
                     return; // 검사 통과하지 않으면 중단
                 }
 
-                const formData = $(this).serialize(); // 폼 데이터 시리얼라이즈
-                const url = "/equipment/meetRoomList"; // 수정 처리를 위한 URL
-				
-                $.ajax({
-                    type: "POST", //HTTP 요청 방식(서버에 데이터를 넘기는 방식)
-                    url: url,
-                    data: formData, 
-                    success: function (data) { //success = 콜백함수
-                    	// 회의실 수정 성공
-                        alert("수정이 완료되었습니다.");
-                        location.reload(); // 새로고침
-                    },
-                    error: function () { //error = 콜백함수
-                    	// 실패 시엔 alert창만 띄우고 새로고침 되지 않음
-                        alert("수정에 실패하였습니다.");
+                const roomName = $("#modalRoomName").val().trim();
+                $.post("/equipment/cntRoomName", { roomName: roomName }, function (data) {
+                    if (data > 0) {
+                        $("#rn_check").text("이미 사용 중인 회의실 이름입니다.");
+                        $("#rn_check").css("color", "red");
+                        $("#modalRoomName").focus();
+                    } else {
+                        const formData = $("#updateForm").serialize();
+                        const url = "/equipment/meetRoomList"; // 수정 처리url
+                        
+                        $.ajax({
+                            type: "POST", //HTTP 요청 방식(서버에 데이터를 넘기는 방식)
+                            url: url,
+                            data: formData, 
+                            success: function (data) { //success = 콜백함수
+                                // 회의실 수정 성공
+                                alert("수정이 완료되었습니다.");
+                                location.reload(); // 새로고침
+                            },
+                            error: function () { //error = 콜백함수
+                                // 실패 시엔 alert창만 띄우고 새로고침 되지 않음
+                                alert("수정에 실패하였습니다.");
+                            }
+                        });
                     }
                 });
             });

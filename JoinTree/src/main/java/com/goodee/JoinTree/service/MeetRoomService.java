@@ -28,4 +28,10 @@ public class MeetRoomService {
 	public void modifyMeetRoom(MeetingRoom meetingRoom) { //메서드 이름이랑 db mapper이름 혼동 주의
 	    meetRoomMapper.updateMeetRoom(meetingRoom);
 	}
+	
+	// 회의실명 중복검사 메서드
+    public int getRoomNameCnt(MeetingRoom meetingRoom) {
+    	int cnt = meetRoomMapper.selectRoomName(meetingRoom);
+        return cnt;
+    }
 }
