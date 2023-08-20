@@ -88,4 +88,9 @@
 		WHERE room_no = #{roomNo}
 	</select>
 	
+	<!-- 삭제 AND member_id = #{memberId}-->
+	<delete id="deleteMeetRoom" parameterType="com.goodee.JoinTree.vo.MeetingRoom">
+		DELETE FROM meeting_room
+		WHERE room_no = #{roomNo}
+	</delete>
 </mapper>

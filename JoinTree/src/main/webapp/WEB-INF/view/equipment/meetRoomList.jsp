@@ -38,6 +38,7 @@
                 </td>
                 <td>
                     <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
+                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
                 </td>
             </tr>
         </c:forEach>
@@ -81,8 +82,12 @@
 <script>
 // 수정 모달창 스크립트
 $(document).ready(function() {
+	let originalRoomName; // 기존 이름 저장 - 중복검사 피하기 위함
+	
     $('.editButton').click(function() {
         const roomNo = $(this).data('room-no'); // 버튼의 data-room-no 속성값 가져오기
+        originalRoomName = $(this).closest('tr').find('.roomName').text(); // 기존 회의실 이름 저장
+        
         $.ajax({
             url: '/modifyMeetRoom',
             type: 'post',
@@ -106,18 +111,23 @@ $(document).ready(function() {
         });
     });
 
-    // 수정 폼 제출 시 이벤트
-    $('#updateForm').submit(function(event) {
-        event.preventDefault(); // 기본 폼 제출 동작 막기
+	// 수정 폼 제출 시 이벤트
+	$('#updateForm').submit(function(event) {
+        event.preventDefault();
         
         const roomName = $('#modalRoomName').val();
         
-        // 회의실명이 공백이거나 중복일 경우 처리
+	// 회의실명이 공백이거나 중복일 경우 막음. 수정하지 않았을 때는 통과
         if (roomName.trim() === "") {
         	 $("#rn_check").text("공백은 입력할 수 없습니다.");
              $("#rn_check").css("color", "red");
              $("#modalRoomName").focus();
-        } else {
+        } else if (roomName === originalRoomName){
+            $('#updateForm').attr('action', '/equipment/modifyMeetRoom');
+            $('#updateForm').attr('method', 'post');
+            $('#updateForm')[0].submit();
+            alert('수정이 완료되었습니다.');
+        } else { // 둘 다 통과시
             $.ajax({
                 url: '/cntRoomName',
                 type: 'post',
@@ -143,6 +153,40 @@ $(document).ready(function() {
         }
     });
 });
+
+//삭제 버튼 클릭 시
+	$('.deleteButton').click(function(event) {
+		event.preventDefault(); // 기본 폼 제출 동작 막기
+		
+	    const roomNo = $(this).data('room-no');
+	    const roomName = $(this).closest('tr').find('.roomName').text(); // 해당 회의실 이름 찾아서 가져오기
+	
+	    const msg = "삭제된 회의실은 복구할 수 없습니다.\n'" + roomName + "' 회의실을 삭제하시겠습니까?";
+	    if (confirm(msg)) {
+	        deleteMeetRoom(roomNo);
+	    }
+	});
+	
+	function deleteMeetRoom(roomNo) {
+	    $.ajax({
+	        url: '/deleteMeetRoom',
+	        type: 'post',
+	        data: { roomNo: roomNo },
+	        success: function(result) {
+	            if (result === "success") {
+	                // 삭제 성공 시 처리
+	                alert('회의실이 삭제되었습니다.');
+	                location.reload(); // 페이지 새로고침
+	            } else {
+	                // 삭제 실패 시 처리
+	                alert('회의실 삭제에 실패했습니다.');
+	            }
+	        },
+	        error: function() {
+	            console.log('ajax 실패');
+	        }
+	    });
+	}
 </script>
 </body>
 </html>

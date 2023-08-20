@@ -102,5 +102,18 @@ public class MeetRoomController {
     }
     
     // 회의실 삭제
+    @PostMapping("/deleteMeetRoom")
+    @ResponseBody
+    public String deleteMeetRoom(int roomNo) {
+    	MeetingRoom meetingRoom = new MeetingRoom();
+    	meetingRoom.setRoomNo(roomNo);
+    	//meetingRoom.setCreateId();
+		int row = meetRoomService.removeMeetRoom(meetingRoom);
+        if (row > 0) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
 	
 }

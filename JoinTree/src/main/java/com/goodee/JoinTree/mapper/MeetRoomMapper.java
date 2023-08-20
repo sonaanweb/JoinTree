@@ -30,4 +30,5 @@ public interface MeetRoomMapper {
 	// 회의실 상세
 	MeetingRoom selectMeetRoomOne(MeetingRoom meetingRoom);
 	
+	
 }

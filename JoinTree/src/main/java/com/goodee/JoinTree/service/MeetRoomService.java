@@ -40,4 +40,9 @@ public class MeetRoomService {
     	MeetingRoom modiMeetingRoom = meetRoomMapper.selectMeetRoomOne(meetingRoom);
     	return modiMeetingRoom;
     }
+    
+    // 회의실 삭제
+	public int removeMeetRoom(MeetingRoom meetingRoom) {
+		return meetRoomMapper.deleteMeetRoom(meetingRoom);
+	}
 }
