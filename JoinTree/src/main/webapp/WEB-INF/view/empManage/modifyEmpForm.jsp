@@ -17,7 +17,7 @@
 			<div>사번</div>
 			<div>
 				<span class="empNo"></span>
-				<input type="hidden" id="modifyEmpNo">
+				<input type="hidden" id=empNoOne name="empNoOne">
 			</div>
 		</div>
 		<div>
@@ -46,7 +46,7 @@
 		</div>
 		<div>
 			<div>부서</div>
-			<input type="hidden" id="departBeforeNo">
+			<input type="hidden" id="departBeforeNo" name="departBeforeNo">
 			<select id="modifyDeptCategory">
 				<c:forEach var="d" items="${deptCodeList}">
 					<option value="${d.code}">${d.codeName}</option>
@@ -55,7 +55,7 @@
 		</div>
 		<div>
 			<div>직급</div>
-			<input type="hidden" id="positionBeforeLevel">
+			<input type="hidden" id="positionBeforeLevel" name="positionBeforeLevel">
 			<select id="modifyPositionCategory">
 				<c:forEach var="p" items="${positionCodeList}">
 					<option value="${p.code}">${p.codeName}</option>
@@ -72,15 +72,15 @@
 		</div>
 		<div>
 			<div>내선번호</div>
-			<input type="text" id="modifyEmpExtensionNo">
+			<input type="text" id="modifyEmpExtensionNo" name="empExtensionNo">
 		</div>
 		<div>
 			<div>입사일</div>
-			<input type="date" id="modifyEmpHireDate">
+			<input type="date" id="modifyEmpHireDate" name="empHireDate">
 		</div>
 		<div>
 			<div>퇴사일</div>
-			<input type="date" id="modifyEmpLastDate">
+			<input type="date" id="modifyEmpLastDate" name="empLastDate">
 		</div>
 		<div class="text-center">
 			<button type="button" id="modifyEmpConfirmBtn">확인</button>

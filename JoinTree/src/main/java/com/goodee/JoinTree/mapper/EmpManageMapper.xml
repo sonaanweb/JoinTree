@@ -297,7 +297,7 @@
 	        emp_hire_date = #{empHireDate},
 	        emp_last_date =
 	    	<choose>
-		        <when test="modifyEmpLastDate != null and modifyEmpLastDate != ''">
+		        <when test="empLastDate != null and empLastDate != ''">
 		            #{empLastDate},
 		        </when>
 		        <otherwise>

@@ -442,7 +442,7 @@
    	 	            
    	 				// 사원 상세정보 값 설정
    	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
-   	 	            $('.empNo').text(empNo);
+   	 	            $('.empNoOne').text(empNo);
    	 				$('.empNameOne').text(empName);
    	 	            $('.empJuminNoOne').text(empJuminNo);
    	 	            $('.empPhoneOne').text(empPhone);
@@ -471,7 +471,8 @@
    	                }
    	 	            
    	 	            // 사원 정보 수정 input 요소에 값 설정
-				    $('input[name="empExtensionNo"]').val(empExtensionNo);
+				    $('input[name="empNoOne"]').val(empNo);
+   	 	            $('input[name="empExtensionNo"]').val(empExtensionNo);
 				    $('input[name="empHireDate"]').val(empHireDate);
 				    $('input[name="empLastDate"]').val(empLastDate);
 				    $('input[name="departBeforeNo"]').val(deptCode);
@@ -530,7 +531,7 @@
        		
        		// 수정할 사원 정보, 인사이동 이력 정보(이전부서, 이전직급)
        		let modifyEmpOne = {
-       			empNo: $('#modifyEmpNo').val(),
+       			empNo: $('#empNoOne').val(),
        			dept: $('#modifyDeptCategory').val(),
        			position: $('#modifyPositionCategory').val(),
        			active: $('#modifyEmpAtiveCategory').val(),
