@@ -39,6 +39,19 @@ public interface EmpManageMapper {
 	
 	// 사원 상세정보 조회
 	Map<String, Object> selectEmpOne(int empNo);
+	
+	// 인사이동이력 조회
+	List<ReshuffleHistory> selectReshuffleHistory(int empNo);
+	
+	// 사원 활성화 여부 수정
+	int modifyEmpActive(Map<String, Object> modifyActive);
+	
+	// 사원 정보 수정
+	int modifyEmpInfo(Map<String, Object> modifyEmpOneMap);
+	
+	
+	
+	
 
 	
 }

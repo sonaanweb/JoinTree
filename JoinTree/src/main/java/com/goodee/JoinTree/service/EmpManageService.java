@@ -166,7 +166,7 @@ public class EmpManageService {
 	}
 	
 	// 사원 목록 조회
-	public Map<String, Object> searchEmpList(Map<String, Object> searchEmpListMap, Map<String, Integer> pagingMap) {
+	public Map<String, Object> searchEmpList(Map<String, Object> searchEmpListMap, int currentPage, int rowPerPage) {
 		
 		// 사번(empNo) 형 변환
 		String empNoStr = String.valueOf(searchEmpListMap.get("empNo"));
@@ -180,9 +180,6 @@ public class EmpManageService {
 		log.debug(searchEmpListCnt+"<-- EmpManageService searchEmpListCnt");
 		
 		// 페이징
-		int currentPage = (int) pagingMap.get("currentPage");
-		int rowPerPage = (int) pagingMap.get("rowPerPage");
-		
 		// 시작 행번호
 		int beginRow = (currentPage-1)*rowPerPage;
 		
@@ -229,9 +226,111 @@ public class EmpManageService {
 	// 사원정보 상세조회
 	public Map<String, Object> selectEmpOne(int empNo) {
 		
+		// 사원정보 상세조회
 		Map<String, Object> selectEmpOne = empManageMapper.selectEmpOne(empNo);
 		log.debug(selectEmpOne+"<-- EmpManageService selectEmpOne");
-		return selectEmpOne;
+		
+		// 인사이동이력 조회
+		List<ReshuffleHistory>  reshuffleHistoryList = empManageMapper.selectReshuffleHistory(empNo);
+		log.debug(reshuffleHistoryList+"<-- EmpManageService reshuffleHistory");
+		
+		// map에 값 저장해서 리턴
+		Map<String, Object> selectEmpOneResult = new HashMap<>();
+		selectEmpOneResult.put("selectEmpOne", selectEmpOne);
+		selectEmpOneResult.put("reshuffleHistoryList", reshuffleHistoryList);
+		
+		return selectEmpOneResult;
+	}
+	
+	// 사원정보 수정
+	public Map<String, Object> modifyEmpInfo(Map<String, Object> modifyEmpOneMap) {
+		
+		// 변수에 값 저장
+		// 사번 형변환
+		String empNoStr = String.valueOf(modifyEmpOneMap.get("empNo"));
+		int empNo = 0;
+		if(empNoStr != null && !empNoStr.isEmpty()) {
+			empNo = Integer.parseInt(empNoStr);
+			log.debug(empNo+"<-- EmpManageService empNo");
+		}
+		
+		// 생성자 형변환
+		String createIdStr = String.valueOf(modifyEmpOneMap.get("createId"));
+		int createId = 0;
+		if(createIdStr != null && !createIdStr.isEmpty()) {
+			createId = Integer.parseInt(createIdStr);
+			log.debug(createId+"<-- EmpManageService createId");
+		}
+		
+		// 수정자 형변환
+		String updateIdStr = String.valueOf(modifyEmpOneMap.get("updateId"));
+		int updateId = 0;
+		if(updateIdStr != null && !updateIdStr.isEmpty()) {
+			updateId = Integer.parseInt(updateIdStr);
+			log.debug(updateId+"<-- EmpManageService updateId");
+		}
+		
+		// 이전부서
+		String departBeforeNo = (String)modifyEmpOneMap.get("departBeforeNo");
+		
+		// 부서
+		String dept = (String)modifyEmpOneMap.get("dept");
+		
+		// 이전직급
+		String positionBeforeLevel = (String)modifyEmpOneMap.get("positionBeforeLevel");
+		
+		// 직급
+		String position = (String)modifyEmpOneMap.get("position");
+		
+		// 활성화
+		String active = (String)modifyEmpOneMap.get("active");
+ 		
+		// 활성화 값 수정시 값 전달할 map
+		Map<String, Object> modifyActive = null; 
+		int modifyActiveResult = 0; // 활성화 수정 후 반환 값 저장 변수
+		int modifyEmpInfoResult = 0; // 사원 정조 수정 후 반환 값 저장 변수
+		
+
+    	// modifyActiveResult에 사번, 활성화, 수정자 값 저장
+		modifyActive = new HashMap<>();
+		modifyActive.put("empNo", empNo);
+		modifyActive.put("active", active);
+		modifyActive.put("updateId", updateId);
+		
+		// 활성화(active) 수정
+		modifyActiveResult = empManageMapper.modifyEmpActive(modifyActive);
+		log.debug(modifyActiveResult+"<-- EmpManageService modifyActiveResult");
+	
+		// 사원 상세정보 수정
+		modifyEmpInfoResult = empManageMapper.modifyEmpInfo(modifyEmpOneMap);
+		log.debug(modifyEmpInfoResult+"<-- EmpManageService modifyEmpInfoResult");
+		
+		// 인사이동 이력 등록 후 반환 값 저장 변수
+		int reshuffleHistoryResult = 0;
+		
+		// 인사이동 이력 등록 시 전달할 map
+		ReshuffleHistory reshuffleHistory = null;
+		
+		// 사원 상세정보 중 인사이동(부서, 직급) 이력이 변경 되면 인사이동 이력 등록
+		if(modifyEmpInfoResult == 1 && (!departBeforeNo.equals(dept) || !positionBeforeLevel.equals(position))) {
+			reshuffleHistory = new ReshuffleHistory();
+			reshuffleHistory.setEmpNo(empNo);
+			reshuffleHistory.setDepartNo(dept);
+			reshuffleHistory.setPosition(position);
+			reshuffleHistory.setDepartBeforeNo(departBeforeNo);
+			reshuffleHistory.setPositionBeforeLevel(positionBeforeLevel);
+			reshuffleHistory.setCreateId(createId);
+			reshuffleHistory.setUpdateId(updateId);
+			
+			reshuffleHistoryResult = empManageMapper.addReshuffleHistory(reshuffleHistory);
+		}
+		log.debug(reshuffleHistoryResult+"<-- EmpManageService reshuffleHistoryResult"); 
+	
+		Map<String, Object> modifyEmpOneResult = new HashMap<>();
+		modifyEmpOneResult.put("modifyActiveResult", modifyActiveResult);
+		modifyEmpOneResult.put("modifyEmpInfoResult", modifyEmpInfoResult);
+		log.debug(modifyEmpOneResult+"<-- EmpManageService modifyEmpOneResult");
+		return modifyEmpOneResult;
 	}
 
 }

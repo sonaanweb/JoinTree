@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -63,15 +64,10 @@ public class EmpManageController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> searchEmpListResult = null;
 		
-		// paging 요청값 map에 저장
-		Map<String, Integer> pagingMap = new HashMap<>();
-		pagingMap.put("currentPage", currentPage);
-		pagingMap.put("rowPerPage", rowPerPage);
-		
 		try {
 	        Map<String, Object> searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
 	        // 검색, 페이징 리스트
-	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, pagingMap);
+	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, currentPage, rowPerPage);
 	        
 	    } catch (JsonProcessingException e) {
 	        e.printStackTrace();
@@ -133,11 +129,31 @@ public class EmpManageController {
 	
 	// 사원 계정, 정보, 인사이동 이력 수정
 	@PostMapping("/empManage/modifyEmp")
-	public String modifyEmpInfo(Model model,
-								HttpSession session,
-								@RequestParam Map<String, Object> empInfo) {
-	
-		return "";
+	@ResponseBody
+	public Map<String, Object> modifyEmpInfo(HttpSession session,
+											 @RequestBody Map<String, Object> modifyEmpOneMap) {
+		log.debug(modifyEmpOneMap+"<-- EmpManageController modifyEmpOneMap");
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int createId = 0;
+		int updateId = 0;
+		
+		if(loginAccount != null) {
+			createId = loginAccount.getEmpNo();
+			updateId = loginAccount.getEmpNo();
+		}
+		
+        // updateId를 modifyEmpOneMap에 추가
+        modifyEmpOneMap.put("createId", createId);
+		modifyEmpOneMap.put("updateId", updateId);
+        
+        // 사원정보 수정
+        Map<String, Object> modifyEmpRow = empManageService.modifyEmpInfo(modifyEmpOneMap);
+		
+        return modifyEmpRow;
 	}
 	
 }

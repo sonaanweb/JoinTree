@@ -113,8 +113,22 @@
 			#{empNo}, 
 			#{departNo}, 
 			#{position},
-			NULL,
-			NULL,
+			<choose>
+	            <when test="departBeforeNo != null">
+	                #{departBeforeNo},
+	            </when>
+	            <otherwise>
+	                NULL,
+	            </otherwise>
+	        </choose>
+	        <choose>
+	            <when test="positionBeforeLevel != null">
+	                #{positionBeforeLevel},
+	            </when>
+	            <otherwise>
+	                NULL,
+	            </otherwise>
+	        </choose>
 			NOW(), 
 			NOW(), 
 			#{createId}, 
@@ -215,8 +229,11 @@
 			e.emp_hire_date empHireDate,
 			e.emp_last_date empLastDate,
 			dc.code_name dept,
+			dc.code deptCode,
 			pc.code_name position,
+			pc.code positionCode,
 			ac.code_name active,
+			ac.code activeCode,
 			ei.emp_save_img_name empSaveImgName
 		FROM emp_info e LEFT OUTER JOIN account_list a
 		ON e.emp_no = a.emp_no
@@ -230,4 +247,75 @@
 		ON e.position = pc.code
 		WHERE e.emp_no = #{empNo}	
 	</select>
+	
+	<!-- 인사이동이력 조회 -->
+	<select id="selectReshuffleHistory"
+			parameterType="int" resultType="com.goodee.JoinTree.vo.ReshuffleHistory" >
+		
+		SELECT 
+			rh.emp_no empNo, 
+			pbc.code_name positionBeforeLevel, 
+			pc.code_name position, 
+			dc.code_name departNo, 
+			dbc.code_name departBeforeNo, 
+			rh.createdate createdate
+		FROM reshuffle_history rh LEFT OUTER JOIN common_code dc
+		ON rh.depart_no = dc.code
+		LEFT OUTER JOIN common_code dbc
+		ON rh.depart_before_no = dbc.code
+		LEFT OUTER JOIN common_code pc
+		ON rh.position = pc.code
+		LEFT OUTER JOIN common_code pbc
+		ON rh.position_before_level = pbc.code
+		WHERE emp_no = #{empNo}
+		ORDER BY rh.createdate DESC 
+	</select>
+	
+	<!-- 사원 활성화 수정 -->
+	<update id="modifyEmpActive" parameterType="java.util.Map">
+		<![CDATA[
+	        UPDATE 
+	            account_list 
+	        SET  
+	            active = #{active},
+	            updatedate = NOW(),
+	            update_id = #{updateId}
+	        WHERE 
+	            emp_no = #{empNo}
+	            AND active <> #{active}
+	    ]]>
+	</update>
+	
+	<!-- 사원 정보 수정 -->
+	<update id="modifyEmpInfo" parameterType="java.util.Map">
+	    UPDATE
+	        emp_info
+	    SET
+	        dept = #{dept},
+	        position = #{position},
+	        emp_extension_no = #{empExtensionNo},
+	        emp_hire_date = #{empHireDate},
+	        emp_last_date =
+	    	<choose>
+		        <when test="modifyEmpLastDate != null and modifyEmpLastDate != ''">
+		            #{empLastDate},
+		        </when>
+		        <otherwise>
+		            emp_last_date,
+		        </otherwise>
+		    </choose>
+	    <![CDATA[
+	        updatedate = NOW(),
+	        update_id = #{updateId}
+	    WHERE
+	        emp_no = #{empNo}
+	        AND (
+	            dept <> #{dept}
+	            OR position <> #{position}
+	            OR emp_extension_no <> #{empExtensionNo}
+	            OR emp_hire_date <> #{empHireDate}
+	            OR emp_last_date <> #{empLastDate}
+	        )
+	    ]]>
+	</update>
 </mapper>

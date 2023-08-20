@@ -5,11 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>selectEmpList</title>
-</head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
 
 <body>
 	<div>
@@ -76,7 +77,7 @@
 				<th>재직상태</th>
 			</tr>
 		</thead>
-		<tbody id="tableBody">
+		<tbody id="empInfoList">
 		
 		</tbody>
 	</table>
@@ -133,16 +134,18 @@
 						<div>
 							<div>부서</div>
 							<select id="deptCategory" name="dept">
+								<option value="">선택하세요</option>
 								<c:forEach var="d" items="${deptCodeList}">
-									<option id="dept" value="${d.code}">${d.codeName}</option>
+									<option value="${d.code}">${d.codeName}</option>
 								</c:forEach>
 							</select>
 						</div>
 						<div>
 							<div>직급</div>
 							<select id="positionCategory" name="position">
+								<option value="">선택하세요</option>
 								<c:forEach var="p" items="${positionCodeList}">
-									<option id="position" value="${p.code}">${p.codeName}</option>
+									<option value="${p.code}">${p.codeName}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -163,83 +166,26 @@
 		</div>
 	</div>
 	
-	<!-- 사원 상세정보 모달창 -->
+	<!-- 사원 상세정보, 수정 모달창 -->
 	<div class="modal" id="selectEmpOneModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 			
 				<!-- Modal Header -->
 				<div class="modal-header">
-					<h4 class="modal-title">사원 상세 정보</h4>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					<h4 class="modal-title" id="modarTitleEmpOne">사원 상세 정보</h4>
+					<h4 class="modal-title" id="modarTitleModifyEmp">사원 정보 수정</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" id="empOneModalClose"></button>
 				</div>
 			
 				<!-- Modal body -->
-				<div class="modal-body" id="empOneModalBody">
-					<div>
-						<div>
-							<div id="empImgOne">
-								<img alt="" src="#">
-							</div>
-						</div>
-						<div>
-							<div>사원명</div>
-							<div>
-								<span id="empNameOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>주민번호</div>
-							<div>
-								<span id="empJuminNoOne"></span> 
-							</div>  
-						</div>
-						<div>
-							<div>연락처</div>
-							<div>
-								<span id="empPhoneOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>주소</div>
-							<div>
-								<span id="empoAddressOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>부서</div>
-							<div>
-								<span id="deptOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>직급</div>
-							<div>
-								<span id="positionOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>내선번호</div>
-							<div>
-								<span id="empExtensionNoOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>입사일</div>
-							<div>
-								<span id="empHireDateOne"></span>
-							</div>
-						</div>
-						<div>
-							<div>퇴사일</div>
-							<div>
-								<span id="empLastDateOne"></span>
-							</div>
-						</div>
-						<div class="text-center">
-							<button type="button" id="modifyEmpBtn">수정</button>
-						</div>
-					</div>
+				<div class="modal-body">
+					
+					<!-- 사원 상세 정보 조회 -->
+					<jsp:include page="./selectEmpOne.jsp"></jsp:include>
+					
+					<!-- 사원 정보 수정 -->
+					<jsp:include page="./modifyEmpForm.jsp"></jsp:include>
 				</div>
 			</div>
 		</div>
@@ -251,10 +197,10 @@
 
 <script>
 	
-	// addEmpBtn click
+	// 사원등록 버튼(addEmpBtn) click
 	$('#addEmpBtn').on('click', function(){
 		
-		// 값 유효성 검사 후 signUpAction.jsp 이동
+		// 값 유효성 검사 후 사원 등록
 	    let addEmpUrl = '/empManage/addEmp';
 		$('#addEmpForm').attr('action', addEmpUrl);
 	    $('#addEmpForm').submit();
@@ -358,7 +304,6 @@
 				},
 				error: function(){
 					console.log(data);
-					alert("잘못된 요청입니다");
 				}
 			});
 		}
@@ -377,7 +322,7 @@
 			
 			// 이전 페이지 버튼
 			if(data.startPage > 1){
-				let prevButton = $('<button class="page-btn">').text('이전');
+				let prevButton = $('<button type="button" class="page-btn">').text('이전');
 	            prevButton.click(function() {
 	                goToPage(data.startPage - data.pageLength);
 	            });
@@ -387,7 +332,7 @@
 			// 페이지 버튼 생성
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
-				let pageButton = $('<button class="page-btn">').text(i);
+				let pageButton = $('<button type="button" class="page-btn">').text(i);
 		        pageButton.click(function(){
 		        	goToPage(page);
 		        });
@@ -396,7 +341,7 @@
 			
 			// 다음 페이지 버튼
 			if(data.endPage < data.lastPage){
-				let nextButton = $('<button class="page-btn">').text('다음');
+				let nextButton = $('<button type="button" class="page-btn">').text('다음');
 	            nextButton.click(function() {
 	                goToPage(data.endPage + data.pageLength);
 	            });
@@ -411,7 +356,7 @@
 		    let empList = data.searchEmpListByPage;
 		    
 		    // 테이블의 tbody를 선택하고 초기화
-		    let tbody = $('#tableBody');
+		    let tbody = $('#empInfoList');
 		    tbody.empty();
 	
 		    // data의 길이만큼 테이블 행을 추가
@@ -429,9 +374,40 @@
 		}
 	
 		});
+	 	
+		// 사원 상세정보, 수정폼 관리
+	 	let modifyFormMode = false; // 수정폼 실행 상태 변수
+	 	
+	 	// 사원 상세정보로 초기화
+	 	function resetEmpOne(){
+	 		$('#empOneModalBody').show();
+	 		$('#modarTitleEmpOne').show();
+	        $('#modifyEmpForm').hide();
+	        $('#modarTitleModifyEmp').hide();
+	        modifyFormMode = false;
+	 	}
+	 	
+	 	// 수정버튼(modifyEmpBtn) click
+	 	$('#modifyEmpBtn').click(function(){
+	 		$('#modifyEmpForm').show();
+	 		$('#modarTitleModifyEmp').show();
+	 		$('#empOneModalBody').hide();
+	 		$('#modarTitleEmpOne').hide();
+	 		modifyFormMode = true;
+	 	});
+	 	
+	 	// 모달창 닫을 때
+	 	$('#empOneModalClose').click(function(){
+	 		// 사원 상세정보 초기화
+	 		resetEmpOne();
+	 	});
 	 
-	 	// 사원 상제정보
-	 	$('#tableBody').on('click', 'tr', function(){
+	 	// 사원 상제정보, 수정폼 데이터 관리
+	 	$('#empInfoList').on('click', 'tr', function(){
+	 		 
+	 		// tr 클릭 시 사원 상세정보로 초기화
+	        resetEmpOne();
+	        document.getElementsByClassName("tablink")[0].click();
 	 		// empNo의 값이 들어있는 첫 번째 열의 값을 가져온다
 	 		let empNo = $(this).find('td:eq(0)').text();
 	 		   
@@ -443,36 +419,71 @@
    	 			success: function(data){
    	 				
    	 				console.log(data);
-   	 				let empInfo = data;
    	 				
-   	 	            // empInfo의 값을 해당 위치에 삽입
-   	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
-   	 	            $('#empNameOne').text(empInfo.empName);
-   	 	            $('#empJuminNoOne').text(empInfo.empJuminNo);
-   	 	            $('#empPhoneOne').text(empInfo.empPhone);
-   	 	            $('#empoAddressOne').text(empInfo.empAddress);
-   	 	            $('#deptOne').text(empInfo.dept);
-   	 	            $('#positionOne').text(empInfo.position);
-   	 	            $('#empExtensionNoOne').text(empInfo.empExtensionNo);
-   	 	            $('#empHireDateOne').text(empInfo.empHireDate);
+   	 				let empInfoOne = data.selectEmpOne;// 사원 상세정보
+   	 				let reshuffleHistoryList = data.reshuffleHistoryList; // 인사이동 이력 목록
+   	 				
+   	 				// 사원 상세정보 값 변수에 저장
+   	 				let empNo = empInfoOne.empNo;
+   	 				let empName = empInfoOne.empName;
+   	 				let empJuminNo = empInfoOne.empJuminNo;
+   	 				let empPhone = empInfoOne.empPhone;
+   	 				let empAddress = empInfoOne.empAddress;
+   	 				let dept = empInfoOne.dept;
+   	 				let deptCode = empInfoOne.deptCode;
+   	 				let position = empInfoOne.position;
+   	 				let positionCode = empInfoOne.positionCode;
+   	 				let empExtensionNo = empInfoOne.empExtensionNo;
+   	 				let empHireDate = empInfoOne.empHireDate;
+   	 				let empLastDate = empInfoOne.empLastDate;
+   	 				let active = empInfoOne.active;
+   	 				let activeCode = empInfoOne.activeCode;
+   	 				let empSaveImgName = empInfoOne.empSaveImgName;
    	 	            
+   	 				// 사원 상세정보 값 설정
+   	 	            //$('#empImgOne img').attr('src', empInfo.empImage || '기본이미지경로');
+   	 	            $('.empNo').text(empNo);
+   	 				$('.empNameOne').text(empName);
+   	 	            $('.empJuminNoOne').text(empJuminNo);
+   	 	            $('.empPhoneOne').text(empPhone);
+   	 	            $('.empoAddressOne').text(empAddress);
+   	 	            $('#deptOne').text(dept);
+   	 	            $('#positionOne').text(position);
+   	 	            $('#empExtensionNoOne').text(empExtensionNo);
+   	 	            $('#empHireDateOne').text(empHireDate);
+   	 	        	$('#empActiveOne').text(active);
+   	 	        	
    	 	            // 이미지 유무에 따른 분기
-   	 	            if (empInfo.empSaveImgName) {
+   	 	            if (empSaveImgName) {
    	                    //$('#empImgOne img').attr('src', empInfo.empSaveImgName);
-   	 	            	$('#empImgOne').text('사진 정보 있음');
+   	 	            	$('.empImgOne').text('사진 정보 있음');
    	                } else {
    	                    // 이미지가 없는 경우 처리
    	                    //$('#empImgOne img').attr('src', '#');
-   	                    $('#empImgOne').text('사진 정보 없음');
+   	                    $('.empImgOne').text('사진 정보 없음');
    	                }
    	 	            
    	 	            // 퇴사일 분기
-   	 	            if (empInfo.empLastDate) {
-   	                    $('#empLastDateOne').text(empInfo.empLastDate);
+   	 	            if (empLastDate) {
+   	                    $('#empLastDateOne').text(empLastDate);
    	                } else {
    	                    $('#empLastDateOne').text('퇴사일 정보 없음');
    	                }
    	 	            
+   	 	            // 사원 정보 수정 input 요소에 값 설정
+				    $('input[name="empExtensionNo"]').val(empExtensionNo);
+				    $('input[name="empHireDate"]').val(empHireDate);
+				    $('input[name="empLastDate"]').val(empLastDate);
+				    $('input[name="departBeforeNo"]').val(deptCode);
+				    $('input[name="positionBeforeLevel"]').val(positionCode);
+   					// 사원 정보로 값 selected		 	      
+				    $('#modifyDeptCategory option[value="' + deptCode + '"]').prop('selected', true);
+				    $('#modifyPositionCategory option[value="' + positionCode + '"]').prop('selected', true);
+				    $('#modifyEmpAtiveCategory option[value="' + activeCode + '"]').prop('selected', true);
+				    
+				    // 인사이동 테이블 데이터
+				    updateReshuffleHistoryTableWithData(reshuffleHistoryList);
+			
    	 	            // 모달창 열기
    	 	        	$('#selectEmpOneModal').modal('show');
 
@@ -481,8 +492,98 @@
    	 				console.log("잘못된 요청입니다");
    				}
    	 		});
+         
 		});
 	 	
-
+	 	// 인사이동 테이블 데이터 수정 함수
+		function updateReshuffleHistoryTableWithData(data) {
+		    // data는 서버에서 반환된 JSON 데이터
+		    // data 값 저장
+		    let reshuffleHistoryList = data;
+		    
+		    // 테이블의 tbody를 선택하고 초기화
+		    let tbody = $('#reshuffleHistoryList');
+		    tbody.empty();
+	
+		    // data의 길이만큼 테이블 행을 추가
+		    for (let i = 0; i < reshuffleHistoryList.length; i++) {
+		        let rh = reshuffleHistoryList[i];
+		        let row = $('<tr>');
+		        let dateOnly = rh.createdate.split(" ")[0];
+		        row.append($('<td>').text(dateOnly));
+		        row.append($('<td>').text(rh.departBeforeNo));
+		        row.append($('<td>').text(rh.departNo));
+		        row.append($('<td>').text(rh.positionBeforeLevel));
+		        row.append($('<td>').text(rh.position));
+		        tbody.append(row);
+		    }
+		}
+	 	
+	 	
+	 	// 사원정보 수정확인 버튼(modifyEmpConfirmBtn) click
+       	$('#modifyEmpConfirmBtn').on('click', function(){
+       		
+       		// 카테고리별 이름 값 저장 변수
+       		let deptCategory = $('#modifyDeptCategory option:selected').text();
+       		let positionCategory = $('#modifyPositionCategory option:selected').text();
+       		let activeCategory = $('#modifyEmpAtiveCategory option:selected').text();
+       		
+       		// 수정할 사원 정보, 인사이동 이력 정보(이전부서, 이전직급)
+       		let modifyEmpOne = {
+       			empNo: $('#modifyEmpNo').val(),
+       			dept: $('#modifyDeptCategory').val(),
+       			position: $('#modifyPositionCategory').val(),
+       			active: $('#modifyEmpAtiveCategory').val(),
+       			empExtensionNo: $('#modifyEmpExtensionNo').val(),
+       			empHireDate: $('#modifyEmpHireDate').val(),
+       			empLastDate: $('#modifyEmpLastDate').val(),
+       			departBeforeNo: $('#departBeforeNo').val(),
+       			positionBeforeLevel: $('#positionBeforeLevel').val()
+       		}
+       		
+       		$.ajax({
+       			url: '/empManage/modifyEmp',
+       			type: 'POST',
+       			contentType: 'application/json',
+       			dataType: 'json',
+       			data: JSON.stringify(modifyEmpOne),
+       			success: function(data){
+       				console.log(data + "<-- modifyEmpOne data");
+       				let activeResult = data.modifyActiveResult;
+       				let empInfoResult = data.modifyEmpInfoResult;
+       				
+       				if(activeResult == 1 || empInfoResult == 1){
+       					alert('사원 정보 수정 성공');
+       					
+       					// 수정된 내용 업데이트
+       					$('#deptOne').text(deptCategory);
+	   	 	            $('#positionOne').text(positionCategory);
+	   	 	            $('#empExtensionNoOne').text(modifyEmpOne.empExtensionNo);
+	   	 	            $('#empHireDateOne').text(modifyEmpOne.empHireDate);
+	   	 	        	$('#empActiveOne').text(activeCategory);
+       					
+       					// 모달 창 내용 변경 후, 수정 폼을 숨기고 상세 정보를 보이게 설정
+       		            $('#modifyEmpForm').hide();
+       		            $('#modarTitleModifyEmp').hide();
+       		            $('#empOneModalBody').show();
+       		            $('#modarTitleEmpOne').show();
+       		         	
+       				} 
+       			},
+       			error: function(){
+       				console.log(data + "<-- modifyEmpOne error data");
+       			}
+       		});
+       	});
+	 	
+	 	// 수정취소 버튼(modifyEmpCancelBtn) click
+	 	$('#modifyEmpCancelBtn').click(function(){
+	 		// 수정 폼을 숨기고 상세 정보를 보이게 설정
+            $('#modifyEmpForm').hide();
+            $('#modarTitleModifyEmp').hide();
+            $('#empOneModalBody').show();
+            $('#modarTitleEmpOne').show();
+	 	});
+	 	
 </script>
 </html>
