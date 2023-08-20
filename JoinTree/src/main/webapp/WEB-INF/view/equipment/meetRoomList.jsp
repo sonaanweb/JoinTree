@@ -37,7 +37,7 @@
                     </c:choose>
                 </td>
                 <td>
-                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}" data-equip-category="${m.equipCategory}" data-room-name="${m.roomName}" data-room-capacity="${m.roomCapacity}" data-room-status="${m.roomStatus}">수정</button>
+                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
                 </td>
             </tr>
         </c:forEach>
@@ -49,7 +49,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="updateForm">
@@ -63,7 +62,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="modalRoomCapacity" class="form-label">수용 인원</label>
-                        <input type="number" class="form-control" id="modalRoomCapacity" name="roomCapacity">
+                        <input type="number" class="form-control" id="modalRoomCapacity" name="roomCapacity" min="1">
                     </div>
                     <div class="mb-3">
                         <label for="modalRoomStatus" class="form-label">사용 여부</label>
@@ -72,78 +71,78 @@
                             <option value="0">사용불가</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">수정</button>
+                    <button type="submit" class="btn btn-primary" id="modalBtn" onclick="modiMeetRoom()">수정</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
                 </form>
             </div>
         </div>
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-        $(".editButton").click(function () {
-            const roomNo = $(this).data("room-no");
-            const equipCategory = $(this).data("equip-category");
-            const roomName = $(this).data("room-name");
-            const roomCapacity = $(this).data("room-capacity");
-            const roomStatus = $(this).data("room-status");
-
-            $("#modalRoomNo").val(roomNo);
-            $("#modalCate").val(equipCategory);
-
-            // 모달 창 내의 input 요소에 값 설정
-            $("#modalRoomName").val(roomName);
-            $("#modalRoomCapacity").val(roomCapacity);
-            $("#modalRoomStatus").val(roomStatus);
-
-            // 모달 창 열기
-            $("#updateModal").modal("show");
-           
-            // 메시지 rn_check 초기화
-            $("#updateModal").on("hidden.bs.modal", function () {
-                $("#rn_check").text("");
-            });
-
-            // 폼 제출 이벤트 핸들러
-            $("#updateForm").submit(function (event) {
-                event.preventDefault();
-
-                // 공백 검사
-                if ($("#modalRoomName").val().trim() === '') {
-                    $("#rn_check").text("공백은 입력 불가능합니다");
-                    $("#rn_check").css("color", "red");
-                    $("#modalRoomName").focus();
-                    return; // 검사 통과하지 않으면 중단
-                }
-
-                const roomName = $("#modalRoomName").val().trim();
-                $.post("/equipment/cntRoomName", { roomName: roomName }, function (data) {
-                    if (data > 0) {
-                        $("#rn_check").text("이미 사용 중인 회의실 이름입니다.");
-                        $("#rn_check").css("color", "red");
-                        $("#modalRoomName").focus();
-                    } else {
-                        const formData = $("#updateForm").serialize();
-                        const url = "/equipment/meetRoomList"; // 수정 처리url
-                        
-                        $.ajax({
-                            type: "POST", //HTTP 요청 방식(서버에 데이터를 넘기는 방식)
-                            url: url,
-                            data: formData, 
-                            success: function (data) { //success = 콜백함수
-                                // 회의실 수정 성공
-                                alert("수정이 완료되었습니다.");
-                                location.reload(); // 새로고침
-                            },
-                            error: function () { //error = 콜백함수
-                                // 실패 시엔 alert창만 띄우고 새로고침 되지 않음
-                                alert("수정에 실패하였습니다.");
-                            }
-                        });
-                    }
-                });
-            });
+// 수정 모달창 스크립트
+$(document).ready(function() {
+    $('.editButton').click(function() {
+        const roomNo = $(this).data('room-no'); // 버튼의 data-room-no 속성값 가져오기
+        $.ajax({
+            url: '/modifyMeetRoom',
+            type: 'post',
+            data: { roomNo: roomNo }, // 가져온 roomNo 전달
+            success: function(meetroom) {
+                $('#modalRoomNo').val(meetroom.roomNo);
+                $('#modalCate').val(meetroom.equipCategory);
+                $('#modalRoomName').val(meetroom.roomName);
+                $('#modalRoomCapacity').val(meetroom.roomCapacity);
+                $('#modalRoomStatus').val(meetroom.roomStatus);
+            },
+            error: function() {
+                console.log('ajax실패');
+            }
+        });
+        $("#updateModal").modal("show");
+        
+        // 모달창 닫을때 메시지 rn_check 초기화
+        $("#updateModal").on("hidden.bs.modal", function () {
+            $("#rn_check").text("");
         });
     });
+
+    // 수정 폼 제출 시 이벤트
+    $('#updateForm').submit(function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작 막기
+        
+        const roomName = $('#modalRoomName').val();
+        
+        // 회의실명이 공백이거나 중복일 경우 처리
+        if (roomName.trim() === "") {
+        	 $("#rn_check").text("공백은 입력할 수 없습니다.");
+             $("#rn_check").css("color", "red");
+             $("#modalRoomName").focus();
+        } else {
+            $.ajax({
+                url: '/cntRoomName',
+                type: 'post',
+                data: roomName,
+                contentType: 'application/json',
+                success: function(cnt) {
+                    if (cnt > 0) {
+	                   	 $("#rn_check").text("이미 존재하는 이름입니다.");
+	                     $("#rn_check").css("color", "red");
+	                     $("#modalRoomName").focus();
+                    } else {
+                        // 유효성 검사 통과시
+	                    $('#updateForm').attr('action', '/equipment/modifyMeetRoom');
+	                    $('#updateForm').attr('method', 'post'); // 폼 제출 방식
+	                    $('#updateForm')[0].submit();
+	                    alert('수정이 완료되었습니다.');
+                    }
+                },
+                error: function() {
+                    console.log('ajax실패');
+                }
+            });
+        }
+    });
+});
 </script>
 </body>
 </html>

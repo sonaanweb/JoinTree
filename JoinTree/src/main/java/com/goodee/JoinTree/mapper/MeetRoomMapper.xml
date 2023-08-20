@@ -7,7 +7,9 @@
     	SELECT
     	COUNT(*)
     	FROM meeting_room
-    	WHERE room_name = #{roomName}
+    	<where>
+    	room_name = #{roomName}
+    	</where>
 	</select>
 	
 	<!-- 경영지원 회의실 목록 조회 -->
@@ -69,5 +71,21 @@
 	        updatedate = NOW()
 	    WHERE room_no = #{roomNo}
 	</update>
+	
+	<!-- 비품 상세 -->
+	<select id="selectMeetRoomOne" parameterType="com.goodee.JoinTree.vo.MeetingRoom" resultType="com.goodee.JoinTree.vo.MeetingRoom">
+		SELECT
+			room_no roomNo,
+			equip_category equipCategory,
+			room_name roomName,
+			room_Capacity roomCapacity,
+			room_status roomStatus,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM meeting_room
+		WHERE room_no = #{roomNo}
+	</select>
 	
 </mapper>

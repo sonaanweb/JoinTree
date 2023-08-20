@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -74,17 +75,25 @@ public class MeetRoomController {
     // ------------------------------------------------
     
     // 회의실 수정 액션(post)
-    @PostMapping("/equipment/meetRoomList")
-    public String updateMeetRoom(MeetingRoom meetingRoom) { // 회의실 객체 그대로
+    @PostMapping("/equipment/modifyMeetRoom")
+    public String updateMeetRoom(HttpSession session,MeetingRoom meetingRoom) {
         meetRoomService.modifyMeetRoom(meetingRoom);
         log.debug(Sona+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RESET);
         return "redirect:/equipment/meetRoomList";
     }
     // ------------------------------------------------
     
+    // 회의실 수정시 불러올 정보(ajax)
+    @PostMapping("/modifyMeetRoom")
+    public @ResponseBody MeetingRoom meetingRoom(MeetingRoom meetingRoom) {
+    	MeetingRoom modiMeetingRoom = meetRoomService.getMeetRoomNo(meetingRoom);
+    	return modiMeetingRoom;
+    }
+    
     // 회의실 추가 & 수정시 회의실명 중복 검사
-    @PostMapping("/equipment/cntRoomName")
-    public @ResponseBody int checkRoomName(@RequestBody String roomName) {
+    @PostMapping("/cntRoomName")
+    @ResponseBody
+    public int checkRoomName(@RequestBody String roomName) {
     	MeetingRoom meetingRoom = new MeetingRoom();
     	meetingRoom.setRoomName(roomName);
         int cnt = meetRoomService.getRoomNameCnt(meetingRoom);

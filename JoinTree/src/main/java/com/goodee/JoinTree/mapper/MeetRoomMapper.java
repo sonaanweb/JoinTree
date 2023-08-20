@@ -22,9 +22,12 @@ public interface MeetRoomMapper {
 	int deleteMeetRoom(MeetingRoom meetingRoom);
 		
 	// 회의실 수정 메서드
-	void updateMeetRoom(MeetingRoom meetingRoom);
+	int updateMeetRoom(MeetingRoom meetingRoom);
 	
 	// 회의실 이름 중복검사 메서드
 	int selectRoomName(MeetingRoom meetingRoom);
+	
+	// 회의실 상세
+	MeetingRoom selectMeetRoomOne(MeetingRoom meetingRoom);
 	
 }

@@ -34,4 +34,10 @@ public class MeetRoomService {
     	int cnt = meetRoomMapper.selectRoomName(meetingRoom);
         return cnt;
     }
+    
+    // 회의실 수정 객체
+    public MeetingRoom getMeetRoomNo(MeetingRoom meetingRoom) {
+    	MeetingRoom modiMeetingRoom = meetRoomMapper.selectMeetRoomOne(meetingRoom);
+    	return modiMeetingRoom;
+    }
 }
