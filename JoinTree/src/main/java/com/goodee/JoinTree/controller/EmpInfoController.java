@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.LoginService;
@@ -130,13 +132,44 @@ public class EmpInfoController {
 		log.debug(CYAN + row + " <-- row(EmpInfoController-modifyEmp)" + RESET);
 		
 		if (row == 1) {
-			msg = URLEncoder.encode("회원정보가 변경되었습니다. 다시 로그인 후 이용 가능합니다.", "UTF-8");
-			session.setAttribute("empChangeMessage", msg); // 메시지를 세션에 저장
+			msg = URLEncoder.encode("사원 정보가 변경되었습니다.", "UTF-8");
+			session.setAttribute("empName", empInfo.get("empName"));
 			
-			return "redirect:/logout?msg=" + msg;
+			return "redirect:/empInfo/empInfo?msg=" + msg;
 		} else {
-			msg = URLEncoder.encode("회원정보 변경 실패. 관리자에게 문의해주세요.", "UTF-8");
+			msg = URLEncoder.encode("사원 정보 변경 실패. 관리자에게 문의해주세요.", "UTF-8");
 			return "redirect:/empInfo/modifyEmp?msg=" + msg;
 		}
+	}
+	
+	@PostMapping("/empInfo/modifyEmp/uploadEmpImg")
+	@ResponseBody
+	public String uploadEmpImg(@RequestParam("newImgFile") MultipartFile newImgFile, HttpServletRequest request, HttpSession session, Model model) {
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		int empNo = loginAccount.getEmpNo();
+		
+		// 파일 저장 경로 설정
+		String path = request.getServletContext().getRealPath("/empImg/"); // 실제 파일 시스템 경로
+		
+		int row = empInfoService.uploadEmpImg(empNo, newImgFile, path);
+		
+		if (row == 1) {
+			return "success";
+		} else {
+			return "error";
+		}
+	}
+	
+	@PostMapping("/empInfo/modifyEmp/modifyEmpImg")
+	@ResponseBody
+	public String modifyEmpImg(HttpServletRequest request, HttpSession session, Model model) {
+		int row = 1;
+		
+		if (row == 1) {
+			return "success";
+		} else {
+			return "false";
+		} 
 	}
 }

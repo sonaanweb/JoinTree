@@ -1,14 +1,20 @@
 package com.goodee.JoinTree.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.mapper.EmpInfoMapper;
 import com.goodee.JoinTree.vo.AccountList;
+import com.goodee.JoinTree.vo.EmpInfoImg;
+import com.goodee.JoinTree.mapper.EmpInfoImgMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +27,9 @@ public class EmpInfoService {
 	
 	@Autowired
 	private EmpInfoMapper empInfoMapper;
+	
+	@Autowired
+	private EmpInfoImgMapper empInfoImgMapper;
 	
 	// 비밀번호 변경
 	public int modifyPw(AccountList account) {
@@ -87,4 +96,106 @@ public class EmpInfoService {
 
 		return row;
 	}
+	
+	// 나의 이미지 추가
+	public int uploadEmpImg(int empNo, MultipartFile newImgFile, String path) {
+		String originFilename = newImgFile.getOriginalFilename();
+		String ext = originFilename.substring(originFilename.lastIndexOf("."));
+		String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
+		String realPath = path + newFilename;
+		
+		EmpInfoImg empInfoImg = new EmpInfoImg();
+		empInfoImg.setEmpNo(empNo);
+		empInfoImg.setEmpOriginImgName(originFilename);
+		empInfoImg.setEmpFiletype(newImgFile.getContentType());
+		empInfoImg.setEmpFilesize(newImgFile.getSize());
+		empInfoImg.setEmpSaveImgName(newFilename);
+		empInfoImg.setCreateId(empNo);
+		empInfoImg.setUpdateId(empNo);
+		
+		// DB에 새 이미지 정보 저장
+		int row = empInfoImgMapper.insertEmpImg(empInfoImg);
+		
+		log.debug(CYAN + row + " <-- row(EmpInfoService-uploadEmpImg)" + RESET);
+		
+		if (row == 1) {
+			// 새 이미지 파일 로컬에 저장
+			try {
+				newImgFile.transferTo(new File(realPath));
+				row++; // 이미지 등록 성공 시 반환값 증가
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				// 트랜잭션 작동을 위해 예외(try-catch를 강요하지 않는 예외 -> ex: RuntimeException) 발생 필요
+				throw new RuntimeException();
+			}
+		}
+		
+		return row; // 최종 2 출력 시 DB, 로컬에 이미지 저장 완료
+	}
+	
+	// 나의 이미지 변경 
+	public int modifyEmpImg(int empNo, MultipartFile newImgFile, String path) {
+		int row = 0;
+		
+		// 기존 이미지 삭제
+		row = removeEmpImg(empNo, path);
+		log.debug(CYAN + row + " <-- 기존 이미지 삭제 row(EmpInfoService-modifyEmpImg)" + RESET);
+		
+		// 새 이미지 등록 로직
+		if (newImgFile != null && !newImgFile.isEmpty()) {
+			String originFilename = newImgFile.getOriginalFilename();
+			String ext = originFilename.substring(originFilename.lastIndexOf("."));// 확장자 
+			String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
+			String realPath = path + newFilename;
+			
+			EmpInfoImg empInfoImg = new EmpInfoImg();
+			empInfoImg.setEmpNo(empNo);
+			empInfoImg.setEmpOriginImgName(originFilename);
+			empInfoImg.setEmpSaveImgName(newFilename);
+			empInfoImg.setEmpFiletype(newImgFile.getContentType());
+			empInfoImg.setEmpFilesize(newImgFile.getSize());
+			empInfoImg.setCreateId(empNo);
+			empInfoImg.setUpdateId(empNo);
+		
+			// DB에 새 이미지 정보 저장
+			int insertRow = empInfoImgMapper.insertEmpImg(empInfoImg);
+			log.debug(CYAN + insertRow + " <-- insertRow(EmpInfoService-modifyEmpImg)" + RESET);
+			
+			if (insertRow == 1) {
+				// 새 이미지 파일 로컬에 저장
+				try {
+					newImgFile.transferTo(new File(realPath));
+	                row++; // 이미지 등록 성공 시 반환값 증가
+				} catch (IllegalStateException | IOException e) {
+	                e.printStackTrace();
+	                throw new RuntimeException();
+	            }
+			}
+		}
+		
+		return row; // 최종 반환값은 이미지 수정 성공 시 2
+	}
+	
+	// 사원 이미지 삭제
+	public int removeEmpImg(int empNo, String path) {
+		EmpInfoImg empInfoImg = empInfoImgMapper.selectEmpImg(empNo);
+		if (empInfoImg != null) { // empNo에 해당하는 이미지가 있으면 삭제 
+			String saveFilename = empInfoImg.getEmpSaveImgName();
+			String realPath = path + saveFilename;
+			File f = new File(realPath);
+			
+			if (f.exists()) {
+				f.delete();
+				log.debug(CYAN + "이미지 파일 삭제 완료(EmpInfoService-removeEmpImg)" + RESET);
+			}
+		}
+		
+		// DB에서 이미지 정보 삭제
+		int row = empInfoImgMapper.removeEmpImg(empNo);
+		
+		log.debug(CYAN + row + " <-- row(EmpInfoService-removeEmpImg)" + RESET);
+		
+		return row;
+	}
+		
 }
