@@ -15,6 +15,9 @@ public interface CodeMapper {
 	// 공통코드 중 하위코드만 출력 
 	List<CommonCode> selectChildCode(String upCode);
 	
+	// 공통코드 상세보기 
+	List<CommonCode> selectCodeOne(String code);
+	
 	// 공통코드 추가
 	int addCommonCode(CommonCode commenCode);
 	

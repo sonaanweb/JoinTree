@@ -30,6 +30,16 @@ public class CodeService {
 		return childCodeList;
 	}
 	
+	// 코드 상세보기 
+	public List<CommonCode> selectCodeOne(String code) {
+		// db에서 가져온 코드내용 조회
+        List<CommonCode> CodeOneList = codeMapper.selectCodeOne(code);
+        
+        // 리스트 반환
+		return CodeOneList;
+	}
+	
+	
 	// 공통코드 추가
 	public int addCommonCode(CommonCode commenCode) {
 		return codeMapper.addCommonCode(commenCode);

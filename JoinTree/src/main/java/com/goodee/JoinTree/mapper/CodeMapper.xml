@@ -33,6 +33,7 @@
 			code,
 			up_code upCode,
 			code_name codeName,
+			status,
 			createdate,
 			updatedate,
 			create_id createId,
@@ -40,6 +41,24 @@
 		FROM common_code
 		WHERE
 			up_code = #{upCode}
+	</select>
+	
+	<!-- 상세보기 디테일 -->
+	<select id ="selectCodeOne"
+			parameterType="com.goodee.JoinTree.vo.CommonCode"
+			resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			up_code upCode,
+			code_name codeName,
+			status,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM common_code
+		WHERE
+			code = #{code}
 	</select>
 	
 	<!-- 공통코드 추가 -->
@@ -74,5 +93,7 @@
 			status = #{status},
 			updatedate = NOW(),
 			update_id = #{updateId}
+		WHERE
+			code = #{code}
 	</update>
 </mapper>

@@ -3,109 +3,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>JoinTree</title>
-<style>
-    /* 스위치 스타일 */
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 40px;
-        height: 20px;
-    }
-    
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-    
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-    
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 2px;
-        bottom: 2px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-    
-    input:checked + .slider {
-        background-color: #2196F3;
-    }
-    
-    input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
-    
-    input:checked + .slider:before {
-        -webkit-transform: translateX(20px);
-        -ms-transform: translateX(20px);
-        transform: translateX(20px);
-    }
-    
-    /* 원형 스위치 */
-    .slider.round {
-        border-radius: 34px;
-    }
-    
-    .slider.round:before {
-        border-radius: 50%;
-    }
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="/resource/css/style.css">
-<link rel="stylesheet" href="/resource/css/style2.css">
+	<meta charset="UTF-8">
+	<title>JoinTree</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="/resource/css/style.css">
+	<link rel="stylesheet" href="/resource/css/style2.css">
 <script>
 	$(document).ready(function() {
+		const id = "11111111";
+       
 		// upCodeLink 클릭시 비동기로 childCodeList에서 값을 가져와서 보여줌 
 		$(".upCodeLink").on("click", function() {// 여러 개의 요소를 선택하기 위해 클래스를 사용
+			
 			// 아래에 지정한 data-code에 값을 가져와서 upCode에 저장
 			const upCode = $(this).data("code");
-			console.log("Clicked upCode:", upCode); // 디버깅용 로그
-		
+				// console.log("Clicked upCode:", upCode); // 디버깅용 로그
+			
 			$.ajax({
-				url: '/code/childCodeList',
+				url: "/code/childCodeList",
 				type: "GET",
 				dataType: "json",
 				data: { upCode: upCode },
 				success: function(data) {
-					console.log("Response Data:", data);
+					//console.log("Response Data:", data);
 			
-					const childCodes = $(".childCodes");
-					childCodes.empty(); // 초기화
+					const childCodeT = $(".childCodes");
+					childCodeT.empty(); // 초기화
 					
 					data.forEach(function(childCode) {
-						const row = $("<tr>"); // 열 변경
+						
+						const row =  $("<tr>").addClass("codeOneLink");
 						const codeCell = $("<td>").text(childCode.code); // 코드
 						const codeNameCell = $("<td>").text(childCode.codeName); // 코드이름
-						const toggleCell = $("<td>").html( // 토글
+						const toggleValue = childCode.status;
+							// console.log("toggleValue:", toggleValue); // 디버깅용 로그
+						const toggleCell = $("<td>").html( // 토글 -> Y일 경우 체크 : 그렇지 않을경우 흰색
 							'<label class="switch">' +
-							'<input type="checkbox" class="toggleSwitch">' +
+						    '<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? ' checked' : '') + '>' +
 							'<span class="slider round"></span>' +
 							'</label>'
 						  );
+				
+						// 토글의 변경 이벤트 감지 -> 수정
+	                    toggleCell.find(".toggleSwitch").on("change", function() {
+	                        const isChecked = $(this).prop("checked");
+	                        const newStatus = isChecked ? "Y" : "N";
+
+	                        // AJAX 요청을 통해 서버로 업데이트 요청 보냄
+	                        $.ajax({
+	                            url: "/code/modifyCommonCode",
+	                            type: "POST",
+	                            data: { code: childCode.code, 
+	                            		status: newStatus, 
+	                            		updateId: id},
+	                            success: function(response) {
+	                            	console.log("response:", response);
+	            					
+	                               if(response === "fail") {
+	                            	   alert("실패");
+	                               }
+	                            },
+	                            error: function(jqXHR, textStatus, errorThrown) {
+	                                console.log("Error:", textStatus, errorThrown);
+	                            }
+	                        });
+	                    });
+							
 						// 같은 열에 추가
 						row.append(codeCell); 
 						row.append(codeNameCell);
 						row.append(toggleCell);
 						
-						// 추가된 열을 최정적으로 해당 테이블에 추가
-						childCodes.append(row);
+						// 추가된 열을 정적으로 해당 테이블에 추가
+						childCodeT.append(row);
 					});
 				},
 				// 에러 발생시
@@ -115,54 +85,127 @@
 			});
 		}); // upCodeLink 끝
 		
+		// 하위코드 클릭 시 상세보기
+		// 동적으로 .codeOneLink가 동적으로 추가되어 이벤트 위임을 사용함
+		// 부모요소에 이벤트를 등록하고 클릭된 요소에 codeOneLink 클래스를 가졌는지 검사
+		$(".wrapper").on("click", ".codeOneLink", function() {
+		    const code = $(this).find("td:first").text(); // 클릭된 행의 첫 번째 td에 있는 코드 가져오기
+		    
+		    $.ajax({
+		        url: "/code/codeOne",
+		        type: "GET",
+		        dataType: "JSON",
+		        data: {code: code},
+		        success: function(data) { // 오타 수정: success
+		            const codeOneT = $(".codeOneT");
+		            codeOneT.empty(); // 초기화
+
+		            data.forEach(function(codeOne) {
+		                const row = $("<tr>");
+		                const upCodeCell =  $("<td>").text(codeOne.upCode); // 상위코드
+		                const codeCell = $("<td>").text(codeOne.code); // 코드
+		                const codeNameCell = $("<td>").text(codeOne.codeName); // 코드이름
+		                const statusCell = $("<td>").text(codeOne.status); // 코드 상태
+		                const cratedateCell = $("<td>").text(codeOne.createdate.slice(0,10));
+		                const updatedateCell = $("<td>").text(codeOne.updatedate.slice(0,10));
+		                const crateIdCell = $("<td>").text(codeOne.createId);
+		                const updateIdCell = $("<td>").text(codeOne.updateId);
+
+			                /* console.log("Clicked codeCell:", codeOne.upCode); // 디버깅용 로그
+			                console.log("Clicked codeCell:", code); // 디버깅용 로그
+			                console.log("Clicked codeNameCell:", codeOne.codeName); // 디버깅용 로그
+			                console.log("Clicked statusCell:", codeOne.status); // 디버깅용 로그
+			                console.log("Clicked cratedateCell:", codeOne.createdate); // 디버깅용 로그
+			                console.log("Clicked updatedateCell:", codeOne.updatedate); // 디버깅용 로그
+			                console.log("Clicked crateIdCell:", codeOne.createId); // 디버깅용 로그
+			                console.log("Clicked updateIdCell:", codeOne.updateId); // 디버깅용 로그*/
+			                
+		                // 행에 셀 추가
+		                row.append(upCodeCell);
+		                row.append(codeCell);
+		                row.append(codeNameCell);
+		                row.append(statusCell);
+		                row.append(cratedateCell);
+		                row.append(updatedateCell);
+		                row.append(crateIdCell);
+		                row.append(updateIdCell);
+
+		                // 추가된 행을 해당 테이블에 추가
+		                codeOneT.append(row);
+		            });
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.log("Error:", textStatus, errorThrown);
+		        }
+		    });
+		});
+
 		// 코드 추가 클릭시 비동기로 값을 저장
 	    $("#addCodeLink").on("click", function() {
-	    	let upCode = $("#upCode").val().toUpperCase().trim();
-			let code = $("#code").val().toUpperCase().trim();
-			let codeName = $("#codeName").val().trim();
+	    	const upCode = $("#upCode").val().toUpperCase().trim(); // upcode를 대문자(toUpperCase)로 변환 및 양끝 공백을 뺀(trim) 값
+	    	const code = $("#code").val().toUpperCase().trim(); // code를 대문자(toUpperCase)로 변환 및 양끝 공백을 뺀(trim) 값
+	    	const codeName = $("#codeName").val().trim(); //codeName의 양끝 공백을 뺀(trim) 값
+			// 입력한 upCode 가져오기
+			const inputUpCode = $("#upCode").val().toUpperCase().trim();
+			// upCode 값들 가져오기
+			const usedUpCodes = [];
+			$(".upCodeLink").each(function() {
+			    usedUpCodes.push($(this).data("code"));
+			});
 			
-			// 빈값 검사
+			// 빈 값 검사
 			if (!upCode || !code || !codeName) {
 			    alert("상위코드, 코드, 코드명을 모두 입력해주세요.");
-			} else {
-				$.ajax({
-					url: '/code/addCommonCode',
-					type: "POST",
-					data: {
-						upCode : upCode,
-						code : code,
-						codeName : codeName
-					},
-					success: function(response) {
-						console.log("response:", response);
-						// 추가된 값 확인
-						if (response === "success") {
-							// 성공적인 응답 처리
-							alert("공통 코드가 추가되었습니다.");
-							// 새로운 코드 행 추가
-							const newRow = $("<tr>");
-							newRow.append($("<td>").text(code));
-							newRow.append($("<td>").text(codeName));
-							newRow.append($("<td>").html( // 토글
-								'<label class="switch">' +
-								'<input type="checkbox" class="toggleSwitch">' +
-								'<span class="slider round"></span>' +
-								'</label>'
-							))
-							// 추가된 행을 테이블에 삽입
-							$("#childCodes").append(newRow);
-						} else {
-							// 실패한 응답 처리
-							alert("요청이 실패하였습니다.");
-						}
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-						console.log("Error:", textStatus, errorThrown);
-					}
-				         
-				});
+			    return; // 사용되지 않은 경우 함수 종료
 			}
+			
+			// 입력한 upCode가 DB에 upCode 값 중 하나인지 확인
+			if (!usedUpCodes.includes(inputUpCode)) {
+			    alert("입력한 상위코드는 존재하지 않는 상위코드입니다.");
+			    return; // 사용되지 않은 경우 함수 종료
+			}
+
+			$.ajax({
+				url: "/code/addCommonCode",
+				type: "POST",
+				data: {
+					upCode : upCode,
+					code : code,
+					codeName : codeName,
+					createId : id,
+					updateId : id
+				},
+				success: function(response) {
+					console.log("response:", response);
+					
+					alert("공통 코드가 추가되었습니다.");
+					
+					if(response === "fail") {
+						alert("fail");
+					}
+
+					// 입력 폼 초기화
+					$("#upCode").val('');
+					$("#code").val('');
+					$("#codeName").val('');
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log("Error:", textStatus, errorThrown);
+				}
+			});
 		});
+		
+	    // upCodeLink를 클릭하면 추가 업코드에 내용 입력
+	    $(".upCodeLink").on("click", function() {
+	        // 클릭한 링크의 데이터 가져오기
+	        const upCode = $(this).data("code");
+
+	        // 값을 추가테이블 값 중 상위코드와 코드에 넣어주기
+	        $("#upCode").val(upCode);
+	        $("#code").val(upCode);
+	    });
+	    
+	    // 
 	});
 </script>
 <body>
@@ -178,13 +221,13 @@
 				</thead>
 				<tbody>
 					<c:forEach var="up" items="${upCodeList}">
-						<tr>
+						<tr class="upCodeLink" data-code="${up.code}">
 							<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
 							<td>
-								<a href="#" class="upCodeLink" data-code="${up.code}">${up.code}</a>
+								${up.code}
 							</td>
 							<td>
-								<a href="#" class="upCodeLink" data-code="${up.code}">${up.codeName}</a>
+								${up.codeName}
 							</td>
 						</tr>
 					</c:forEach>
@@ -205,6 +248,27 @@
 				<tbody class="childCodes">
 					<!-- 하위 코드들이 여기에 동적으로 추가 됨 -->
 				</tbody>
+			</table>
+		</div>
+		
+		<div class="code-one">
+			<table id="codeOne" class="table table-bordered">
+				 <thead>
+				 	<tr>
+						<th>상위코드</th>					
+						<th>코드</th>
+						<th>코드명</th>
+						<th>사용여부</th>
+						<th>생성일</th>
+						<th>수정일</th>
+						<th>생성자</th>
+						<th>수정자</th>
+					</tr>
+				 </thead>
+				 <tbody class="codeOneT">
+				 
+				 </tbody>
+				
 			</table>
 		</div>
 	</div>
