@@ -5,16 +5,16 @@
 <head>
 	<meta charset="UTF-8">
 	<title>개발팀</title>
-<!-- plugins:css -->
-<link rel="stylesheet" href="/resource/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-<link rel="stylesheet" href="/resource/vendors/css/vendor.bundle.base.css">
-<!-- endinject -->
-<!-- inject:css -->
-<link rel="stylesheet" href="/resource/css/style.css">
-<link rel="stylesheet" href="/resource/css/style2.css">
-<!-- endinject -->
-<link rel="shortcut icon" href="/resource/images/favicon.png" />
-<!-- plugins : js -->
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="/resource/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="/resource/vendors/css/vendor.bundle.base.css">
+	<!-- endinject -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="/resource/css/style.css">
+	<link rel="stylesheet" href="/resource/css/style2.css">
+	<!-- endinject -->
+	<link rel="shortcut icon" href="/resource/images/favicon.png" />
+	<!-- plugins : js -->
 	<script src="/resource/vendors/js/vendor.bundle.base.js"></script>
 	<script src="/resource/vendors/js/vendor.bundle.addons.js"></script>
 	<script src="/resource/js/off-canvas.js"></script>
@@ -26,8 +26,8 @@
 	<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 		<!-- 로고 -->
 		<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-			<a class="navbar-brand brand-logo" href="main.jsp"><img src="/resource/images/jointree.png" alt="logo"/></a>
-			<a class="navbar-brand brand-logo-mini" href="main.jsp"><img src="/resource/images/jointree_mini.png" alt="logo"/></a>
+			<a class="navbar-brand brand-logo" href="/home"><img src="/resource/images/jointree.png" alt="logo"/></a>
+			<a class="navbar-brand brand-logo-mini" href="/home"><img src="/resource/images/jointree_mini.png" alt="logo"/></a>
 		</div>
   		<!-- 위 - 메뉴바 -->
 		<div class="navbar-menu-wrapper d-flex align-items-stretch">
