@@ -7,6 +7,7 @@ public class CommonCode {
 	private String code;
 	private String upCode;
 	private String codeName;
+	private String status;
 	private String createdate;
 	private String updatedate;
 	private int createId;
