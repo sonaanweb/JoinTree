@@ -204,104 +204,109 @@
 	        $("#upCode").val(upCode);
 	        $("#code").val(upCode);
 	    });
-	    
-	    // 
 	});
 </script>
 <body>
-<div>	
-	<div class="wrapper">
-		<div class="up-code">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>상위코드</th>
-						<th>상위코드명</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="up" items="${upCodeList}">
-						<tr class="upCodeLink" data-code="${up.code}">
-							<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
-							<td>
-								${up.code}
-							</td>
-							<td>
-								${up.codeName}
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-		
-		<div class="child-code">
-			<table id="childCodes" class="table table-bordered">
-				<thead>
-					<tr>
-						<th>코드</th>
-						<th>코드명</th>
-						<th>사용여부</th>
-					</tr>
-				</thead>
+<div class="container-scroller"> <!-- 전체 스크롤 -->
+	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
+	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
+		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
+			<div class="content-wrapper"> <!-- 컨텐츠 -->
+			
+				<div class="wrapper">
+					<div class="up-code">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>상위코드</th>
+									<th>상위코드명</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="up" items="${upCodeList}">
+									<tr class="upCodeLink" data-code="${up.code}">
+										<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
+										<td>
+											${up.code}
+										</td>
+										<td>
+											${up.codeName}
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="child-code">
+						<table id="childCodes" class="table table-bordered">
+							<thead>
+								<tr>
+									<th>코드</th>
+									<th>코드명</th>
+									<th>사용여부</th>
+								</tr>
+							</thead>
+							
+							<tbody class="childCodes">
+								<!-- 하위 코드들이 여기에 동적으로 추가 됨 -->
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="code-one">
+						<table id="codeOne" class="table table-bordered">
+							 <thead>
+							 	<tr>
+									<th>상위코드</th>					
+									<th>코드</th>
+									<th>코드명</th>
+									<th>사용여부</th>
+									<th>생성일</th>
+									<th>수정일</th>
+									<th>생성자</th>
+									<th>수정자</th>
+								</tr>
+							 </thead>
+							 <tbody class="codeOneT">
+							 
+							 </tbody>
+							
+						</table>
+					</div>
+				</div>
 				
-				<tbody class="childCodes">
-					<!-- 하위 코드들이 여기에 동적으로 추가 됨 -->
-				</tbody>
-			</table>
-		</div>
-		
-		<div class="code-one">
-			<table id="codeOne" class="table table-bordered">
-				 <thead>
-				 	<tr>
-						<th>상위코드</th>					
-						<th>코드</th>
-						<th>코드명</th>
-						<th>사용여부</th>
-						<th>생성일</th>
-						<th>수정일</th>
-						<th>생성자</th>
-						<th>수정자</th>
-					</tr>
-				 </thead>
-				 <tbody class="codeOneT">
-				 
-				 </tbody>
+				<div class="add-code">
+					<h1>코드 추가하기</h1>
+					<button type="button" id="addCodeLink" class="btn btn-success left">추가</button>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>상위코드</th>
+								<th>코드</th>
+								<th>코드명</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td> 
+									<input type="text" id="upCode" class="uppercase-text">
+								</td>
+								<td> 
+									<input type="text" id="code" class="uppercase-text">
+								</td>
+								<td> 
+									<input type="text" id="codeName">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				
-			</table>
-		</div>
-	</div>
-	
-	<div class="add-code">
-		<h1>코드 추가하기</h1>
-		
-			<button type="button" id="addCodeLink" class="btn btn-success left">추가</button>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>상위코드</th>
-						<th>코드</th>
-						<th>코드명</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td> 
-							<input type="text" id="upCode" class="uppercase-text">
-						</td>
-						<td> 
-							<input type="text" id="code" class="uppercase-text">
-						</td>
-						<td> 
-							<input type="text" id="codeName">
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		 <div id="responseMessage"></div>
-	</div>
-	
-</div>
+			</div><!-- 컨텐츠 끝 -->
+		</div><!-- 컨텐츠전체 끝 -->
+	</div><!-- 상단제외 끝 -->
+</div><!-- 전체 스크롤 끝 -->
+<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 </body>
 </html>
