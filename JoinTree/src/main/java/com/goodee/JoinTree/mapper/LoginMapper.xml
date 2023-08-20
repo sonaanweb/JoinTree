@@ -17,6 +17,13 @@
 		WHERE emp_no = #{empNo}
 	</select>
 	
+	<!-- 사번으로 부서코드 출력 -->
+	<select id="selectDept">
+		SELECT dept
+		FROM emp_info
+		WHERE emp_no = #{empNo}
+	</select>
+	
 	<!-- 사번, 주민번호 인증  -->
 	<select id="selectEmpNoJumin">
 		SELECT COUNT(*)

@@ -30,6 +30,11 @@ public class LoginService {
 		return loginMapper.selectEmpName(empNo);
 	}
 	
+	// 로그인 성공 시 empNo로 dept 출력
+	public String getEmpDept(int empNo) {
+		return loginMapper.selectDept(empNo);
+	}
+	
 	// 사원, 주민번호 뒷자리 일치 체크 (비밀번호 분실 시)
 	public int selectEmpNoJumin(int empNo, String juminNo) {
 		int row = loginMapper.selectEmpNoJumin(empNo, juminNo);
