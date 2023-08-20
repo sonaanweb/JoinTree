@@ -17,6 +17,154 @@
 					if (msg != null) {
 						alert(msg);
 					}
+					
+				// 사진 등록 버튼 클릭 시 팝업 창 열기
+				$('#uploadImgBtn').click(function() {
+					console.log("사진 등록 버튼이 클릭되었습니다."); 
+				    openUploadImgPopup();
+				});
+			
+				let uploadPopup; // 팝업 창을 함수 외부에 선언
+				// 사진 등록 팝업 열기 함수
+				function openUploadImgPopup() {
+					uploadPopup = window.open("", "UploadImgPopup", "width=500,height=400,scrollbars=yes,resizable=yes");
+				    
+				    // 팝업 내용 작성
+				    var uploadPopupContent = "<h2>사진 등록</h2>" +
+				    				   "<p>파일 크기는 3MB 이하로 제한됩니다.</p>" +
+				                       "<form id='uploadImgForm' enctype='multipart/form-data'>" +
+				                       "   <input type='file' name='uploadImg' accept='image/jpg, image/jpeg, image/png'>" +
+				                       "   <img id='previewImg' src='' alt='Image Preview' style='max-width: 300px; max-height: 300px; display: none;'>" +
+				                       "   <button type='button' onclick='uploadImage()''>등록</button>" +
+				                       "</form>";
+				    
+                    uploadPopup.document.write(uploadPopupContent);
+				    uploadPopup.document.close();
+				}
+				
+				// 파일 선택 시 미리보기 (사진 등록)
+				$('#uploadImg').change(function() {
+				    var input = this;
+				    if (input.files && input.files[0]) {
+				        var reader = new FileReader();
+				        reader.onload = function(e) {
+				        	console.log("미리보기 이미지가 업데이트되었습니다."); // 디버그 메시지
+				            // 미리보기 이미지 업데이트
+				            $('#previewImg').attr('src', e.target.result).show();
+				        };
+				        reader.readAsDataURL(input.files[0]);
+				    }
+				});
+				
+				// 사진 등록 처리 함수
+				function uploadImage() {
+					 console.log("사진 업로드 함수가 호출되었습니다."); // 디버그 메시지
+				    // var formData = new FormData(popup.document.getElementById('uploadImgForm'));
+				    
+				    var formData = new FormData();
+				    var fileInput = document.getElementById('uploadImg');
+				    formData.append('newImgFile', fileInput.files[0]);
+				    
+				    
+				    // AJAX 요청
+				    $.ajax({
+				    	url: '/myJoinTree/empInfo/modifyEmp/uploadEmpImg',
+				    	type: 'post', 
+				    	data: formData, 
+				    	processData: false, // false로 선언 시 formData를 string으로 변환하지 않음
+				    	contentType: false, // false로 선언 시 content-type 헤더가 multipart/form-data로 전송되게 함
+				    	success: function(response) {
+				    		if (response === "success") {
+				    			alert("사진 등록이 완료되었습니다.");
+				    			location.reload(); // 현재 메인 페이지 새로고침(팝업 X)
+				    		} else {
+				    			alert("사진 등록 중 오류가 발생했습니다.");
+				    		}
+				    	},
+				    	error: function(error) {
+				    		alert("서버 오류 발생");
+				    	}
+				    	
+				    });
+				    
+				    // 이미지 업로드 후 팝업 창을 닫습니다
+				    uploadPopup.close();
+				}
+				
+				// 사진 변경 버튼 클릭 시 팝업 창 열기
+				$('#modifyImgBtn').click(function() {
+					 console.log("정보 수정 버튼이 클릭되었습니다."); // 디버그 메시지
+				    openModifyImgPopup();
+				});
+				
+				let modifyPopup;
+				
+			  	// 사진 변경 팝업 열기 함수
+			    function openModifyImgPopup() {
+			    	modifyPopup = window.open("", "ModifyImgPopup", "width=500,height=400,scrollbars=yes,resizable=yes");
+			
+			        // 팝업 내용 작성
+			        var modifypopupContent = "<h2>사진 변경</h2>" +
+			        				   "<p>파일 크기는 3MB 이하로 제한됩니다.</p>" +
+			                           "<form id='modifyImgForm' enctype='multipart/form-data'>" +
+			                           "   <img id='modifyPreviewImage' src='' alt='Image Preview' style='max-width: 300px; max-height: 300px; display: none;'>" +
+			                           "   <input type='file' name='modifyImage' accept='image/jpg, image/jpeg, image/png'>" +
+			                           "   <input type='button' value='등록' onclick='uploadImgModify()'>" +
+			                           "</form>";
+			
+                    modifyPopup.document.write(modifypopupContent);
+                    modifyPopup.document.close();
+				}
+			  	
+			 	// 파일 선택 시 미리보기 (사진 변경)
+			    $('#newImageInput').change(function() {
+			        var input = this;
+			        if (input.files && input.files[0]) {
+			            var reader = new FileReader();
+			            reader.onload = function(e) {
+			                // 미리보기 이미지 업데이트
+			                $('#modifyPreviewImage').attr('src', e.target.result).show();
+			            };
+			            reader.readAsDataURL(input.files[0]);
+			        }
+			    });
+				
+			  	
+			    // 사진 변경 업로드 처리 함수
+			    function uploadImgModify() {
+			        var formData = new FormData(popup.document.getElementById('modifyImgForm'));
+			        
+			        // AJAX 요청
+			        $.ajax({
+			        	url: '/myJoinTree/empInfo/modifyEmp/modifyEmpImg',
+			        	type: 'POST',
+			        	data: formData,
+			        	processData: false,
+			        	contentType: false,
+			        	success: function(response) {
+			        		if (response === "success") {
+			        			alert("사진 변경이 완료되었습니다.");
+			        		} else {
+			        			alert("사진 변경 중 오류가 발생했습니다.");
+			        		}
+			        		
+			        	},
+			        	error: function(error) {
+			        		alert("서버 오류 발생");
+			        	}
+			        });
+			        
+			        // 이미지 업로드 후 팝업 창을 닫기
+			        modifyPopup.close();
+			        
+		            // 이미지 미리보기 업데이트
+		            var modifyPreviewImage = $('#modifyPreviewImage');
+		            modifyPreviewImage.attr('src', ''); // 기존 이미지 초기화
+		            modifyPreviewImage.hide(); // 미리보기 숨김
+
+		            // empInfo/empInfo 페이지 새로고침
+		            location.reload();
+			    }	
 				
 				// 이름 칸은 문자만 입력 허용
 				$("#empName").on("keypress", function(event) {
@@ -126,16 +274,17 @@
 						
 						<img id="imgPreview" src="" alt="image preview" style="max-width: 300px; max-height: 300px; display: none;">
 						
+						<!-- type="button" 없을 경우 액션 폼 제출되는 현상 주의  -->
 						<c:choose>
-							<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없움'}">
+							<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
 								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
-								<button id="uploadImgBtn">사진 등록</button>
+								<button type="button" id="uploadImgBtn">사진 등록</button>
 							</c:when>
 							<c:otherwise>
 								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
 								<span>변경 전 이미지</span><br>
 								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
-								<button id="modifyImgBtn">사진 변경</button>	
+								<button type="button" id="modifyImgBtn">사진 변경</button>	
 							</c:otherwise>
 						</c:choose>
 					</td>
