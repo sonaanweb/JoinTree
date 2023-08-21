@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BoardFile {
-
+	private int boardFileNo;
 	private int boardNo;
 	private String boardOriginFilename;
 	private String boardSaveFilename;
@@ -14,4 +14,6 @@ public class BoardFile {
 	private String updatedate;
 	private int createId;
 	private int updateId;
+	
+	private int empNo; // DB에는 없음
 }
