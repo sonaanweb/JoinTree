@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>${comm.empNo}</td>
+				<td>${comm.empName}</td>
 			</tr>
 			<tr>
 				<th>작성일자</th>

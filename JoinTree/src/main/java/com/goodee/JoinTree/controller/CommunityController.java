@@ -45,6 +45,7 @@ public class CommunityController {
 		
 		// view로 값 넘길 때는 분리
 		model.addAttribute("category", category);
+		model.addAttribute("pinnedCommList", resultMap.get("pinnedCommList"));
 		model.addAttribute("commList", resultMap.get("commList"));
 		
 		model.addAttribute("lastPage", resultMap.get("lastPage"));
