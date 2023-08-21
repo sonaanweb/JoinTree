@@ -142,7 +142,7 @@
 	<ul class="nav">
 		<!-- 왼쪽 - 프로필 -->
 		<li class="nav-item nav-profile">
-			<a href="#" class="nav-link">
+			<a href="/empInfo/empInfo" class="nav-link">
 				<div class="nav-profile-image">
 					<img src="/empImg/tiger.png" alt="profile">
 					<span class="login-status online"></span> <!--change to offline or busy as needed-->              
@@ -187,10 +187,10 @@
 			</a>
 			<div class="collapse" id="board">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="">자유게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="">익명게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="">경조사게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="">중고게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/community/freeCommList">자유게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/community/anonymousCommList">익명게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/community/secondhandCommList">중고장터게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/community/lifeEventCommList">경조사게시판</a></li>
 				</ul>
 			</div>
 		</li>
