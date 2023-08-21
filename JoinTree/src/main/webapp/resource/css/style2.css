@@ -71,27 +71,29 @@ input:checked + .slider:before {
 }
 
 /* 공통코드 테이블*/
-.wrapper{
-	display: flex;
+.code {
+    overflow-y: hidden;
+    border: 1px solid #ccc; /* 스크롤 바깥쪽 테두리 추가 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+    position: relative; /* Relative 포지션 추가 */
 }
-.up-code {
-	border: 1px solid #999;
-	width: 300px;
+.scrollable-tbody {
+    height: 400px; 
+    overflow-y: auto;
 }
-.upCodeLink:hover {
-    background-color: lightskyblue;   
+.code table {
+    border-collapse: collapse;
 }
-.child-code {
-	border: 1px solid #999;
-	width: 300px;
+.code thead {
+    background-color: #ccc;
+    position: sticky;
+    top: 0;
+    z-index: 2; /* 더 높은 z-index 값을 사용하여 스티키 헤더를 위로 유지 */
 }
-.child-code th, .child-code tr td {
-	width: 30%;
+.upCodeLink:hover, .codeOneLink:hover {
+    background-color: lightskyblue;
 }
 
-.codeOneLink:hover {
-	background-color: lightskyblue;   
-}
 .add-code {
 	margin-top: 20px;
 	border: 1px solid #999;

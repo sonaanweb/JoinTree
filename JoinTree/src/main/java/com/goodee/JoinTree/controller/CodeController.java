@@ -67,7 +67,27 @@ public class CodeController {
         return codeOneList;
     }
 	
-	// 공통코드 추가
+	// 상위코드 추가
+	@PostMapping("code/addUpCommonCode")
+	@ResponseBody
+	public String addUpCommonCode(CommonCode commonCode, 
+								@RequestParam(name = "code") String code,
+								@RequestParam(name = "codeName") String codeName,
+								@RequestParam(name = "createId") String createId,
+								@RequestParam(name = "updateId") String updateId) {
+
+			// log.debug(yellow + "code:" + code + reset); 
+			// log.debug(yellow + "codeName:" + codeName + reset); 
+		int row = codeService.addUpCommonCode(commonCode);
+			log.debug(yellow + "row:" + row + reset); 
+		if(row != 1) {// 실패
+			return "fail";
+		}
+		
+		return "success";
+	}
+	
+	// 하위코드 추가
 	@PostMapping("code/addCommonCode")
 	@ResponseBody
 	public String addCommonCode(CommonCode commonCode, 
@@ -100,7 +120,7 @@ public class CodeController {
 		commonCode.setCode(code);
 		commonCode.setStatus(status);
 		commonCode.setUpdateId(updateId);
-			// log.debug(yellow + "code:" + code + reset); 
+			log.debug(yellow + "code:" + code + reset); 
 			// log.debug(yellow + "status:" + status + reset); 
 			// log.debug(yellow + "updateId:" + updateId + reset); 
 		int row = codeService.modifyCommonCode(commonCode);

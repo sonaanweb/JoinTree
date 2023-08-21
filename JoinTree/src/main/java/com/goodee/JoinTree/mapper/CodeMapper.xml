@@ -16,6 +16,7 @@
 			code,
 			up_code upCode,
 			code_name codeName,
+			status,
 			createdate,
 			updatedate,
 			create_id createId,
@@ -61,7 +62,31 @@
 			code = #{code}
 	</select>
 	
-	<!-- 공통코드 추가 -->
+	<!-- 상위코드 추가 -->
+	<insert id="addUpCommonCode"
+			parameterType="com.goodee.JoinTree.vo.CommonCode">
+		INSERT INTO common_code(
+			code,
+			up_code,
+			code_name,
+			status,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{code},
+			'SYSTEM',
+			#{codeName},
+			'Y',
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 하위코드 추가 -->
 	<insert id="addCommonCode"
 			parameterType="com.goodee.JoinTree.vo.CommonCode">
 		INSERT INTO common_code(

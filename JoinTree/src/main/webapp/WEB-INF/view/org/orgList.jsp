@@ -24,8 +24,7 @@
 <script>
 	$(document).ready(function() {
 		// 트리뷰 초기 설정
-		$("#codeList").treeview({ collapsed: true });
-		
+
 		// empTree 요소에 대한 데이터를 가져옴 -> 각 부서에 맞는 사원들을 가져옴
 		$(".empTree").each(function() {
 			const dept = $(this).data("dept"); // dept데이터는 수정될 일이 없기에 const로 저장
@@ -51,6 +50,7 @@
 		});
 		// modalBtn 클릭 시 모달 띄우기
 		$("#modalBtn").on("click", function() {
+			alert("성공");
 			$("#myModal").modal("show");
 		});
      
@@ -123,16 +123,34 @@
 				selectEmp.append(selectedEmpItem);
 			}
 		}
-	    
+		
+		$("#codeList").treeview({ collapsed: true });
+
 	}); // 제일 처음
 </script>
 </head>
 <body>
-	<div>
-	<button type="button" id="modalBtn">결재선 추가</button>	
-	</div>
-	
-	<div class="modal" id="myModal" tabindex="-1">
+<div class="container-scroller"> <!-- 전체 스크롤 -->
+	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
+	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
+		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
+			<div class="content-wrapper"> <!-- 컨텐츠 -->
+			
+				<div>
+					<button type="button" id="modalBtn">결재선 추가</button>	
+				</div>
+				
+				<div id="selectEmp" style="border: 1px solid #999; width:200px; height: 200px;"><!-- 여기에 데이터를 추가하는 부분 --></div>
+				<button type="button" id="deleteSelectedBtn">삭제</button>
+				<button type="button" id="moveUpBtn">위로</button>
+				<button type="button" id="moveDownBtn">아래로</button>
+				
+			</div><!-- 컨텐츠 끝 -->
+		</div><!-- 컨텐츠전체 끝 -->
+	</div><!-- 상단제외 끝 -->
+</div><!-- 전체 스크롤 끝 -->
+
+<div class="modal" id="myModal" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -156,10 +174,5 @@
 		</div>
 	</div>
     
-	<div id="selectEmp" style="border: 1px solid #999; width:200px; height: 200px;"><!-- 여기에 데이터를 추가하는 부분 --></div>
-	<button type="button" id="deleteSelectedBtn">삭제</button>
-	<button type="button" id="moveUpBtn">위로</button>
-	<button type="button" id="moveDownBtn">아래로</button>
-    	
 </body>
 </html>

@@ -39,13 +39,17 @@ public class CodeService {
 		return CodeOneList;
 	}
 	
+	// 상위코드 추가
+		public int addUpCommonCode(CommonCode commenCode) {
+			return codeMapper.addUpCommonCode(commenCode);
+		}
 	
-	// 공통코드 추가
+	// 하위코드 추가
 	public int addCommonCode(CommonCode commenCode) {
 		return codeMapper.addCommonCode(commenCode);
 	}
 	
-	// 공통코드 수정
+	// 하위코드 수정
 	public int modifyCommonCode(CommonCode commenCode) {
 		return codeMapper.modifyCommonCode(commenCode);
 	}

@@ -2,66 +2,44 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>home</title>
-	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-	  	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	  	<link rel="stylesheet" href="/resource/css/style.css">
-	  	<link rel="stylesheet" href="/resource/css/style2.css">
-		<script>
-			$(document).ready(function() {
-				// 로그인
-				const urlParams = new URL(location.href).searchParams;
-				const msg = urlParams.get("msg");
-					if (msg != null) {
-						alert(msg);
-					}
-			
-				// 현재시간 출력
-			    updateTime();
-			    setInterval(updateTime, 1000); // 1초마다 시간 업데이트
+	<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// 로그인
+			const urlParams = new URL(location.href).searchParams;
+			const msg = urlParams.get("msg");
+				if (msg != null) {
+					alert(msg);
+				}
+		
+			// 현재시간 출력
+		    updateTime();
+		    setInterval(updateTime, 1000); // 1초마다 시간 업데이트
 
-			    function updateTime() {
-			        const time = new Date();
-			        const hour = time.getHours();
-			        const minutes = time.getMinutes();
-			        const seconds = time.getSeconds();
-			        
-			        const formattedHour = hour < 10 ? '0' + hour : hour;
-			       	const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-			       	const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-			        		
-			        const formattedTime = formattedHour + ":" + formattedMinutes + ":" + formattedSeconds;
-			        $('.clock').text(formattedTime);
-			    }
-			});
-		</script>
-	</head>
-<body>
-<div class="container-scroller"> <!-- 전체 스크롤 -->
-	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-			<div class="content-wrapper"> <!-- 컨텐츠 -->
-				<%-- <h1>home</h1>
-				<c:if test="${loginAccount.empNo eq null}">
-					<div>
-						<a href="/login/login">로그인</a>
-					</div>
-				</c:if>
-				<c:if test="${loginAccount.empNo ne null}">
-					<div>
-						현재 사용자 : ${empName}
-						현재 로그인 아이디: ${loginAccount.empNo}
-					</div>
-					<div>
-						<a href="/empInfo/empInfo">나의 정보</a>
-					</div>
-					<div>
-						<a href="/logout">로그아웃</a>
-					</div>
-				</c:if> --%>
+		    function updateTime() {
+		        const time = new Date();
+		        const hour = time.getHours();
+		        const minutes = time.getMinutes();
+		        const seconds = time.getSeconds();
+		        
+		        const formattedHour = hour < 10 ? '0' + hour : hour;
+		       	const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+		       	const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+		        		
+		        const formattedTime = formattedHour + ":" + formattedMinutes + ":" + formattedSeconds;
+		        $('.clock').text(formattedTime);
+		    }
+		});
+	</script>
+	
+	<!-- 필수 요소-->
+	<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+			
+				<!-- 컨텐츠 시작 -->
 				<div class="row">
 					<div class="col-md-4 stretch-card grid-margin">
 						<div class="card bg-gradient-danger card-img-holder text-white">
@@ -99,6 +77,7 @@
 						</div>
 					</div>
 				</div>
+				<!--  두번째 줄 -->
 				<div class="row">
 					<div class="col-md-9 stretch-card grid-margin">
 						<div class="card bg-gradient-danger card-img-holder text-white">
@@ -119,17 +98,8 @@
 					</div>					
 				</div>
 				
-								<div class="row">
-					<div class="col-md-9 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
-							<div class="card-body"> 
-							<!-- 	결재문서목록
-								<hr>
-								문서함 -->
-							</div>
-						</div>
-					</div>		
-					
+				<!--  로그인 임시 -->
+				<div class="row">
 					<div class="col-md-3 stretch-card grid-margin">
 						<div class="card bg-gradient-danger card-img-holder text-white">
 							<div class="card-body"> 
@@ -140,9 +110,6 @@
 					</div>					
 				</div>
 				
-			</div><!-- 컨텐츠 끝 -->
-		</div><!-- 컨텐츠전체 끝 -->
-	</div><!-- 상단제외 끝 -->
-</div><!-- 전체 스크롤 끝 -->	
-</body>
+		</div><!-- 컨텐츠 끝 -->
+	</div><!-- 컨텐츠전체 끝 -->
 </html>
