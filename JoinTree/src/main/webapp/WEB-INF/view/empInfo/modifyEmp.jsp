@@ -18,13 +18,14 @@
 						alert(msg);
 					}
 					
-				// 사진 등록 버튼 클릭 시 팝업 창 열기
+				// 사진 등록 버튼 클릭 시 팝업 열기
 				$('#uploadImgBtn').click(function() {
 					console.log("사진 등록 버튼이 클릭되었습니다."); 
 				    openUploadImgPopup();
 				});
 			
 				let uploadPopup; // 팝업 창을 함수 외부에 선언
+				
 				// 사진 등록 팝업 열기 함수
 				function openUploadImgPopup() {
 					uploadPopup = window.open("", "UploadImgPopup", "width=500,height=400,scrollbars=yes,resizable=yes");
@@ -33,13 +34,17 @@
 				    var uploadPopupContent = "<h2>사진 등록</h2>" +
 				    				   "<p>파일 크기는 3MB 이하로 제한됩니다.</p>" +
 				                       "<form id='uploadImgForm' enctype='multipart/form-data'>" +
-				                       "   <input type='file' name='uploadImg' accept='image/jpg, image/jpeg, image/png'>" +
-				                       "   <img id='previewImg' src='' alt='Image Preview' style='max-width: 300px; max-height: 300px; display: none;'>" +
-				                       "   <button type='button' onclick='uploadImage()''>등록</button>" +
+				                       "   <input type='file' name='newImgFile' id='uploadImg' accept='image/jpg, image/jpeg, image/png'>" +
+				                       "   <img id='uploadPreviewImg' src='' alt='Image Preview' style='max-width: 300px; max-height: 300px; display: none;'>" +
+				                       "   <button type='button' id='uploadImageBtn'>등록</button>" +
 				                       "</form>";
 				    
+                    // 등록 버튼에 클릭 이벤트 핸들러 등록
+   				    $('#uploadImageBtn').click(uploadImage);
+				                       
                     uploadPopup.document.write(uploadPopupContent);
 				    uploadPopup.document.close();
+				   
 				}
 				
 				// 파일 선택 시 미리보기 (사진 등록)
@@ -50,15 +55,11 @@
 				        reader.onload = function(e) {
 				        	console.log("미리보기 이미지가 업데이트되었습니다."); // 디버그 메시지
 				            // 미리보기 이미지 업데이트
-				            $('#previewImg').attr('src', e.target.result).show();
+				            $('#uploadPreviewImg').attr('src', e.target.result).show();
 				        };
 				        reader.readAsDataURL(input.files[0]);
 				    }
 				});
-				
-				
-
-				
 				
 				// 사진 등록 처리 함수
 				function uploadImage() {
@@ -68,7 +69,6 @@
 				    var formData = new FormData();
 				    var fileInput = document.getElementById('uploadImg');
 				    formData.append('newImgFile', fileInput.files[0]);
-				    
 				    
 				    // AJAX 요청
 				    $.ajax({
@@ -88,13 +88,14 @@
 				    	error: function(error) {
 				    		alert("서버 오류 발생");
 				    	}
-				    	
 				    });
 				    
 				    // 이미지 업로드 후 팝업 창을 닫습니다
 				    uploadPopup.close();
 				}
 				
+				
+
 				// 사진 변경 버튼 클릭 시 팝업 창 열기
 				$('#modifyImgBtn').click(function() {
 					 console.log("정보 수정 버튼이 클릭되었습니다."); // 디버그 메시지
@@ -136,7 +137,7 @@
 
 			 	
 				/*
-				
+				//////////////////////
 				const fileInput = $('#fileInput');
 		        const previewImage = $('#previewImage');
 		       
@@ -154,13 +155,13 @@
 	                    previewImage.attr('src', ''); // 파일이 선택되지 않았을 때 미리보기 초기화
 	                }
 	            });
-				*/
+				
 		        
 	            // <img id="previewImage" src="" style="max-width: 300px; max-height: 300px;">
+	            ////////////////////
+	            
+	            */
 			 	
-			 	
-				
-			  	
 			    // 사진 변경 업로드 처리 함수
 			    function uploadImgModify() {
 			        var formData = new FormData(popup.document.getElementById('modifyImgForm'));
@@ -196,6 +197,7 @@
 		            // empInfo/empInfo 페이지 새로고침
 		            location.reload();
 			    }	
+			    
 				
 				// 이름 칸은 문자만 입력 허용
 				$("#empName").on("keypress", function(event) {
@@ -248,8 +250,7 @@
 						$("#modifyEmp").submit();
 					}
 				});
-		
-				
+
 			});
 			
 			// 주소API
@@ -308,13 +309,12 @@
 						<!-- type="button" 없을 경우 액션 폼 제출되는 현상 주의  -->
 						<c:choose>
 							<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
-								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
+								<!-- <input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp; -->
 								<button type="button" id="uploadImgBtn">사진 등록</button>
 							</c:when>
 							<c:otherwise>
 								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
 								<span>변경 전 이미지</span><br>
-								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
 								<button type="button" id="modifyImgBtn">사진 변경</button>	
 							</c:otherwise>
 						</c:choose>
@@ -386,14 +386,12 @@
 						<!-- type="button" 없을 경우 액션 폼 제출되는 현상 주의  -->
 						<c:choose>
 							<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
-								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
 								<button type="button" id="uploadSignImgBtn">서명 등록</button>
 							</c:when>
 							<c:otherwise>
-								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
+								<img src="${pageContext.request.contextPath}/signImg/${empInfo.empSaveImgName}" alt="sign image"><br>
 								<span>변경 전 서명</span><br>
-								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
-								<button type="button" id="modifyImgBtn">서명 변경</button>	
+								<button type="button" id="modifySignImgBtn">서명 변경</button>	
 							</c:otherwise>
 						</c:choose>
 					</td>
