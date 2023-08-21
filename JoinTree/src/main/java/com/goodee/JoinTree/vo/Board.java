@@ -21,4 +21,6 @@ public class Board {
 	// table 속성은 아니고 입력폼 속성 -> BoardForm.class(DTO), Board.class(도메인) 분리해서 사용 가능
 	// 입력 시 위 컬럼명과 함께 업로드 파일도 받기 때문에 Board.java 내 위치
 	private MultipartFile multipartFile;
+	
+	private String empName; // DB에 없음, 작성자 이름 출력을 위해 추가
 }

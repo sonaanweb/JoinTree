@@ -14,6 +14,4 @@ public class BoardFile {
 	private String updatedate;
 	private int createId;
 	private int updateId;
-	
-	private int empNo; // DB에는 없음
 }
