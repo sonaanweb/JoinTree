@@ -65,9 +65,9 @@
 		</div>
 		<form action="/community/freeCommList/addFreeComm" method="post" enctype="multipart/form-data" id="addFreeComm">
 			<div>
-				<c:if test="${dept eq 'D0202'}">
-					<input type="checkbox"> 게시판 상단고정
-				</c:if>
+				<c:if test="${dept eq 'D0202'}">	
+					게시판 상단고정 <input type="checkbox" name="boardPinned"> <!-- value 지정하지 않았을 경우 체크박스 선택 시 boardPinned="on" 과 같이 넘어감 -->
+ 				</c:if>
 			</div>
 			<input type="hidden" name="empNo" value="${loginAccount.empNo}">
 			<input type="hidden" name="boardCategory" value="B0103">

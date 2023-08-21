@@ -44,11 +44,13 @@ public class CommunityService {
 		
 		log.debug(CYAN + map + " <-- map(CommunityService-getCommList)" + RESET);
 		
+		// 상단고정 글 가져오기
+		List<Board> pinnedCommList = communityMapper.selectPinnedCommList(category);
+		log.debug(CYAN + pinnedCommList + " <-- pinnedCmmList(CommunityService-getCommList)" + RESET);
+		
+		// 전체 글 가져오기
 		List<Board> commList = communityMapper.selectCommListByPage(map);
-		
 		log.debug(CYAN + commList + " <-- commList(CommunityService-getCommList)" + RESET);
-		
-		
 		
 		int commCnt = communityMapper.selectCommCnt(category);
 		log.debug(CYAN + commCnt + " <-- commCnt(CommunityService-getCommList)" + RESET);
@@ -59,15 +61,25 @@ public class CommunityService {
 		}
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("pinnedCommList", pinnedCommList);
 		resultMap.put("commList", commList);
 		resultMap.put("lastPage", lastPage);
 		
 		log.debug(CYAN + "category: " + category + RESET);
 		log.debug(CYAN + "resultMap: " + resultMap + RESET);
+		log.debug(CYAN + "pinnedCommList: " + resultMap.get("pinnedCommList") + RESET);
 		log.debug(CYAN + "commList: " + resultMap.get("commList") + RESET);
 		log.debug( CYAN + "lastPage: " + resultMap.get("lastPage") + RESET);
 
 		return resultMap;
+	}
+
+	// 조회수 증가 처리
+	public int increaseCommCount(int boardNo) {
+		int row = communityMapper.increaseCommCount(boardNo);
+		log.debug(CYAN + row + " <-- row(CommunityService-increaseCommCount)" + RESET);
+		
+		return row;
 	}
 	
 	// 게시글 상세보기
@@ -98,7 +110,9 @@ public class CommunityService {
 				bf.setBoardOriginFilename(file.getOriginalFilename()); // 파일 원본 이름
 				bf.setBoardFilesize(file.getSize()); // 파일 사이즈
 				bf.setBoardFiletype(file.getContentType()); // 파일 타입(MIME)
-			
+				bf.setCreateId(board.getEmpNo());
+				bf.setUpdateId(board.getEmpNo());
+				
 				// 확장자
 				String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 				

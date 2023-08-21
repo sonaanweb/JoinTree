@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.CommunityMapper">
-		<!-- 게시판 게시글 리스트 -->
+	<!-- 게시판 상단고정 게시글 리스트 -->
+	<select id="selectPinnedCommList" parameterType="String" resultType="com.goodee.JoinTree.vo.Board">
+		SELECT
+			b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
+			b.board_title boardTitle, b.board_content boardContent, b.board_pinned boardPinned,
+			b.board_count boardCount, b.createdate, b.updatedate, b.create_id createId, b.update_id updateId,
+			ei.emp_name empName
+		FROM board b INNER JOIN emp_info ei
+		ON b.emp_no = ei.emp_no
+		WHERE b.board_category = #{category} AND b.board_pinned = "1"
+		ORDER BY b.createdate DESC
+	</select>
+	
+	
+	<!-- 게시판 게시글 리스트 -->
 	<select id="selectCommListByPage" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
 		SELECT
-			board_no boardNo, emp_no empNo, board_category boardCategory, 
-			board_title boardTitle, board_content boardContent, board_pinned boardPinned, 
-			board_count boardCount, createdate, updatedate, create_id createId, update_id updateId
-		FROM board
-		WHERE board_category = #{category}
-		ORDER BY createdate DESC
+            b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
+            b.board_title boardTitle, b.board_content boardContent, b.board_pinned boardPinned, 
+            b.board_count boardCount, b.createdate, b.updatedate, b.create_id createId, b.update_id updateId, 
+            ei.emp_name empName
+        FROM board b INNER JOIN emp_info ei
+        ON b.emp_no = ei.emp_no
+        WHERE b.board_category = #{category}
+        ORDER BY b.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
 	<!-- 게시판별 행 개수  -->
+	<!-- boardCategory 부분 나중에 확인  -->
 	<select id="selectCommCnt">
 		SELECT COUNT(*) FROM board
 		WHERE board_category = #{boardCategory}
 	</select>
+	
+	<!-- 게시글 조회수 증가 -->
+	<update id="increaseCommCount">
+		UPDATE board
+		SET board_count = board_count + 1
+		WHERE board_no = #{boardNo}
+	</update>
 
 	<!-- 게시판 게시글 상세정보  -->
 	<select id="selectCommOne" resultType="com.goodee.JoinTree.vo.Board">
-		SELECT board_no boardNo, emp_no empNo, board_category boardCategory, 
-			   board_title boardTitle, board_content boardContent, 
-			   board_pinned boardPinned, board_count boardCount, 
-			   createdate, updatedate, create_id createId, update_id updateId
-	    FROM board
+		SELECT b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
+               b.board_title boardTitle, b.board_content boardContent, 
+               b.board_pinned boardPinned, b.board_count boardCount, 
+               b.createdate, b.updatedate, b.create_id createId, b.update_id updateId, 
+               ei.emp_name empName
+        FROM board b INNER JOIN emp_info ei
+        ON b.emp_no = ei.emp_no
 	    WHERE board_no = #{boardNo}
 	</select>
 	
 	<!-- 게시판 게시글 입력 -->
-	<!-- 상단 고정 여부 이슈  -->
 	<insert id="addComm" parameterType="com.goodee.JoinTree.vo.Board">
 		<selectKey order="AFTER" keyProperty="boardNo" resultType="int"> <!-- AFTER: 키가 반환되고 난 뒤에 실행 -->
 			SELECT last_insert_id() <!-- insert 후 생성되는 키값 반환  -->
@@ -40,6 +65,7 @@
 			board_category, 
 			board_title, 
 			board_content, 
+			board_pinned,
 			createdate, 
 			updatedate, 
 			create_id, 
@@ -49,6 +75,7 @@
 			#{boardCategory},
 			#{boardTitle}, 
 			#{boardContent}, 
+			#{boardPinned}, 
 			NOW(), 
 			NOW(), 
 			#{empNo}, 
@@ -66,7 +93,6 @@
 			updatedate = NOW(), 
 			update_id = #{empNo}
 		WHERE board_no = #{boardNo} AND emp_no = #{empNo}
-			
 	</update>
 	
 	<!-- 게시판 게시글 삭제  -->

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,7 @@ public class CommunityController {
 		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage);
 		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-freeCommList)" + RESET);
+		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-freeCommList)" + RESET);
 		
 		// view로 값 넘길 때는 분리
 		model.addAttribute("category", category);
@@ -115,11 +117,15 @@ public class CommunityController {
 	// 자유 게시판 게시글 상세보기
 	@GetMapping("/community/freeCommList/freeCommOne")
 	public String freeCommOne(Model model, int boardNo) {
+		// 게시글 정보 가져오기
 		Map<String, Object> map = communityService.getCommOne(boardNo);
 		log.debug(CYAN + map + " <-- map(CommunityController-freeCommOne)" + RESET);
 		
 		Board comm = (Board) map.get("comm");
 		BoardFile boardFile = (BoardFile)map.get("boardFile");
+		
+		// 조회수 증가 처리
+		communityService.increaseCommCount(boardNo);
 		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
@@ -139,14 +145,33 @@ public class CommunityController {
 	
 	// 자유게시판 게시글 작성 액션
 	@PostMapping("/community/freeCommList/addFreeComm")
-	public String addFreeComm(HttpServletRequest request, Board board) {
+	public String addFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
 		String path = request.getServletContext().getRealPath("/commImg/");
+		
+		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
+		HttpSession session = request.getSession();
+		String dept = (String) session.getAttribute("dept");
+		log.debug(CYAN + dept + " <-- row(CommunityController-addFreeComm)" + RESET);
+		
+		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
+		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
+			board.setBoardPinned("1");
+		} else {
+			board.setBoardPinned("0");
+		}
+		
 		int row = communityService.addComm(board, path);
 		
 		log.debug(CYAN + row + " <-- row(CommunityController-addFreeComm)" + RESET);
 		
-		
-		return "redirect:/community/freeCommList";
+		if (row == 1) {
+			msg = URLEncoder.encode("게시글이 등록되었습니다.", "UTF-8");
+			
+			return "redirect:/community/freeCommList?msg=" + msg;
+		} else {
+			msg = URLEncoder.encode("게시글 등록에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
+			return "redirect:/community/freeCommList/addFreeComm?msg=" + msg;
+		}
 	}
 	
 	// 자유 게시판 게시글 수정
@@ -170,8 +195,6 @@ public class CommunityController {
 		} else {
 			msg = URLEncoder.encode("게시글 삭제에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
 			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + boardNo + "&msg=" + msg;
-		}
-		
+		}	
 	}
-
 }
