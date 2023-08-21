@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>개발팀</title>
+	<title>상단, 사이드 바</title>
 	<!-- plugins:css -->
 	<link rel="stylesheet" href="/resource/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
 	<link rel="stylesheet" href="/resource/vendors/css/vendor.bundle.base.css">
@@ -44,6 +44,12 @@
 			</div>
   			<!-- 아이콘들 -->
 			<ul class="navbar-nav navbar-nav-right">
+				<!-- 위 - 세션시간 -->
+				<li class="nav-item d-none d-lg-block full-screen-link">
+					<a class="nav-link">
+						세션시간
+					</a>
+				</li>
 				<!-- 위 - 전체화면 -->
 				<li class="nav-item d-none d-lg-block full-screen-link">
 					<a class="nav-link">
