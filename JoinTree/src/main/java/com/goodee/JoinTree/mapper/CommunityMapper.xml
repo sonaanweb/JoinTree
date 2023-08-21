@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.CommunityMapper">
+		<!-- 게시판 게시글 리스트 -->
+	<select id="selectCommListByPage" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
+		SELECT
+			board_no boardNo, emp_no empNo, board_category boardCategory, 
+			board_title boardTitle, board_content boardContent, board_pinned boardPinned, 
+			board_count boardCount, createdate, updatedate, create_id createId, update_id updateId
+		FROM board
+		WHERE board_category = #{category}
+		ORDER BY createdate DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 게시판별 행 개수  -->
+	<select id="selectCommCnt">
+		SELECT COUNT(*) FROM board
+		WHERE board_category = #{boardCategory}
+	</select>
+
+	<!-- 게시판 게시글 상세정보  -->
+	<select id="selectCommOne" resultType="com.goodee.JoinTree.vo.Board">
+		SELECT board_no boardNo, emp_no empNo, board_category boardCategory, 
+			   board_title boardTitle, board_content boardContent, 
+			   board_pinned boardPinned, board_count boardCount, 
+			   createdate, updatedate, create_id createId, update_id updateId
+	    FROM board
+	    WHERE board_no = #{boardNo}
+	</select>
+	
+	<!-- 게시판 게시글 입력 -->
+	<!-- 상단 고정 여부 이슈  -->
+	<insert id="addComm" parameterType="com.goodee.JoinTree.vo.Board">
+		<selectKey order="AFTER" keyProperty="boardNo" resultType="int"> <!-- AFTER: 키가 반환되고 난 뒤에 실행 -->
+			SELECT last_insert_id() <!-- insert 후 생성되는 키값 반환  -->
+		</selectKey>
+		INSERT INTO board(
+			emp_no, 
+			board_category, 
+			board_title, 
+			board_content, 
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+		) VALUES (
+			#{empNo}, 
+			#{boardCategory},
+			#{boardTitle}, 
+			#{boardContent}, 
+			NOW(), 
+			NOW(), 
+			#{empNo}, 
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 게시판 게시글 수정 -->
+	<!-- 상단 고정 여부 이슈 -->
+	<update id="modifyComm" parameterType="com.goodee.JoinTree.vo.Board">
+		UPDATE board
+		SET board_title = #{boardTitle}, 
+			board_content = #{boardContent},
+			board_pinned = #{boardPinned}, 
+			updatedate = NOW(), 
+			update_id = #{empNo}
+		WHERE board_no = #{boardNo} AND emp_no = #{empNo}
+			
+	</update>
+	
+	<!-- 게시판 게시글 삭제  -->
+	<delete id="removeComm">
+		DELETE FROM board
+		WHERE board_no = #{boardNo}
+	</delete>
+
+</mapper>
