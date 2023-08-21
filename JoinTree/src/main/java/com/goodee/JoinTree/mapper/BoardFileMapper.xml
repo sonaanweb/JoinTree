@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.BoardFileMapper">
+	<!-- 파일 업로드 -->
+	<!-- 아이디 이슈 -->
+	<insert id="insertBoardFile" parameterType="com.goodee.JoinTree.vo.BoardFile">
+		INSERT INTO board_file (
+			board_no, 
+			board_origin_filename, 
+			board_save_filename, 
+			board_filetype, 
+			board_filesize, 
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+		) VALUES (
+			#{boardNo}, 
+			#{boardOriginFilename}, 
+			#{boardSaveFilename}, 
+			#{boardFiletype}, 
+			#{boardFilesize}, 
+			NOW(), 
+			NOW(), 
+			#{empNo},
+			#{empNo} 
+		)
+	</insert>
+	
+	<!-- 업로드 파일 상세정보 -->
+	<select id="selectBoardFile" resultType="com.goodee.JoinTree.vo.BoardFile">
+		SELECT board_file_no boardFileNo, board_no boardNo, board_origin_filename boardOriginFilename,
+			   board_save_filename boardSaveFilename, board_filetype boardFiletype, board_filesize boardFilesize,
+			   createdate, updatedate, create_id createId, update_id updateId
+		FROM board_file 
+		WHERE board_no = #{boardNo}
+	</select>
+	
+	<!-- 게시글 내 파일 삭제  -->
+	<delete id="removeBoardFile">
+		DELETE FROM board_file 
+		WHERE board_no = #{boardNo}
+	</delete>
+	
+	<!-- 게시글 내 첨부파일 수 (0, 1) -->
+	<select id="selectBoardFileCnt">
+		SELECT COUNT(*) FROM board_file
+		WHERE board_no = #{boardNo}
+	</select>
+
+</mapper>
