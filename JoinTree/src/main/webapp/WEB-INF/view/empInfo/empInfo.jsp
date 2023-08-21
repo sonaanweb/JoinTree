@@ -230,6 +230,13 @@
 				<td>${empInfo.updatedate.toString().substring(0, 19)}</td> <!--timestamp이므로 String 변환 후 자르기  -->
 				<%-- <td>${empInfo.updatedate}</td> --%>
 			</tr>
+			<tr>
+				<td>서명</td>
+				<td>
+					<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="sign image">
+					<%-- <img src="${pageContext.request.contextPath}/signImg/${empInfo.empSaveImgName}" alt="sign image"> --%>
+				</td>
+			</tr>
 		</table>
 		
 		<div>

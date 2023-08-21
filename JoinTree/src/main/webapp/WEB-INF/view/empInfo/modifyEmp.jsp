@@ -56,6 +56,10 @@
 				    }
 				});
 				
+				
+
+				
+				
 				// 사진 등록 처리 함수
 				function uploadImage() {
 					 console.log("사진 업로드 함수가 호출되었습니다."); // 디버그 메시지
@@ -68,7 +72,7 @@
 				    
 				    // AJAX 요청
 				    $.ajax({
-				    	url: '/myJoinTree/empInfo/modifyEmp/uploadEmpImg',
+				    	url: '/empInfo/modifyEmp/uploadEmpImg',
 				    	type: 'post', 
 				    	data: formData, 
 				    	processData: false, // false로 선언 시 formData를 string으로 변환하지 않음
@@ -107,27 +111,54 @@
 			        var modifypopupContent = "<h2>사진 변경</h2>" +
 			        				   "<p>파일 크기는 3MB 이하로 제한됩니다.</p>" +
 			                           "<form id='modifyImgForm' enctype='multipart/form-data'>" +
-			                           "   <img id='modifyPreviewImage' src='' alt='Image Preview' style='max-width: 300px; max-height: 300px; display: none;'>" +
-			                           "   <input type='file' name='modifyImage' accept='image/jpg, image/jpeg, image/png'>" +
+			                           "   <img id='modifyPreviewImg' src='' style='max-width: 300px; max-height: 300px;'>" +
+			                           "   <input type='file' name='modifyImg' id='modifyImg' accept='image/jpg, image/jpeg, image/png'>" +
 			                           "   <input type='button' value='등록' onclick='uploadImgModify()'>" +
 			                           "</form>";
+			                           
+      			 	// 파일 선택 시 미리보기 (사진 변경)
+      			    $('#modifyImg').change(function() {
+      			        var input = this;
+      			        if (input.files && input.files[0]) {
+      			            var reader = new FileReader();
+      			            reader.onload = function(e) {
+      			                // 미리보기 이미지 업데이트
+      			                $('#modifyPreviewImg').attr('src', e.target.result).show();
+      			            };
+      			            reader.readAsDataURL(input.files[0]);
+      			        }
+      			    });
 			
                     modifyPopup.document.write(modifypopupContent);
                     modifyPopup.document.close();
-				}
+					}
 			  	
-			 	// 파일 선택 시 미리보기 (사진 변경)
-			    $('#newImageInput').change(function() {
-			        var input = this;
-			        if (input.files && input.files[0]) {
-			            var reader = new FileReader();
-			            reader.onload = function(e) {
-			                // 미리보기 이미지 업데이트
-			                $('#modifyPreviewImage').attr('src', e.target.result).show();
-			            };
-			            reader.readAsDataURL(input.files[0]);
-			        }
-			    });
+
+			 	
+				/*
+				
+				const fileInput = $('#fileInput');
+		        const previewImage = $('#previewImage');
+		       
+		        // 파일 선택 시 미리보기
+	            fileInput.change(function() {
+	                const file = fileInput.prop('files')[0]; // 선택한 파일 객체 가져오기
+	                if (file) {
+	                    const reader = new FileReader(); // FileReader 객체 생성
+	                    reader.onload = function(e) { // 파일 읽기 완료 후 실행될 함수 정의
+	                    	// 미리보기 이미지의 'src' 속성을 읽은 파일 내용으로 설정
+	                        previewImage.attr('src', e.target.result); 
+	                    };
+	                    reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기 시작
+	                } else {
+	                    previewImage.attr('src', ''); // 파일이 선택되지 않았을 때 미리보기 초기화
+	                }
+	            });
+				*/
+		        
+	            // <img id="previewImage" src="" style="max-width: 300px; max-height: 300px;">
+			 	
+			 	
 				
 			  	
 			    // 사진 변경 업로드 처리 함수
@@ -136,7 +167,7 @@
 			        
 			        // AJAX 요청
 			        $.ajax({
-			        	url: '/myJoinTree/empInfo/modifyEmp/modifyEmpImg',
+			        	url: '/empInfo/modifyEmp/modifyEmpImg',
 			        	type: 'POST',
 			        	data: formData,
 			        	processData: false,
@@ -344,6 +375,27 @@
 						<input type="text" value="${empInfo.empPhone.substring(0, 3)}" name="empPhone1" id="empPhone1" maxlength="3"> &#45;  
 						<input type="text" value="${empInfo.empPhone.substring(4, 8)}" name="empPhone2" id="empPhone2" maxlength="4"> &#45;  
 						<input type="text" value="${empInfo.empPhone.substring(9)}" name="empPhone3" id="empPhone3" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<td>서명</td>
+					<td>
+						
+						<img id="signImgPreview" src="" alt="signImage preview" style="max-width: 300px; max-height: 300px; display: none;">
+						
+						<!-- type="button" 없을 경우 액션 폼 제출되는 현상 주의  -->
+						<c:choose>
+							<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
+								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
+								<button type="button" id="uploadSignImgBtn">서명 등록</button>
+							</c:when>
+							<c:otherwise>
+								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
+								<span>변경 전 서명</span><br>
+								<input type="file" id="newImageInput" accept="image/jpg, image/jpeg, image/png" style="display: none;"> &nbsp;
+								<button type="button" id="modifyImgBtn">서명 변경</button>	
+							</c:otherwise>
+						</c:choose>
 					</td>
 				</tr>
 			</table>
