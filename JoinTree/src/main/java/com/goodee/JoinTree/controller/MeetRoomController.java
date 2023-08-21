@@ -47,25 +47,25 @@ public class MeetRoomController {
 	}
 	// ------------------------------------------------
 	
-	// 회의실 추가
+	/* 회의실 추가
     @GetMapping("/equipment/addMeetRoom")
     public String addMeetRoom() {
         return "/equipment/addMeetRoom";
-    }
+    }*/
 
-    @PostMapping("/equipment/addMeetRoom")
+    @PostMapping("/addMeetRoom")
     public String addMeetRoom(HttpServletRequest request, MeetingRoom meetingRoom) {
     	
     	// 임시 아이디값 ---
-    	int createId = Integer.parseInt(request.getParameter("createId"));
-    	int updateId = Integer.parseInt(request.getParameter("updateId"));
+    	int createId = 1111;
+    	int updateId = 1111;
     	meetingRoom.setCreateId(createId);
     	meetingRoom.setUpdateId(updateId);
     	
         String equipCategory = "E0101"; // 회의실 공통 코드 IN
-        
         meetingRoom.setEquipCategory(equipCategory);
-        meetRoomService.addMeetRoom(meetingRoom);
+    	meetRoomService.addMeetRoom(meetingRoom);
+        //meetRoomService.addMeetRoom(meetingRoom);
         
         log.debug(Sona+"MeetRoomController.equipCategory : "+equipCategory.toString()+RESET);
         log.debug(Sona+"MeetRoomController.addmeetingRoom : "+meetingRoom.toString()+RESET);

@@ -11,16 +11,17 @@
 </head>
 <body>
 <!-- 관리 회의실 리스트 -->
-<a href="/equipment/addMeetRoom">추가</a>
-<table>
+<!-- <a href="/equipment/addMeetRoom">추가</a> -->
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
+<table class="table">
     <thead>
         <tr>
             <td>회의실 번호</td>
             <td>기자재카테고리</td>
             <td>회의실이름</td>
             <td>수용인원</td>
-            <td>사용여부</td>
-            <td>수정</td>
+            <td rowspan="1">사용여부</td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +45,41 @@
         </c:forEach>
     </tbody>
 </table>
+<!-- 추가 모달창 -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">회의실 추가</h5>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                <input type="hidden" id="modalAddCate" name="equipCategory">
+                <input type="hidden" name="createId" value="1111"> <!-- testId -->
+   				<input type="hidden" name="updateId" value="1111">
+                    <div class="mb-3">
+                        <label for="modalAddRoomName" class="col-form-label">이름</label>
+                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName">
+                        <div class="check" id="rn_add_check"></div><!-- 회의실명 중복, 공백일 시 -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalAddRoomCapacity" class="form-label">수용 인원</label>
+                        <input type="number" class="form-control" id="modalAddRoomCapacity" name="roomCapacity" min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalAddRoomStatus" class="col-form-label">사용여부</label>
+                        <select name="roomStatus" id="modalAddRoomStatus">
+                            <option value="1">사용가능</option>
+                            <option value="0">사용불가</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="modalBtn">추가</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- 수정 모달창 -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -72,7 +108,7 @@
                             <option value="0">사용불가</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="modalBtn" onclick="modiMeetRoom()">수정</button>
+                    <button type="submit" class="btn btn-primary" id="modalBtn">수정</button>
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
                 </form>
             </div>
@@ -80,6 +116,52 @@
     </div>
 </div>
 <script>
+// 추가 모달창 스크립트
+$('#addModal').on('show.bs.modal', function (event) {
+    //열리기 전 값 초기화 show.bs.modal (모달창이 보여지기 직전에 발생하는 event)
+    $("#modalAddRoomName").val("");
+    $("#modalAddRoomCapacity").val("1");
+    $("#modalAddRoomStatus").val("1");
+    $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
+
+    $('#modalBtn').click(function() {
+        const roomName = $('#modalAddRoomName').val();
+        const roomCapacity = $('#modalAddRoomCapacity').val();
+        const roomStatus = $('#modalAddRoomStatus').val();
+
+        if (roomName.trim() === '') {
+            $("#rn_add_check").text("공백은 입력할 수 없습니다.");
+            $("#rn_add_check").css("color", "red");
+            $("#modalAddRoomName").focus();
+            return;
+        }
+
+        $.ajax({
+            url: '/cntRoomName',
+            type: 'post',
+            data: roomName,
+            contentType: 'application/json',
+            success: function(cnt) {
+                if (cnt > 0) {
+                    $("#rn_add_check").text("이미 존재하는 이름입니다.");
+                    $("#rn_add_check").css("color", "red");
+                    $("#modalAddRoomName").focus();
+                } else {
+                    // 유효성 검사 통과시
+                    $('#addForm').attr('action', '/addMeetRoom');
+                    $('#addForm').attr('method', 'post'); // 폼 제출 방식
+                    $('#addForm')[0].submit();
+                    alert('회의실이 추가되었습니다.');
+                }
+            },
+            error: function() {
+                console.log('ajax실패');
+            }
+        });
+    });
+});
+
+
 // 수정 모달창 스크립트
 $(document).ready(function() {
 	let originalRoomName; // 기존 이름 저장 - 중복검사 피하기 위함

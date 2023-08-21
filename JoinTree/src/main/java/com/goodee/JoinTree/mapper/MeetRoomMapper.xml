@@ -25,7 +25,8 @@
 			create_id createId,
 			update_id updateId
 		FROM meeting_room
-		WHERE equip_category = 'E0101';
+		WHERE equip_category = 'E0101'
+		ORDER BY createdate DESC;
 	</select>
 	
 	<!-- 회의실 공통코드 E0101 가져오기
@@ -59,7 +60,7 @@
 	        NOW(),
 	        #{createId},
 	        #{updateId}
-	    )	
+	    )
 	</insert>
 	
 	<!-- 회의실 수정 create_id.... 추가 해야함  update_id = #{updateId}-->
