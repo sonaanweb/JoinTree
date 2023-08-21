@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SignImg {
-
+	private int signImgNo;
 	private int empNo;
 	private String signSaveImgname;
 	private String signFiletype;
