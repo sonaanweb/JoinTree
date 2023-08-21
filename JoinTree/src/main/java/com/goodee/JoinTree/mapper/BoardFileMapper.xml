@@ -22,8 +22,8 @@
 			#{boardFilesize}, 
 			NOW(), 
 			NOW(), 
-			#{empNo},
-			#{empNo} 
+			#{createId},
+			#{updateId} 
 		)
 	</insert>
 	
