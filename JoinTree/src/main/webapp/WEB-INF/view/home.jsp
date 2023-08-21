@@ -119,6 +119,27 @@
 					</div>					
 				</div>
 				
+								<div class="row">
+					<div class="col-md-9 stretch-card grid-margin">
+						<div class="card bg-gradient-danger card-img-holder text-white">
+							<div class="card-body"> 
+							<!-- 	결재문서목록
+								<hr>
+								문서함 -->
+							</div>
+						</div>
+					</div>		
+					
+					<div class="col-md-3 stretch-card grid-margin">
+						<div class="card bg-gradient-danger card-img-holder text-white">
+							<div class="card-body"> 
+								<a href="/login/login">로그인</a>
+								<a href="/logout">로그아웃</a>
+							</div>
+						</div>
+					</div>					
+				</div>
+				
 			</div><!-- 컨텐츠 끝 -->
 		</div><!-- 컨텐츠전체 끝 -->
 	</div><!-- 상단제외 끝 -->
