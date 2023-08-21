@@ -211,12 +211,12 @@
 
 		<!-- 왼쪽 - 일정 -->
 		<li class="nav-item">
-			<a class="nav-link" data-toggle="collapse" href="#calendar" aria-expanded="false" aria-controls="ui-basic">
+			<a class="nav-link" data-toggle="collapse" href="#calendarBar" aria-expanded="false" aria-controls="ui-basic">
 				<span class="menu-title">일정</span>
 				<i class="menu-arrow"></i>
 				<i class="mdi mdi-calendar-check menu-icon"></i>
 			</a>
-			<div class="collapse" id="calendar">
+			<div class="collapse" id="calendarBar">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"> <a class="nav-link" href="">전사일정</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">부서일정</a></li>
