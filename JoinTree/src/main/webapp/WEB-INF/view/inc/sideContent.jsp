@@ -214,7 +214,7 @@
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"> <a class="nav-link" href="">전사일정</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">부서일정</a></li>
-					<li class="nav-item"> <a class="nav-link" href="">개인일정</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/schedule/personalSchedule">개인일정</a></li>
 				</ul>
 			</div>
 		</li>
