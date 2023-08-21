@@ -369,6 +369,7 @@
 			</a>
 		 	<div class="collapse" id="document">
 				<ul class="nav flex-column sub-menu">
+					<li class="nav-item"> <a class="nav-link" href="">결재하기</a></li>
 					<li class="nav-item"> <a class="nav-link" href="/document/testDocument">기안문서목록</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">결재함</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">개인문서함</a></li>
