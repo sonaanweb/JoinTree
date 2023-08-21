@@ -5,22 +5,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<!-- jQuery 라이브러리 -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-  <!-- 부트스트랩 CSS CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-  
-  <!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- jQuery 트리뷰 및 쿠키 라이브러리 -->
-  <script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
-  <script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
-  
-  <!-- 기타 스타일 시트 -->
-  <link rel="stylesheet" href="/resource/jquery.treeview.css">
-  <link rel="stylesheet" href="/resource/screen.css">
+	<!-- jQuery 라이브러리 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	<!-- 부트스트랩 CSS CDN -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+	
+	<!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- jQuery 트리뷰 및 쿠키 라이브러리 -->
+	<script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
+	<script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
+	
+	<!-- 기타 스타일 시트 -->
+	<link rel="stylesheet" href="/resource/jquery.treeview.css">
+	<link rel="stylesheet" href="/resource/screen.css">
 <script>
 	$(document).ready(function() {
 		// 트리뷰 초기 설정
@@ -49,84 +49,87 @@
 				}
 			});
 		});
-	 	// modalBtn 클릭 시 모달 띄우기
+		// modalBtn 클릭 시 모달 띄우기
 		$("#modalBtn").on("click", function() {
 			$("#myModal").modal("show");
 		});
-	      
-	   	// 클릭한 li 값에 따라 처리
+     
+		// 클릭한 li 값에 따라 처리
 		const selectedEmps = []; // 선택한 부서 번호를 저장하는 배열
-		
+				
 		$("body").on("click", ".file.code", function() {
-	        const selectedEmpNo = $(this).data("no");
-	        const selectedEmpName = $(this).data("name");
-	        const selectedEmpPosition = $(this).data("position");
-	        
-	        if (!selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")") && selectedEmps.length < 2) {
-	            selectedEmps.push(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")"); // 한 번에 추가
-
-	          // 선택한 번호 저장
-	          updateSelectEmp(); // selectEmp 업데이트
-	          // 모달 닫기
-	          $("#myModal").modal("hide");
-	        } else if (selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")")) {
-	          alert("이미 선택한 번호입니다.");
-	        } else {
-	          alert("최대 두 명까지만 선택 가능합니다.");
-	        }
+			const selectedEmpNo = $(this).data("no");
+			const selectedEmpName = $(this).data("name");
+			const selectedEmpPosition = $(this).data("position");
+			
+			if (!selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")") && selectedEmps.length < 2) {
+				selectedEmps.push(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")"); // 한 번에 추가
+			
+			// 선택한 번호 저장
+			updateSelectEmp(); // selectEmp 업데이트
+			// 모달 닫기
+			$("#myModal").modal("hide");
+			} else if (selectedEmps.includes(selectedEmpName + " " +selectedEmpPosition + "(" + selectedEmpNo + ")")) {
+				alert("이미 선택한 번호입니다.");
+			} else {
+				alert("최대 두 명까지만 선택 가능합니다.");
+			}
 		
-	      });
-	     //삭제
+		});
+		
+		// 선택한 사원 삭제
 		$("#deleteSelectedBtn").on("click", function() {
-	        const checkedCheckboxes = $(".empCheckbox:checked");
-	        checkedCheckboxes.each(function() {
-	          const selectedEmp = $(this).data("no");
-	          const index = selectedEmps.indexOf(selectedEmp);
-	          if (index !== -1) {
-	            selectedEmps.splice(index, 1); // 선택한 번호 삭제
-	          }
-	        });
-	        updateSelectEmp(); // selectEmp 업데이트
-	      });
+			const checkedCheckboxes = $(".empCheckbox:checked");
+			checkedCheckboxes.each(function() {
+				const selectedEmp = $(this).data("no");
+				const index = selectedEmps.indexOf(selectedEmp);
+				if (index !== -1) {
+					selectedEmps.splice(index, 1); // 선택한 번호 삭제
+				}
+			});
+			updateSelectEmp(); // selectEmp 업데이트
+		});
 		
-		// 선택한 사원을 위로 이동하는 기능 추가
-	    $("#moveUpBtn").on("click", function() {
-	      const selectedIndex = selectedEmps.length - 1;
-	      if (selectedIndex > 0) {
-	        const temp = selectedEmps[selectedIndex];
-	        selectedEmps[selectedIndex] = selectedEmps[selectedIndex - 1];
-	        selectedEmps[selectedIndex - 1] = temp;
-	        updateSelectEmp();
-	      }
-	    });
+		// 위로 버튼을 클릭하면 선택한 사원을 위로 이동하는 기능 추가
+		$("#moveUpBtn").on("click", function() {
+		    const selectedEmp = $(".empCheckbox:checked").data("no");
+		    const selectedIndex = selectedEmps.indexOf(selectedEmp);
+		    if (selectedIndex > 0) {
+		        const temp = selectedEmps[selectedIndex];
+		        selectedEmps[selectedIndex] = selectedEmps[selectedIndex - 1];
+		        selectedEmps[selectedIndex - 1] = temp;
+		        updateSelectEmp();
+		    }
+		});
 
-	    // 선택한 사원을 아래로 이동하는 기능 추가
-	    $("#moveDownBtn").on("click", function() {
-	      const selectedIndex = selectedEmps.length - 1;
-	      if (selectedIndex >= 0 && selectedIndex < selectedEmps.length - 1) {
-	        const temp = selectedEmps[selectedIndex];
-	        selectedEmps[selectedIndex] = selectedEmps[selectedIndex + 1];
-	        selectedEmps[selectedIndex + 1] = temp;
-	        updateSelectEmp();
-	      }
-	    });
-	      
-	      // selectEmp 업데이트 함수
-	      function updateSelectEmp() {
-	    	  const selectEmp = $("#selectEmp");
-	    	  selectEmp.empty();
-	    	  for (const emp of selectedEmps) {
-	    	    const selectedEmpItem =  '<div class="selectedEmp">'+ emp +'<input type="checkbox" class="empCheckbox" data-no="'+ emp +'"></div>';
-	          selectEmp.append(selectedEmpItem);
-	        }
-	      }
+		// 아래로 버튼을 클릭하면 선택한 사원을 아래로 이동하는 기능 추가
+		$("#moveDownBtn").on("click", function() {
+		    const selectedEmp = $(".empCheckbox:checked").data("no");
+		    const selectedIndex = selectedEmps.indexOf(selectedEmp);
+		    if (selectedIndex >= 0 && selectedIndex < selectedEmps.length - 1) {
+		        const temp = selectedEmps[selectedIndex];
+		        selectedEmps[selectedIndex] = selectedEmps[selectedIndex + 1];
+		        selectedEmps[selectedIndex + 1] = temp;
+		        updateSelectEmp();
+		    }
+		});
+   
+		// selectEmp 업데이트 함수
+		function updateSelectEmp() {
+			const selectEmp = $("#selectEmp");
+			selectEmp.empty();
+			for (const emp of selectedEmps) {
+				const selectedEmpItem =  '<div class="selectedEmp">'+ emp +'<input type="checkbox" class="empCheckbox" data-no="'+ emp +'"></div>';
+				selectEmp.append(selectedEmpItem);
+			}
+		}
 	    
 	}); // 제일 처음
 </script>
 </head>
 <body>
 	<div>
-	<button type="button" id="modalBtn">결재선</button>	
+	<button type="button" id="modalBtn">결재선 추가</button>	
 	</div>
 	
 	<div class="modal" id="myModal" tabindex="-1">
