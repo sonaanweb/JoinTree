@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.SignMapper">
+	<insert id="insertSign" parameterType="com.goodee.JoinTree.vo.SignImg">
+		INSERT INTO sign_img (
+			emp_no, 
+			sign_save_imgname, 
+			sign_filetype, 
+			sign_filesize,
+			createdate,
+			updatedate,
+			create_id,
+			update_id,
+		) VALUES (
+			#{empNo}, 
+			#{signSaveImgname}, 
+			#{signFiletype}, 
+			#{signFilesize},
+			NOW(), 
+			NOW(), 
+			#{createId},
+			#{updateId}
+		);
+	</insert>
+</mapper>
