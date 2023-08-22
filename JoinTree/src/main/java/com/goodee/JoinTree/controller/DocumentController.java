@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.OrgChartService;
-import com.goodee.JoinTree.service.TestDocumentService;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
+import com.goodee.JoinTree.vo.DocumentDefault;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,6 +76,19 @@ public class DocumentController {
 		model.addAttribute("empInfo", empInfo);
 		
 		return new ModelAndView(path);
+	}
+	
+	@PostMapping("/document/docDefault")
+	public String docDefault(DocumentDefault documentDefault) {
+		int row = documentService.addDocDefault(documentDefault);	
+		log.debug(row+"<--docDefault row ");
+		
+		if(row == 1) {
+			
+		return "/home";
+		}else {
+			return "/home";
+		}
 	}
 
 }

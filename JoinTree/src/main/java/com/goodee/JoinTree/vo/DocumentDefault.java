@@ -6,14 +6,17 @@ import lombok.Data;
 public class DocumentDefault {
 
 	private int docNo;
-	private int empMo;
-	private String doc;
-	private String docDefaultTitle;
-	private String docDefaultContent;
+	private int empNo;
+	private String docTitle;
+	private String docContent;
+	private String category;
 	private String writer;
-	private String reference;
+	private int reference;
 	private String recieverTeam;
-	private String docDefaultStatus;
+	private String docStatus;
+	private String docStamp1;
+	private String docStamp2;
+	private String docStamp3;
 	private String createdate;
 	private String updatedate;
 	private int createId;
