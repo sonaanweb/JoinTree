@@ -142,7 +142,7 @@ public class EmpInfoService {
 	
 
 	// 나의 서명(이미지) 추가
-	public int uploadSignImg(int empNo, String newSignImg, String path) {
+	public String uploadSignImg(int empNo, String newSignImg, String path) {
 		String type = newSignImg.split(";")[0].split(":")[1]; // split: 구분자를 기준으로 문자열 배열 반환
 		String data = newSignImg.split(",")[1];
 		byte[] image = Base64.decodeBase64(data);
@@ -183,7 +183,8 @@ public class EmpInfoService {
             throw new RuntimeException();
 		}
 		
-		return row; // 1일 때 저장 성공
+		// return row; // 1일 때 저장 성공
+		return saveFilename;
 	}
 	
 	// 나의 서명(이미지) 삭제

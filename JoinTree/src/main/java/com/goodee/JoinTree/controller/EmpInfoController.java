@@ -174,14 +174,27 @@ public class EmpInfoController {
 		// 파일 저장 경로 설정
 		String path = request.getServletContext().getRealPath("/signImg/"); // 실제 파일 시스템 경로
 		
-		int row = empInfoService.uploadSignImg(empNo, newSignImg, path);
-		log.debug(CYAN + row + " <-- row(EmpInfoController-uploadSignImg)" + RESET);
+	 	String saveFilename = empInfoService.uploadSignImg(empNo, newSignImg, path); // 저장된 파일 이름을 가져옵니다.
+	 	log.debug(CYAN + saveFilename + " <-- saveFilename(EmpInfoController-uploadSignImg)" + RESET);
 		
+	 	// int row = empInfoService.uploadSignImg(empNo, newSignImg, path);
+		// log.debug(CYAN + row + " <-- row(EmpInfoController-uploadSignImg)" + RESET);
+		/*
 		if (row == 1) { // 1 출력 시 DB, 로컬에 이미지 저장 완료
+			// session.setAttribute("signImg", );
+			
 			return "success";
 		} else {
 			return "false";
 		}
+		*/
+	 	
+	    if (saveFilename != null) {
+	        session.setAttribute("signImg", saveFilename); // 세션에 파일 이름을 저장합니다.
+	        return "success";
+	    } else {
+	        return "false";
+	    }
 	}
 	
 	@PostMapping("/empInfo/modifyEmp/modifyEmpImg")
