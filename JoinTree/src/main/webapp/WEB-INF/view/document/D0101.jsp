@@ -4,8 +4,19 @@
 	<!-- css - 우선순위를 위해 한 번 더 -->
 	<link rel="stylesheet" href="/resource/css/style2.css">
 	<link rel="stylesheet" href="/resource/css/style.css">
+	<script>
+		$(document).ready(function() {
+			const today = new Date();
+		    const year = today.getFullYear();
+		    const month = String(today.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 1을 더해준다
+		    const day = String(today.getDate()).padStart(2, '0');
+		    const formattedDate = year + "-" + month + "-" + day;
+		    
+		    $("#draftDate").val(formattedDate); // 오늘날짜 출력
+		});
+	</script>
 <div class="doc">
-	<h1>기&nbsp;&nbsp;안&nbsp;&nbsp;서</h1>
+	<h1 class="center">기안서</h1>
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -19,17 +30,17 @@
 							
 							<tr>
 								<td>기안부서</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text" readonly="readonly" value="${empInfo.dept}"></td>
 							</tr>
 							
 							<tr>
 								<td>기안일</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text" readonly="readonly" id="draftDate"></td>
 							</tr>
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -37,7 +48,10 @@
 				
 				<td class="blank"></td>
 				
-				<td class="sign"><input type="text" id="tom" readonly="readonly"></input></td>
+				<td class="sign">
+					<input type="hidden" id="empName" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empNo" readonly="readonly" value="${empInfo.empName}">
+				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>

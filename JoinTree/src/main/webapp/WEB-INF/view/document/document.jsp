@@ -20,9 +20,7 @@
 	<link rel="stylesheet" href="/resource/screen.css">
 <script>
 	$(document).ready(function() {
-		const empName = '${empInfo.empName}'; // 서버 사이드 템플릿 변수의 값을 가져옴
-		$("#tom").val(empName);
-		
+		 
 		// empTree 요소에 대한 데이터를 가져옴 -> 각 부서에 맞는 사원들을 가져옴
 		$(".empTree").each(function() {
 			const dept = $(this).data("dept"); // dept데이터는 수정될 일이 없기에 const로 저장
@@ -170,23 +168,24 @@
 			$("#inputSignerBtn").on("click", function() {
 				const selectedSigner1 = signerSelectedEmps[0]; // 선택한 수신팀 정보 가져오기
 				const selectedSigner2 = signerSelectedEmps[1];
+				
 				$("#signer1").val(selectedSigner1); // .text() 메서드를 사용하여 내용 변경 -> td에 넣어야 함
 			    $("#signer2").val(selectedSigner2); // .text() 메서드를 사용하여 내용 변경
-					console.log($("#signer1").val());
-					console.log($("#signer2").val());
+					//console.log($("#signer1").val());
+					//console.log($("#signer2").val());
 			});
 			
 			// inputReferBtn 버튼을 클릭하면 참조자 값을 기안서 - 참조자(reference) 영역에 추가
 			$("#inputReferBtn").on("click", function() {
-				const selectedRefer = referSelectedEmps // 선택한 수신팀 정보 가져오기
-
+				const selectedRefer = referSelectedEmps; // 선택한 수신팀 정보 가져오기
 				$("#reference").val(selectedRefer); // -> input이라서 val
 					//console.log($("#receiverTeam").val());
 			});
 			
+			console.log($("#tom").val());
 			// inputReceiverBtn 버튼을 클릭하면 수신팀의 값을 기안서 - 수신팀(receiverTeam) 영역에 추가
 			$("#inputReceiverBtn").on("click", function() {
-			    const selectedReceiverTeam = receiverSelectedEmps // 선택한 수신팀 정보 가져오기
+			    const selectedReceiverTeam = receiverSelectedEmps; // 선택한 수신팀 정보 가져오기
 			    
 			    $("#receiverTeam").val(selectedReceiverTeam);
 					//console.log($("#receiverTeam").val());
@@ -250,10 +249,10 @@
 								<c:forEach var="d" items="${documentCodeList}">
 									<c:choose>
 										<c:when test="${d.code == 'd0101'}">
-											<option value="${d.code}" selected>${d.codeName}</option>
+											<option id="category" value="${d.code}" selected>${d.codeName}</option>
 										</c:when>
 										<c:otherwise>
-											<option value="${d.code}">${d.codeName}</option>
+											<option id="category" value="${d.code}">${d.codeName}</option>
 										</c:otherwise>
 									</c:choose>						
 								</c:forEach>
@@ -310,75 +309,75 @@
 	<!-- footer -->
 	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 	<!-- 결재선 모달 -->
-<div class="modal" id="signerModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">결재선</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <ul id="signerCodeList"> <!-- 고유한 ID 부여 -->
-                    <c:forEach var="dept" items="${deptList}">
-                        <li>
-                            <span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
-                            <ul>
-                                <!-- 여기에 데이터를 추가하는 부분 -->
-                            </ul>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 참조자 모달 -->
-<div class="modal" id="referModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">참조자</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <ul id="referCodeList"> <!-- 고유한 ID 부여 -->
-                    <c:forEach var="dept" items="${deptList}">
-                        <li>
-                            <span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
-                            <ul>
-                                <!-- 여기에 데이터를 추가하는 부분 -->
-                            </ul>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 수신팀 모달 -->
-<div class="modal" id="receiverModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">수신자</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <ul id="receiverCodeList"> <!-- 고유한 ID 부여 -->
-                    <c:forEach var="dept" items="${deptList}">
-                        <li>
-                            <span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}</span>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="modal" id="signerModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">결재선</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+				<div class="modal-body">
+					<ul id="signerCodeList"> <!-- 고유한 ID 부여 -->
+						<c:forEach var="dept" items="${deptList}">
+							<li>
+								<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
+								<ul>
+								<!-- 여기에 데이터를 추가하는 부분 -->
+								</ul>
+							</li>
+						</c:forEach>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+		<!-- 참조자 모달 -->
+		<div class="modal" id="referModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">참조자</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					
+					<div class="modal-body">
+						<ul id="referCodeList"> <!-- 고유한 ID 부여 -->
+							<c:forEach var="dept" items="${deptList}">
+							<li>
+								<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
+								<ul>
+								<!-- 여기에 데이터를 추가하는 부분 -->
+								</ul>
+							</li>
+						</c:forEach>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<!-- 수신팀 모달 -->
+		<div class="modal" id="receiverModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">수신자</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+						
+					<div class="modal-body">
+						<ul id="receiverCodeList"> <!-- 고유한 ID 부여 -->
+							<c:forEach var="dept" items="${deptList}">
+								<li>
+									<span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}</span>
+								</li>
+							</c:forEach>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
 </html>

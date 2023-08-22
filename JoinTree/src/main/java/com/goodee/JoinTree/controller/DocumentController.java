@@ -43,6 +43,8 @@ public class DocumentController {
 		
 		// 결재선 리스트
 		List<CommonCode> deptList = orgChartService.selectOrgDept();
+		
+		// 로그인 유저
 		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 		
 		int empNo = loginAccount.getEmpNo();
@@ -59,9 +61,19 @@ public class DocumentController {
 	}
 	
 	@GetMapping("/document/getDocumentForm")
-	public ModelAndView getDocumentForm(@RequestParam String selectedForm) {
+	public ModelAndView getDocumentForm(Model model, HttpSession session, @RequestParam String selectedForm) {
 		
 		String path = "document/" + selectedForm;
+		// 로그인 유저
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		int empNo = loginAccount.getEmpNo();
+		
+		// 로그인한 사원 정보 
+		Map<String, Object> empInfo = empInfoService.getEmpOne(empNo);
+		
+		// 뷰에서 사용할 수 있도록 모델에 추가
+		model.addAttribute("empInfo", empInfo);
 		
 		return new ModelAndView(path);
 	}

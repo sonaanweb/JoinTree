@@ -117,11 +117,16 @@ input:checked + .slider:before {
 }
 
 /*기안서*/
+.doc table{
+	width: 100%;
+}
 .doc input { /*input중에 readonly인거 */
 	border: none;
+	width: 100%;
 }
 .doc > table{
 	margin-bottom: 20px;
+	width: 100%;
 }
 .doc .doc-title tr > td:first-child {
 	border: none;
@@ -132,7 +137,7 @@ input:checked + .slider:before {
 	padding: 10px;
 }
 .doc .table .table tr td{
-	width: 100%;
+	width: 400px;
 }
 .doc .table .table tr td{
 	border: 1px solid #999;
