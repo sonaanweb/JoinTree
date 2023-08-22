@@ -2,11 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-	<!-- jQuery 라이브러리 -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 	
 	<!-- 부트스트랩 CSS CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
@@ -125,17 +122,36 @@
 		}
 		
 		$("#codeList").treeview({ collapsed: true });
-
+		
+		// slectDocument 옵션 변경시 이벤트
+		$('#slectDocument').change(function(){
+			let selectedValue = $(this).val();
+			console.log(selectedValue);
+			updateSelectDocument(selectedValue);
+		});
+		
+		function updateSelectDocument(selectForm){
+			$.ajax({
+				type: 'GET',
+				url: '/document/getDocumentForm',
+				data: {
+					selectedForm: selectForm
+				},
+				success: function(data){
+					$('#documentForm').html(data);
+				},
+				error: function(){
+					console.log('Error loading document form content.');
+				}
+			});
+		}
 	}); // 제일 처음
 </script>
-</head>
-<body>
-<div class="container-scroller"> <!-- 전체 스크롤 -->
-	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-			<div class="content-wrapper"> <!-- 컨텐츠 -->
+	<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
+				<!-- 결재선 -->
 				<div>
 					<button type="button" id="modalBtn">결재선 추가</button>	
 				</div>
@@ -145,10 +161,23 @@
 				<button type="button" id="moveUpBtn">위로</button>
 				<button type="button" id="moveDownBtn">아래로</button>
 				
+				<!-- 기안서 -->
+				<div>
+					<select id="slectDocument" name="document">
+						<option value="">선택하세요</option>
+						<c:forEach var="d" items="${documentCodeList}">
+							<option value="${d.code}">${d.codeName}</option>
+						</c:forEach>
+					</select>
+				</div>
+	
+				<div id="documentForm">
+		
+				</div>
 			</div><!-- 컨텐츠 끝 -->
-		</div><!-- 컨텐츠전체 끝 -->
-	</div><!-- 상단제외 끝 -->
-</div><!-- 전체 스크롤 끝 -->
+</div><!-- 컨텐츠전체 끝 -->
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 <div class="modal" id="myModal" tabindex="-1">
 		<div class="modal-dialog">
@@ -173,6 +202,4 @@
 			</div>
 		</div>
 	</div>
-    
-</body>
 </html>
