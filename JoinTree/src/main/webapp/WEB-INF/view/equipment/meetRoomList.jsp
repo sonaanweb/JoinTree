@@ -10,126 +10,120 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<!-- include1 start -->
-<div class="container-scroller"> <!-- 전체 스크롤 -->
-	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-			<div class="content-wrapper"> <!-- 컨텐츠 -->
-<!-- include1 end -->
+<!-- 필수 요소-->
+<div class="container-fluid page-body-wrapper">
+	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 
-				<!-- 관리 회의실 리스트 -->
-				<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
-				<table class="table">
-				    <thead>
-				        <tr>
-				            <td>회의실 번호</td>
-				            <td>기자재카테고리</td>
-				            <td>회의실이름</td>
-				            <td>수용인원</td>
-				            <td rowspan="1">사용여부</td>
-				            <td></td>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <c:forEach var="m" items="${meetRoomList}">
-				            <tr>
-				                <td class="roomNo">${m.roomNo}</td>
-				                <td class="equipCategory">${m.equipCategory}</td>
-				                <td class="roomName">${m.roomName}</td>
-				                <td class="roomCapacity">${m.roomCapacity}명</td>
-				                <td class="roomStatus">
-				                    <c:choose>
-				                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
-				                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
-				                    </c:choose>
-				                </td>
-				                <td>
-				                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
-				                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
-				                </td>
-				            </tr>
-				        </c:forEach>
-				    </tbody>
-				</table>
-				<!-- 추가 모달창 -->
-				<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-				    <div class="modal-dialog">
-				        <div class="modal-content">
-				            <div class="modal-header">
-				                <h5 class="modal-title" id="addModalLabel">회의실 추가</h5>
-				            </div>
-				            <div class="modal-body">
-				                <form id="addForm">
-				                <input type="hidden" id="modalAddCate" name="equipCategory">
-				                <input type="hidden" name="createId" value="1111"> <!-- testId -->
-				   				<input type="hidden" name="updateId" value="1111">
-				                    <div class="mb-3">
-				                        <label for="modalAddRoomName" class="col-form-label">이름</label>
-				                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName">
-				                        <div class="check" id="rn_add_check"></div><!-- 회의실명 중복, 공백일 시 -->
-				                    </div>
-				                    <div class="mb-3">
-				                        <label for="modalAddRoomCapacity" class="form-label">수용 인원</label>
-				                        <input type="number" class="form-control" id="modalAddRoomCapacity" name="roomCapacity" min="1">
-				                    </div>
-				                    <div class="mb-3">
-				                        <label for="modalAddRoomStatus" class="col-form-label">사용여부</label>
-				                        <select name="roomStatus" id="modalAddRoomStatus">
-				                            <option value="1">사용가능</option>
-				                            <option value="0">사용불가</option>
-				                        </select>
-				                    </div>
-				                    <button type="button" class="btn btn-primary" id="modalBtn">추가</button>
-				                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-				                </form>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-				<!-- 수정 모달창 -->
-				<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-				    <div class="modal-dialog">
-				        <div class="modal-content">
-				            <div class="modal-header">
-				                <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
-				            </div>
-				            <div class="modal-body">
-				                <form id="updateForm">
-				                    <!-- hidden : roomNo, Category -->
-				                    <input type="hidden" id="modalRoomNo" name="roomNo">
-				                    <input type="hidden" id="modalCate" name="equipCategory">
-				                    <div class="mb-3">
-				                        <label for="modalRoomName" class="form-label">회의실 이름</label>
-				                        <input type="text" class="form-control" id="modalRoomName" name="roomName">
-				                        <div class="check" id="rn_check"></div><!-- 회의실명 중복, 공백일 시 -->
-				                    </div>
-				                    <div class="mb-3">
-				                        <label for="modalRoomCapacity" class="form-label">수용 인원</label>
-				                        <input type="number" class="form-control" id="modalRoomCapacity" name="roomCapacity" min="1">
-				                    </div>
-				                    <div class="mb-3">
-				                        <label for="modalRoomStatus" class="form-label">사용 여부</label>
-				                        <select class="form-control" id="modalRoomStatus" name="roomStatus">
-				                            <option value="1">사용가능</option>
-				                            <option value="0">사용불가</option>
-				                        </select>
-				                    </div>
-				                    <button type="submit" class="btn btn-primary" id="modalBtn">수정</button>
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
-				                </form>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-				
-<!-- include footer start -->
-			</div><!-- 컨텐츠 끝 -->
-		</div><!-- 컨텐츠전체 끝 -->
-	</div><!-- 상단제외 끝 -->
-</div><!-- 전체 스크롤 끝 -->
+			<!-- 관리 회의실 리스트 -->
+			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
+			<table class="table">
+			    <thead>
+			        <tr>
+			            <td>회의실 번호</td>
+			            <td>기자재카테고리</td>
+			            <td>회의실이름</td>
+			            <td>수용인원</td>
+			            <td rowspan="1">사용여부</td>
+			            <td></td>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <c:forEach var="m" items="${meetRoomList}">
+			            <tr>
+			                <td class="roomNo">${m.roomNo}</td>
+			                <td class="equipCategory">${m.equipCategory}</td>
+			                <td class="roomName">${m.roomName}</td>
+			                <td class="roomCapacity">${m.roomCapacity}명</td>
+			                <td class="roomStatus">
+			                    <c:choose>
+			                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
+			                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
+			                    </c:choose>
+			                </td>
+			                <td>
+			                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
+			                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
+			                </td>
+			            </tr>
+			        </c:forEach>
+			    </tbody>
+			</table>
+			<!-- 추가 모달창 -->
+			<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <h5 class="modal-title" id="addModalLabel">회의실 추가</h5>
+			            </div>
+			            <div class="modal-body">
+			                <form id="addForm">
+			                <input type="hidden" id="modalAddCate" name="equipCategory">
+			                <input type="hidden" name="createId" value="1111"> <!-- testId -->
+			   				<input type="hidden" name="updateId" value="1111">
+			                    <div class="mb-3">
+			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
+			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName">
+			                        <div class="check" id="rn_add_check"></div><!-- 회의실명 중복, 공백일 시 -->
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="modalAddRoomCapacity" class="form-label">수용 인원</label>
+			                        <input type="number" class="form-control" id="modalAddRoomCapacity" name="roomCapacity" min="1">
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="modalAddRoomStatus" class="col-form-label">사용여부</label>
+			                        <select name="roomStatus" id="modalAddRoomStatus">
+			                            <option value="1">사용가능</option>
+			                            <option value="0">사용불가</option>
+			                        </select>
+			                    </div>
+			                    <button type="button" class="btn btn-primary" id="modalBtn">추가</button>
+			                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<!-- 수정 모달창 -->
+			<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
+			            </div>
+			            <div class="modal-body">
+			                <form id="updateForm">
+			                    <!-- hidden : roomNo, Category -->
+			                    <input type="hidden" id="modalRoomNo" name="roomNo">
+			                    <input type="hidden" id="modalCate" name="equipCategory">
+			                    <div class="mb-3">
+			                        <label for="modalRoomName" class="form-label">회의실 이름</label>
+			                        <input type="text" class="form-control" id="modalRoomName" name="roomName">
+			                        <div class="check" id="rn_check"></div><!-- 회의실명 중복, 공백일 시 -->
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="modalRoomCapacity" class="form-label">수용 인원</label>
+			                        <input type="number" class="form-control" id="modalRoomCapacity" name="roomCapacity" min="1">
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="modalRoomStatus" class="form-label">사용 여부</label>
+			                        <select class="form-control" id="modalRoomStatus" name="roomStatus">
+			                            <option value="1">사용가능</option>
+			                            <option value="0">사용불가</option>
+			                        </select>
+			                    </div>
+			                    <button type="submit" class="btn btn-primary" id="modalBtn">수정</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+	<!-- 컨텐츠 끝 -->
+		</div>
+	</div><!-- 컨텐츠전체 끝 -->
+<!-- footer -->
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
-<!-- include footer end -->
 
 <script>
 // 추가 모달창 스크립트

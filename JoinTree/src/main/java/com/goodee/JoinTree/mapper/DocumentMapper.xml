@@ -35,7 +35,6 @@
 	<!-- 휴가 기안서 입력 -->
  	<insert id="addDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
 		INSERT INTO document_leave(
-			doc_no,
 			leave,
 			doc_leave_start_date,
 			doc_leave_end_date,
@@ -48,7 +47,6 @@
 			update_id
 		)
 		VALUES(
-			#{docNo},
 			#{leave},
 			#{docLeaveStartDate},
 			#{docLeaveEndDate},
@@ -65,7 +63,6 @@
 	<!-- 인사이동 기안서 입력 -->
  	<insert id="addDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
 		INSERT INTO document_reshuffle(
-			doc_no,
 			doc_reshuffle_date,
 			doc_reshuffle_task,
 			doc_reshuffle_result,
@@ -78,7 +75,6 @@
 			update_id
 		)
 		VALUES(
-			#{docNo},
 			#{docReshuffleDate},
 			#{docReshuffleTask},
 			#{docReshuffleResult},
@@ -95,7 +91,6 @@
 	<!-- 퇴직 기안서 입력 -->
  	<insert id="addDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
 		INSERT INTO document_resign(
-			doc_no,
 			doc_resign_date,
 			doc_resign_reason,
 			createdate,
@@ -104,7 +99,6 @@
 			update_id
 		)
 		VALUES(
-			#{docNo},
 			#{docResignDate},
 			#{docResignReason},
 			now(),
