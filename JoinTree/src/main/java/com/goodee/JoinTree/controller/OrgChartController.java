@@ -26,4 +26,5 @@ public class OrgChartController {
 		
 		return empList;
 	}
+
 }

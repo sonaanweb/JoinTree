@@ -7,7 +7,7 @@
 	<script>
 		$(document).ready(function() {
 			const id = "11111111";
-	       
+			
 			// upCodeLink 클릭시 비동기로 childCodeList에서 값을 가져와서 보여줌 
 			$(".upCodeLink").on("click", function() {// 여러 개의 요소를 선택하기 위해 클래스를 사용
 				
@@ -270,6 +270,147 @@
 			});
 			
 			// 하위코드 추가
+			// 하위코드 추가 폼 값 저장
+			/* 
+			$("#saveCodeBtn").on("click", function() {
+				// 새로운 행에서 데이터를 가져와 변수에 저장
+				const parentRow = $(this).closest("tr");
+				const upCode = $(this).data("code");
+					console.log("upCode:"+upCode);
+				const newUpCode = $("#newCode").val().toUpperCase().trim();
+				const newUpCodeName = $("#newCodeName").val().toUpperCase().trim();
+			
+				// 빈 값 검사
+				if (!newCode || !newCodeName) {
+					alert("하위코드, 하위코드명을 모두 입력해주세요.");
+					return; // 사용되지 않은 경우 함수 종료
+				}
+			
+				// 입력한 하위코드가 DB에 있는 값인지 중복 확인
+				const inputUpCode = $("#newCode").val()
+				const usedUpCodes = [];
+				$(".upCodeLink").each(function() {
+					usedUpCodes.push($(this).data("code"));
+				});
+				
+				if (usedUpCodes.includes(inputUpCode)) {
+					alert("이미 존재하는 상위코드입니다.");
+					return; // 사용되지 않은 경우 함수 종료
+				}
+			
+				$.ajax({
+					url: "/code/addCommonCode",
+					type: "POST",
+					data: {
+						upCode : upCode,
+						code : code,
+						codeName : codeName,
+						createId : id,
+						updateId : id
+					},
+					success: function(response) {
+						console.log("response:", response);
+						
+						alert("상위 코드가 추가되었습니다.");
+						
+						 // 새로운 상위 코드를 테이블에 추가합니다.
+						const newRow = $("<tr>").addClass("upCodeLink").attr("data-code", newUpCode);
+						const upCodeCell = $("<td>").addClass("upCode").text(newUpCode);
+						const codeNameCell = $("<td>").addClass("upCodeName").text(newUpCodeName);
+						const toggleCell = $("<td>").html( // 토글 -> Y일 경우 체크 : 그렇지 않을경우 흰색
+							'<label class="switch">' +
+							'<input type="checkbox" class="toggleSwitch" checked >' +
+							'<span class="slider round"></span>' +
+							'</label>'
+						 );
+	
+						// 행에 추가
+						newRow.append(codeCell);
+						newRow.append(codeNameCell);
+						newRow.append(toggleCell);
+						
+						// 새로운 행을 테이블의 상단에 추가합니다.
+						$("#upCodeT tbody").append(newRow);
+						
+						// 입력 필드 초기화
+						$("#newCode").val('');
+						$("#newCodeName").val('');
+						
+						// 입력창 숨기기
+						$("#newCode").closest("tr").hide();
+						
+						// 버튼 상태 변경: "추가" 버튼을 보이게 하고 "저장" 버튼을 숨김
+						$("#addCodeLink").show();
+						$("#saveCodeBtn").hide();
+						
+						//실패시
+						if(response === "fail") {
+							alert("fail");
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				});
+			}); */
+			
+			/* // 코드 추가 클릭시 비동기로 값을 저장
+			$("#addCodeLink").on("click", function() {
+				const upCode = $("#upCode").val().toUpperCase().trim(); // upcode를 대문자(toUpperCase)로 변환 및 양끝 공백을 뺀(trim) 값
+				const code = $("#code").val().toUpperCase().trim(); // code를 대문자(toUpperCase)로 변환 및 양끝 공백을 뺀(trim) 값
+				const codeName = $("#codeName").val().trim(); //codeName의 양끝 공백을 뺀(trim) 값
+				
+				// 입력한 upCode 가져오기
+				const inputUpCode = $("#upCode").val().toUpperCase().trim();
+				
+				// upCode 값들 가져오기
+				const usedUpCodes = [];
+				$(".upCodeLink").each(function() {
+				    usedUpCodes.push($(this).data("code"));
+				});
+				
+				// 빈 값 검사
+				if (!upCode || !code || !codeName) {
+				    alert("상위코드, 코드, 코드명을 모두 입력해주세요.");
+				    return; // 사용되지 않은 경우 함수 종료
+				}
+				
+				// 입력한 upCode가 DB에 upCode 값 중 하나인지 확인
+				if (!usedUpCodes.includes(inputUpCode)) {
+				    alert("입력한 상위코드는 존재하지 않는 상위코드입니다.");
+				    return; // 사용되지 않은 경우 함수 종료
+				}
+	
+				$.ajax({
+					url: "/code/addCommonCode",
+					type: "POST",
+					data: {
+						upCode : upCode,
+						code : code,
+						codeName : codeName,
+						createId : id,
+						updateId : id
+					},
+					success: function(response) {
+						console.log("response:", response);
+						
+						alert("공통 코드가 추가되었습니다.");
+						
+						if(response === "fail") {
+							alert("fail");
+						}
+	
+						// 입력 폼 초기화
+						$("#upCode").val('');
+						$("#code").val('');
+						$("#codeName").val('');
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				});
+			});
+			 */
 		    // upCodeLink를 클릭하면 추가 업코드에 내용 입력
 		    $(".upCodeLink").on("click", function() {
 		        // 클릭한 링크의 데이터 가져오기
@@ -403,5 +544,4 @@
 		</div><!-- 컨텐츠전체 끝 -->
 	<!-- footer -->
 	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
-</body>
 </html>
