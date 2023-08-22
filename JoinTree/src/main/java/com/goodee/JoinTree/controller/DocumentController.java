@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.goodee.JoinTree.service.CodeService;
 import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.OrgChartService;
@@ -32,6 +33,8 @@ public class DocumentController {
 	private OrgChartService orgChartService;
 	@Autowired
 	private EmpInfoService empInfoService;
+	@Autowired
+	private CodeService codeService;
 	
 	// document.jsp
 	@GetMapping("/document/document")
@@ -59,7 +62,7 @@ public class DocumentController {
 		
 		return "/document/document";
 	}
-	
+	// 문서양식 컨트롤러
 	@GetMapping("/document/getDocumentForm")
 	public ModelAndView getDocumentForm(Model model, HttpSession session, @RequestParam String selectedForm) {
 		
@@ -72,8 +75,13 @@ public class DocumentController {
 		// 로그인한 사원 정보 
 		Map<String, Object> empInfo = empInfoService.getEmpOne(empNo);
 		
+		// 휴가종류
+		
+		List<CommonCode> leaveList = codeService.selectChildCode("L01");
+		
 		// 뷰에서 사용할 수 있도록 모델에 추가
 		model.addAttribute("empInfo", empInfo);
+		model.addAttribute("leaveList", leaveList);
 		
 		return new ModelAndView(path);
 	}
