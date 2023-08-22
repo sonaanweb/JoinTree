@@ -17,6 +17,7 @@
 	</script>
 <div class="doc">
 	<h1 class="center">기안서</h1>
+<form action="/document/docDefault" method="post">
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -25,22 +26,22 @@
 						<tbody>
 							<tr>
 								<td>문서번호</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text" name="docNo" readonly="readonly"></td>
 							</tr>
 							
 							<tr>
 								<td>기안부서</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.dept}"></td>
+								<td><input type="text" name="receiverTeam" readonly="readonly" value="${empInfo.dept}"></td>
 							</tr>
 							
 							<tr>
 								<td>기안일</td>
-								<td><input type="text" readonly="readonly" id="draftDate"></td>
+								<td><input type="text" name="createdate" readonly="readonly" id="draftDate"></td>
 							</tr>
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.empName}"></td>
+								<td><input type="text" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -49,17 +50,17 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
-					<input type="hidden" id="empName" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empNo" readonly="readonly" value="${empInfo.empName}">
+					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
-				<td class="sign" rowspan="3">[기안자 도장]</td>
-				<td class="sign" rowspan="3">[결재자1 도장]</td>
-				<td class="sign" rowspan="3">[결재자2 도장]</td>
+				<td class="sign" rowspan="3"><img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="max-width: 100%; height: auto;">[기안자 서명]</td>
+				<td class="sign" rowspan="3"><img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="max-width: 100%; height: auto;">[결재자1 서명]</td>
+				<td class="sign" rowspan="3"><img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="max-width: 100%; height: auto;">[결재자2 서명]</td>
 			</tr>
 			<tr></tr>
 			<tr></tr>
@@ -116,6 +117,7 @@
 			</tr>
 		</tbody>
 	</table>
-	
+<button type="submit">결재하기</button>
+</form>
 </div>
 </html>
