@@ -9,7 +9,7 @@ public interface EmpInfoImgMapper {
 	// 사원 이미지 정보 추가
 	int insertEmpImg(EmpInfoImg empInfoImg);
 	
-	// 이미지 상세정보
+	// 사원 이미지 상세정보
 	EmpInfoImg selectEmpImg(int empNo);
 		
 	// 사원 이미지 정보 삭제

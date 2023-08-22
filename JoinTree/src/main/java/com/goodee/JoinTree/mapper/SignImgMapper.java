@@ -6,5 +6,12 @@ import com.goodee.JoinTree.vo.SignImg;
 
 @Mapper
 public interface SignImgMapper {
-	public int insertSignImg(SignImg signimg);
+	// 서명 이미지 정보 추가
+	public int insertSignImg(SignImg signImg);
+	
+	// 서명 이미지 상세정보
+	SignImg selectSignImg(int empNo);
+	
+	// 서명 이미지 정보 삭제
+	int removeSignImg(int empNo);
 }

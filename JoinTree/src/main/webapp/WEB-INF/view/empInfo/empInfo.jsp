@@ -184,7 +184,7 @@
 			<tr>
 				<td>사원이미지</td>
 				<td>
-					<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image"><br>
+					<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" style="max-width: 300px; max-height: 300px;"><br>
 					<%-- ${empInfo.empSaveImgName} --%>
 					<%-- <img src="이미지파일경로/${empInfo.empSaveImgName}" alt="Employee Image"> --%>
 				</td>
@@ -233,8 +233,7 @@
 			<tr>
 				<td>서명</td>
 				<td>
-					<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="sign image">
-					<%-- <img src="${pageContext.request.contextPath}/signImg/${empInfo.empSaveImgName}" alt="sign image"> --%>
+					<img src="${pageContext.request.contextPath}/signImg/${empInfo.signSaveImgName}" alt="sign image" style="max-width: 300px; max-height: 300px;">
 				</td>
 			</tr>
 		</table>

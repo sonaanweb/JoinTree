@@ -144,7 +144,8 @@ public class EmpInfoController {
 	
 	@PostMapping("/empInfo/modifyEmp/uploadEmpImg")
 	@ResponseBody
-	public String uploadEmpImg(@RequestParam("newImgFile") MultipartFile newImgFile, HttpServletRequest request, HttpSession session, Model model) {
+	public String uploadEmpImg(@RequestParam("uploadImg") MultipartFile newImg, HttpServletRequest request, HttpSession session) {
+		log.debug(CYAN + newImg + " <-- newImgFile(EmpInfoController-uploadEmpImg)" + RESET);
 		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 		
 		int empNo = loginAccount.getEmpNo();
@@ -152,12 +153,34 @@ public class EmpInfoController {
 		// 파일 저장 경로 설정
 		String path = request.getServletContext().getRealPath("/empImg/"); // 실제 파일 시스템 경로
 		
-		int row = empInfoService.uploadEmpImg(empNo, newImgFile, path);
-		
-		if (row == 1) {
+		int row = empInfoService.uploadEmpImg(empNo, newImg, path);
+		log.debug(CYAN + row + " <-- row(EmpInfoController-uploadEmpImg)" + RESET);
+		if (row == 2) { // 2 출력 시 DB, 로컬에 이미지 저장 완료 
 			return "success";
 		} else {
 			return "error";
+		}
+	}
+	
+	@PostMapping("/empInfo/modifyEmp/uploadSignImg")
+	@ResponseBody
+	public String uploadSignImg(@RequestParam("uploadSignImg") String newSignImg, HttpServletRequest request, HttpSession session) {
+		// Service Layer: BASE64 디코딩 -> 이미지로 변경 -> 저장소에 이미지 저장 -> DB에 메타데이터 저장
+		log.debug(CYAN + newSignImg + " <-- newSignImg(EmpInfoController-uploadSignImg)" + RESET);
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		int empNo = loginAccount.getEmpNo();
+		
+		// 파일 저장 경로 설정
+		String path = request.getServletContext().getRealPath("/signImg/"); // 실제 파일 시스템 경로
+		
+		int row = empInfoService.uploadSignImg(empNo, newSignImg, path);
+		log.debug(CYAN + row + " <-- row(EmpInfoController-uploadSignImg)" + RESET);
+		
+		if (row == 1) { // 1 출력 시 DB, 로컬에 이미지 저장 완료
+			return "success";
+		} else {
+			return "false";
 		}
 	}
 	

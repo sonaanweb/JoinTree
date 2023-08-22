@@ -1,19 +1,23 @@
 package com.goodee.JoinTree.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.mapper.EmpInfoMapper;
+import com.goodee.JoinTree.mapper.SignImgMapper;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.EmpInfoImg;
+import com.goodee.JoinTree.vo.SignImg;
 import com.goodee.JoinTree.mapper.EmpInfoImgMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +34,9 @@ public class EmpInfoService {
 	
 	@Autowired
 	private EmpInfoImgMapper empInfoImgMapper;
+	
+	@Autowired
+	private SignImgMapper signImgMapper;
 	
 	// 비밀번호 변경
 	public int modifyPw(AccountList account) {
@@ -98,8 +105,8 @@ public class EmpInfoService {
 	}
 	
 	// 나의 이미지 추가
-	public int uploadEmpImg(int empNo, MultipartFile newImgFile, String path) {
-		String originFilename = newImgFile.getOriginalFilename();
+	public int uploadEmpImg(int empNo, MultipartFile newImg, String path) {
+		String originFilename = newImg.getOriginalFilename();
 		String ext = originFilename.substring(originFilename.lastIndexOf("."));
 		String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
 		String realPath = path + newFilename;
@@ -107,8 +114,8 @@ public class EmpInfoService {
 		EmpInfoImg empInfoImg = new EmpInfoImg();
 		empInfoImg.setEmpNo(empNo);
 		empInfoImg.setEmpOriginImgName(originFilename);
-		empInfoImg.setEmpFiletype(newImgFile.getContentType());
-		empInfoImg.setEmpFilesize(newImgFile.getSize());
+		empInfoImg.setEmpFiletype(newImg.getContentType());
+		empInfoImg.setEmpFilesize(newImg.getSize());
 		empInfoImg.setEmpSaveImgName(newFilename);
 		empInfoImg.setCreateId(empNo);
 		empInfoImg.setUpdateId(empNo);
@@ -121,7 +128,7 @@ public class EmpInfoService {
 		if (row == 1) {
 			// 새 이미지 파일 로컬에 저장
 			try {
-				newImgFile.transferTo(new File(realPath));
+				newImg.transferTo(new File(realPath));
 				row++; // 이미지 등록 성공 시 반환값 증가
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
@@ -130,8 +137,62 @@ public class EmpInfoService {
 			}
 		}
 		
-		return row; // 최종 2 출력 시 DB, 로컬에 이미지 저장 완료
+		return row; // 컨트롤러에서 최종 2 출력 시 DB, 로컬에 이미지 저장 완료 
 	}
+	
+
+	// 나의 서명(이미지) 추가
+	public int uploadSignImg(int empNo, String newSignImg, String path) {
+		String type = newSignImg.split(";")[0].split(":")[1]; // split: 구분자를 기준으로 문자열 배열 반환
+		String data = newSignImg.split(",")[1];
+		byte[] image = Base64.decodeBase64(data);
+		int size = image.length;
+		
+		log.debug(CYAN + type + " <-- type(EmpInfoService-uploadSignImg)"  + RESET);
+		log.debug(CYAN + size + " <-- size(EmpInfoService-uploadSignImg)"  + RESET);
+		
+		// 저장 시 사용할 파일명
+		String saveFilename = UUID.randomUUID().toString().replace("-", "") + ".png"; // UUID에서 하이픈 제거
+		log.debug(CYAN + saveFilename + " <-- saveFilename(EmpInfoService-uploadSignImg)"  + RESET);
+		
+		
+		// DB에 정보 저장
+		SignImg signImg = new SignImg();
+		signImg.setEmpNo(empNo);
+		signImg.setSignSaveImgname(saveFilename);
+		signImg.setSignFiletype(type);
+		signImg.setSignFilesize(size);
+		signImg.setCreateId(empNo);
+		signImg.setUpdateId(empNo);
+		
+		int row = signImgMapper.insertSignImg(signImg);
+		log.debug(CYAN + row + " <-- row(EmpInfoService-uploadSignImg)"  + RESET);
+		
+		// 빈 파일 생성
+		File f = new File(path + saveFilename);
+		
+		try {
+			// 빈 파일에 이미지 파일 주입
+			FileOutputStream fos = new FileOutputStream(f); // 파일에 바이트를 기록하는 클래스
+			fos.write(image); // 디코딩된 데이터 파일에 저장
+			fos.close();
+			log.debug(CYAN + f.length() + " <-- f.length()(EmpInfoService-uploadSignImg)"  + RESET); 
+		} catch (IllegalStateException | IOException e) {
+			 e.printStackTrace();
+            // 트랜잭션 작동을 위해 예외를 강요하지 않는 예외 발생 필요
+            throw new RuntimeException();
+		}
+		
+		return row; // 1일 때 저장 성공
+	}
+	
+	// 나의 서명(이미지) 삭제
+	public int removeSignImg(int empNo) {
+		return 0;
+	}
+	
+	
+	
 	
 	// 나의 이미지 변경 
 	public int modifyEmpImg(int empNo, MultipartFile newImgFile, String path) {
