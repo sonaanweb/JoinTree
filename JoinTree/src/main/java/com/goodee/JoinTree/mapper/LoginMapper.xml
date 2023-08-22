@@ -24,6 +24,13 @@
 		WHERE emp_no = #{empNo}
 	</select>
 	
+	<!-- 사번으로 서명 출력 -->
+	<select id="selectSignImg">
+		SELECT sign_save_img_name signSaveImgName
+		FROM  sign_img
+		WHERE emp_no = #{empNo}
+	</select>
+	
 	<!-- 사번, 주민번호 인증  -->
 	<select id="selectEmpNoJumin">
 		SELECT COUNT(*)

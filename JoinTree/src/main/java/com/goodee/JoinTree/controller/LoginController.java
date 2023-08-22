@@ -63,19 +63,22 @@ public class LoginController {
 		AccountList account = new AccountList();
 		account.setEmpNo(empNo);
 		account.setEmpPw(empPw);
-				
+		
 		AccountList loginAccount = loginService.login(account);
         
 		// 로그인 성공 시 
 		if (loginAccount != null) {
 			String empName = loginService.getEmpName(empNo);
 			String dept = loginService.getEmpDept(empNo);
+			String signImg = loginService.getSignImg(empNo);
 			log.debug(CYAN + empName + " <-- empName(LoginController)"+ RESET); // 디버그 로그
 			log.debug(CYAN + dept + " <-- dept(LoginController)"+ RESET);
+			log.debug(CYAN + signImg + " <-- signImg(LoginController)"+ RESET);
 			
 			session.setAttribute("loginAccount", loginAccount);
 			session.setAttribute("empName", empName);
 			session.setAttribute("dept", dept);
+			session.setAttribute("signImg", signImg);
 			
 	        // 세션의 만료 시간 설정 (30분)
 	        int sessionTimeout = 30 * 60; // 30분 (초 단위)

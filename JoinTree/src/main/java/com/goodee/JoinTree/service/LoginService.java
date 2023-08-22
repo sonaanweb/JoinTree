@@ -35,6 +35,11 @@ public class LoginService {
 		return loginMapper.selectDept(empNo);
 	}
 	
+	// 로그인 성공 시 empNo로 signImg 출력
+	public String getSignImg(int empNo) {
+		return loginMapper.selectSignImg(empNo);
+	}
+	
 	// 사원, 주민번호 뒷자리 일치 체크 (비밀번호 분실 시)
 	public int selectEmpNoJumin(int empNo, String juminNo) {
 		int row = loginMapper.selectEmpNoJumin(empNo, juminNo);
