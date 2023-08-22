@@ -24,7 +24,7 @@
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			timeZone: 'Asia/Seoul',
 			selectable: true,
-			events: '/schedule/getPersonalSchedules',
+			events: '/schedule/getCompanySchedules',
 			eventClick: function(info) {
 				var scheduleNo = parseInt(info.event.extendedProps.scheduleNo);
 				console.log(info.event);
@@ -233,8 +233,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 </body>
 </html>

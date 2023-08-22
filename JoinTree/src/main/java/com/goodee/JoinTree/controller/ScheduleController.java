@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.ScheduleService;
@@ -26,6 +27,37 @@ public class ScheduleController {
 	@Autowired
     private ScheduleService scheduleService;
 	
+	// 전사 일정 출력 페이지
+		@GetMapping("schedule/companySchedule")
+	    public String companySchedulePage(Model model, HttpSession session) {
+			List<Schedule> schedules = scheduleService.selectCompanySchedules();
+			model.addAttribute("schedules", schedules);
+			return "schedule/companySchedule";
+	    }
+	
+	// 전사 일정 데이터를 JSON 형태로 반환
+		@GetMapping("/schedule/getCompanySchedules")
+	    @ResponseBody
+	    public ResponseEntity<List<Map<String, Object>>> getCompanySchedules(HttpSession session) {
+	        // MyBatis를 사용하여 데이터베이스에서 일정 데이터 가져오기
+	        List<Schedule> schedules = scheduleService.selectCompanySchedules();
+	        
+	        // FullCalendar에서 요구하는 데이터 형식으로 변환
+	        List<Map<String, Object>> eventDataList = new ArrayList<>();
+	        for (Schedule schedule : schedules) {
+	            Map<String, Object> eventData = new HashMap<>();
+	            eventData.put("title", schedule.getScheduleTitle());
+	            eventData.put("start", schedule.getScheduleStart());
+	            eventData.put("end", schedule.getScheduleEnd());
+	            eventData.put("allDay", false); // 현재 데이터에 allDay 정보가 없으므로 기본값으로 설정
+	            eventDataList.add(eventData);
+	        }
+	        
+	        // JSON 형식의 데이터를 ResponseEntity에 넣어서 반환
+	        return new ResponseEntity<>(eventDataList, HttpStatus.OK);
+	    }
+		
+		
 	// 개인 일정 출력 페이지
 	@GetMapping("schedule/personalSchedule")
     public String personalSchedulePage(Model model, HttpSession session) {
@@ -69,6 +101,12 @@ public class ScheduleController {
     }
 	
 	// 일정 상세보기
+	@GetMapping("/schedule/selectScheduleOne")
+    @ResponseBody
+    public Schedule selectScheduleOne(@RequestParam int scheduleNo) {
+        Schedule schedule = scheduleService.selectScheduleOne(scheduleNo);
+        return schedule;
+    }
 
 
 }

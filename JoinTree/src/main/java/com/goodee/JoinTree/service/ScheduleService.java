@@ -13,15 +13,35 @@ public class ScheduleService {
 	@Autowired
     private ScheduleMapper scheduleMapper;
 	
-	// 개인일정 출력
+	// 전사 일정 출력
+		public List<Schedule> selectCompanySchedules() {
+	       List<Schedule> companyScheduleList = scheduleMapper.selectCompanySchedules();
+			return companyScheduleList;
+		}
+		
+	// 부서 일정 출력
+		public List<Schedule> selectDepartmentSchedule() {
+	       List<Schedule> personalScheduleList = scheduleMapper.selectDepartmentSchedules();
+			return personalScheduleList;
+		}
+		
+	// 개인 일정 출력
 	public List<Schedule> selectPersonalSchedules(int empNo) {
        List<Schedule> personalScheduleList = scheduleMapper.selectPersonalSchedules(empNo);
 		return personalScheduleList;
 	}
-
+	
+	
+	// 개인 일정 추가
 	public void addSchedule(Schedule schedule) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	// 일정 상세보기
+	 public Schedule selectScheduleOne(int scheduleNo) {
+	        return scheduleMapper.selectScheduleOne(scheduleNo);
+	    }
+
 
 }

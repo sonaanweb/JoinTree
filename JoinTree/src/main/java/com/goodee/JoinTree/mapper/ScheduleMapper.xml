@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.ScheduleMapper">
+	
+	<!-- 전사 일정 출력 -->
+	<select id="selectCompanySchedules" resultType="com.goodee.JoinTree.vo.Schedule">
+		SELECT
+        	schedule_no scheduleNo,
+        	emp_no empNo,
+        	schedule_category scheduleCategory,
+        	schedule_title scheduleTitle,
+        	schedule_content scheduleContent,
+        	schedule_location scheduleLocation,
+        	schedule_start scheduleStart,
+        	schedule_end scheduleEnd,
+        	createdate,
+        	updatedate,
+        	create_id createId,
+        	update_id updateId
+        FROM schedule
+        WHERE schedule_category = 's0101';
+	</select>
+		
+	<!-- 부서 일정 출력 -->
+	<select id="selectDepartmentSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
+		SELECT
+        	schedule_no scheduleNo,
+        	emp_no empNo,
+        	schedule_category scheduleCategory,
+        	schedule_title scheduleTitle,
+        	schedule_content scheduleContent,
+        	schedule_location scheduleLocation,
+        	schedule_start scheduleStart,
+        	schedule_end scheduleEnd,
+        	createdate,
+        	updatedate,
+        	create_id createId,
+        	update_id updateId
+        FROM schedule
+        WHERE schedule_category = 's0102' AND ;
+	</select>
+		
+	 <!-- 개인 일정 출력 -->
 	 <select id="selectPersonalSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
         SELECT
         	schedule_no scheduleNo,
@@ -17,6 +57,25 @@
         	update_id updateId
         FROM schedule
         WHERE emp_no = #{empNo} AND schedule_category = 's0103';
+    </select>
+    
+    <!-- 일정 상세보기 -->
+    <select id="selectScheduleOne" resultType="com.goodee.JoinTree.vo.Schedule">
+        SELECT
+        	schedule_no scheduleNo,
+        	emp_no empNo,
+        	schedule_category scheduleCategory,
+        	schedule_title scheduleTitle,
+        	schedule_content scheduleContent,
+        	schedule_location scheduleLocation,
+        	schedule_start scheduleStart,
+        	schedule_end scheduleEnd,
+        	createdate,
+        	updatedate,
+        	create_id createId,
+        	update_id updateId
+        FROM schedule
+        WHERE schedule_no = #{scheduleNo};
     </select>
 
 </mapper>
