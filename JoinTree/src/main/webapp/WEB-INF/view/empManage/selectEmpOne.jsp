@@ -10,14 +10,27 @@
 </style>
 </head>
 <body>
-	 <div id="empOneModalBody">
-		 <div class="w3-bar w3-border-bottom">
-			<button class="tablink w3-bar-item w3-button" data-target="empInfoOne">사원상세정보</button>
-			<button class="tablink w3-bar-item w3-button" data-target="reshuffleHistoryOne">인사이동이력</button>
+	 
+	 
+	 <div id="empOneInfoModalContent">
+		 <!-- Modal Header -->
+		 <div class="modal-header">
+			<h4 class="modal-title">사원 상세 정보</h4>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" id="empOneModalClose"></button>
 		 </div>
-	
-		 <div id="empInfoOne" class="w3-container empOne">
-		 	<div>
+		 
+		 <!-- Modal body -->
+		 <div class="modal-body">
+			 
+			<!-- 사원 상세정보, 인사이동이력 탭 이동 버튼 -->
+			<div class="w3-bar w3-border-bottom">
+				<button class="tablink w3-bar-item w3-button" data-target="empInfoOne">사원상세정보</button>
+				<button class="tablink w3-bar-item w3-button" data-target="reshuffleHistoryOne">인사이동이력</button>
+			</div>
+			
+			<!-- 사원 상세정보 -->	
+			<div id="empInfoOne" class="w3-container empOne">
+			<div>
 				<div class="empImgOne">
 					<img alt="" src="#">
 				</div>
@@ -25,7 +38,7 @@
 			<div>
 				<div>사번</div>
 				<div>
-					<span class="empNo"></span>
+					<span class="empNoOne"></span>
 				</div>
 			</div>
 			<div>
@@ -91,43 +104,28 @@
 			<div class="text-center">
 				<button type="button" id="modifyEmpBtn">수정</button>
 			</div>
+			</div>
+			
+			<!-- 인사이동이력 -->
+			<div id="reshuffleHistoryOne" class="w3-container empOne">
+			 	<table>
+			 		<thead>
+				 		<tr>
+				 			<th>발령일</th>
+				 			<th>이전부서</th>
+				 			<th>발령부서</th>
+				 			<th>이전직급</th>
+				 			<th>발령직급</th>
+				 		</tr>
+			 		</thead>
+			 		<tbody id="reshuffleHistoryList">
+			 		
+			 		</tbody>
+			 	</table>
+			</div>
 		 </div>
-	
-	  	 <div id="reshuffleHistoryOne" class="w3-container empOne">
-	   	 	<table>
-	   	 		<thead>
-		   	 		<tr>
-		   	 			<th>발령일</th>
-		   	 			<th>이전부서</th>
-		   	 			<th>발령부서</th>
-		   	 			<th>이전직급</th>
-		   	 			<th>발령직급</th>
-		   	 		</tr>
-	   	 		</thead>
-	   	 		<tbody id="reshuffleHistoryList">
-	   	 		
-	   	 		</tbody>
-	   	 	</table>
-	  	 </div>
 	 </div>
 	 
+	 
 </body>
-<script>
-$(document).ready(function() {
-	  $(".tablink").eq(0).click();
-
-	  $(".tablink").click(function(evt) {
-	    var empInfoOne = $(this).data("target");
-	    var x = $(".empOne");
-	    var tablinks = $(".tablink");
-
-	    x.hide();
-	    tablinks.removeClass("w3-light-grey");
-
-	    $("#" + empInfoOne).show();
-	    $(this).addClass("w3-light-grey");
-	  });
-	});
-</script>
-
 </html>

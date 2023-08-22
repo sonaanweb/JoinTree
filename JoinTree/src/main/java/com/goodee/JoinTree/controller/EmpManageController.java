@@ -1,5 +1,7 @@
 package com.goodee.JoinTree.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodee.JoinTree.service.EmpManageService;
 import com.goodee.JoinTree.vo.AccountList;
@@ -92,7 +93,7 @@ public class EmpManageController {
 	@PostMapping("/empManage/addEmp")
 	public String addEmpInfo(Model model,
 							 HttpSession session,
-							 @RequestParam Map<String, Object> empInfo) {
+							 @RequestParam Map<String, Object> empInfo) throws UnsupportedEncodingException {
 		
 		//세션에서 사번 가져오기
 		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
@@ -113,17 +114,25 @@ public class EmpManageController {
 		
 		// 사원 정보 등록
 		int addEmpInfoRow = empManageService.addEmpInfo(empInfo);
+		log.debug(addEmpInfoRow+"<-- EmpManageController addEmpInfoRow");
 		
+		// 사원 등록, 실패 msg
+		String msg = "";
 		// row 값의 따른 분기
 		if(addEmpInfoRow  == 0) {
 			
-			// 사원등록 실패 시 errorMsg
-			// String errorMsg = "사원 등록에 실패하였습니다."; // errorMsg
-            // model.addAttribute("errorMsg", errorMsg); // 모델에 실패 메시지 추가
+			// 사원등록 실패 시 msg
+			msg = "사원 등록에 실패하였습니다"; // msg
+			msg = URLEncoder.encode(msg, "UTF-8");
 			
-		} 
+		} else {
+			
+			// 사원등록 성공 시 msg
+			msg = "사원 등록 성공"; // msg
+			msg = URLEncoder.encode(msg, "UTF-8");
+		}
 		
-		return "redirect:/empManage/selectEmpList";
+		return "redirect:/empManage/selectEmpList?msg="+ msg;
 		
 	}
 	

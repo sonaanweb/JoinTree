@@ -84,12 +84,12 @@ public class EmpManageService {
 		log.debug(empNo+"<-- EmpManageService empNo");
 		
 		// 주소
-		String zip = (String)empInfo.get("zip");
+		String postCode = (String)empInfo.get("postCode");
 		String add1 = (String)empInfo.get("add1");
 		String add2 = (String)empInfo.get("add2");
 		String add3 = (String)empInfo.get("add3");
 		// 주소 합쳐서 저장
-		String empAddress = String.join("-", zip, add1, add2, add3);
+		String empAddress = String.join("-", postCode, add1, add2, add3);
 		log.debug(empAddress+"<-- EmpManageService empAddress");
 		
 		// 연락처
