@@ -9,7 +9,7 @@
 			<a href="/empInfo/empInfo" class="nav-link">
 				<div class="nav-profile-image">
 					<img src="/empImg/tiger.png" alt="profile">
-					<span class="login-status online"></span> <!--change to offline or busy as needed-->              
+					<span class="login-status online"></span>
 				</div>
 				<div class="nav-profile-text d-flex flex-column">
 					<span class="font-weight-bold mb-2">김미진</span>
@@ -107,7 +107,7 @@
 			</a>
 		 	<div class="collapse" id="document">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/document/testDocument">결재하기</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/document/document">결재하기</a></li>
 					<li class="nav-item"> <a class="nav-link" href="/document/testDocument">기안문서목록</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">결재함</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">개인문서함</a></li>
@@ -186,18 +186,6 @@
 	</ul>
 	</nav><!-- 왼쪽바 끝 -->
 	
-	<!-- 모달 -->
-	<div id="extensionModal" class="modal">
- 		<div class="modal-content">
-			<div class="modal-header">
-			   <h4>세션 연장 알림</h4>
-			   <span class="close">&times;</span>
-			</div>
-			<div class="modal-body">
-			   <p>자동 로그아웃까지 5분 남았습니다. 로그인 시간을 연장하시겠습니까?</p>
-			   <button id="extensionYesBtn">예</button>
-			   <button id="extensionNoBtn">아니오</button>
-			</div>
-	   </div>
-	</div>
+	<!-- 사이드에 추가할 부분이 있으면 여기 아래로 작성해주세요 -->
+	
 </html>

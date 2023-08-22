@@ -16,13 +16,13 @@
 	<script src="/resource/js/off-canvas.js"></script>
 	<script src="/resource/js/misc.js"></script>
 	<script src="/resource/js/dashboard.js"></script>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	
 	<!-- css - 수정가능 -->
 	<link rel="stylesheet" href="/resource/css/style.css">
 	<link rel="stylesheet" href="/resource/css/style2.css">
-	
-	<!-- 제이쿼리 -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<script>
        $(document).ready(function() {
@@ -251,6 +251,22 @@
 			<span class="mdi mdi-menu"></span>
 		</button>
 	</div><!-- 위 - 메뉴바 끝 -->
-</nav><!-- 상단바 끝 -->			
+</nav><!-- 상단바 끝 -->		
+
+	<!-- 상단에 추가할 부분이 있으면 여기 아래로 작성해주세요 -->
+		<!-- 모달 -->
+		<div id="extensionModal" class="modal">
+	 		<div class="modal-content">
+				<div class="modal-header">
+				   <h4>세션 연장 알림</h4>
+				   <span class="close">&times;</span>
+				</div>
+				<div class="modal-body">
+				   <p>자동 로그아웃까지 5분 남았습니다. 로그인 시간을 연장하시겠습니까?</p>
+				   <button id="extensionYesBtn">예</button>
+				   <button id="extensionNoBtn">아니오</button>
+				</div>
+		   </div>
+		</div>	
 </body>
 </html>
