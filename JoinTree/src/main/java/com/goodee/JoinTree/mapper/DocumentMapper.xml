@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.DocumentMapper">
- 	<insert id="insertDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+	<!-- 입력 -->
+	<!-- 기본 기안서 입력 -->
+ 	<insert id="addDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
 		INSERT INTO document_default(
-			doc_category_no,
 			emp_no,
-			doc_default_title,
-			doc_default_content,
+			category,
+			doc_title,
+			doc_content,
 			writer,
 			reference,
 			receiver_team,
@@ -16,43 +18,272 @@
 			update_id
 		)
 		VALUES(
-			#{docCategoryNo},
 			#{empNo},
-			#{docDefaultTitle},
-			#{docDefaultContent},
-			#{writer},
+			#{category},
+			#{docTitle},
+			#{docContent},
+			#{empNo},
 			#{reference},
 			#{receiverTeam},
 			now(),
 			now(),
-			#{createId},
-			#{updateId}
+			#{empNo},
+			#{empNo}
 		)
 	</insert>
 	
-	<!-- 문서 조회 -->
+	<!-- 휴가 기안서 입력 -->
+ 	<insert id="addDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
+		INSERT INTO document_leave(
+			doc_no,
+			leave,
+			doc_leave_start_date,
+			doc_leave_end_date,
+			doc_leave_period_date,
+			doc_leave_reason,
+			doc_leave_tel,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)
+		VALUES(
+			#{docNo},
+			#{leave},
+			#{docLeaveStartDate},
+			#{docLeaveEndDate},
+			#{docLeavePeriodDate},
+			#{docLeaveReason},
+			#{docLeaveTel},
+			now(),
+			now(),
+			#{empNo},
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 인사이동 기안서 입력 -->
+ 	<insert id="addDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
+		INSERT INTO document_reshuffle(
+			doc_no,
+			doc_reshuffle_date,
+			doc_reshuffle_task,
+			doc_reshuffle_result,
+			doc_reshuffle_dept,
+			doc_reshuffle_position,
+			doc_reshuffle_reason,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)
+		VALUES(
+			#{docNo},
+			#{docReshuffleDate},
+			#{docReshuffleTask},
+			#{docReshuffleResult},
+			#{docReshuffleDept},
+			#{docReshufflePosition},
+			#{docReshuffleReason},
+			now(),
+			now(),
+			#{empNo},
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 퇴직 기안서 입력 -->
+ 	<insert id="addDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
+		INSERT INTO document_resign(
+			doc_no,
+			doc_resign_date,
+			doc_resign_reason,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)
+		VALUES(
+			#{docNo},
+			#{docResignDate},
+			#{docResignReason},
+			now(),
+			now(),
+			#{empNo},
+			#{empNo}
+		)
+	</insert>
+	
+	
+	<!-- 수정 -->
+	<!-- 기본 기안서 수정 -->
+ 	<update id="modifyDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		UPDATE document_default
+		SET
+			doc_title = #{docTitle},
+			doc_content = #{docContent},
+			reference = #{reference},
+			receiver_team = #{receiverTeam},
+			updatedate = now(),
+			update_id = #{empNo} <!-- 이것도 업데이트 해야할까요..? -->
+		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
+	</update>
+	
+	<!-- 휴가 기안서 수정 -->
+ 	<update id="modifyDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
+		UPATE document_leave
+		SET
+			leave = #{leave},
+			doc_leave_start_date = #{docLeaveStartDate},
+			doc_leave_end_date =#{docLeaveEndDate},
+			doc_leave_period_date = #{docLeavePeriodDate},
+			doc_leave_reason =#{docLeaveReason},
+			doc_leave_tel =#{docLeaveTel},
+			updatedate = now(),
+			update_id = #{empNo}
+		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
+	</update>
+	
+	<!-- 인사이동 기안서 수정 -->
+ 	<update id="modifyDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
+		UPDATE document_reshuffle
+		SET
+			doc_reshuffle_date = #{docReshuffleDate},
+			doc_reshuffle_task = #{docReshuffleTask},
+			doc_reshuffle_result = #{docReshuffleResult},
+			doc_reshuffle_dept = #{docReshuffleDept},
+			doc_reshuffle_position = #{docReshufflePosition},
+			doc_reshuffle_reason = #{docReshuffleReason},
+			updatedate = now(),
+			update_id = #{empNo}
+		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
+	</update>
+	
+	<!-- 퇴직 기안서 수정 -->
+ 	<update id="modifyDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
+		UPDATE document_resign
+		SET
+			doc_resign_date = #{docResignDate},
+			doc_resign_reason = #{docResignReason},
+			updatedate = now(),
+			update_id = #{empNo}
+		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
+	</update>
+	
+	
+	<!-- 삭제 -->
+	<!-- 기본 기안서 삭제 -->
+ 	<delete id="deleteDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		DELETE
+		FROM document_default
+		WHERE doc_no = #{docNo}
+	</delete>
+	
+	<!-- 휴가 기안서 삭제 -->
+ 	<delete id="deleteDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
+		DELETE
+		FROM document_leave
+		WHERE doc_no = #{docNo}
+	</delete>
+	
+	<!-- 인사이동 기안서 삭제 -->
+ 	<delete id="deleteDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
+		DELETE
+		FROM document_reshuffle
+		WHERE doc_no = #{docNo}
+	</delete>
+	
+	<!-- 퇴직 기안서 삭제 -->
+ 	<delete id="deleteDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
+		DELETE
+		FROM document_resign
+		WHERE doc_no = #{docNo}
+	</delete>
+	
+	
+	<!-- 조회 -->
+	<!-- 기본 기안서 조회 -->
 	<select id="selectDocDefaultOne"
-		parameterType="int"
+		parameterType="com.goodee.JoinTree.vo.DocumentDefault"
 		resultType="com.goodee.JoinTree.vo.DocumentDefault">
 		SELECT 
-			doc_default_no docDefaultNo,
-			doc_category_no docCategoryNo,
+			doc_no docNo,
 			emp_no empNo,
-			doc_default_title docDefaultTitle,
-			doc_default_content docDefaultContent,
+			category,
+			doc_title docTitle,
+			doc_content docContent,
 			writer,
 			reference,
-			doc_default_status docDefaultStatus,
 			receiver_team receiverTeam,
+			doc_status docStatus,
 			createdate,
 			updatedate,
 			create_id createId,
 			update_id updateId
 		FROM
 			document_default
-			
-		WHERE doc_default_no = #{docDefaultNo}
+		WHERE doc_no = #{docNo}
 	</select>
+	
+	<!-- 휴가 기안서 조회 -->
+	<select id="selectDocLeaveOne"
+		parameterType="com.goodee.JoinTree.vo.DocumentLeave"
+		resultType="com.goodee.JoinTree.vo.DocumentLeave">
+		SELECT 
+			doc_no docNo,
+			leave,
+			doc_leave_start_date docLeaveStartDate,
+			doc_leave_end_date docLeaveEndDate,
+			doc_leave_period_date docLeavePeriodDate,
+			doc_leave_reason docLeaveReason,
+			doc_leave_tel docLeaveTel,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM
+			document_leave
+		WHERE doc_no = #{docNo}
+	</select>
+	
+	<!-- 인사이동 기안서 조회 -->
+	<select id="selectDocReshuffleOne"
+		parameterType="com.goodee.JoinTree.vo.DocumentReshuffle"
+		resultType="com.goodee.JoinTree.vo.DocumentReshuffle">
+		SELECT 
+			doc_no docNo,
+			doc_reshuffle_date docReshuffleDate,
+			doc_reshuffle_task docReshuffleTask,
+			doc_reshuffle_result docReshuffleResult,
+			doc_reshuffle_dept docReshuffleDept,
+			doc_reshuffle_position docReshufflePosition,
+			doc_reshuffle_reason docReshuffleReason,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM
+			document_reshuffle
+		WHERE doc_no = #{docNo}
+	</select>
+	
+	<!-- 퇴직 기안서 조회 -->
+	<select id="selectDocResignOne"
+		parameterType="com.goodee.JoinTree.vo.DocumentResign"
+		resultType="com.goodee.JoinTree.vo.DocumentResign">
+		SELECT 
+			doc_no docNo,
+			doc_resign_date docResignDate,
+			doc_resign_reason docResignReason,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM
+			document_resign
+		WHERE doc_no = #{docNo}
+	</select>
+	
 	
 	<!-- 문서결제양식 코드 조회 -->
 	<select id="selectDocumentCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
