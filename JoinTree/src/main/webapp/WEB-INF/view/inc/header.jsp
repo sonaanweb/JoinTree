@@ -98,9 +98,14 @@
        	           
         const timerElement = $("#timer");
     
+        const loginEmpNo = ${loginAccount.empNo}; // JSP 변수 값을 JavaScript 변수에 할당
         const sessionDuration = 30 * 60; // 분 * 초 -> 세션 기본값인 30분 설정
         // 초기 타이머 시작
-        startTimer(sessionDuration);
+        // loginAccount.empNo 값이 null이 아닐 때에만 타이머 시작
+         if (loginEmpNo !== null) {
+        	console.log(loginEmpNo); 
+        	startTimer(sessionDuration);
+    	 } 
         
         function startTimer(duration) {
             let timer = duration, minutes, seconds;
