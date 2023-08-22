@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,12 +18,13 @@
 	<script src="/resource/js/misc.js"></script>
 	<script src="/resource/js/dashboard.js"></script>
 
-	<!-- jquery -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
 	<!-- css - 수정가능 -->
 	<link rel="stylesheet" href="/resource/css/style.css">
 	<link rel="stylesheet" href="/resource/css/style2.css">
+	
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
 
 	<script>
        $(document).ready(function() {
