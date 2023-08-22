@@ -173,28 +173,28 @@
 	
 	<!-- 삭제 -->
 	<!-- 기본 기안서 삭제 -->
- 	<delete id="deleteDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+ 	<delete id="removeDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
 		DELETE
 		FROM document_default
 		WHERE doc_no = #{docNo}
 	</delete>
 	
 	<!-- 휴가 기안서 삭제 -->
- 	<delete id="deleteDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
+ 	<delete id="removeDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
 		DELETE
 		FROM document_leave
 		WHERE doc_no = #{docNo}
 	</delete>
 	
 	<!-- 인사이동 기안서 삭제 -->
- 	<delete id="deleteDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
+ 	<delete id="removeDocReshuffle" parameterType="com.goodee.JoinTree.vo.DocumentReshuffle">
 		DELETE
 		FROM document_reshuffle
 		WHERE doc_no = #{docNo}
 	</delete>
 	
 	<!-- 퇴직 기안서 삭제 -->
- 	<delete id="deleteDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
+ 	<delete id="removeDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
 		DELETE
 		FROM document_resign
 		WHERE doc_no = #{docNo}
