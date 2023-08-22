@@ -17,5 +17,4 @@ public interface DocumentMapper {
 		
 		// 문서결제양식 코드 조회
 		List<CommonCode> selectDocumentCodeList();
-
 }

@@ -18,17 +18,6 @@ public class OrgChartController {
 	@Autowired
 	private OrgChartService orgChartService;
 	
-	// 부서 코드 정보를 전달하는 컨트롤러
-	@GetMapping("org/orgList")
-	public String selectOrgDept(Model model) {
-		List<CommonCode> deptList = orgChartService.selectOrgDept();
-		
-		// 뷰에서 사용할 수 있도록 모델에 추가
-		model.addAttribute("deptList", deptList);
-		
-		return "org/orgList";
-	}
-	
 	// 부서에 맞는 직원 정보를 전달하는 컨트롤러
 	@GetMapping("org/orgEmpList")
 	@ResponseBody // json 형태로 전달을 위해 사용
