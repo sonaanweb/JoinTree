@@ -117,10 +117,16 @@ input:checked + .slider:before {
 }
 
 /*기안서*/
+.doc h1{
+	font-size: 45px;
+	font-weight: bold;
+}
 .doc table{
 	width: 100%;
+	text-align: center;
 }
 .doc input { /*input중에 readonly인거 */
+	text-align: center;
 	border: none;
 	width: 100%;
 }
@@ -138,10 +144,13 @@ input:checked + .slider:before {
 }
 .doc .table .table tr td{
 	width: 400px;
-}
-.doc .table .table tr td{
 	border: 1px solid #999;
 	padding: 10px;
+}
+.doc .table .table tr > td:first-child{
+	width: 200px;
+	background-color: rgb(213, 213, 213);
+	font-weight: bold;
 }
 .doc .table .blank{
 	border: none;
@@ -154,6 +163,11 @@ input:checked + .slider:before {
 	border-bottom: 1px solid #000;
 	width: 100%;
 	padding: 0;
+}
+.doc .doc-comment tr td:first-child{
+	border: 1px solid #999;
+	background-color: rgb(213, 213, 213);
+	font-weight: bold;
 }
 .doc .doc-comment tr td{
 	border: 1px solid #999;

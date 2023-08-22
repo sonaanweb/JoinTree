@@ -41,7 +41,7 @@
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
+								<td><input type="text" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}"></td>
 							</tr>
 						</tbody>
 					</table>

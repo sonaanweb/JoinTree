@@ -169,8 +169,15 @@
 				const selectedSigner1 = signerSelectedEmps[0]; // 선택한 수신팀 정보 가져오기
 				const selectedSigner2 = signerSelectedEmps[1];
 				
-				$("#signer1").val(selectedSigner1); // .text() 메서드를 사용하여 내용 변경 -> td에 넣어야 함
-			    $("#signer2").val(selectedSigner2); // .text() 메서드를 사용하여 내용 변경
+				const maskedSigner1 = selectedSigner1.substring(0, selectedSigner1.indexOf('('));
+				let maskedSigner2 = "";
+
+				if (selectedSigner2) {
+					maskedSigner2 = selectedSigner2.substring(0, selectedSigner2.indexOf('('));
+				}
+
+				$("#signer1").val(maskedSigner1); // .text() 메서드를 사용하여 내용 변경 -> td에 넣어야 함
+			    $("#signer2").val(maskedSigner2); // .text() 메서드를 사용하여 내용 변경
 					//console.log($("#signer1").val());
 					//console.log($("#signer2").val());
 			});
@@ -178,7 +185,9 @@
 			// inputReferBtn 버튼을 클릭하면 참조자 값을 기안서 - 참조자(reference) 영역에 추가
 			$("#inputReferBtn").on("click", function() {
 				const selectedRefer = referSelectedEmps; // 선택한 수신팀 정보 가져오기
-				$("#reference").val(selectedRefer); // -> input이라서 val
+				
+				const maskedRefer = selectedRefer[0].split('(')[0];
+				$("#reference").val(maskedRefer); // -> input이라서 val
 					//console.log($("#receiverTeam").val());
 			});
 			
@@ -298,6 +307,7 @@
 					<div class="col-md-9 grid-margin stretch-card">
 						<div class="card">
 							<div class="card-body">
+								<button type="button">결재상신</button>
 								<div id="documentForm">
 								</div>
 							</div>
@@ -333,51 +343,50 @@
 		</div>
 	</div>
 	
-		<!-- 참조자 모달 -->
-		<div class="modal" id="referModal" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">참조자</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
+	<!-- 참조자 모달 -->
+	<div class="modal" id="referModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">참조자</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+				<div class="modal-body">
+					<ul id="referCodeList"> <!-- 고유한 ID 부여 -->
+						<c:forEach var="dept" items="${deptList}">
+						<li>
+							<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
+							<ul>
+							<!-- 여기에 데이터를 추가하는 부분 -->
+							</ul>
+						</li>
+					</c:forEach>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 수신팀 모달 -->
+	<div class="modal" id="receiverModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">수신자</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
 					
-					<div class="modal-body">
-						<ul id="referCodeList"> <!-- 고유한 ID 부여 -->
-							<c:forEach var="dept" items="${deptList}">
+				<div class="modal-body">
+					<ul id="receiverCodeList"> <!-- 고유한 ID 부여 -->
+						<c:forEach var="dept" items="${deptList}">
 							<li>
-								<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
-								<ul>
-								<!-- 여기에 데이터를 추가하는 부분 -->
-								</ul>
+								<span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}</span>
 							</li>
 						</c:forEach>
-						</ul>
-					</div>
+					</ul>
 				</div>
 			</div>
 		</div>
-	
-		<!-- 수신팀 모달 -->
-		<div class="modal" id="receiverModal" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">수신자</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-						
-					<div class="modal-body">
-						<ul id="receiverCodeList"> <!-- 고유한 ID 부여 -->
-							<c:forEach var="dept" items="${deptList}">
-								<li>
-									<span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}</span>
-								</li>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-
+	</div>
 </html>
