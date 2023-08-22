@@ -75,13 +75,20 @@ public class DocumentController {
 		// 로그인한 사원 정보 
 		Map<String, Object> empInfo = empInfoService.getEmpOne(empNo);
 		
-		// 휴가종류
-		
+		// 휴가 리스트
 		List<CommonCode> leaveList = codeService.selectChildCode("L01");
+		
+		// 직급 리스트
+		List<CommonCode> positionList = codeService.selectChildCode("P01");
+		
+		// 부서 리스트
+		List<CommonCode> deptList = codeService.selectChildCode("D02");
 		
 		// 뷰에서 사용할 수 있도록 모델에 추가
 		model.addAttribute("empInfo", empInfo);
 		model.addAttribute("leaveList", leaveList);
+		model.addAttribute("positionList", positionList);
+		model.addAttribute("deptList", deptList);
 		
 		return new ModelAndView(path);
 	}
