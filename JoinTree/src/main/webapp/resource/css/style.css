@@ -8654,7 +8654,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #343a40;
+  color: #464846;
   text-align: left;
   background-color: #fff;
 }
@@ -10081,7 +10081,6 @@ pre code {
 .table-info > td {
   background-color: #bfdef7;
 }
-
 .table-info th,
 .table-info td,
 .table-info thead th,
@@ -19592,7 +19591,7 @@ html {
 }
 
 .content-wrapper {
-  background: #f2edf3;
+  background: #e1ede8;
   padding: 2.75rem 2.25rem;
   width: 100%;
   -webkit-flex-grow: 1;

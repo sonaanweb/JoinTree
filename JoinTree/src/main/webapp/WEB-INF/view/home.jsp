@@ -15,22 +15,22 @@
 				}
 		
 			// 현재시간 출력
-		    updateTime();
-		    setInterval(updateTime, 1000); // 1초마다 시간 업데이트
-
-		    function updateTime() {
-		        const time = new Date();
-		        const hour = time.getHours();
-		        const minutes = time.getMinutes();
-		        const seconds = time.getSeconds();
-		        
-		        const formattedHour = hour < 10 ? '0' + hour : hour;
-		       	const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-		       	const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-		        		
-		        const formattedTime = formattedHour + ":" + formattedMinutes + ":" + formattedSeconds;
-		        $('.clock').text(formattedTime);
-		    }
+			updateTime();
+			setInterval(updateTime, 1000); // 1초마다 시간 업데이트
+		
+			function updateTime() {
+				const time = new Date();
+				const hour = time.getHours();
+				const minutes = time.getMinutes();
+				const seconds = time.getSeconds();
+				
+				const formattedHour = hour < 10 ? '0' + hour : hour;
+				const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+				const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+						
+				const formattedTime = formattedHour + ":" + formattedMinutes + ":" + formattedSeconds;
+				$('.clock').text(formattedTime);
+			}
 		});
 	</script>
 	
@@ -40,10 +40,10 @@
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
 				<!-- 컨텐츠 시작 -->
-				<div class="row">
+				<div class="row home">
 					<div class="col-md-4 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
-							<div class="card-body center">
+						<div class="card card-img-holder">
+							<div class="card-body center ">
 								<div class="home-profile">
 									<img class="mb-2" src="/empImg/tiger.png" >
 									<h1 class="mb-2 center">${empInfo.empName}${empInfo.position}</h1>
@@ -60,26 +60,55 @@
 					</div>
 					
 					<div class="col-md-5 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
+						<div class="card card-img-holder">
 							<div class="card-body"> 
 								공지사항
 								<hr>
-								
+								<ul>
+										
+										<c:forEach var="p" items="${homeProejctList}" varStatus="status">
+											<li>
+												${p.projectName}(${p.empName})
+											</li>
+										</c:forEach>
+										<li>
+											테스트
+											</li>
+											<li>
+											테스트
+											</li>
+											<li>
+											테스트
+											</li>
+											
+									</ul>
 								<div>
 									<div>프로젝트</div>
-										<c:forEach var="p" items="${homeProejctList}">
-											<div>${p.projectNo}</div>
-											<div>${p.projectName}</div>
-											<div>${p.empName}</div>
-											<div>${p.projectStatusName}</div>
+									<hr>
+									<ul>
+										
+										<c:forEach var="p" items="${homeProejctList}" varStatus="status">
+											<li>
+												${p.projectName}(${p.empName})
+											</li>
 										</c:forEach>
+										<li>
+											테스트
+											</li>
+											<li>
+											테스트
+											</li>
+											<li>
+											테스트
+											</li>
+									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
 					
 					<div class="col-md-3 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
+						<div class="card card-img-holder">
 							<div class="card-body"> 
 								오늘일정
 							</div>
@@ -89,7 +118,7 @@
 				<!--  두번째 줄 -->
 				<div class="row">
 					<div class="col-md-9 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
+						<div class="card card-img-holder">
 							<div class="card-body"> 
 								결재문서목록
 								<hr>
@@ -99,7 +128,7 @@
 					</div>		
 					
 					<div class="col-md-3 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
+						<div class="card card-img-holder">
 							<div class="card-body"> 
 								todo
 							</div>
@@ -110,7 +139,7 @@
 				<!--  로그인 임시 -->
 				<div class="row">
 					<div class="col-md-3 stretch-card grid-margin">
-						<div class="card bg-gradient-danger card-img-holder text-white">
+						<div class="card card-img-holder">
 							<div class="card-body"> 
 								<a href="/login/login">로그인</a>
 								<a href="/logout">로그아웃</a>
