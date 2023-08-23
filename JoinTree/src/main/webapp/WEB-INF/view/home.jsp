@@ -46,8 +46,8 @@
 							<div class="card-body center">
 								<div class="home-profile">
 									<img class="mb-2" src="/empImg/tiger.png" >
-									<h1 class="mb-2 center">김미진과장</h1>
-									<h4 class="mb-2 center">개발팀</h4>
+									<h1 class="mb-2 center">${empInfo.empName}${empInfo.position}</h1>
+									<h4 class="mb-2 center">${empInfo.dept}</h4>
 									<h1 class="mb-2 clock"></h1>
 									<h4 class="mb-2 on">출근시간 : </h4>
 									<h4 class="onTime"></h4>
@@ -64,7 +64,16 @@
 							<div class="card-body"> 
 								공지사항
 								<hr>
-								프로젝트
+								
+								<div>
+									<div>프로젝트</div>
+										<c:forEach var="p" items="${homeProejctList}">
+											<div>${p.projectNo}</div>
+											<div>${p.projectName}</div>
+											<div>${p.empName}</div>
+											<div>${p.projectStatusName}</div>
+										</c:forEach>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.ProjectMapper">
+	
+	<!-- 프로젝트 전체 리스트 출력  -->
+	<select id="selectProejectList"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			project_no projectNo,
+			emp_no empNo,
+			project_no projectName,
+			project_start_date projectStartDate, 
+			project_end_date projectEndDate,
+			project_content projectContent,
+			project_status projectStatus,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM project
+		ORDER BY projectNo asc
+		LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)  -->
+	<select id="selectProjectListByPersonal"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			p.project_no projectNo,
+			p.emp_no p.empNo,
+			pm.emp_no memberNo,
+			p.project_name projectName,
+			p.project_start_date projectStartDate, 
+			p.project_end_date projectEndDate,
+			p.project_content projectContent,
+			p.project_status projectStatus,
+			p.createdate,
+			p.updatedate,
+			p.create_id createId,
+			p.update_id updateId
+		FROM project p
+		INNER JOIN project_member pm
+		ON p.project_no=pm.project_no
+		WHERE 
+			pm.emp_no = #{empNo}
+			AND
+			p.project_status= 'A0502'
+		ORDER BY p.createdate DESC, p.projectNo ASC
+		LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0503) -->
+	<select id="selectEndProjectList"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			project_no projectNo,
+			emp_no empNo,
+			project_no projectName,
+			project_start_date projectStartDate, 
+			project_end_date projectEndDate,
+			project_content projectContent,
+			project_status projectStatus,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM project
+		WHERE 
+			project_status= 'A0503'
+		ORDER BY createdate DESC, projectNo ASC
+		LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 홈에서 참여중인 프로젝트 출력 -> 참여중인 프로젝트5개만 -->
+	<select id="selectProjectListByHome"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			p.project_no projectNo,
+			p.emp_no empNo,
+			e.emp_name empName,
+			p.project_name projectName,
+			p.project_start_date projectStartDate, 
+			p.project_end_date projectEndDate,
+			p.project_content projectContent,
+			c.code_name projectStatusName,
+			p.createdate,
+			p.updatedate,
+			p.create_id createId,
+			p.update_id updateId
+		FROM project p
+		INNER JOIN project_member pm
+		INNER JOIN common_code c
+		INNER JOIN emp_info e
+		ON 
+			p.project_no=pm.project_no 
+			AND 
+			p.project_status=c.code
+			AND 
+			pm.emp_no=e.emp_no
+			
+		WHERE 
+			pm.emp_no = #{empNo}
+			AND
+			p.project_status= 'A0502'
+		ORDER BY p.createdate DESC, p.project_no ASC
+		LIMIT 0, 5
+	</select>
+
+
+
+
+</mapper>
