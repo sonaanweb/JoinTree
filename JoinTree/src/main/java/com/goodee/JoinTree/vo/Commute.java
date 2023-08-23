@@ -10,7 +10,6 @@ public class Commute {
 	private String empOnOffDate;
 	private String empOnTime;
 	private String empOffTime;
-	private String empStatus;
 	private String createdate;
 	private String updatedate;
 	private int createId;

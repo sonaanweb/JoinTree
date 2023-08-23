@@ -31,6 +31,84 @@
 				const formattedTime = formattedHour + ":" + formattedMinutes + ":" + formattedSeconds;
 				$('.clock').text(formattedTime);
 			}
+			
+			// 출퇴근 시간 업데이트 함수
+		    function updateCommuteTimes(empOnTime, empOffTime){
+		    	$('#onTime').text('출근시간 : '+empOnTime);
+	    		$('#offTime').text('퇴근시간 : '+empOffTime);
+		    }
+			
+			// 출퇴근 데이터 화면 출력 함수
+			function selectCommuteByDate(){
+				$.ajax({
+    		    	type:'GET',
+    		    	url: '/getCommuteTime',
+    		    	success: function(data){
+    		    		
+    		    		if(data){
+    		    			let empOnTime = data.empOnTime;
+    		            	let empOffTime = data.empOffTime;
+    		            	console.log(empOnTime+'<--empOnTime');
+    		            	console.log(empOffTime+'<--empOffTime');
+    			    		
+    		            	updateCommuteTimes(empOnTime, empOffTime);
+    		    		}
+    		    	},
+    		    	error: function(error){
+    		    		console.error('error commute data', error);
+    		    	}
+    		    });
+			}
+			
+			// 페이지 로드 시  출퇴근 데이터 화면 출력 함수
+			selectCommuteByDate();
+			
+		 	// 출근/퇴근 버튼 클릭 이벤트 처리
+	        $('#commuteBtn').click(function() {
+	            const commuteBtnText = $('#commuteBtn').text().trim(); // 버튼 텍스트 저장
+	            const currentTime = $('.clock').text(); // 현재시간 저장
+	           	const isCommute = commuteBtnText === '출근하기';
+	            
+	            $.ajax({
+	            	type: 'post',
+	            	url: '/saveCommuteTime',
+	            	data:{
+	            		time: currentTime,
+	            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
+	            	},
+		            success: function(data){
+		            	console.log(data+'<--data');
+		            	
+		            	if (commuteBtnText === '출근하기') {
+		            		
+			                $('#commuteBtn').text('퇴근하기'); // 버튼 텍스트 변경
+			                    
+			            } else if (commuteBtnText === '퇴근하기') {
+			            	
+			                $('#commuteBtn').text('출근하기'); // 버튼 텍스트 변경
+			                $('#commuteBtn').prop('disabled', true); // 출근하기 버튼 비활성화
+			                
+			             	// 자정까지 남은 시간 계산
+			                const now = new Date();
+			                const midnight = new Date(now);
+			                midnight.setHours(24, 0, 0, 0);
+			                const timeUntilMidnight = midnight - now;
+			                
+			                // 자정까지 버튼 비활성화 유지
+			                setTimeout(function() {
+			                    $('#commuteBtn').prop('disabled', false);
+			                }, timeUntilMidnight);     
+			            }
+		            	
+		            	// 출퇴근 데이터 화면 출력
+		    		    selectCommuteByDate();
+		            },
+		            error: function(error){
+		            	console.error('error commute time:', error);
+		            }
+	            });
+	        });
+
 		});
 	</script>
 	
@@ -49,11 +127,9 @@
 									<h1 class="mb-2 center">${empInfo.empName}${empInfo.position}</h1>
 									<h4 class="mb-2 center">${empInfo.dept}</h4>
 									<h1 class="mb-2 clock"></h1>
-									<h4 class="mb-2 on">출근시간 : </h4>
-									<h4 class="onTime"></h4>
-									<h4 class="mb-2 off">퇴근시간 : </h4>
-									<h4 class="offTime"></h4>
-									<button type="button" class="btn btn-success btn-fw">출근 / 퇴근하기</button>
+									<h4 class="mb-2" id="onTime">출근시간 : </h4>
+									<h4 class="mb-2" id="offTime">퇴근시간 : </h4>
+									<button type="button" class="btn btn-success btn-fw" id="commuteBtn">출근하기</button>
 								</div>
 							</div>
 						</div>
