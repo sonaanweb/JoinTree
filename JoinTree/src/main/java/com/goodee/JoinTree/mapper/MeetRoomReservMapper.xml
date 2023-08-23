@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 회의실 캘린더 예약 mapper -->
+<mapper namespace="com.goodee.JoinTree.mapper.MeetRoomReservMapper">
+<!-- 캘린더에 보이는 예약 현황 조회 -->
+<!-- 	<resultMap id="meetCal" type="com.goodee.JoinTree.vo.Reservation">
+		<id column="rev_no" property="revNo"/>
+		<result column="equip_no" property="equipNo"/>
+		<result column="equip_category" property="equipCategory"/>
+		<result column="rev_start_time" property="revStartTime"/>
+		<result column="rev_end_time" property="revEndTime"/>
+	</resultMap> -->
+	
+	<select id="selectMeetCalList" resultType="com.goodee.JoinTree.vo.Reservation">
+		SELECT
+			rev_no revNo,
+			emp_no empNo,
+			equip_no equipNo,
+			equip_category equipCategory,
+			rev_start_time revStartTime,
+			rev_end_time revEndTime,
+			rev_status revStatus,
+			rev_reason revReason,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM reservation
+		WHERE equip_category = 'E0101'
+	</select>
+</mapper>

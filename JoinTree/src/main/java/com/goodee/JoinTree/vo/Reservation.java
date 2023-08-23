@@ -8,7 +8,7 @@ public class Reservation {
 	private int revNo;
 	private int empNo;
 	private int equipNo;
-	private int equipCategory;
+	private String equipCategory;
 	private String revStartTime;
 	private String revEndTime;
 	private String revStatus;

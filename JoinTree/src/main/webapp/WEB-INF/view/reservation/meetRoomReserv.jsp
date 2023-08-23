@@ -4,7 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
 <style>
   html, body {
     margin: 0;
@@ -17,44 +22,71 @@
     max-width: 1100px;
     margin: 40px auto;
   }
+.fc .fc-button-primary {
+	    background-color: #C8E4B2;
+}
 </style>
-
- <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      timeZone: 'UTC',
-      initialView: 'dayGridWeek',
-      headerToolbar: {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridWeek'
-      },
-      editable: true,
-      events: '/api/demo-feeds/events.json'
-    });
-
-    calendar.render();
-  });
-</script>
 <title>예약 현황 창(캘린더) + 예약하기</title>
 </head>
 <body>
-<div class="container-scroller"> <!-- 전체 스크롤 -->
-	<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-		<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-			<div class="content-wrapper"> <!-- 컨텐츠 -->
-    			
-    			<div id='calendar'></div>
-    				
-<!-- include footer start -->
-			</div><!-- 컨텐츠 끝 -->
-		</div><!-- 컨텐츠전체 끝 -->
-	</div><!-- 상단제외 끝 -->
-</div><!-- 전체 스크롤 끝 -->
-<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
-<!-- include footer end -->
+<div id='calendar'></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	
+	var calendarEl = document.getElementById('calendar');
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView : 'timeGridWeek',
+		headerToolbar : {
+			start : 'prev next today',
+			center : 'title',
+			right: 'timeGridWeek'
+		},
+		titleFormat : function(date) {
+			return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+		},
+		selectable : true,
+		droppable : true,
+		editable : true,
+		nowIndicator: true,
+		locale: 'ko',
+		height: 'auto', // 캘린더 높이 조절
+	    slotDuration: '00:30:00',
+	    slotMinTime: '09:00:00',
+	    slotMaxTime: '18:00:00',  // 오후 6시까지 슬롯 생성
+	    slotLabelInterval: { hours: 1 },  // 1시간 간격으로 레이블 표시
+	    slotLabelFormat: {
+	        hour: 'numeric',
+	        hour12: true
+	    },
+	    editable: false, //드래그 막기
+	    
+	    //DB 연결
+	    events: function(info, successCallback, failureCallback) {
+		    $.ajax({
+		        url: '/meetRoomReserv', // AJAX를 통해 데이터를 가져올 URL
+		        type: 'GET',
+		        dataType: 'json',
+		        success: function(response) {
+		            var events = [];
+		            for (var i = 0; i < response.length; i++) {
+		                events.push({
+		                    title: response[i].title,
+		                    start: response[i].start,
+		                    end: response[i].end
+		                });
+		            }
+		            successCallback(events); // 성공 시 이벤트 배열을 전달
+		        },
+		        error: function() {
+		            failureCallback('There was an error while fetching events.'); // 오류 시 메시지 전달
+		        }
+		    });
+		}
+	 
+	});
+	calendar.render();
+});
+</script>
 </body>
 </html>
