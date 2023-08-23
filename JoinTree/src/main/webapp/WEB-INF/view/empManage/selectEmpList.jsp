@@ -523,15 +523,6 @@
 		searchEmpListResults();
 	});
 	
-	// 기존 페이지 이동 버튼 클릭 이벤트 핸들러 제거
-	//$('#pagination').off('click', '.page-btn');
-	
-	// 페이지 이동 버튼 클릭 이벤트
-	$('#pagination').on('click','.page-btn',function(){
-		let page = $(this).text();
-		goToPage(page);
-	});
-	
 	// 사원 상세정보 호출
 	function selectEmpInfoOne(empNo){
 		// 상세 정보 가져오기
