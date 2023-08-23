@@ -2,13 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.ProjectMapper">
 	
+	<!-- 프로젝트 검색별 행의 수  -->
+	<select id="projectCountRows" 
+			resultType="int">
+		SELECT COUNT(*)
+		FROM project
+		<where>
+			<!-- 타이틀이 있을때 -->
+			<if test="title != null and title != ''">
+			AND projectName LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<!-- startDate가 있을때-->
+			<if test="startDate != null">
+			AND project_start_date >= #{startDate}
+			</if>
+			<!-- endDate가 있을때-->
+			<if test="endDate != null">
+			AND project_end_date &lt;= #{endDate}
+			</if>
+		</where>
+	</select>
+	
 	<!-- 프로젝트 전체 리스트 출력  -->
 	<select id="selectProejectList"
 			resultType="com.goodee.JoinTree.vo.Project">
 		SELECT 
 			project_no projectNo,
 			emp_no empNo,
-			project_no projectName,
+			project_name projectName,
 			project_start_date projectStartDate, 
 			project_end_date projectEndDate,
 			project_content projectContent,
@@ -22,12 +43,20 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
+	<!-- 프로젝트 멤버 수 구하기 -->
+	<select id="selectProejectMemberCnt">
+		SELECT 
+			COUNT(emp_no) empCnt
+		FROM project_member
+		where project_no = #{projectNo};
+	</select>
+	
 	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)  -->
 	<select id="selectProjectListByPersonal"
 			resultType="com.goodee.JoinTree.vo.Project">
 		SELECT 
 			p.project_no projectNo,
-			p.emp_no p.empNo,
+			p.emp_no empNo,
 			pm.emp_no memberNo,
 			p.project_name projectName,
 			p.project_start_date projectStartDate, 
@@ -45,7 +74,7 @@
 			pm.emp_no = #{empNo}
 			AND
 			p.project_status= 'A0502'
-		ORDER BY p.createdate DESC, p.projectNo ASC
+		ORDER BY p.createdate DESC, p.project_no ASC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
@@ -55,7 +84,7 @@
 		SELECT 
 			project_no projectNo,
 			emp_no empNo,
-			project_no projectName,
+			project_name projectName,
 			project_start_date projectStartDate, 
 			project_end_date projectEndDate,
 			project_content projectContent,
@@ -96,8 +125,7 @@
 			AND 
 			p.project_status=c.code
 			AND 
-			pm.emp_no=e.emp_no
-			
+			p.emp_no=e.emp_no
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND

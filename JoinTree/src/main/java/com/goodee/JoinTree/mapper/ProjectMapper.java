@@ -9,6 +9,12 @@ import com.goodee.JoinTree.vo.Project;
 @Mapper
 public interface ProjectMapper {
 	
+	// 프로젝트 검색 별 행 카운트
+	int projectCountRows(String title, String startDate, String endDate);
+	
+	// 프로젝트 멤버 카운트 출력 
+	int selectProejectMemberCnt(int projectNo);
+		
 	// 프로젝트 전체 리스트 출력
 	List<Project> selectProejectList(int startRow, int rowPerPage);
 	
