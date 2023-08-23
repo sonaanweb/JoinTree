@@ -47,7 +47,7 @@
     		    		
     		    		if(data){
     		    			let empOnTime = data.empOnTime;
-    		            	let empOffTime = data.empOffTime;
+    		    			let empOffTime = data.empOffTime;
     		            	console.log(empOnTime+'<--empOnTime');
     		            	console.log(empOffTime+'<--empOffTime');
     			    		
@@ -62,6 +62,48 @@
 			
 			// 페이지 로드 시  출퇴근 데이터 화면 출력 함수
 			selectCommuteByDate();
+			
+			// 세션에 버튼 상태 저장 함수
+			function setCommuteBtnState(state){
+				$.ajax({
+					type: 'post',
+					url: '/setCommuteBtnState', 
+					data:{
+						state: state
+					},
+					success: function(data){
+						console.log('Button state set to' + state);
+					}, error: function(error){
+						console.log('error set button state' + state);
+					}
+				})
+			}
+			
+			// 버튼 상태 값 요청 함수
+			function getCommuteBtnState(){
+				$.ajax({
+					type: 'GET',
+					url: '/getCommuteBtnState',
+					success: function(buttonState){
+						if(buttonState === ''){
+							$('#commuteBtn').text('출근하기');
+							$('#commuteBtn').prop('disabled', false);
+						} else if(buttonState === '출근'){
+							$('#commuteBtn').prop('disabled', true);
+							$('#commuteBtn').text('출근하기');
+						} else{
+							$('#commuteBtn').prop('disabled', false);
+							$('#commuteBtn').text('퇴근하기');
+						} 
+					},
+					error: function(error){
+						console.error('error getCommuteBtnState:', error)
+					}
+				});
+			}
+			
+			// 페이지 로드 시 버튼 상태 적용
+			getCommuteBtnState();
 			
 		 	// 출근/퇴근 버튼 클릭 이벤트 처리
 	        $('#commuteBtn').click(function() {
@@ -79,14 +121,15 @@
 		            success: function(data){
 		            	console.log(data+'<--data');
 		            	
-		            	if (commuteBtnText === '출근하기') {
-		            		
-			                $('#commuteBtn').text('퇴근하기'); // 버튼 텍스트 변경
-			                    
-			            } else if (commuteBtnText === '퇴근하기') {
+		            	if (isCommute) {
+		    
+		            		setCommuteBtnState('퇴근'); // 세션에 버튼 상태 저장
+		                    getCommuteBtnState(); // 버튼 상태 가져와서 적용
+			                
+			            } else {
 			            	
-			                $('#commuteBtn').text('출근하기'); // 버튼 텍스트 변경
-			                $('#commuteBtn').prop('disabled', true); // 출근하기 버튼 비활성화
+			                setCommuteBtnState('출근'); // 세션에 버튼 상태 저장
+			                getCommuteBtnState();
 			                
 			             	// 자정까지 남은 시간 계산
 			                const now = new Date();
@@ -96,7 +139,9 @@
 			                
 			                // 자정까지 버튼 비활성화 유지
 			                setTimeout(function() {
-			                    $('#commuteBtn').prop('disabled', false);
+			                    
+			                    getCommuteBtnState(); // 버튼 상태 가져와서 적용
+			                    
 			                }, timeUntilMidnight);     
 			            }
 		            	

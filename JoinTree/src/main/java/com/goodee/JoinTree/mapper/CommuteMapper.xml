@@ -43,7 +43,7 @@
 			resultType="com.goodee.JoinTree.vo.Commute">
 		SELECT 
 			emp_on_time empOnTime, 
-			emp_off_time empOffTime
+			COALESCE(emp_off_time, '') empOffTime
 		FROM 
 			commute 
 		WHERE 
