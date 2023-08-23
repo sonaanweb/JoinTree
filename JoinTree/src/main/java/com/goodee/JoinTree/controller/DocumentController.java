@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -94,7 +95,7 @@ public class DocumentController {
 	}
 	
 	@PostMapping("/document/docDefault")
-	public String docDefault(DocumentDefault documentDefault) {
+	public String docDefault(@ModelAttribute DocumentDefault documentDefault) {
 		int row = documentService.addDocDefault(documentDefault);	
 		log.debug(row+"<--docDefault row ");
 		

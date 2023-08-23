@@ -4,6 +4,9 @@
 	<!-- 입력 -->
 	<!-- 기본 기안서 입력 -->
  	<insert id="addDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+ 		<selectKey order="AFTER" keyProperty="docNo" resultType="int">
+	        SELECT last_insert_id()
+	    </selectKey>
 		INSERT INTO document_default(
 			emp_no,
 			doc_title,
@@ -26,7 +29,7 @@
 			#{docTitle},
 			#{docContent},
 			#{category},
-			#{empName},
+			#{writer},
 			#{reference},
 			#{receiverTeam},
 			#{docStatus},

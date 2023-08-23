@@ -12,7 +12,7 @@ public class DocumentDefault {
 	private String category;
 	private String writer;
 	private int reference;
-	private String recieverTeam;
+	private String receiverTeam;
 	private String docStatus;
 	private String docStamp1;
 	private String docStamp2;

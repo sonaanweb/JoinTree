@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.DocumentSignerMapper">
+	<insert id="insertDocSigner" parameterType="com.goodee.JoinTree.vo.DocumentSigner">
+		INSERT INTO document_signer(
+			doc_no,
+			emp_signer_no,
+			emp_signer_level,
+			doc_status,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)VALUES(
+			#{docNo},
+			#{empSignerNo},
+			#{empSignerLevel},
+			#{docStatus},
+			#{createdate},
+			#{updatedate},
+			#{createId},
+			#{updateId}
+		)
+	</insert>
+</mapper>
