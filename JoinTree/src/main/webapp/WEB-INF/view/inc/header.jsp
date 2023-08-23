@@ -17,7 +17,12 @@
 	<script src="/resource/js/off-canvas.js"></script>
 	<script src="/resource/js/misc.js"></script>
 	<script src="/resource/js/dashboard.js"></script>
-
+	<!-- 부트스트랩 CSS CDN -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+	
+	<!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+	
 	<!-- css - 수정가능 -->
 	<link rel="stylesheet" href="/resource/css/style.css">
 	<link rel="stylesheet" href="/resource/css/style2.css">
@@ -25,7 +30,6 @@
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	
-
 	<script>
        $(document).ready(function() {
 		   let isTimerRunning = false;
