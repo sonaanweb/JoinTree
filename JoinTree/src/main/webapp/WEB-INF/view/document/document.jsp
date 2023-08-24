@@ -9,13 +9,7 @@
 	<script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
 	<script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
 	
-	<!-- 부트스트랩 CSS CDN -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-	
-	<!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-	
-	<!-- 기타 스타일 시트 -->
+	<!-- 트리뷰 스타일 시트 -->
 	<link rel="stylesheet" href="/resource/jquery.treeview.css">
 	<link rel="stylesheet" href="/resource/screen.css">
 <script>
