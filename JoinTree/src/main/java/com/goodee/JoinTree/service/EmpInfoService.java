@@ -194,7 +194,7 @@ public class EmpInfoService {
 	
 	
 	
-	
+	/*
 	// 나의 이미지 변경 
 	public int modifyEmpImg(int empNo, MultipartFile newImgFile, String path) {
 		int row = 0;
@@ -238,9 +238,13 @@ public class EmpInfoService {
 		return row; // 최종 반환값은 이미지 수정 성공 시 2
 	}
 	
+	*/
+	
 	// 사원 이미지 삭제
 	public int removeEmpImg(int empNo, String path) {
 		EmpInfoImg empInfoImg = empInfoImgMapper.selectEmpImg(empNo);
+		log.debug(CYAN + empInfoImg + " <-- empInfoImg(EmpInfoService-removeEmpImg)" + RESET);
+		
 		if (empInfoImg != null) { // empNo에 해당하는 이미지가 있으면 삭제 
 			String saveFilename = empInfoImg.getEmpSaveImgName();
 			String realPath = path + saveFilename;
@@ -259,5 +263,4 @@ public class EmpInfoService {
 		
 		return row;
 	}
-		
 }

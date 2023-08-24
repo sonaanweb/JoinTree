@@ -101,10 +101,34 @@
 		        	}
 		        });
 		        
-		       
-		    	
-
-							  
+		        // 사진 삭제 버튼 클릭되었을 때
+		        $("#removeImgBtn").click(function() {
+		        	console.log("사진 삭제 버튼 클릭");
+		        	
+		            $.ajax({
+		                url: "/empInfo/modifyEmp/removeEmpImg", // 적절한 서버 엔드포인트로 변경
+		                type: "POST",
+		                success: function(response) {
+		                    console.log(response);
+		                    if (response === "success") {
+		                        alert("사진이 삭제되었습니다.");
+		                        // 서버에서 삭제된 이미지 경로로 뷰 업데이트
+		                        $("#currentImage").attr("src", "");
+		                        $("#currentImage").hide();
+		                        $("#currentImageTxt").hide();
+		                        
+		                        location.reload(); // 페이지 새로고침
+		                    } else {
+		                        alert("사진 삭제 중 오류가 발생했습니다.");
+		                    }
+		                },
+		                error: function(error) {
+		                    alert("서버 오류 발생");
+		                }
+		            });
+		        	
+		        });
+		       	  
 				// 이름 칸은 문자만 입력 허용
 				$("#empName").on("keypress", function(event) {
 				    // ASCII 코드 값이 숫자 범위(48~57)인 경우 입력 막음
@@ -257,9 +281,12 @@
 							</c:when>
 							<c:otherwise>
 								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" id="currentImage" style="max-width: 300px; max-height: 300px;"><br>
-								<span id="currentImageTxt">기존 이미지</span><br>
+								<!-- <span id="currentImageTxt">기존 이미지</span><br> -->
 								<!-- <img id="previewImage" src="" style="max-width: 300px; max-height: 300px;"><br> -->
-								<button type="button" id="modifyImgBtn">사진 삭제</button>	
+								<button type="button" id="removeImgBtn">사진 삭제</button>	
+								<div>
+									* 사진 삭제 버튼 클릭 시 등록된 사진이 완전히 삭제됩니다. 
+								</div>
 							</c:otherwise>
 						</c:choose>
 					</td>

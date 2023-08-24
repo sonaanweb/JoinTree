@@ -142,6 +142,7 @@ public class EmpInfoController {
 		}
 	}
 	
+	// 사원 이미지 등록 (AJAX)
 	@PostMapping("/empInfo/modifyEmp/uploadEmpImg")
 	@ResponseBody
 	public String uploadEmpImg(@RequestParam("uploadImg") MultipartFile newImg, HttpServletRequest request, HttpSession session) {
@@ -156,6 +157,27 @@ public class EmpInfoController {
 		int row = empInfoService.uploadEmpImg(empNo, newImg, path);
 		log.debug(CYAN + row + " <-- row(EmpInfoController-uploadEmpImg)" + RESET);
 		if (row == 2) { // 2 출력 시 DB, 로컬에 이미지 저장 완료 
+			return "success";
+		} else {
+			return "error";
+		}
+	}
+	
+	// 사원 이미지 삭제(AJAX)
+	@PostMapping("/empInfo/modifyEmp/removeEmpImg")
+	@ResponseBody
+	public String removeEmpImg(HttpServletRequest request, HttpSession session) {
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		int empNo = loginAccount.getEmpNo();
+		
+		// 파일 저장 경로 설정
+		String path = request.getServletContext().getRealPath("/empImg/"); // 실제 파일 시스템 경로
+		
+		int row = empInfoService.removeEmpImg(empNo, path);
+		log.debug(CYAN + row + " <-- row(EmpInfoController-removeEmpImg)" + RESET);
+		
+		if (row == 1) { // 사원 이미지 삭제 시 
 			return "success";
 		} else {
 			return "error";
@@ -190,7 +212,7 @@ public class EmpInfoController {
 		*/
 	 	
 	    if (saveFilename != null) {
-	        session.setAttribute("signImg", saveFilename); // 세션에 파일 이름을 저장합니다.
+	        session.setAttribute("signImg", saveFilename); // 세션에 파일 이름 저장
 	        return "success";
 	    } else {
 	        return "false";
