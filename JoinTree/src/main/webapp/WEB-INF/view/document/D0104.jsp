@@ -30,7 +30,7 @@
 							</tr>
 							
 							<tr>
-								<td>기안부서</td>
+								<td>기안부서</td> <!-- receiverTeam? -->
 								<td><input type="text" readonly="readonly" value="${empInfo.dept}"></td>
 							</tr>
 							
@@ -41,7 +41,7 @@
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.empName}"></td>
+								<td><input type="text" readonly="readonly" name="writer" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -50,17 +50,26 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
+					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
 					<input type="hidden" id="empNo" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empName" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}"">
+					<input type="text" id="empName" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
-				<td class="sign" rowspan="3">[기안자 도장]</td>
-				<td class="sign" rowspan="3">[결재자1 도장]</td>
-				<td class="sign" rowspan="3">[결재자2 도장]</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp2" name="docStamp2">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp3" name="docStamp3">
+				</td>
 			</tr>
 			<tr></tr>
 			<tr></tr>
@@ -95,7 +104,7 @@
 					제목
 				</td>
 				<td>
-					<input type="text">
+					<input type="text" id="docTitle">
 				</td>
 			</tr>
 			<!-- 퇴직사유 -->
@@ -104,7 +113,7 @@
 					퇴직사유
 				</td>
 				<td>
-					<textarea></textarea> 
+					<textarea id="docResignReason"></textarea> 
 				</td>
 			</tr>
 			<!-- 퇴직예정일 -->
@@ -113,7 +122,7 @@
 					퇴직예정일
 				</td>
 				<td>
-					<input type="date">
+					<input type="date" id="docResignDate">
 				</td>
 			</tr>
 			<!-- 첨부파일 추가 -->
@@ -121,8 +130,8 @@
 				<td>
 					첨부파일
 				</td>
-				<td>
-					<input type="file"><br>
+				<td> <!-- name, id 확인  -->
+					<input type="file" id="docOriginFilename"><br>
 				</td>
 			</tr>
 	</tbody>
