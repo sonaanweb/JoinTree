@@ -1,5 +1,7 @@
 package com.goodee.JoinTree.vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -21,4 +23,5 @@ public class DocumentDefault {
 	private String updatedate;
 	private int createId;
 	private int updateId;
+	private MultipartFile multipartFile;
 }
