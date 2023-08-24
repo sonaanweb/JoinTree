@@ -50,17 +50,26 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
-					<input type="hidden" id="empName" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empNo" readonly="readonly" value="${empInfo.empName}">
+					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
-				<td class="sign" rowspan="3">[기안자 도장]</td>
-				<td class="sign" rowspan="3">[결재자1 도장]</td>
-				<td class="sign" rowspan="3">[결재자2 도장]</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp2" name="docStamp2">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp3" name="docStamp3">
+				</td>
 			</tr>
 			<tr></tr>
 			<tr></tr>
@@ -95,87 +104,79 @@
 					이동일자
 				</td>
 				<td>
-					<input type="date">
-				</td>
-			</tr>
-			<!-- 이동인원 -->
-			<tr>
-				<td>
-					이동인원
-				</td>
-				<td>
-					<input type="number">
-				</td>
-			</tr>
-			<!-- 이동 유형 및 대상자 -->
-			<tr>
-				<td>
-					이동 유형 및 대상자
-				</td>
-				<td>
-					<input type="text">
+					<input type="date" id="docReshuffleDate">
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<table class="table">
+	
+	<h4>[직급변경]</h4>
+	<table class="table doc-comment">
 		<tbody>
-		<h4>[직급변경]</h4>
 			<tr>
 				<td>
 					사원명
 				</td>
+				<!-- 사원명 -->
+				<td>
+					${empInfo.empName}
+				</td>
+			<tr>
 				<td>
 					변경 전 직급
 				</td>
+				<!-- 변경 전 직급 -->
+				<td>
+					${empInfo.position}
+				</td>
+				
+			</tr>
+			<tr>
 				<td>
 					변경 후 직급
 				</td>
-			</tr>
-			<tr>
-				<!-- 사원명 -->
-				<td>
-					<input type="text">
-				</td>
-				<!-- 변경 전 직급 -->
-				<td>
-					<input type="text">
-				</td>
 				<!-- 변경 후 직급 -->
 				<td>
-					<input type="text">
+					<c:forEach var="p" items="${positionList}">
+						<input type="radio" name="docReshufflePosition" id="docReshufflePosition" value="${p.code}" style="display: inline-block; margin-right: 10px;">${p.codeName}
+					</c:forEach>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
-
-	<table class="table">
+	<h4>[부서변경]</h4>
+	<table class="table doc-comment">
 		<tbody>
-		<h4>[부서변경]</h4>
 			<tr>
 				<td>
 					사원명
 				</td>
+				<!-- 사원명 -->
 				<td>
-					변경 전 부서
-				</td>
-				<td>
-					변경 후 부서
+					${empInfo.empName}
 				</td>
 			</tr>
 			<tr>
-				<!-- 사원명 -->
 				<td>
-					<input type="text">
+					변경 전 부서
 				</td>
 				<!-- 변경 전 부서 -->
 				<td>
-					<input type="text">
+					${empInfo.dept}
+				</td>
+				
+			</tr>
+				
+			<tr>
+				<td>
+					변경 후 부서
 				</td>
 				<!-- 변경 후 부서 -->
 				<td>
-					<input type="text">
+					<c:forEach var="d" items="${deptList}">
+						<input type="radio" name="docReshuffleDept" id="docReshuffleDept" value="${d.code}" style="display: inline-block; margin-right: 10px;">${d.codeName}
+					</c:forEach>
 				</td>
 			</tr>
 		</tbody>
@@ -188,7 +189,7 @@
 				주요 업무
 			</td>
 			<td>
-				<textarea></textarea> 
+				<textarea id="docReshuffleTask"></textarea> 
 			</td>
 		</tr>
 
@@ -198,7 +199,7 @@
 				업무 성과
 			</td>
 			<td>
-				<textarea></textarea> 
+				<textarea id="docReshuffleResult"></textarea> 
 			</td>
 		</tr>
 
@@ -208,7 +209,7 @@
 				발령 사유
 			</td>
 			<td>
-				<textarea></textarea> 
+				<textarea id="docReshuffleReason"></textarea> 
 			</td>
 		</tr>
 
@@ -218,7 +219,7 @@
 				첨부파일
 			</td>
 			<td>
-				<input type="file"><br>
+				<input type="file" id="docOriginFilename"><br>
 			</td>
 		</tr>
 	</table>
