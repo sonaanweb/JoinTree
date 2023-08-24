@@ -50,8 +50,8 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
-					<input type="hidden" id="empName" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empNo" readonly="readonly" value="${empInfo.empName}">
+					<input type="hidden" id="empNo" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empName" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}"">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
