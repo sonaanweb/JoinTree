@@ -76,7 +76,7 @@ public class DocumentService {
 		
 		// 새로운 파일명 생성 // 새로운 이름 + 확장자
 		String fileSaveName = uuids + fileExtension;
-		File saveFile = new File(uploadPath + "\\" + fileSaveName);
+		File saveFile = new File(uploadPath + "/" + fileSaveName);
 		
 		if (file.getSize() > 0) {
 			// DocumentFile 객체 생성 및 정보 설정
