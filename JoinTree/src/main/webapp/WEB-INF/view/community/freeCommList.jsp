@@ -18,11 +18,6 @@
 		</script>
 	</head>
 	<body>
-		<div class="container-scroller"> <!-- 전체 스크롤 -->
-			<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-			<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-				<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-					<div class="content-wrapper"> <!-- 컨텐츠 -->
 	
 		<a href="/home">홈</a>
 	
@@ -82,10 +77,6 @@
 			</c:forEach>
 		</table>
 		
-						</div><!-- 컨텐츠 끝 -->
-			</div><!-- 컨텐츠전체 끝 -->
-		</div><!-- 상단제외 끝 -->
-	</div><!-- 전체 스크롤 끝 -->
-	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
+
 	</body>
 </html>
