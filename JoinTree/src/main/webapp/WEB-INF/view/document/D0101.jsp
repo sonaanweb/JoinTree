@@ -17,9 +17,6 @@
 	</script>
 <div class="doc">
 	<h1 class="center">기안서</h1>
-<form action="/document/docDefault" method="post">
-<input type="hidden" name="category" value="cate">
-<input type="hidden" name="docStatus" value="결재중">
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -43,7 +40,7 @@
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" name="writer" readonly="readonly" value="dd"></td>
+								<td><input type="text" id="writer" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -52,10 +49,10 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
-					<input type="hidden" id="empNo" name="updateId" readonly="readonly" value="${empInfo.empNo}">
-					<input type="hidden" id="empNo" name="createId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
 					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="ddddddd" name="writer" readonly="readonly" value="ddd">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
@@ -63,10 +60,15 @@
 			<tr>
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-				<input type="text" name="docStamp1" value="${signImg}">
-				<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">[기안자 서명]</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;"><img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp2">[결재자1 서명]</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;"><img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp3">[결재자2 서명]</td>
+					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp2">[결재자1 서명]
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp3">[결재자2 서명]
+				</td>
 			</tr>
 			<tr></tr>
 			<tr></tr>
@@ -81,7 +83,7 @@
 					참조자
 				</td>
 				<td>
-					<input type="number" readonly="readonly" id="reference" name="reference" value="7">
+					<input type="text" readonly="readonly" id="reference" name="reference">
 				</td>
 			</tr>
 			
@@ -90,7 +92,7 @@
 					수신팀
 				</td>
 				<td>
-					<input type="text" readonly="readonly" id="receiverTeam" name="receiverTeam" value="dd">
+					<input type="text" readonly="readonly" id="receiverTeam" name="receiverTeam">
 				</td>
 			</tr>
 			
@@ -100,7 +102,7 @@
 					제목
 				</td>
 				<td>
-					<input type="text" name="docTitle">
+					<input type="text" id="docTitle" name="docTitle">
 				</td>
 			</tr>
 			<!-- 상세 내용입력 -->
@@ -109,7 +111,7 @@
 					상세내용
 				</td>
 				<td>
-					<textarea name="docContent"></textarea> 
+					<textarea id="docContent" name="docContent"></textarea> 
 				</td>
 			</tr>
 			<!-- 첨부파일 추가 -->

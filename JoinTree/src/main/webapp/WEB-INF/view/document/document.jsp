@@ -102,8 +102,11 @@
 			});
 			
 			// 수신팀 모달에서 선택한 팀 처리
+			// selectedDeptName을 더 넓은 스코프로 이동
+			let selectedDept = ""; 
+
 			$("#receiverModal").on("click", ".empTree.folder.code", function() {
-				const selectedDept = $(this).data("dept");
+				selectedDept = $(this).data("dept");
 				const selectedDeptName = $(this).data("deptname"); // 팀 이름 가져오기
 				
 				if (!receiverSelectedEmps.includes(selectedDept)) {
@@ -160,7 +163,7 @@
 			
 			// inputSignerBtn 버튼을 클릭하면 결재자의 값을 기안서 - 결재자1(signer1), 결재자2(signer2) 영역에 추가
 			$("#inputSignerBtn").on("click", function() {
-				const selectedSigner1 = signerSelectedEmps[0]; // 선택한 수신팀 정보 가져오기
+				const selectedSigner1 = signerSelectedEmps[0]; // 선택한 결재자 정보 가져오기
 				const selectedSigner2 = signerSelectedEmps[1];
 				
 				const maskedSigner1 = selectedSigner1.substring(0, selectedSigner1.indexOf('('));
@@ -178,14 +181,13 @@
 			
 			// inputReferBtn 버튼을 클릭하면 참조자 값을 기안서 - 참조자(reference) 영역에 추가
 			$("#inputReferBtn").on("click", function() {
-				const selectedRefer = referSelectedEmps; // 선택한 수신팀 정보 가져오기
+				const selectedRefer = referSelectedEmps[0]; // 선택한 수신팀 정보 가져오기
 				
-				const maskedRefer = selectedRefer[0].split('(')[0];
+				const maskedRefer = selectedRefer.substring(0, selectedRefer.indexOf('('));
 				$("#reference").val(maskedRefer); // -> input이라서 val
-					//console.log($("#receiverTeam").val());
+					//console.log($("#reference").val());
 			});
 			
-			console.log($("#tom").val());
 			// inputReceiverBtn 버튼을 클릭하면 수신팀의 값을 기안서 - 수신팀(receiverTeam) 영역에 추가
 			$("#inputReceiverBtn").on("click", function() {
 			    const selectedReceiverTeam = receiverSelectedEmps; // 선택한 수신팀 정보 가져오기
@@ -239,6 +241,73 @@
 				}
 			});
 		}
+		$('#docFormBtn').on("click", function() {
+			// 기안서
+			// 기안자 사번
+			const empNo = $("#empNo").val();
+				console.log("empNo:",empNo);
+			// 기안자 이름
+			const empName = $("#empName").val();
+				console.log("empName:",empName);
+			// 기안서 카테고리
+			const category = $("#category").val();
+				console.log("category:",category);
+			// 기안서 제목
+			const docTitle = $("#docTitle").val();
+				console.log("docTitle:",docTitle);
+			// 기안서 내용
+			const docContent = $("#docContent").val();
+				console.log("docContent:",docContent);
+			
+			//참조자
+			const reference = referSelectedEmps[0].substring(referSelectedEmps[0].indexOf('(')+1,referSelectedEmps[0].indexOf(')'));
+				console.log("reference:",reference);
+			//수신팀
+			const receiverTeam = selectedDept;
+				console.log("receiverTeam:",receiverTeam);
+			// 기안자 도장 정보 1
+			const docStamp1 = $("#docStamp1").val();
+				console.log("docStamp1:",docStamp1);
+			// 작성자
+			const createId = $("#createId").val();
+				console.log("createId:",createId);
+			// 수정자
+			const updateId = $("#updateId").val();
+				console.log("updateId:",updateId);
+			
+			// 사인테이블
+			// 결재자 1 사번
+			const signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
+				console.log("signer1:",signer1);
+			// 결재자 2 사번
+			const signer2 = signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
+				console.log("signer2:",signer2);
+			
+			$.ajax({
+				type: 'POST',
+				url: '/document/docDefault',
+				data: {
+					empNo: empNo,
+					empName: empName,
+					category: category,
+					docTitle: docTitle,
+					docContent: docContent,
+					reference: reference,
+					receiverTeam: receiverTeam,
+					docStamp1: docStamp1,
+					createId: createId,
+					updateId: updateId,
+					signer1: signer1,
+					signer2: signer2
+				},
+				success: function(data){
+					
+				},
+				error: function(){
+					console.log('Error loading document form content.');
+				}
+			});
+		});
 	}); // 제일 처음
 </script>
 	<div class="container-fluid page-body-wrapper">
@@ -301,8 +370,9 @@
 					<div class="col-md-9 grid-margin stretch-card">
 						<div class="card">
 							<div class="card-body">
-								<button type="button">결재상신</button>
+								<button type="button" id="docFormBtn">결재상신</button>
 								<div id="documentForm">
+									<!-- 폼데이터 추가 -->
 								</div>
 							</div>
 						</div>
@@ -327,7 +397,7 @@
 							<li>
 								<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
 								<ul>
-								<!-- 여기에 데이터를 추가하는 부분 -->
+									<!-- 여기에 데이터를 추가하는 부분 -->
 								</ul>
 							</li>
 						</c:forEach>
