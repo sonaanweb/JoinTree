@@ -85,18 +85,4 @@ public class CommuteRestController {
 		
 		return commute;
 	}
-	
-	// 버튼상태 값 세션에 저장
-	@PostMapping("/setCommuteBtnState")
-	public void setCommuteBtnState(HttpSession session, @RequestParam String state) {
-		session.setAttribute("commuteButtonState", state);
-	}
-	
-	// 버튼상태 값 가져오기
-	@GetMapping("/getCommuteBtnState")
-	public String getCommuteBtnState(HttpSession session) {
-		
-		String getCommuteButtonState = (String) session.getAttribute("commuteButtonState");
-		return getCommuteButtonState;
-	}
 }

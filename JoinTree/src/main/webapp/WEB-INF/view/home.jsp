@@ -37,10 +37,10 @@
 		    	$('#onTime').text('출근시간 : '+empOnTime);
 	    		$('#offTime').text('퇴근시간 : '+empOffTime);
 		    }
-			
+		    
 			// 출퇴근 데이터 화면 출력 함수
 			function selectCommuteByDate(){
-				$.ajax({
+		    	$.ajax({
     		    	type:'GET',
     		    	url: '/getCommuteTime',
     		    	success: function(data){
@@ -51,7 +51,19 @@
     		            	console.log(empOnTime+'<--empOnTime');
     		            	console.log(empOffTime+'<--empOffTime');
     			    		
-    		            	updateCommuteTimes(empOnTime, empOffTime);
+    		            	updateCommuteTimes(empOnTime, empOffTime); // 출퇴근 시간 업테이트
+    		            	
+    		            	// 출퇴근 시간 값에 따른 출퇴근 버튼 상태 분기
+							if(empOnTime == null && empOffTime == null){
+								$('#commuteBtn').text('출근하기');
+								$('#commuteBtn').prop('disabled', false);
+    		            	} else if(empOffTime == ''){
+    		            		$('#commuteBtn').prop('disabled', false);
+    							$('#commuteBtn').text('퇴근하기');
+    		            	} else{
+   		            			$('#commuteBtn').prop('disabled', true);
+       							$('#commuteBtn').text('출근하기');
+    		    			}
     		    		}
     		    	},
     		    	error: function(error){
@@ -60,56 +72,14 @@
     		    });
 			}
 			
-			// 페이지 로드 시  출퇴근 데이터 화면 출력 함수
+			// 초기 페이지 로드 시 출퇴근 데이터 출력, 출퇴근 버튼 초기화
 			selectCommuteByDate();
-			
-			// 세션에 버튼 상태 저장 함수
-			function setCommuteBtnState(state){
-				$.ajax({
-					type: 'post',
-					url: '/setCommuteBtnState', 
-					data:{
-						state: state
-					},
-					success: function(data){
-						console.log('Button state set to' + state);
-					}, error: function(error){
-						console.log('error set button state' + state);
-					}
-				})
-			}
-			
-			// 버튼 상태 값 요청 함수
-			function getCommuteBtnState(){
-				$.ajax({
-					type: 'GET',
-					url: '/getCommuteBtnState',
-					success: function(buttonState){
-						if(buttonState === ''){
-							$('#commuteBtn').text('출근하기');
-							$('#commuteBtn').prop('disabled', false);
-						} else if(buttonState === '출근'){
-							$('#commuteBtn').prop('disabled', true);
-							$('#commuteBtn').text('출근하기');
-						} else{
-							$('#commuteBtn').prop('disabled', false);
-							$('#commuteBtn').text('퇴근하기');
-						} 
-					},
-					error: function(error){
-						console.error('error getCommuteBtnState:', error)
-					}
-				});
-			}
-			
-			// 페이지 로드 시 버튼 상태 적용
-			getCommuteBtnState();
 			
 		 	// 출근/퇴근 버튼 클릭 이벤트 처리
 	        $('#commuteBtn').click(function() {
 	            const commuteBtnText = $('#commuteBtn').text().trim(); // 버튼 텍스트 저장
 	            const currentTime = $('.clock').text(); // 현재시간 저장
-	           	const isCommute = commuteBtnText === '출근하기';
+	            const isCommute = commuteBtnText === '출근하기';
 	            
 	            $.ajax({
 	            	type: 'post',
@@ -121,32 +91,7 @@
 		            success: function(data){
 		            	console.log(data+'<--data');
 		            	
-		            	if (isCommute) {
-		    
-		            		setCommuteBtnState('퇴근'); // 세션에 버튼 상태 저장
-		                    getCommuteBtnState(); // 버튼 상태 가져와서 적용
-			                
-			            } else {
-			            	
-			                setCommuteBtnState('출근'); // 세션에 버튼 상태 저장
-			                getCommuteBtnState();
-			                
-			             	// 자정까지 남은 시간 계산
-			                const now = new Date();
-			                const midnight = new Date(now);
-			                midnight.setHours(24, 0, 0, 0);
-			                const timeUntilMidnight = midnight - now;
-			                
-			                // 자정까지 버튼 비활성화 유지
-			                setTimeout(function() {
-			                    
-			                    getCommuteBtnState(); // 버튼 상태 가져와서 적용
-			                    
-			                }, timeUntilMidnight);     
-			            }
-		            	
-		            	// 출퇴근 데이터 화면 출력
-		    		    selectCommuteByDate();
+		    		    selectCommuteByDate(); // 출퇴근 데이터 화면 출력
 		            },
 		            error: function(error){
 		            	console.error('error commute time:', error);
