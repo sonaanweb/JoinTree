@@ -6,5 +6,5 @@ import com.goodee.JoinTree.vo.DocumentSigner;
 @Mapper
 public interface DocumentSignerMapper {
 	// 결재자 추가
-	int insertDocSigner(DocumentSigner documentSigner);
+	int addDocSigner(DocumentSigner documentSigner);
 }
