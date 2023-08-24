@@ -135,7 +135,7 @@
 					휴가사유
 				</td>
 				<td>
-					<textarea id="docLeaveReason"></textarea> 
+					<textarea id="docContent"></textarea> 
 				</td>
 			</tr>
 			<!-- 비상연락처 -->

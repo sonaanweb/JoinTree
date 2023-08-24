@@ -125,7 +125,5 @@
 			</tr>
 		</tbody>
 	</table>
-<button type="submit">결재하기</button>
-</form>
 </div>
 </html>

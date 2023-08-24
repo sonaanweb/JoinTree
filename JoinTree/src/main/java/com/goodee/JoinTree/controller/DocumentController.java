@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.goodee.JoinTree.mapper.DocumentSignerMapper;
 import com.goodee.JoinTree.service.CodeService;
 import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.service.EmpInfoService;
@@ -22,6 +23,7 @@ import com.goodee.JoinTree.service.OrgChartService;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.DocumentDefault;
+import com.goodee.JoinTree.vo.DocumentSigner;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,19 +100,33 @@ public class DocumentController {
 		return new ModelAndView(path);
 	}
 	
+	// 기본 기안서
 	@PostMapping("/document/docDefault")
 	@ResponseBody
-	public String docDefault(DocumentDefault documentDefault) {
+	public int docDefault(DocumentDefault documentDefault) {
 		
 		int row = documentService.addDocDefault(documentDefault);
-		
+			
 		log.debug(row+"<--docDefault row ");
 		
+		if(row != 1) { // 실패
+			return 0;
+		}
+		
+		return documentDefault.getDocNo();
+	}
+	
+	// 사인
+	@PostMapping("/document/docSigner")
+	@ResponseBody
+	public String docSigner(DocumentSigner documentSigner) {
+		int row = documentService.addDocSigner(documentSigner);
+
 		if(row != 1) { // 실패
 			return "fail";
 		}
 		
 		return "success";
+		
 	}
-
 }

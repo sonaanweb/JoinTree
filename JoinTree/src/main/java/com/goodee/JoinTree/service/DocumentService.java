@@ -10,6 +10,7 @@ import com.goodee.JoinTree.mapper.DocumentSignerMapper;
 import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.DocumentDefault;
 import com.goodee.JoinTree.vo.DocumentLeave;
+import com.goodee.JoinTree.vo.DocumentSigner;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,12 +31,19 @@ public class DocumentService {
 		return documentCodeList;
 	}
 	
+	// 기본 기안서에 정보추가
 	public int addDocDefault(DocumentDefault documentDefault) {
 		
 		int row = documentMapper.addDocDefault(documentDefault);
+			
 		log.debug(row +"<-- DocumentService documentDefault row");
 		
 		return row;	
 	}
+	
+	public int addDocSigner(DocumentSigner documentSigner) {
+		return documentSignerMapper.addDocSigner(documentSigner);
+	}
+
 
 }

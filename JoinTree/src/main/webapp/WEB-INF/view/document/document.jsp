@@ -218,11 +218,13 @@
 		// 기본 기안서로 생성
 		const defaultSelectedValue = $('#slectDocument').val();
 			updateSelectDocument(defaultSelectedValue);
-
+		
+		let selectedValue = 'D0101'; // 기본값 설정
+		
 		// slectDocument 옵션 변경시 이벤트
 		$('#slectDocument').change(function(){
-			let selectedValue = $(this).val();
-			console.log(selectedValue);
+			selectedValue = $(this).val();
+			console.log("selectedValue",selectedValue);
 			updateSelectDocument(selectedValue);
 		});
 		
@@ -242,7 +244,7 @@
 			});
 		}
 		$('#docFormBtn').on("click", function() {
-			// 기안서
+			// 기안서 - 기본
 			// 기안자 사번
 			const empNo = $("#empNo").val();
 				console.log("empNo:",empNo);
@@ -250,15 +252,56 @@
 			const writer = $("#writer").val();
 				console.log("writer:",writer);
 			// 기안서 카테고리
-			const category = $("#category").val();
+			const category = selectedValue;
 				console.log("category:",category);
 			// 기안서 제목
 			const docTitle = $("#docTitle").val();
 				console.log("docTitle:",docTitle);
-			// 기안서 내용
+			// 기안서 내용(휴가사유, 퇴직사유 및 퇴직예정일)
 			const docContent = $("#docContent").val();
 				console.log("docContent:",docContent);
+				
+			// 기안서 - 연차
+			// 연차 종류 leave 
+			const leaveCate = $("#leaveCate").val();
+				console.log("leaveCate:",leaveCate);
+			// 연차 시작일
+			const docLeaveStartDate = $("#docLeaveStartDate").val();
+				console.log("docLeaveStartDate:",docLeaveStartDate);
+			// 연차 종료일
+			const docLeaveEndDate = $("#docLeaveEndDate").val();
+				console.log("docLeaveEndDate:",docLeaveEndDate);
+			// 기간 
+			const docLeavePeriodDate = $("#docLeavePeriodDate").val();
+				console.log("docLeavePeriodDate:",docLeavePeriodDate);
+			// 비상연락처
+			const docLeaveTel = $("#docLeaveTel").val();
+				console.log("docLeaveTel:",docLeaveTel);
+				
+			// 기안서 - 인사이동
+			// 인사이동일자 
+			const docReshuffleDate = $("#docReshuffleDate").val();
+				console.log("docReshuffleDate:",docReshuffleDate);
+			// 주요업무
+			const docReshuffleTask = $("#docReshuffleTask").val();
+				console.log("docReshuffleTask:",docReshuffleTask);
+			// 업무성과 
+			const docReshuffleResult = $("#docReshuffleResult").val();
+				console.log("docReshuffleResult:",docReshuffleResult);
+			// 변경 후 부서
+			const docReshuffleDept = $("#docReshuffleDept").val();
+			console.log("docReshuffleDept:",docReshuffleDept);
+			// 변경 후 직급
+			const docReshufflePosition = $("#docReshufflePosition").val();
+			console.log("docReshufflePosition:",docReshufflePosition);
+			// 발령 사유
+			const docReshuffleReason = $("#docReshuffleReason").val();
+			console.log("docReshuffleReason:",docReshuffleReason);
 			
+			// 공통
+			// 파일
+			const docOriginFilename = $("#docOriginFilename").val();
+				console.log("docOriginFilename:",docOriginFilename);
 			//참조자
 			let reference = "";
 			if(referSelectedEmps[0]){
@@ -279,24 +322,28 @@
 			// 수정자
 			const updateId = $("#updateId").val();
 				console.log("updateId:",updateId);
-			
-			// 사인테이블
+
 			// 결재자 1 사번
+			let empSignerLevel1 = ""; // 레벨
 			let signer1 = "";
 			if(signerSelectedEmps[0]) {
 				signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
+				empSignerLevel1 = "1"
 			}
 			console.log("signer1:",signer1);
 			
 			// 결재자 2 사번
+			let empSignerLevel2 = ""; // 레벨
 			let signer2 = "";
 			if(signerSelectedEmps[1]) {
 				signer2 = signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
+				empSignerLevel2 = "2"
 			}
 				console.log("signer2:",signer2);
-		
+				
 			if (!empNo || !empName || !category || !docTitle || !docContent || !reference || !receiverTeam || !docStamp1 || !createId || !updateId || !signer1) {
 			   	alert("모든 필수 정보를 입력해주세요.");
+			   	return;
 			}
 			$.ajax({
 				type: 'POST',
@@ -311,23 +358,62 @@
 					receiverTeam: receiverTeam,
 					docStamp1: docStamp1,
 					createId: createId,
-					updateId: updateId,
-					signer1: signer1,
-					signer2: signer2
+					updateId: updateId
 				},
-				success: function(response){
-					console.log("response:", response);
+				success: function(docNo){
+					console.log("docNo:", docNo);
 					
 					alert("추가되었습니다.");
-					
-					updateSelectDocument(defaultSelectedValue);
-					$("#selectSigner").empty();
-					$("#selectReference").empty();
-				    $("#selectReceiverTeam").empty();
+						// 결재자가 한명만 있을 경우
+						$.ajax({
+							type: 'POST',
+							url: '/document/docSigner',
+							data: {
+								docNo: docNo, // 위에서 전달받은 docNo 사용
+								empSignerNo: signer1,
+								empSignerLevel: empSignerLevel1,
+								createId: createId,
+								updateId: updateId
+							},
+							success: function(response) {
+								console.log("response:", response);
+								// alert("사인이 추가되었습니다.");
+								
+								window.location.href = '/home'; // 홈 페이지 URL로 변경
+
+							},
+							error: function(jqXHR, textStatus, errorThrown) {
+								console.log("Error:", textStatus, errorThrown);
+							}
+						});
+						// 두번째 결재자가 있을 경우
+						if(signer2) {
+							$.ajax({
+								type: 'POST',
+								url: '/document/docSigner',
+								data: {
+									docNo: docNo, // 위에서 전달받은 docNo 사용
+									empSignerNo: signer2,
+									empSignerLevel: empSignerLevel2,
+									createId: createId,
+									updateId: updateId
+								},
+								success: function(response) {
+									console.log("response:", response);
+									// alert("사인이 추가되었습니다.");
+									
+									window.location.href = '/home'; // 홈 페이지 URL로 변경
+								},
+								error: function(jqXHR, textStatus, errorThrown) {
+									console.log("Error:", textStatus, errorThrown);
+								}
+							});
+						}
+						
 				},
-				 error: function(jqXHR, textStatus, errorThrown) {
-                     console.log("Error:", textStatus, errorThrown);
-                 }
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log("Error:", textStatus, errorThrown);
+				}
 			});
 		});
 	}); // 제일 처음
@@ -341,14 +427,7 @@
 						<div>
 							<select id="slectDocument" name="document">
 								<c:forEach var="d" items="${documentCodeList}">
-									<c:choose>
-										<c:when test="${d.code == 'd0101'}">
-											<option id="category" value="${d.code}" selected>${d.codeName}</option>
-										</c:when>
-										<c:otherwise>
-											<option id="category" value="${d.code}">${d.codeName}</option>
-										</c:otherwise>
-									</c:choose>						
+									<option id="category" value="${d.code}">${d.codeName}</option>
 								</c:forEach>
 							</select>
 						</div>

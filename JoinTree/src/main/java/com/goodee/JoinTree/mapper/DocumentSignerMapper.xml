@@ -15,9 +15,9 @@
 			#{docNo},
 			#{empSignerNo},
 			#{empSignerLevel},
-			#{docStatus},
-			#{createdate},
-			#{updatedate},
+			'A0201',
+			now(),
+			now(),
 			#{createId},
 			#{updateId}
 		)
