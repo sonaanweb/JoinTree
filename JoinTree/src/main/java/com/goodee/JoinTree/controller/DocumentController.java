@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.goodee.JoinTree.service.CodeService;
@@ -27,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class DocumentController {
+	
+	String yellow = "\u001B[33m";
+	String reset = "\u001B[0m";
 	
 	@Autowired
 	private DocumentService documentService;
@@ -95,16 +99,39 @@ public class DocumentController {
 	}
 	
 	@PostMapping("/document/docDefault")
-	public String docDefault(@ModelAttribute DocumentDefault documentDefault) {
-		int row = documentService.addDocDefault(documentDefault);	
+	@ResponseBody
+	public String docDefault(DocumentDefault documentDefault,
+								@RequestParam(name = "empNo") String empNo,
+								@RequestParam(name = "empName") String empName,
+								@RequestParam(name = "category") String category,
+								@RequestParam(name = "docTitle") String docTitle,
+								@RequestParam(name = "docContent") String docContent,
+								@RequestParam(name = "reference") String reference,
+								@RequestParam(name = "receiverTeam") String receiverTeam,
+								@RequestParam(name = "docStamp1") String docStamp1,
+								@RequestParam(name = "createId") String createId,
+								@RequestParam(name = "updateId") String updateId) {
+		
+		log.debug(yellow + "empNo: " + empNo + reset);
+		log.debug(yellow + "empName: " + empName + reset);
+		log.debug(yellow + "category: " + category + reset);
+		log.debug(yellow + "docTitle: " + docTitle + reset);
+		log.debug(yellow + "docContent: " + docContent + reset);
+		log.debug(yellow + "reference: " + reference + reset);
+		log.debug(yellow + "receiverTeam: " + receiverTeam + reset);
+		log.debug(yellow + "docStamp1: " + docStamp1 + reset);
+		log.debug(yellow + "createId: " + createId + reset);
+		log.debug(yellow + "updateId: " + updateId + reset);
+		
+		int row = documentService.addDocDefault(documentDefault);
+		
 		log.debug(row+"<--docDefault row ");
 		
-		if(row == 1) {
-			
-		return "/home";
-		}else {
-			return "/home";
+		if(row != 1) { // 실패
+			return "fail";
 		}
+		
+		return "success";
 	}
 
 }

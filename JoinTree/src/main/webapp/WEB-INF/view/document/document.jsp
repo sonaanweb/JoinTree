@@ -247,8 +247,8 @@
 			const empNo = $("#empNo").val();
 				console.log("empNo:",empNo);
 			// 기안자 이름
-			const empName = $("#empName").val();
-				console.log("empName:",empName);
+			const writer = $("#writer").val();
+				console.log("writer:",writer);
 			// 기안서 카테고리
 			const category = $("#category").val();
 				console.log("category:",category);
@@ -260,11 +260,16 @@
 				console.log("docContent:",docContent);
 			
 			//참조자
-			const reference = referSelectedEmps[0].substring(referSelectedEmps[0].indexOf('(')+1,referSelectedEmps[0].indexOf(')'));
-				console.log("reference:",reference);
+			let reference = "";
+			if(referSelectedEmps[0]){
+				reference = referSelectedEmps[0].substring(referSelectedEmps[0].indexOf('(')+1,referSelectedEmps[0].indexOf(')'));
+			}
+			console.log("reference:",reference);
+				
 			//수신팀
 			const receiverTeam = selectedDept;
 				console.log("receiverTeam:",receiverTeam);
+				
 			// 기안자 도장 정보 1
 			const docStamp1 = $("#docStamp1").val();
 				console.log("docStamp1:",docStamp1);
@@ -277,12 +282,22 @@
 			
 			// 사인테이블
 			// 결재자 1 사번
-			const signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
-				console.log("signer1:",signer1);
-			// 결재자 2 사번
-			const signer2 = signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
-				console.log("signer2:",signer2);
+			let signer1 = "";
+			if(signerSelectedEmps[0]) {
+				signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
+			}
+			console.log("signer1:",signer1);
 			
+			// 결재자 2 사번
+			const signer2 = "";
+			if(signerSelectedEmps[1]) {
+				signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
+			}
+				console.log("signer2:",signer2);
+		
+			if (!empNo || !empName || !category || !docTitle || !docContent || !reference || !receiverTeam || !docStamp1 || !createId || !updateId || !signer1) {
+			   	alert("모든 필수 정보를 입력해주세요.");
+			}
 			$.ajax({
 				type: 'POST',
 				url: '/document/docDefault',
@@ -300,7 +315,10 @@
 					signer1: signer1,
 					signer2: signer2
 				},
-				success: function(data){
+				success: function(response){
+					console.log("response:", response);
+					
+					alert("상위 코드가 추가되었습니다.");
 					
 				},
 				error: function(){
