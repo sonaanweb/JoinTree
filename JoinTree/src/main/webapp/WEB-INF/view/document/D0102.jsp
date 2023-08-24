@@ -50,17 +50,26 @@
 				<td class="blank"></td>
 				
 				<td class="sign">
-					<input type="hidden" id="empNo" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empName" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
+					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
+					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
-				<td class="sign" rowspan="3">[기안자 도장]</td>
-				<td class="sign" rowspan="3">[결재자1 도장]</td>
-				<td class="sign" rowspan="3">[결재자2 도장]</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
+					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp2" name="docStamp2">
+				</td>
+				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+					<input type="hidden" id="docStamp3" name="docStamp3">
+				</td>
 			</tr>
 			<tr></tr>
 			<tr></tr>
@@ -106,8 +115,7 @@
 			
 				<td >
 					<c:forEach var="l" items="${leaveList}">
-					
-						<input type="radio" name="leaveCate" value="${l.code}" style="display: inline-block; margin-right: 10px;">${l.codeName}
+						<input type="radio" id="leaveCate" name="leaveCate" value="${l.code}" style="display: inline-block; margin-right: 10px;">${l.codeName}
 					</c:forEach>
 				</td>		
 			</tr>
@@ -117,8 +125,8 @@
 					기간
 				</td>
 				<td>
-					<input type="date"> ~ <input type="date">
-					<input type="number" style="width: 40px">&nbsp;일
+					<input type="date" id="docLeaveStartDate"> ~ <input type="date" id="docLeaveEndDate">
+					<input type="number" id="docLeavePeriodDate" style="width: 40px">&nbsp;일
 				</td>
 			</tr>
 			<!-- 연차사유 -->
@@ -127,7 +135,7 @@
 					휴가사유
 				</td>
 				<td>
-					<textarea></textarea> 
+					<textarea id="docLeaveReason"></textarea> 
 				</td>
 			</tr>
 			<!-- 비상연락처 -->
@@ -136,7 +144,7 @@
 					비상연락처
 				</td>
 				<td>
-					<input type="text" placeholder="000-0000-0000">
+					<input type="text" id="docLeaveTel" placeholder="000-0000-0000">
 				</td>
 			</tr>
 			<tr>
@@ -154,7 +162,7 @@
 					첨부파일
 				</td>
 				<td>
-					<input type="file"><br>
+					<input type="file" id="docOriginFilename"><br>
 				</td>
 			</tr>
 	</tbody>
