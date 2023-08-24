@@ -11,21 +11,41 @@
 		<result column="rev_end_time" property="revEndTime"/>
 	</resultMap> -->
 	
-	<select id="selectMeetCalList" resultType="com.goodee.JoinTree.vo.Reservation">
+	<!-- 회의실 리스트 (MeetingRoom VO)-->
+	<select id="selectMeetRoomAll" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
 		SELECT
-			rev_no revNo,
-			emp_no empNo,
-			equip_no equipNo,
+			room_no roomNo,
 			equip_category equipCategory,
-			rev_start_time revStartTime,
-			rev_end_time revEndTime,
-			rev_status revStatus,
-			rev_reason revReason,
+			room_name roomName,
+			room_Capacity roomCapacity,
+			room_status roomStatus,
 			createdate,
 			updatedate,
 			create_id createId,
 			update_id updateId
-		FROM reservation
+		FROM meeting_room
 		WHERE equip_category = 'E0101'
+		ORDER BY createdate DESC;	
+	</select>
+	
+	<!-- 회의실 별 캘린더(예약현황 조회) -->
+	<select id="selectMeetCalList" resultType="com.goodee.JoinTree.vo.Reservation">
+		SELECT
+			r.rev_no revNo,
+			r.emp_no empNo,
+			r.equip_no equipNo,
+			r.equip_category equipCategory,
+			r.rev_start_time revStartTime,
+			r.rev_end_time revEndTime,
+			r.rev_status revStatus,
+			r.rev_reason revReason,
+			r.createdate,
+			r.updatedate,
+			r.create_id createId,
+			r.update_id updateId,
+			m.room_no AS equip_no
+		FROM reservation r
+		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
+		WHERE m.room_no = #{roomNo}
 	</select>
 </mapper>

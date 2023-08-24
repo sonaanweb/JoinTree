@@ -26,6 +26,7 @@
 	    background-color: #C8E4B2;
 }
 </style>
+<!-- 캘린더 문제로 회의실별 예약 현황 캘린더로 수정해야 합니다 -->
 <title>예약 현황 창(캘린더) + 예약하기</title>
 </head>
 <body>
@@ -63,8 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	    
 	    //DB 연결
 	    events: function(info, successCallback, failureCallback) {
+	    	var roomNo = ${roomNo};
+	    	
 		    $.ajax({
-		        url: '/meetRoomReserv', // AJAX를 통해 데이터를 가져올 URL
+		        url: '/meetRoomReserv?roomNo=' + roomNo, // AJAX를 통해 데이터를 가져올 URL
 		        type: 'GET',
 		        dataType: 'json',
 		        success: function(response) {
