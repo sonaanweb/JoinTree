@@ -13,6 +13,11 @@
 				if (msg != null) {
 					alert(msg);
 				}
+			
+			// 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트 (새로고침 시 메시지 알림창 출력하지 않음)
+	        urlParams.delete("msg");
+	        const newUrl = `${location.pathname}?${urlParams.toString()}`;
+	        history.replaceState({}, document.title, newUrl);
 		
 			// 현재시간 출력
 			updateTime();
