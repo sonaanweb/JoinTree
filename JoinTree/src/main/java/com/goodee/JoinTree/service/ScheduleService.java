@@ -14,34 +14,34 @@ public class ScheduleService {
     private ScheduleMapper scheduleMapper;
 	
 	// 전사 일정 출력
-		public List<Schedule> selectCompanySchedules() {
-	       List<Schedule> companyScheduleList = scheduleMapper.selectCompanySchedules();
-			return companyScheduleList;
-		}
+	public List<Schedule> selectCompanySchedules(String scheduleCategory) {
+       List<Schedule> companyScheduleList = scheduleMapper.selectCompanySchedules(scheduleCategory);
+       return companyScheduleList;
+	}
 		
 	// 부서 일정 출력
-		public List<Schedule> selectDepartmentSchedule() {
-	       List<Schedule> personalScheduleList = scheduleMapper.selectDepartmentSchedules();
-			return personalScheduleList;
-		}
+	public List<Schedule> selectDepartmentSchedules(String scheduleCategory) {
+       List<Schedule> personalScheduleList = scheduleMapper.selectDepartmentSchedules(scheduleCategory);
+       return personalScheduleList;
+	}
 		
 	// 개인 일정 출력
-	public List<Schedule> selectPersonalSchedules(int empNo) {
-       List<Schedule> personalScheduleList = scheduleMapper.selectPersonalSchedules(empNo);
-		return personalScheduleList;
+	public List<Schedule> selectPersonalSchedules(int empNo, String scheduleCategory) {
+       List<Schedule> personalScheduleList = scheduleMapper.selectPersonalSchedules(empNo, scheduleCategory);
+       return personalScheduleList;
 	}
 	
-	
 	// 개인 일정 추가
-	public void addSchedule(Schedule schedule) {
-		// TODO Auto-generated method stub
+	public int addPersonalSchedule(Schedule schedule) {
+		return scheduleMapper.addPersonalSchedule(schedule);
 		
 	}
 	
 	// 일정 상세보기
 	 public Schedule selectScheduleOne(int scheduleNo) {
-	        return scheduleMapper.selectScheduleOne(scheduleNo);
-	    }
+		 Schedule scheduleOne = scheduleMapper.selectScheduleOne(scheduleNo);
+		 return scheduleOne;
+    }
 
 
 }

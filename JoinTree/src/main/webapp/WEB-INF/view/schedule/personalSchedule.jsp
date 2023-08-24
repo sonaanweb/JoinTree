@@ -2,180 +2,33 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+	
 	<!-- FullCalendar CDN -->
 	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 	<!-- FullCalendar 언어 CDN -->
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	<!-- jQuery CDN -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- 부트스트랩 CDN -->
+	<!-- 부트스트랩 CSS CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-<script>
-
-	document.addEventListener('DOMContentLoaded', function() {
-		var calendarEl = document.getElementById('calendar');
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			timeZone: 'Asia/Seoul',
-			selectable: true,
-			events: '/schedule/getPersonalSchedules',
-			eventClick: function(info) {
-				var scheduleNo = parseInt(info.event.extendedProps.scheduleNo);
-				console.log(info.event);
-				if (!isNaN(scheduleNo)) { // 정수로 변환 가능한지 체크
-			        openViewModal(scheduleNo); // 일정 클릭 시 상세보기 모달 창 열기
-			    } else {
-			        console.error('Invalid schedule number:', info.event.extendedProps.scheduleNo);
-			    }
-            },
-			select: function(info) {
-				var startDate = info.start;
-				var endDate = info.end;
-				openModal(startDate, endDate);
-			}
-	
-		});
-		
-		calendar.render();
-		
-		//상세보기 모달창
-		function openViewModal(scheduleNo) {
-			 $.ajax({
-	                type: 'GET',
-	                url: '/schedule/selectScheduleOne', // 서버에서 상세 정보를 가져오는 URL
-	                data: { scheduleNo: scheduleNo },
-	                dataType: 'json', // JSON 형식으로 응답을 처리
-	                success: function(schedule) {
-	                	$('#viewTitle').text(schedule.scheduleTitle);
-	                    $('#viewContent').text(schedule.scheduleContent);
-	                    $('#viewLocation').text(schedule.scheduleLocation);
-	                    $('#viewStart').text(schedule.scheduleStart);
-	                    $('#viewEnd').text(schedule.scheduleEnd);
-
-	         		    $('#scheduleOneModal').modal('show');
-	                },
-	                error: function(error) {
-	                    console.error('Failed to fetch schedule details.', error);
-	                }
-	            })
-		   
-		}
-		
-		// 일정추가 모달창
-		function openModal(startDate, endDate) {
-			$('#addScheduleModal').modal('show');
-			$('#scheduleTitle').val('');
-			$('#scheduleContent').val('');
-			$('#scheduleLocation').val('');
-			$('#scheduleStart').val(startDate.toISOString().slice(0, 16));
-			$('#scheduleEnd').val(endDate.toISOString().slice(0, 16));
-
-			var allDayCheckbox = $('#allDay');
-			var startTimeInput = $('#scheduleStart');
-			var endTimeInput = $('#scheduleEnd');
-
-			allDayCheckbox.change(function() {
-				if (allDayCheckbox.is(':checked')) {
-				startTimeInput.prop('disabled', true);
-				endTimeInput.prop('disabled', true);
-				startTimeInput.val(startDate.format('YYYY-MM-DDTHH:mm'));
-				endTimeInput.val(startDate.clone().endOf('day').format('YYYY-MM-DDTHH:mm'));
-				} else {
-				startTimeInput.prop('disabled', false);
-				endTimeInput.prop('disabled', false);
-				}
-			});
-
-			allDayCheckbox.trigger('change');
-		}
-
-		var submitScheduleBtn = document.getElementById('submitScheduleBtn');
-		submitScheduleBtn.addEventListener('click', function() {
-			var allDay = $('#allDay').prop('checked');
-			var startTime = $('#scheduleStart').val();
-			var endTime = allDay ? startTime : $('#scheduleEnd').val();
-    
-			// 제목, 내용 필수(유효성검사)
-			var title = $('#scheduleTitle').val();
-			var content = $('#scheduleContent').val();
-			if (title.trim() === '' || content.trim() === '') {
-				alert('제목과 내용은 필수 입력 사항입니다.');
-				return;
-			}
-    
-			// 종료일은 시작일보다 이전X 
-			if (!allDay && new Date(endTime) < new Date(startTime)) {
-				alert('종료일은 시작일보다 늦어야 합니다.');
-				return;
-			}
-
-			var eventData = {
-			title: $('#scheduleTitle').val(),
-			content: $('#scheduleContent').val(),
-			location: $('#scheduleLocation').val(),
-			start: startTime,
-			end: endTime,
-			allDay: allDay
-			};
-    
-			$.ajax({
-				type: 'POST',
-				url: '/schedule/add',
-				contentType: 'application/json',
-				data: JSON.stringify(eventData),
-				success: function(response) {
-					if (response.success) {
-						if (!allDay) {
-							eventData.start = startTime;
-							eventData.end = endTime;
-						}
-						calendar.addEvent(eventData);
-						$('#addScheduleModal').modal('hide');
-					} else {
-						console.error('Failed to add schedule.');
-					}
-				}
-			});
-		});
-  
-		// 폼 닫힐때마다 모달창 초기화
-		$('#addScheduleModal').on('hidden.bs.modal', function() {
-			$('#scheduleTitle').val('');
-			$('#scheduleContent').val('');
-			$('#scheduleLocation').val('');
-			$('#scheduleStart').val('');
-			$('#scheduleEnd').val('');
-			$('#allDay').prop('checked', false);
-		});
-  
-	});
-	
-</script>
 
 
-	<div class="container-scroller"> <!-- 전체 스크롤 -->
-		<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-			<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-				<div class="content-wrapper"> <!-- 컨텐츠 -->
+
+	<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-				<!-- 달력 출력 -->
-				<div id='caslendar-container'>
-			    	<div id='calendar'></div>
-				</div>
+			<!-- 달력 출력 -->
+			<div id='caslendar-container'>
+		    	<div id='calendar'></div>
+			</div>
+			
+		</div>
+	</div>	
 	
-				</div><!-- 컨텐츠 끝 -->
-			</div><!-- 컨텐츠전체 끝 -->
-		</div><!-- 상단제외 끝 -->
-	</div><!-- 전체 스크롤 끝 -->
-	
-
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>				
 
 	<!-- 상세보기 모달창 -->
 	<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
@@ -218,12 +71,15 @@
 						시작일
 						<input type="datetime-local" id="scheduleStart" class="form-control" name="scheduleStart">
 						<br>
+						<!-- 종료일 선택 부분 -->
+						<div id="endTimeContainer">
 						종료일
 						<input type="datetime-local" id="scheduleEnd" class="form-control" name="scheduleEnd">
+						</div>
 						<br>
 						
-						<label>하루 종일
-						<input type="checkbox" id="allDay"></label>
+						<label>시작일 종료일 같음
+						<input type="checkbox" id="checkboxAllDay"></label>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -234,7 +90,146 @@
 		</div>
 	</div>
 
+<script>
 
+$(document).ready(function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'Asia/Seoul',
+        selectable: true,
+        events: '/schedule/getPersonalSchedules',
+        eventClick: function(info) {
+            var scheduleNo = parseInt(info.event.extendedProps.scheduleNo);
+            console.log(scheduleNo);
+            if (!isNaN(scheduleNo)) {
+                // 일정 번호를 가져와서 서버에서 상세 정보를 요청합니다.
+                fetchScheduleDetails(scheduleNo);
+            } else {
+                console.error('Invalid schedule number:', info.event.extendedProps.scheduleNo);
+            }
+        },
+        select: function(info) {
+            var startDate = info.start;
+            var endDate = info.end;
+            openModal(startDate, endDate);
+        }
+    });
 
-</body>
+    // 상세보기 모달창
+    function fetchScheduleDetails(scheduleNo) {
+        $.ajax({
+            type: 'GET',
+            url: '/schedule/selectScheduleOne',
+            data: { scheduleNo: scheduleNo },
+            dataType: 'json',
+            success: function(schedule) {
+                // 상세 정보를 모달 창에 표시하는 함수를 호출합니다.
+                displayScheduleDetails(schedule);
+            },
+            error: function(error) {
+                console.error('Failed to fetch schedule details.', error);
+            }
+        });
+    }
+
+    function displayScheduleDetails(schedule) {
+        $('#viewTitle').text(schedule.scheduleTitle);
+        $('#viewContent').text(schedule.scheduleContent);
+        $('#viewLocation').text(schedule.scheduleLocation);
+        $('#viewStart').text(schedule.scheduleStart);
+        $('#viewEnd').text(schedule.scheduleEnd);
+
+        $('#scheduleOneModal').modal('show');
+    }
+
+    // 일정추가 모달창
+    function openModal(startDate, endDate) {
+        $('#addScheduleModal').modal('show');
+        $('#scheduleTitle').val('');
+        $('#scheduleContent').val('');
+        $('#scheduleLocation').val('');
+        $('#scheduleStart').val(startDate.toISOString().slice(0, 16));
+        $('#scheduleEnd').val(endDate.toISOString().slice(0, 16));
+
+        var checkboxAllDay = $('#checkboxAllDay');
+        var startTimeInput = $('#scheduleStart');
+        var endTimeInput = $('#scheduleEnd');
+        var endTimeContainer = $('#endTimeContainer');
+
+        checkboxAllDay.change(function() {
+            if (checkboxAllDay.is(':checked')) {
+            	// 하루 종일 체크 시 종료일 선택 부분 숨김
+				endTimeContainer.hide();
+           // startTimeInput.prop('disabled', true); // 시작일 입력 비활성화
+            endTimeInput.val(startTimeInput.val()); // 종료일을 시작일과 같은 값으로 설정
+            } else {
+            	
+            	endTimeContainer.show();
+            }
+        });
+        
+        
+
+        checkboxAllDay.trigger('change');
+    }
+
+    var submitScheduleBtn = document.getElementById('submitScheduleBtn');
+    submitScheduleBtn.addEventListener('click', function() {
+        var allDay = $('#checkboxAllDay').prop('checked');
+        var startTime = $('#scheduleStart').val();
+        var endTime = allDay ? startTime : $('#scheduleEnd').val();
+
+        var title = $('#scheduleTitle').val();
+        var content = $('#scheduleContent').val();
+        if (title.trim() === '' || content.trim() === '') {
+            alert('제목과 내용은 필수 입력 사항입니다.');
+            return;
+        }
+
+        if (!allDay && new Date(endTime) < new Date(startTime)) {
+            alert('종료일은 시작일보다 늦어야 합니다.');
+            return;
+        }
+
+        var eventData = {
+        	    scheduleTitle: title,
+        	    scheduleContent: content,
+        	    scheduleLocation: $('#scheduleLocation').val(),
+        	    scheduleStart: startTime,
+        	    scheduleEnd: endTime,
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/schedule/addPersonalSchedule',
+            contentType: 'application/json',
+            data: JSON.stringify(eventData),
+            success: function(response) {
+                if (response.success) {
+                    if (!allDay) {
+                        eventData.end = endTime;
+                    }
+                    calendar.addEvent(eventData);
+                    $('#addScheduleModal').modal('hide');
+                	// 일정 추가 성공 시 페이지를 새로고침
+                    location.reload();
+                } else {
+                    console.error('Failed to add schedule.');
+                }
+            }
+        });
+    });
+
+    $('#addScheduleModal').on('hidden.bs.modal', function() {
+        $('#scheduleTitle').val('');
+        $('#scheduleContent').val('');
+        $('#scheduleLocation').val('');
+        $('#scheduleStart').val('');
+        $('#scheduleEnd').val('');
+        $('#checkboxAllDay').prop('checked', false);
+    });
+
+    calendar.render();
+});
+</script>
 </html>

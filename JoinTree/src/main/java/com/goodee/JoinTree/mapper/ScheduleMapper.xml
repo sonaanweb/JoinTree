@@ -18,10 +18,10 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE schedule_category = 's0101';
+        WHERE schedule_category = #{scheduleCategory};
 	</select>
 		
-	<!-- 부서 일정 출력 -->
+	<!-- 부서 일정 출력
 	<select id="selectDepartmentSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
 		SELECT
         	schedule_no scheduleNo,
@@ -38,7 +38,7 @@
         	update_id updateId
         FROM schedule
         WHERE schedule_category = 's0102' AND ;
-	</select>
+	</select> -->
 		
 	 <!-- 개인 일정 출력 -->
 	 <select id="selectPersonalSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
@@ -56,8 +56,41 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE emp_no = #{empNo} AND schedule_category = 's0103';
+        WHERE emp_no = #{empNo} AND schedule_category = #{scheduleCategory};
     </select>
+    
+    <!-- 개인일정 추가 -->
+    <insert id="addPersonalSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
+   		<selectKey order="AFTER" keyProperty="scheduleNo" resultType="int">
+	        SELECT last_insert_id()
+	    </selectKey>
+   		INSERT INTO schedule(
+   			emp_no, 
+   			schedule_category, 
+   			schedule_title, 
+   			schedule_content,
+            schedule_location, 
+            schedule_start, 
+            schedule_end,
+            createdate,
+            updatedate,
+            create_id,
+            update_id
+        ) VALUES (
+            #{empNo},
+            #{scheduleCategory},
+            #{scheduleTitle},
+            #{scheduleContent},
+            #{scheduleLocation},
+            #{scheduleStart},
+            #{scheduleEnd},
+            now(),
+            now(),
+            #{empNo},
+            #{empNo}
+        )
+    </insert>
+    
     
     <!-- 일정 상세보기 -->
     <select id="selectScheduleOne" resultType="com.goodee.JoinTree.vo.Schedule">

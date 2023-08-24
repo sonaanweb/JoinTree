@@ -2,21 +2,17 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
+	
 	<!-- FullCalendar CDN -->
 	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 	<!-- FullCalendar 언어 CDN -->
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	<!-- jQuery CDN -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- 부트스트랩 CDN -->
+	<!-- 부트스트랩 CSS CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
+
 <script>
 
 	document.addEventListener('DOMContentLoaded', function() {
@@ -158,28 +154,23 @@
 	
 </script>
 
-
-	<div class="container-scroller"> <!-- 전체 스크롤 -->
-		<div class="container-fluid page-body-wrapper"><!-- 상단제외 -->
-		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 위왼쪽 사이드바 -->
-			<div class = "main-panel"> <!-- 컨텐츠 전체 -->
-				<div class="content-wrapper"> <!-- 컨텐츠 -->
+	<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-				<!-- 달력 출력 -->
-				<div id='caslendar-container'>
-			    	<div id='calendar'></div>
-				</div>
+			<!-- 달력 출력 -->
+			<div id='caslendar-container'>
+		    	<div id='calendar'></div>
+			</div>
+			
+		</div>
+	</div>	
 	
-				</div><!-- 컨텐츠 끝 -->
-			</div><!-- 컨텐츠전체 끝 -->
-		</div><!-- 상단제외 끝 -->
-	</div><!-- 전체 스크롤 끝 -->
-	
-
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 	<!-- 상세보기 모달창 -->
 	<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>

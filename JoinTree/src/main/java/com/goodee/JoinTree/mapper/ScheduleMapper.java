@@ -10,17 +10,22 @@ import com.goodee.JoinTree.vo.Schedule;
 public interface ScheduleMapper {
 	
 	// 전사 일정 출력
-	List<Schedule> selectCompanySchedules();
-		
+	List<Schedule> selectCompanySchedules(String scheduleCategory);
+	
 	// 전사 일정 출력
-	List<Schedule> selectDepartmentSchedules();
+	List<Schedule> selectDepartmentSchedules(String scheduleCategory);
 	
 	// 개인 일정 출력
-	List<Schedule> selectPersonalSchedules(int empNo);
+	List<Schedule> selectPersonalSchedules(int empNo, String scheduleCategory);
 	
+	// 전사 일정 추가
+	// 부서 일정 추가
+	// 개인 일정 추가
+	int addPersonalSchedule(Schedule schedule);
 	
 	// 일정 상세보기
 	Schedule selectScheduleOne(int scheduleNo);
+	
 
 
 }
