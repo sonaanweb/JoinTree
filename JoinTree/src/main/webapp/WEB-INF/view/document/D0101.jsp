@@ -64,10 +64,10 @@
 					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp2">[결재자1 서명]
+					<input type="hidden" id="docStamp2" name="docStamp2">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img src="${pageContext.request.contextPath}/signImg/${signImg}" alt="sign image" style="width: 100px; height: 70px;" name="docStamp3">[결재자2 서명]
+					<input type="hidden" id="docStamp3" name="docStamp3">
 				</td>
 			</tr>
 			<tr></tr>

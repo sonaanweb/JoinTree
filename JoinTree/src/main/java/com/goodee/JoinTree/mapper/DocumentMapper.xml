@@ -32,7 +32,7 @@
 			#{writer},
 			#{reference},
 			#{receiverTeam},
-			#{docStatus},
+			'A0201',
 			#{docStamp1},
 			#{docStamp2},
 			#{docStamp3},

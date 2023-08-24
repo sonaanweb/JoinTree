@@ -289,9 +289,9 @@
 			console.log("signer1:",signer1);
 			
 			// 결재자 2 사번
-			const signer2 = "";
+			let signer2 = "";
 			if(signerSelectedEmps[1]) {
-				signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
+				signer2 = signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
 			}
 				console.log("signer2:",signer2);
 		
@@ -303,7 +303,7 @@
 				url: '/document/docDefault',
 				data: {
 					empNo: empNo,
-					empName: empName,
+					writer: writer,
 					category: category,
 					docTitle: docTitle,
 					docContent: docContent,
@@ -318,12 +318,16 @@
 				success: function(response){
 					console.log("response:", response);
 					
-					alert("상위 코드가 추가되었습니다.");
+					alert("추가되었습니다.");
 					
+					updateSelectDocument(defaultSelectedValue);
+					$("#selectSigner").empty();
+					$("#selectReference").empty();
+				    $("#selectReceiverTeam").empty();
 				},
-				error: function(){
-					console.log('Error loading document form content.');
-				}
+				 error: function(jqXHR, textStatus, errorThrown) {
+                     console.log("Error:", textStatus, errorThrown);
+                 }
 			});
 		});
 	}); // 제일 처음
@@ -440,7 +444,7 @@
 						<li>
 							<span class="empTree folder code" data-dept="${dept.code}">${dept.codeName}</span>
 							<ul>
-							<!-- 여기에 데이터를 추가하는 부분 -->
+								<!-- 여기에 데이터를 추가하는 부분 -->
 							</ul>
 						</li>
 					</c:forEach>

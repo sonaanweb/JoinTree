@@ -100,28 +100,7 @@ public class DocumentController {
 	
 	@PostMapping("/document/docDefault")
 	@ResponseBody
-	public String docDefault(DocumentDefault documentDefault,
-								@RequestParam(name = "empNo") String empNo,
-								@RequestParam(name = "empName") String empName,
-								@RequestParam(name = "category") String category,
-								@RequestParam(name = "docTitle") String docTitle,
-								@RequestParam(name = "docContent") String docContent,
-								@RequestParam(name = "reference") String reference,
-								@RequestParam(name = "receiverTeam") String receiverTeam,
-								@RequestParam(name = "docStamp1") String docStamp1,
-								@RequestParam(name = "createId") String createId,
-								@RequestParam(name = "updateId") String updateId) {
-		
-		log.debug(yellow + "empNo: " + empNo + reset);
-		log.debug(yellow + "empName: " + empName + reset);
-		log.debug(yellow + "category: " + category + reset);
-		log.debug(yellow + "docTitle: " + docTitle + reset);
-		log.debug(yellow + "docContent: " + docContent + reset);
-		log.debug(yellow + "reference: " + reference + reset);
-		log.debug(yellow + "receiverTeam: " + receiverTeam + reset);
-		log.debug(yellow + "docStamp1: " + docStamp1 + reset);
-		log.debug(yellow + "createId: " + createId + reset);
-		log.debug(yellow + "updateId: " + updateId + reset);
+	public String docDefault(DocumentDefault documentDefault) {
 		
 		int row = documentService.addDocDefault(documentDefault);
 		
