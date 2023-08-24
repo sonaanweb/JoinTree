@@ -33,7 +33,9 @@
 			
 			const rowPerPage = 6; // 한 페이지당 수
 			
-			// 프로젝트 목록을 처음에 가져오기
+			fetchProjectListAndUpdate(selectedTab);
+			
+			// 버튼 클릭 시 이벤트
 			function attachPageButtonEventHandlers() {
 				$('.page-button').click(function() {
 					const clickedTab = $(this).data('tab');

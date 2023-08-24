@@ -1,9 +1,11 @@
 package com.goodee.JoinTree.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.goodee.JoinTree.mapper.DocumentFileMapper;
 import com.goodee.JoinTree.mapper.DocumentMapper;
 import com.goodee.JoinTree.mapper.DocumentSignerMapper;
+import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.DocumentDefault;
 import com.goodee.JoinTree.vo.DocumentFile;
-import com.goodee.JoinTree.vo.DocumentLeave;
 import com.goodee.JoinTree.vo.DocumentSigner;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class DocumentService {
 	@Autowired
 	private DocumentFileMapper documentFileMapper;
 	
+	String yellow = "\u001B[33m";
+	String reset = "\u001B[0m";
+	
 	// 문서결제양식 코드 조회
 	public List<CommonCode> documentCodeList() {
 		
@@ -40,53 +45,75 @@ public class DocumentService {
 	}
 	
 	// 기본 기안서에 정보추가
-	public int addDocDefault(DocumentDefault documentDefault, String path) {
+	public int addDocDefault(DocumentDefault documentDefault) {
 		
 		int row = documentMapper.addDocDefault(documentDefault);
 			
 		log.debug(row +"<-- DocumentService documentDefault row");
-		
-		// 추가한 정보가 1개 이상인 경우와 파일이 첨부되었을 때
-	    if (row > 0 && documentDefault.getMultipartFile() != null && documentDefault.getMultipartFile().getSize() > 0) {
-	        int docNo = documentDefault.getDocNo(); // 추가한 정보의 documentNo 가져오기
-	        
-	        MultipartFile file = documentDefault.getMultipartFile();
-	        
-	        if (file.getSize() > 0) {
-	            DocumentFile df = new DocumentFile();
-	            df.setDocNo(docNo);
-	            df.setDocOriginFilename(file.getOriginalFilename()); // 파일 원본 이름
-	            df.setDocFilesize(file.getSize()); // 파일 사이즈
-	            df.setDocFiletype(file.getContentType()); // 파일 타입(MIME)
-	            df.setCreateId(documentDefault.getEmpNo());
-	            df.setUpdateId(documentDefault.getEmpNo());
-	            
-	            // 확장자
-	            String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-	            
-	            // 새로운 이름 + 확장자
-	            String newFilename = UUID.randomUUID().toString().replace("-", "") + ext; // - 를 공백으로 바꿈
-	            df.setDocSaveFilename(newFilename);
-	            
-	            // 테이블에 저장
-	            documentFileMapper.addDocFile(df);
-	            
-	            // 파일 저장 (저장 위치: path)
-	            File f = new File(path + df.getDocSaveFilename()); // path 위치에 저장 파일 이름으로 빈 파일을 생성
-	            
-	            // 빈 파일에 첨부된 파일의 스트림을 주입
-	            try {
-	                file.transferTo(f);
-	            } catch (IllegalStateException | IOException e) {
-	                e.printStackTrace();
-	                // 트랜잭션 작동을 위해 예외(try-catch를 강요하지 않는 예외 -> ex: RuntimeException) 발생 필요
-	                throw new RuntimeException();
-	            }
-	        }
-	    }
 	    return row;
 	}
 	
+	public String fileUpload(HttpSession session, HttpServletRequest request, MultipartFile file, int docNo, String category) {
+	    // 세션에서 로그인 유저 정보 가져오기
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		// 업로드 경로 설정
+		String uploadPath = request.getServletContext().getRealPath("/docFile/");
+		
+		// 고유한 파일명 생성
+		UUID uuid = UUID.randomUUID();
+		String uuids = uuid.toString().replaceAll("-", "");
+		
+		// 파일명과 확장자 추출
+		String fileOreginName = file.getOriginalFilename();
+		String fileExtension = fileOreginName.substring(fileOreginName.lastIndexOf("."));
+		
+			// 로그 출력
+		log.debug(yellow + "저장할 폴더 경로 : " + uploadPath+ reset);
+		log.debug(yellow +"실제 파일 명 : " + fileOreginName+ reset);
+		log.debug(yellow +"확장자 : " + fileExtension+ reset);
+		log.debug(yellow +"고유 랜덤 문자 : " + uuids + reset);
+		
+		// 새로운 파일명 생성 // 새로운 이름 + 확장자
+		String fileSaveName = uuids + fileExtension;
+		File saveFile = new File(uploadPath + "\\" + fileSaveName);
+		
+		if (file.getSize() > 0) {
+			// DocumentFile 객체 생성 및 정보 설정
+			DocumentFile documentFile = new DocumentFile();
+			documentFile.setDocNo(docNo);
+			documentFile.setDocCategoryNo(category);        
+			documentFile.setDocOriginFilename(file.getOriginalFilename());
+			documentFile.setDocSaveFilename(fileSaveName);
+			documentFile.setDocFilesize(file.getSize());
+			documentFile.setDocFiletype(file.getContentType());
+			documentFile.setCreateId(loginAccount.getEmpNo());
+			documentFile.setUpdateId(loginAccount.getEmpNo());
+			
+			log.debug(yellow +"넘버 : " + documentFile.getDocNo() + reset);
+			log.debug(yellow +"카테고리 : " + documentFile.getDocCategoryNo() + reset);
+			log.debug(yellow +"오리진네임 : " + documentFile.getDocOriginFilename() + reset);
+			log.debug(yellow +"세이브네임 : " + documentFile.getDocSaveFilename() + reset);
+			log.debug(yellow +"사이즈 : " + documentFile.getDocFilesize() + reset);
+			log.debug(yellow +"타입 : " + documentFile.getDocFiletype() + reset);
+			log.debug(yellow +"작성자 : " + documentFile.getCreateId() + reset);
+			log.debug(yellow +"수정자 : " + documentFile.getUpdateId() + reset);
+			
+			// DocumentFileMapper를 통해 DB에 파일 정보 저장
+		    documentFileMapper.addDocFile(documentFile);
+		}
+		
+		try {
+			// 파일 저장
+			file.transferTo(saveFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		return "fail"; // 업로드 실패 시
+		}
+		
+	return "success"; // 업로드 성공 시
+	}
+
 	public int addDocSigner(DocumentSigner documentSigner) {
 		return documentSignerMapper.addDocSigner(documentSigner);
 	}

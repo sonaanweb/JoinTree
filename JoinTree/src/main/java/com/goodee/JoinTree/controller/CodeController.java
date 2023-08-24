@@ -2,6 +2,7 @@ package com.goodee.JoinTree.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.CodeService;
+import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,19 +26,23 @@ public class CodeController {
 	
 	String yellow = "\u001B[33m";
 	String reset = "\u001B[0m";
-	
-	// 상위 코드 목록을 전달하는 컨트롤러
 	@GetMapping("code/codeList")
-	public String upCodeInfo(Model model
+	public String codeList(Model model) {
+		
+		// 상위 코드 목록을 뷰로 전달
+		return "code/codeList";
+		}
+	// 상위 코드 목록을 전달하는 컨트롤러
+	@GetMapping("code/upCodeList")
+	@ResponseBody
+	public List<CommonCode> upCodeInfo(Model model
 						) {
 		// 서비스 레이어에서 상위 코드 목록을 조회하여 CommonCode타입으로 가져오기
 		List<CommonCode> upCodeList = codeService.selectUpCode();
 		
-		// 조회한 공통코드를 뷰에서 사용할 수 있도록 모델에 추가
-		model.addAttribute("upCodeList", upCodeList);
 		
 		// 상위 코드 목록을 뷰로 전달
-		return "code/codeList";
+		return upCodeList;
 	}
 	
 	// 하위 코드 목록을 뷰로 전달하는 컨트롤러 
@@ -70,14 +76,20 @@ public class CodeController {
 	// 상위코드 추가
 	@PostMapping("code/addUpCommonCode")
 	@ResponseBody
-	public String addUpCommonCode(CommonCode commonCode, 
+	public String addUpCommonCode(CommonCode commonCode, HttpSession session,
 								@RequestParam(name = "code") String code,
 								@RequestParam(name = "codeName") String codeName,
-								@RequestParam(name = "createId") String createId,
-								@RequestParam(name = "updateId") String updateId) {
+								@RequestParam(name = "createId") int createId,
+								@RequestParam(name = "updateId") int updateId) {
 
 			// log.debug(yellow + "code:" + code + reset); 
 			// log.debug(yellow + "codeName:" + codeName + reset); 
+		// 로그인 유저
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		createId = loginAccount.getEmpNo();
+		updateId = loginAccount.getEmpNo();
+
 		int row = codeService.addUpCommonCode(commonCode);
 			log.debug(yellow + "row:" + row + reset); 
 		if(row != 1) {// 실패
@@ -112,14 +124,17 @@ public class CodeController {
 	// 공통코드 수정
 	@PostMapping("code/modifyCommonCode")
 	@ResponseBody
-	public String modifyCommonCode(@RequestParam(name = "code") String code,
-									@RequestParam(name = "status") String status, 
-									@RequestParam(name = "updateId") int updateId) {
+	public String modifyCommonCode(HttpSession session,
+									@RequestParam(name = "code") String code,
+									@RequestParam(name = "status") String status) {
+		// 로그인 유저
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 		
 		CommonCode commonCode = new CommonCode();
 		commonCode.setCode(code);
 		commonCode.setStatus(status);
-		commonCode.setUpdateId(updateId);
+		commonCode.setUpdateId(loginAccount.getEmpNo());
+		
 			log.debug(yellow + "code:" + code + reset); 
 			// log.debug(yellow + "status:" + status + reset); 
 			// log.debug(yellow + "updateId:" + updateId + reset); 

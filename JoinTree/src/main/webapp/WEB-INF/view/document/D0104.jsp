@@ -113,7 +113,7 @@
 					퇴직사유
 				</td>
 				<td>
-					<textarea id="docResignReason"></textarea> 
+					<textarea id="doc"></textarea> 
 				</td>
 			</tr>
 			<!-- 퇴직예정일 -->

@@ -6,14 +6,45 @@
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 	<script>
 		$(document).ready(function() {
-			const id = "11111111";
+			
+			// 로딩되자마자 리스트 뿌리기
+			fetchUpCodeList();
+			
+			// 업코드 리스트 비동기로 받아오기
+			function fetchUpCodeList() {
+				$.ajax({
+					url: "/code/upCodeList",
+					type: "GET",
+					success: function(data) {
+						data.forEach(function(upCode) {
+							const row = $("<tr>").addClass("upCodeLink").attr("data-code", upCode.code);
+							const codeCell = $("<td>").text(upCode.code); // 코드
+							const codeNameCell = $("<td>").text(upCode.codeName); // 코드이름
+							const toggleValue = upCode.status;
+								
+							const toggleCell = $("<td>").html(
+								'<label class="switch">' +
+								'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? ' checked' : '') + '>' +
+								'<span class="slider round"></span>' +
+								'</label>'
+							);
+								
+							row.append(codeCell, codeNameCell, toggleCell); // 행에 셀들 추가
+							
+							$("#upCodeList").append(row); // 행을 테이블에 추가
+						});
+					},
+					error: function() {
+						alert("fail");
+					}
+				});
+			}
 			
 			// upCodeLink 클릭시 비동기로 childCodeList에서 값을 가져와서 보여줌 
-			$(".upCodeLink").on("click", function() {// 여러 개의 요소를 선택하기 위해 클래스를 사용
-				
+			$(document).on("click", ".upCodeLink", function() {// 여러 개의 요소를 선택하기 위해 클래스를 사용
 				// 아래에 지정한 data-code에 값을 가져와서 upCode에 저장
 				const upCode = $(this).data("code");
-					// console.log("Clicked upCode:", upCode); // 디버깅용 로그
+					console.log("Clicked upCode:", upCode); // 디버깅용 로그
 				
 				$.ajax({
 					url: "/code/childCodeList",
@@ -21,49 +52,29 @@
 					dataType: "json",
 					data: { upCode: upCode },
 					success: function(data) {
-						//console.log("Response Data:", data);
+						console.log("Response Data:", data);
 				
 						const childCodeT = $(".childCodes");
 						childCodeT.empty(); // 초기화
 						
+						if (data.length === 0) {
+							childCodeT.append("<tr><td colspan=\"3\">하위코드가 추가해주세요</td></tr>");
+							return; // 하위 코드가 없으면 여기서 처리 중단
+						}
+						
 						data.forEach(function(childCode) {
 							
-							const row =  $("<tr>").addClass("codeOneLink");
+						    const row = $("<tr>").addClass("codeOneLink").data("code", childCode.code); // 코드 추가
 							const codeCell = $("<td>").text(childCode.code); // 코드
 							const codeNameCell = $("<td>").text(childCode.codeName); // 코드이름
 							const toggleValue = childCode.status;
 								// console.log("toggleValue:", toggleValue); // 디버깅용 로그
 							const toggleCell = $("<td>").html( // 토글 -> Y일 경우 체크 : 그렇지 않을경우 흰색
 								'<label class="switch">' +
-							    '<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? ' checked' : '') + '>' +
+								'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? ' checked' : '') + '>' +
 								'<span class="slider round"></span>' +
 								'</label>'
-							  );
-					
-							// 토글의 변경 이벤트 감지 -> 하위코드 수정
-		                    $(".toggleSwitch").on("change", function() {
-		                        const isChecked = $(this).prop("checked");
-		                        const newStatus = isChecked ? "Y" : "N";
-	
-		                        // AJAX 요청을 통해 서버로 업데이트 요청 보냄
-		                        $.ajax({
-		                            url: "/code/modifyCommonCode",
-		                            type: "POST",
-		                            data: { code: childCode.code, 
-		                            		status: newStatus, 
-		                            		updateId: id},
-		                            success: function(response) {
-		                            	console.log("response:", response);
-		            					
-		                               if(response === "fail") {
-		                            	   alert("실패");
-		                               }
-		                            },
-		                            error: function(jqXHR, textStatus, errorThrown) {
-		                                console.log("Error:", textStatus, errorThrown);
-		                            }
-		                        });
-		                    });
+								);
 								
 							// 같은 열에 추가
 							row.append(codeCell); 
@@ -72,6 +83,34 @@
 							
 							// 추가된 열을 정적으로 해당 테이블에 추가
 							childCodeT.append(row);
+							
+							// 토글의 변경 이벤트 감지 -> 하위코드 상태 수정
+							row.find(".toggleSwitch").on("change", function() { // 로우에 있는 토글스위치 찾기 -> 행의 사용여부를 변경하기 위해
+								const isChecked = $(this).prop("checked");
+								const code = row.data("code");
+								console.log(code);
+								const newStatus = isChecked ? "Y" : "N";
+								
+								// AJAX 요청을 통해 서버로 업데이트 요청 보냄
+								$.ajax({
+									url: "/code/modifyCommonCode",
+									type: "POST",
+									data: { 
+										code: code,
+										status: newStatus
+									},
+									success: function(response) {
+										console.log("response:", response);
+									
+										if(response === "fail") {
+											alert("실패");
+										}
+									},
+									error: function(jqXHR, textStatus, errorThrown) {
+										console.log("Error:", textStatus, errorThrown);
+									}
+								});
+							});
 						});
 					},
 					// 에러 발생시
@@ -193,17 +232,30 @@
 					url: "/code/addUpCommonCode",
 					type: "POST",
 					data: {
-					code : newUpCode,
-					codeName : newUpCodeName,
-					createId : id,
-					updateId : id
+						code : newUpCode,
+						codeName : newUpCodeName,
+						createId : id,
+						updateId : id
 					},
 					success: function(response) {
 						console.log("response:", response);
 						
-						alert("상위 코드가 추가되었습니다.");
+						// 이전 리스트 삭제
+				        $("#upCodeList").empty();
+				        // 상위 코드 추가 성공 후 리스트 다시 불러오기
+	                    fetchUpCodeList();
+				    	 // 입력 필드 초기화
+						$("#newUpCode").val('');
+						$("#newUpCodeName").val('');
 						
-						 // 새로운 상위 코드를 테이블에 추가합니다.
+						// 입력창 숨기기
+						$("#newUpCode").closest("tr").hide();
+						
+						// 버튼 상태 변경: "추가" 버튼을 보이게 하고 "저장" 버튼을 숨김
+						$("#addUpCodeLink").show();
+						$("#saveUpCodeBtn").hide();
+
+						/*  // 새로운 상위 코드를 테이블에 추가합니다.
 						const newRow = $("<tr>").addClass("upCodeLink").attr("data-code", newUpCode);
 						const upCodeCell = $("<td>").addClass("upCode").text(newUpCode);
 						const codeNameCell = $("<td>").addClass("upCodeName").text(newUpCodeName);
@@ -232,7 +284,7 @@
 						// 버튼 상태 변경: "추가" 버튼을 보이게 하고 "저장" 버튼을 숨김
 						$("#addUpCodeLink").show();
 						$("#saveUpCodeBtn").hide();
-						
+						 */
 						//실패시
 						if(response === "fail") {
 							alert("fail");
@@ -432,8 +484,8 @@
 					<div class="col-md-6">
 						<div class="code">
 						<h1>공통코드 리스트</h1>
-							<button type="button" id="addUpCodeLink" class="btn btn-success left">추가</button>
-	       					<button type="button" id="saveUpCodeBtn" class="btn btn-primary left" style="display: none;">저장</button>
+							<button type="button" id="addUpCodeLink" class="btn btn-sm btn-success right"><i class="mdi mdi-plus"></i></button>
+	       					<button type="button" id="saveUpCodeBtn" class="btn btn-sm btn-success right" style="display: none;"><i class="mdi mdi-content-save"></i></button>
 							<div class="scrollable-tbody">
 								<table class="table table-bordered" id="upCodeT">
 									<thead>
@@ -443,24 +495,8 @@
 											<td>상태</td>
 										</tr>
 									</thead>
-									<tbody>
-										<c:forEach var="up" items="${upCodeList}">
-											<tr class="upCodeLink" data-code="${up.code}">
-												<!-- data-code는 data속성으로 code라는 이름으로 데이터를 가지고 있음 -->
-												<td class="upCode">
-													${up.code}
-												</td>
-												<td class="upCodeName">
-													${up.codeName}
-												</td>
-												 <td class="status">
-												 	<label class="switch">
-														<input type="checkbox" class="toggleUpSwitch" ${up.status == 'Y' ? 'checked' : ''}>
-															<span class="slider round"></span>
-													</label>
-												</td>
-											</tr>
-										</c:forEach>
+									<tbody id="upCodeList">
+										<!-- 상위 코드들이 여기에 동적으로 추가 됨 -->
 									</tbody>
 								</table>
 							</div>
@@ -469,8 +505,8 @@
 					<div class="col-md-6">
 						<div class="code">
 						<h1>상세코드 리스트</h1>
-							<button type="button" id="addCodeLink" class="btn btn-success left">신규</button>
-							<button type="button" id="saveCodeBtn" class="btn btn-primary left" style="display: none;">저장</button>
+							<button type="button" id="addCodeLink" class="btn btn-sm btn-success right"><i class="mdi mdi-plus"></i></button>
+							<button type="button" id="saveCodeBtn" class="btn btn-sm btn-success right" style="display: none;"><i class="mdi mdi-content-save"></i></button>
 							<div class="scrollable-tbody">
 								<table class="table table-bordered" id="childCodes">
 									<thead>

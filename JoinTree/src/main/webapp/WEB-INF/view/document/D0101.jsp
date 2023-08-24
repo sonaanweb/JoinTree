@@ -120,7 +120,7 @@
 					첨부파일
 				</td>
 				<td>
-					<input type="file"><br>
+					<input type="file" id="docOriginFilename"><br>
 				</td>
 			</tr>
 		</tbody>

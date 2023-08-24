@@ -6,7 +6,7 @@ import lombok.Data;
 public class DocumentFile {
 
 	private int docNo;
-	private int docCategoryNo;
+	private String docCategoryNo;
 	private String docOriginFilename;
 	private String docSaveFilename;
 	private String docFiletype;

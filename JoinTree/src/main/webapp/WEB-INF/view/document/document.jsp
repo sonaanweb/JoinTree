@@ -212,22 +212,23 @@
 			
 			$("#signerCodeList").treeview({ collapsed: true });
 			$("#referCodeList").treeview({ collapsed: true });
-			$("#receiverCodeList").treeview({ collapsed: true });
-			
+			$("#receiverCodeList").treeview({ collapsed: true }); // 트리구조 끝
+		
 		// 기안서 양식 샐렉트
 		// 기본 기안서로 생성
 		const defaultSelectedValue = $('#slectDocument').val();
-			updateSelectDocument(defaultSelectedValue);
+		updateSelectDocument(defaultSelectedValue);
 		
 		let selectedValue = 'D0101'; // 기본값 설정
 		
 		// slectDocument 옵션 변경시 이벤트
-		$('#slectDocument').change(function(){
+		$('#slectDocument').off('change').on('change', function(){
 			selectedValue = $(this).val();
 			console.log("selectedValue",selectedValue);
 			updateSelectDocument(selectedValue);
 		});
 		
+		// 폼 선택시 폼 업데이트 기능
 		function updateSelectDocument(selectForm){
 			$.ajax({
 				type: 'GET',
@@ -243,7 +244,10 @@
 				}
 			});
 		}
+		
+		// 기안하기 버튼 클릭시 
 		$('#docFormBtn').on("click", function() {
+			event.preventDefault(); // 폼 제출 방지
 			// 기안서 - 기본
 			// 기안자 사번
 			const empNo = $("#empNo").val();
@@ -341,10 +345,12 @@
 			}
 				console.log("signer2:",signer2);
 				
-			if (!empNo || !empName || !category || !docTitle || !docContent || !reference || !receiverTeam || !docStamp1 || !createId || !updateId || !signer1) {
-			   	alert("모든 필수 정보를 입력해주세요.");
-			   	return;
+			if (!empNo || !writer || !category || !docTitle || !reference || !receiverTeam || !docStamp1 || !createId || !updateId || !signer1) {
+				alert("모든 필수 정보를 입력해주세요.");
+				return;
 			}
+			
+			// 기본 기안서 값 넘기기
 			$.ajax({
 				type: 'POST',
 				url: '/document/docDefault',
@@ -362,60 +368,135 @@
 				},
 				success: function(docNo){
 					console.log("docNo:", docNo);
+					alert("성공");
 					
-					alert("추가되었습니다.");
-						// 결재자가 한명만 있을 경우
-						$.ajax({
-							type: 'POST',
-							url: '/document/docSigner',
-							data: {
-								docNo: docNo, // 위에서 전달받은 docNo 사용
-								empSignerNo: signer1,
-								empSignerLevel: empSignerLevel1,
-								createId: createId,
-								updateId: updateId
-							},
-							success: function(response) {
-								console.log("response:", response);
-								// alert("사인이 추가되었습니다.");
-								
-								window.location.href = '/home'; // 홈 페이지 URL로 변경
+					// 문서에 첨부파일이 있는 경우
+					if (docOriginFilename) {
+						uploadDocument(docNo, category, writer); // uploadDocument 함수 호출
+					}
+					
+					// 결재자가 한명만 있을 경우
+					submitDocumentSigner(docNo, signer1, empSignerLevel1, createId, updateId);
 
-							},
-							error: function(jqXHR, textStatus, errorThrown) {
-								console.log("Error:", textStatus, errorThrown);
-							}
-						});
-						// 두번째 결재자가 있을 경우
-						if(signer2) {
-							$.ajax({
-								type: 'POST',
-								url: '/document/docSigner',
-								data: {
-									docNo: docNo, // 위에서 전달받은 docNo 사용
-									empSignerNo: signer2,
-									empSignerLevel: empSignerLevel2,
-									createId: createId,
-									updateId: updateId
-								},
-								success: function(response) {
-									console.log("response:", response);
-									// alert("사인이 추가되었습니다.");
-									
-									window.location.href = '/home'; // 홈 페이지 URL로 변경
-								},
-								error: function(jqXHR, textStatus, errorThrown) {
-									console.log("Error:", textStatus, errorThrown);
-								}
-							});
-						}
-						
+					// 두번째 결재자가 있을 경우
+					if(signer2) {
+						submitDocumentSigner(docNo, signer2, empSignerLevel2, createId, updateId);
+					}
+					
+					// 카테고리가 휴가 일때 
+					if(category === 'D0102') {
+						submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel);
+					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					console.log("Error:", textStatus, errorThrown);
 				}
-			});
-		});
+			}); // 기본기안서 값 비동기 끝
+			
+			// 문서의 첨부파일 
+			function uploadDocument(docNo, category, writer) {
+				// 파일 
+				let file = $("#docOriginFilename").val();
+				
+				// .을 제거한 확장자만 얻어내서 소문자로 변경
+				file = file.slice(file.indexOf('.')+1).toLowerCase();
+				
+				// 파일타입 제한
+				if (file !== 'jpg' && file !== 'png' && file !== 'jpeg' && file !== 'zip' && file !== 'pdf'){
+					alert("jpg, png, jpeg, zip, pdf 확장자만 등록하실 수 있습니다.");
+					$('#file').val('');
+					// 사용자가 등록한 file의 value를 지움 
+					return;
+				}
+				
+				const formData = new FormData();
+				const files = $('#docOriginFilename')[0].files;
+				formData.append('docNo', docNo); // 문서 번호
+				formData.append('category', category); // 문서 카테고리
+				formData.append('writer', writer); // 작성자
+		
+				if (files.length > 0) {
+					formData.append('file', files[0]); // 'file'은 서버에서 기대하는 파일 파트 이름
+				}
+				
+				console.log('files:' + files);
+				console.log(files[0]);
+				
+				console.log(files[0].files);
+					// 파일등록 하러 비동기로
+					$.ajax({
+						url: '/document/fileUpload',
+						type: 'post',
+						data: formData,
+						contentType: false, // 비동기로 파일을 등록할 때 필수
+						processData: false, // 비동기로 파일을 등록할 때 필수
+						success: function(data) {
+							
+							if(data === 'success'){
+								$('#docOriginFilename').val('');
+								alert("업로드 성공");
+							} else {
+								alert("업로드 실패");
+							}
+						},
+						error : function() {
+							alert("업로드 실패");
+						}
+					});
+			}
+			// 결재자 정보를 결재자 테이블에 넣어주기
+			function submitDocumentSigner(docNo, empSignerNo, empSignerLevel, createId, updateId) {
+				$.ajax({
+					type: 'POST',
+					url: '/document/docSigner',
+					data: {
+						docNo: docNo,
+						empSignerNo: empSignerNo,
+						empSignerLevel: empSignerLevel,
+						createId: createId,
+						updateId: updateId
+					},
+					success: function(response) {
+						console.log("response:", response);
+						window.location.href = '/home'; // 홈 페이지 URL로 변경
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				});
+			}
+			
+			// 휴가 기안서 비동기
+			function submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel) {
+				$.ajax({
+					type: 'POST',
+					url: '/document/',
+					data: {
+						leave: leaveCate,
+						docLeaveStartDate: docLeaveStartDate,
+						docLeaveEndDate: docLeaveEndDate,
+						docLeavePeriodDate: docLeavePeriodDate,
+						docLeaveTel: docLeaveTel
+					},
+					success: function(response) {
+						console.log("response:", response);
+						
+						// 결재자가 한 명만 있을 경우
+						submitDocumentSigner(docNo, empSignerNo, empSignerLevel, createId, updateId);
+						
+						// 두 번째 결재자가 있을 경우
+						if (signer2) {
+						submitDocumentSigner(docNo, signer2, empSignerLevel2, createId, updateId);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				});
+			}
+			
+		}); // 기안하기 버튼 클릭 시 끝
+		
 	}); // 제일 처음
 </script>
 	<div class="container-fluid page-body-wrapper">

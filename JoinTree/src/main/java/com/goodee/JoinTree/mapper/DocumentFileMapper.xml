@@ -20,10 +20,10 @@ INSERT INTO document_file (
 			#{docSaveFilename},
 			#{docFiletype},
 			#{docFilesize},
-			#{createdate},
-			#{updatedate},
-			#{empNo},
-			#{empNo}
+			now(),
+			now(),
+			#{createId},
+			#{createId}
 		)
 
 </insert>
