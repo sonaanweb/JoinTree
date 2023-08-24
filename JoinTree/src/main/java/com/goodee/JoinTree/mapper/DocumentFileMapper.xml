@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.DocumentFileMapper">
+<insert id="addDocFile">
+INSERT INTO document_file (
+			doc_no,
+			doc_category_no,
+			doc_origin_filename,
+			doc_save_filename,
+			doc_filetype,
+			doc_filesize,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{docNo},
+			#{docCategoryNo},
+			#{docOriginFilename},
+			#{docSaveFilename},
+			#{docFiletype},
+			#{docFilesize},
+			#{createdate},
+			#{updatedate},
+			#{empNo},
+			#{empNo}
+		)
+
+</insert>
+</mapper>
