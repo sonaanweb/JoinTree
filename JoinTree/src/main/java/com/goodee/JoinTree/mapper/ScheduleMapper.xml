@@ -59,8 +59,9 @@
         WHERE emp_no = #{empNo} AND schedule_category = #{scheduleCategory};
     </select>
     
-    <!-- 개인일정 추가 -->
-    <insert id="addPersonalSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
+    
+    <!-- 일정 추가 -->
+    <insert id="addSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
    		<selectKey order="AFTER" keyProperty="scheduleNo" resultType="int">
 	        SELECT last_insert_id()
 	    </selectKey>

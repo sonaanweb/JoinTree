@@ -19,9 +19,10 @@ public interface ScheduleMapper {
 	List<Schedule> selectPersonalSchedules(int empNo, String scheduleCategory);
 	
 	// 전사 일정 추가
+	//int addCompanySchedule(Schedule schedule);
 	// 부서 일정 추가
 	// 개인 일정 추가
-	int addPersonalSchedule(Schedule schedule);
+	int addSchedule(Schedule schedule);
 	
 	// 일정 상세보기
 	Schedule selectScheduleOne(int scheduleNo);

@@ -31,10 +31,9 @@ public class ScheduleService {
        return personalScheduleList;
 	}
 	
-	// 개인 일정 추가
-	public int addPersonalSchedule(Schedule schedule) {
-		return scheduleMapper.addPersonalSchedule(schedule);
-		
+	// 일정 추가
+	public int addSchedule(Schedule schedule) {
+		return scheduleMapper.addSchedule(schedule);
 	}
 	
 	// 일정 상세보기

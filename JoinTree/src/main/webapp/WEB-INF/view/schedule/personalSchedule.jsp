@@ -102,7 +102,7 @@
 	            var scheduleNo = parseInt(info.event.extendedProps.scheduleNo);
 	            console.log(scheduleNo);
 	            if (!isNaN(scheduleNo)) {
-	                // 일정 번호를 가져와서 서버에서 상세 정보를 요청합니다.
+	                // 일정 번호를 가져와서 서버에서 상세 정보를 요청
 	                fetchScheduleDetails(scheduleNo);
 	            } else {
 	                console.error('Invalid schedule number:', info.event.extendedProps.scheduleNo);
