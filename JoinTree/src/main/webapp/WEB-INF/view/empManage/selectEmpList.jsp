@@ -364,7 +364,7 @@
 		}
 		
 		// 값 유효성 검사 후 사원 등록
-	    let addEmpUrl = '/empManage/addEmp';
+	    let addEmpUrl = '/JoinTree/empManage/addEmp';
 		$('#addEmpForm').attr('action', addEmpUrl);
 	    $('#addEmpForm').submit();
 	    
@@ -469,7 +469,7 @@
 		
 		// 데이터 조회
 		$.ajax({
-			url: '/empManage/searchEmpList',
+			url: '/JoinTree/empManage/searchEmpList',
 			type: 'GET',
 			data: {
 				// 검색조건 객체를 JSON으로 변환
@@ -527,7 +527,7 @@
 	function selectEmpInfoOne(empNo){
 		// 상세 정보 가져오기
         $.ajax({
-			url: '/empManage/selctEmpOne',
+			url: '/JoinTree/empManage/selctEmpOne',
 			type: 'GET',
 			data: {empNo: empNo},
 			success: function(data){
@@ -590,7 +590,8 @@
 			    $('input[name="empLastDate"]').val(empLastDate);
 			    $('input[name="departBeforeNo"]').val(deptCode);
 			    $('input[name="positionBeforeLevel"]').val(positionCode);
-					// 사원 정보로 값 selected		 	      
+				
+			    // 사원 정보로 값 selected		 	      
 			    $('#modifyDept option[value="' + deptCode + '"]').prop('selected', true);
 			    $('#modifyPosition option[value="' + positionCode + '"]').prop('selected', true);
 			    $('#modifyEmpAtive option[value="' + activeCode + '"]').prop('selected', true);
@@ -686,7 +687,7 @@
    		}
     		
    		$.ajax({
-   			url: '/empManage/modifyEmp',
+   			url: '/JoinTree/empManage/modifyEmp',
    			type: 'POST',
    			contentType: 'application/json',
    			dataType: 'json',
