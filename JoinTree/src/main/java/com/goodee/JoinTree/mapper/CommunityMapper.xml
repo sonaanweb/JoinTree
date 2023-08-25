@@ -89,7 +89,9 @@
 		UPDATE board
 		SET board_title = #{boardTitle}, 
 			board_content = #{boardContent},
-			board_pinned = #{boardPinned}, 
+			<if test="boardPinned != null &amp;&amp; boardPinned != ''"> <!-- boardPinned가 null도 공백도 아닐 경우 실행 -->
+				board_pinned = #{boardPinned},
+			</if>
 			updatedate = NOW(), 
 			update_id = #{empNo}
 		WHERE board_no = #{boardNo} AND emp_no = #{empNo}

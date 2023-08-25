@@ -117,7 +117,7 @@ public class CommunityController {
 	
 	// 자유 게시판 게시글 상세보기
 	@GetMapping("/community/freeCommList/freeCommOne")
-	public String freeCommOne(Model model, int boardNo) {
+	public String freeCommOne(Model model, @RequestParam(name="boardNo") int boardNo) {
 		// 게시글 정보 가져오기
 		Map<String, Object> map = communityService.getCommOne(boardNo);
 		log.debug(CYAN + map + " <-- map(CommunityController-freeCommOne)" + RESET);
@@ -177,9 +177,51 @@ public class CommunityController {
 	
 	// 자유 게시판 게시글 수정
 	@GetMapping("/community/freeCommList/modifyFreeComm")
-	public String modifyFreeComm() {
+	public String modifyFreeComm(Model model, int boardNo) {
+		// 게시글 정보 가져오기
+		Map<String, Object> map = communityService.getCommOne(boardNo);
+		log.debug(CYAN + map + " <-- map(CommunityController-freeCommOne)" + RESET);
+		
+		Board comm = (Board) map.get("comm");
+		BoardFile boardFile = (BoardFile)map.get("boardFile");
+		
+		model.addAttribute("comm", comm);
+		model.addAttribute("boardFile", boardFile);
+		
+		log.debug(CYAN + comm + " <-- comm(CommunityController-freeCommOne)" + RESET);
+		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-freeCommOne)" + RESET);
 		
 		return "/community/modifyFreeComm";
+	}
+	
+	// 자유게시판 게시글 수정 액션
+	@PostMapping("/community/freeCommList/modifyFreeComm") 
+	public String modifyFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
+		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
+		HttpSession session = request.getSession();
+		String dept = (String) session.getAttribute("dept");
+		log.debug(CYAN + dept + " <-- row(CommunityController-addFreeComm)" + RESET);
+		
+		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
+		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
+			board.setBoardPinned("1");
+		} else {
+			board.setBoardPinned("0");
+		}
+		
+		int row = communityService.modifyComm(board);
+		log.debug(CYAN + row + " <-- row(CommunityController-modifyFreeComm)" + RESET);
+		
+		if (row == 1) {
+			msg = URLEncoder.encode("게시글이 수정되었습니다.", "UTF-8");
+			
+			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+		} else {
+			msg = URLEncoder.encode("게시글 수정에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
+			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+		}
+		
+	
 	}
 	
 	// 자유 게시판 게시글 삭제

@@ -143,15 +143,12 @@ public class CommunityService {
 		return row;
 	}
 	
-	// 게시글 삭제 시 첨부파일 함께 삭제
+	// 게시글 삭제 시 첨부파일 함께 삭제 (실제 첨부파일 -> DB 내 파일 정보 -> 게시글 삭제 순)
 	public int removeComm(int boardNo, String path) {
 		int boardFileCnt = boardFileMapper.selectBoardFileCnt(boardNo);
 		log.debug(CYAN + boardFileCnt + " <-- boardFileCnt(CommunityService-removeComm)" + RESET);
-		int row = boardFileMapper.removeBoardFile(boardNo);
-		log.debug(CYAN + row + " <-- row(CommunityService-removeComm)" + RESET);
-		if (boardFileCnt == row) {
-			row = communityMapper.removeComm(boardNo);
-			
+		
+		if (boardFileCnt == 1) {
 			// 첨부파일 삭제
 			BoardFile file = boardFileMapper.selectBoardFile(boardNo);
 			log.debug(CYAN + file + " <-- file(CommunityService-removeComm)" + RESET);
@@ -162,28 +159,34 @@ public class CommunityService {
 					f.delete();
 					log.debug(CYAN + "로컬 파일 삭제(BoardService-removeComm)" + RESET);
 				}
-			
 			}
 		}
 		
-		return row;
+		int row = boardFileMapper.removeBoardFile(boardNo); 
+		log.debug(CYAN + row + " <-- 첨부파일 DB 삭제 row(CommunityService-removeComm)" + RESET);
+		if (row == 1) {
+			row = communityMapper.removeComm(boardNo);
+			log.debug(CYAN + row + " <-- 게시글 삭제 row(CommunityService-removeComm)" + RESET);
+		}
+		
+		return row; // 게시글 삭제 row
 	}
 	
-	// 게시글 수정 (첨부파일 변경 이슈 확인하기)
-	public int modifyComm(Board board, String path) {
+	// 게시글 수정 (첨부파일 삭제, 추가는 비동기로 처리)
+	public int modifyComm(Board board) {		
 		int row = communityMapper.modifyComm(board);
 		log.debug(CYAN + row + " <-- row(CommunityService-modifyComm)" + RESET);
+		/*
 		if (row == 1) { // 게시글이 수정되었을 경우
 			int boardNo = board.getBoardNo();
 			log.debug(CYAN + boardNo + " <-- boardNo(CommunityService-modifyComm)" + RESET);
 			MultipartFile file = board.getMultipartFile();
 			// 첨부파일이 존재할 경우
-			if (file != null) {
-				
-			}
-			
+			if (file != null) {	
+			}		
 		}
-		
+		*/
+
 		return row;
 		
 	}
