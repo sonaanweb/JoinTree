@@ -5,26 +5,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title>JoinTree</title>
-	<link rel="shortcut icon" href="/resource/images/jointree_mini.png" />
+	<link rel="shortcut icon" href="/JoinTree/resource/images/jointree_mini.png" />
 	
 	<!-- 템플릿 : css -->
-	<link rel="stylesheet" href="/resource/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-	<link rel="stylesheet" href="/resource/vendors/css/vendor.bundle.base.css">
+	<link rel="stylesheet" href="/JoinTree/resource/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="/JoinTree/resource/vendors/css/vendor.bundle.base.css">
 	
 	<!-- 템플릿 : js -->
-	<script src="/resource/vendors/js/vendor.bundle.base.js"></script>
-	<script src="/resource/vendors/js/vendor.bundle.addons.js"></script>
-	<script src="/resource/js/off-canvas.js"></script>
-	<script src="/resource/js/misc.js"></script>
-	<script src="/resource/js/dashboard.js"></script>
+	<script src="/JoinTree/resource/vendors/js/vendor.bundle.base.js"></script>
+	<script src="/JoinTree/resource/vendors/js/vendor.bundle.addons.js"></script>
+	<script src="/JoinTree/resource/js/off-canvas.js"></script>
+	<script src="/JoinTree/resource/js/misc.js"></script>
+	<script src="/JoinTree/resource/js/dashboard.js"></script>
 	
 	<!-- 부트스트랩 JavaScript 및 의존성 라이브러리 CDN -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 	
 	<!-- css - 수정가능 -->
-	<link rel="stylesheet" href="/resource/css/style.css">
-	<link rel="stylesheet" href="/resource/css/style2.css">
-	
+	<link rel="stylesheet" href="/JoinTree/resource/css/style.css">
+	<link rel="stylesheet" href="/JoinTree/resource/css/style2.css">
 	
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -127,7 +126,7 @@
 	            } else if (timer < 0) {
 	                clearInterval(interval);
 	                showSessionExpirationAlert(); // 세션 만료 알림
-	                window.location.href = "/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
+	                window.location.href = "/JoinTree/logout"; // 로그아웃을 수행하는 URL로 리다이렉트
 	            }
 	        }, 1000);
 	    }
@@ -144,8 +143,8 @@
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 	<!-- 로고 -->
 	<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-		<a class="navbar-brand brand-logo" href="/home"><img src="/resource/images/jointree.png" alt="logo"/></a>
-		<a class="navbar-brand brand-logo-mini" href="/home"><img src="/resource/images/jointree_mini.png" alt="logo"/></a>
+		<a class="navbar-brand brand-logo" href="/JoinTree/home"><img src="/JoinTree/resource/images/jointree.png" alt="logo"/></a>
+		<a class="navbar-brand brand-logo-mini" href="/JoinTree/home"><img src="/JoinTree/resource/images/jointree_mini.png" alt="logo"/></a>
 	</div>
  		<!-- 위 - 메뉴바 -->
 	<div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -189,7 +188,7 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item preview-item">
 						<div class="preview-thumbnail">
-							<img src="/empImg/tiger.png" alt="image" class="profile-pic">
+							<img src="/JoinTree/empImg/tiger.png" alt="image" class="profile-pic">
 						</div>
 						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
 							<h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
@@ -251,7 +250,7 @@
 			
 			<!-- 위 - 로그아웃 -->
 			<li class="nav-item nav-logout d-none d-lg-block">
-				<a class="nav-link" href="/logout">
+				<a class="nav-link" href="/JoinTree/logout">
 					<i class="mdi mdi-power"></i>
 				</a>
 			</li><!-- 위 - 로그아웃 끝 -->

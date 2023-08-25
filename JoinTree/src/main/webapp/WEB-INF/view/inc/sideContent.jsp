@@ -8,7 +8,7 @@
 		<li class="nav-item nav-profile">
 			<a href="/empInfo/empInfo" class="nav-link">
 				<div class="nav-profile-image">
-					<img src="/empImg/tiger.png" alt="profile">
+					<img src="/JoinTree/empImg/tiger.png" alt="profile">
 					<span class="login-status online"></span>
 				</div>
 				<div class="nav-profile-text d-flex flex-column">
@@ -21,7 +21,7 @@
 
 		<!-- 왼쪽 - 홈 -->
 		<li class="nav-item">
-			<a class="nav-link" href="/home">
+			<a class="nav-link" href="/JoinTree/home">
 				<span class="menu-title">홈</span>
 				<i class="mdi mdi-home menu-icon"></i>
 			</a>
@@ -51,10 +51,10 @@
 			</a>
 			<div class="collapse" id="board">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/community/freeCommList">자유게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/community/anonymousCommList">익명게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/community/secondhandCommList">중고장터게시판</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/community/lifeEventCommList">경조사게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/community/freeCommList">자유게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/community/anonymousCommList">익명게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/community/secondhandCommList">중고장터게시판</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/community/lifeEventCommList">경조사게시판</a></li>
 				</ul>
 			</div>
 		</li>
@@ -76,9 +76,9 @@
 			</a>
 			<div class="collapse" id="calendarBar">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/schedule/companySchedule">전사일정</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/schedule/deptSchedule">부서일정</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/schedule/personalSchedule">개인일정</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/schedule/companySchedule">전사일정</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/schedule/departmentSchedule">부서일정</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/schedule/personalSchedule">개인일정</a></li>
 				</ul>
 			</div>
 		</li>
@@ -107,7 +107,7 @@
 			</a>
 		 	<div class="collapse" id="document">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/document/document">결재하기</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/document">결재하기</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">기안문서목록</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">결재함</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">개인문서함</a></li>
@@ -145,7 +145,7 @@
 			</a>
 			<div class="collapse" id="emp">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/empManage/selectEmpList">사원관리</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/empManage/selectEmpList">사원관리</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">출퇴근관리</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">연가관리</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">연차관리</a></li>
