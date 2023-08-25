@@ -6,6 +6,21 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>freeCommOne</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				const urlParams = new URL(location.href).searchParams;
+				const msg = urlParams.get("msg");
+					if (msg != null) {
+						alert(msg);
+					}
+					
+				// 새로고침 시 메시지 알림창 출력하지 않음
+		        // urlParams.delete("msg");
+		        //const newUrl = `${location.pathname}?${urlParams.toString()}`;
+		        //history.replaceState({}, document.title, newUrl);
+			});
+		</script>
 	</head>
 	<body>
 		<a href="/community/freeCommList">이전</a>
@@ -37,17 +52,12 @@
 			<tr>
 			<th>첨부파일</th>
 				<td>
-					<img src="${pageContext.request.contextPath}/commImg/${boardFile.boardSaveFilename}" style="width: 300px; height: auto;">
-					<c:forEach var="f" items="${boardfiles}">
-					<a href="/upload/${f.saveFilename}">${f.originFilename}</a><br>
-					</c:forEach>
-					
 			    	<c:choose>
-				        <c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
+				        <c:when test="${boardFile.boardSaveFilename eq null or boardFile.boardSaveFilename == '이미지 없음'}">
 				            이미지 없음
 				        </c:when>
 				        <c:otherwise>
-				            <img src="${pageContext.request.contextPath}/commImg/${boardFile.boardSaveFilename}"><br>
+				            <img src="${pageContext.request.contextPath}/commImg/${boardFile.boardSaveFilename}" style="width: 300px; height: auto;"><br>
 				        </c:otherwise>
 				    </c:choose>
 				</td>
