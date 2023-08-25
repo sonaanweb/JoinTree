@@ -12,8 +12,8 @@ public interface ScheduleMapper {
 	// 전사 일정 출력
 	List<Schedule> selectCompanySchedules(String scheduleCategory);
 	
-	// 전사 일정 출력
-	List<Schedule> selectDepartmentSchedules(String scheduleCategory);
+	// 부서 일정 출력
+	List<Schedule> selectDepartmentSchedules(String dept, String scheduleCategory);
 	
 	// 개인 일정 출력
 	List<Schedule> selectPersonalSchedules(int empNo, String scheduleCategory);

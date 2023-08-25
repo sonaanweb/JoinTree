@@ -20,9 +20,9 @@ public class ScheduleService {
 	}
 		
 	// 부서 일정 출력
-	public List<Schedule> selectDepartmentSchedules(String scheduleCategory) {
-       List<Schedule> personalScheduleList = scheduleMapper.selectDepartmentSchedules(scheduleCategory);
-       return personalScheduleList;
+	public List<Schedule> selectDepartmentSchedules(String dept, String scheduleCategory) {
+       List<Schedule> departmentScheduleList = scheduleMapper.selectDepartmentSchedules(dept, scheduleCategory);
+       return departmentScheduleList;
 	}
 		
 	// 개인 일정 출력

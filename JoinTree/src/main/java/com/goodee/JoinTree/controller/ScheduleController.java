@@ -68,10 +68,47 @@ public class ScheduleController {
         return new ResponseEntity<>(eventDataList, HttpStatus.OK);
     }
 		
-	// 부서 일정 출력 페이지
+	// 부서 일정 출력 페이지 (같은 부서끼리만 볼수있음)
+	@GetMapping("schedule/departmentSchedule")
+    public String departmentSchedulePage(Model model,  HttpSession session,
+    		@RequestParam(name="scheduleCategory", defaultValue = "S0102") String scheduleCategory) {
 		
+		// 세션에서 dept 정보 추출
+	    String dept = (String) session.getAttribute("dept");
+	    
+		List<Schedule> schedules = scheduleService.selectDepartmentSchedules(dept, scheduleCategory);
+		
+		model.addAttribute("scheduleCategory", scheduleCategory);
+		model.addAttribute("schedules", schedules);
+		return "schedule/departmentSchedule";
+    }
 		
 	// 부서 일정 데이터를 JSON 형태로 반환
+	@GetMapping("/schedule/getDepartmentSchedules")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> getDepartmentSchedules(HttpSession session,
+    		@RequestParam(name="scheduleCategory", defaultValue = "S0102") String scheduleCategory) {
+		
+		// 세션에서 dept 정보 추출
+	    String dept = (String) session.getAttribute("dept");
+		
+		// MyBatis를 사용하여 데이터베이스에서 일정 데이터 가져오기
+        List<Schedule> schedules = scheduleService.selectDepartmentSchedules(dept, scheduleCategory);
+        
+        // FullCalendar에서 요구하는 데이터 형식으로 변환
+        List<Map<String, Object>> eventDataList = new ArrayList<>();
+        for (Schedule schedule : schedules) {
+            Map<String, Object> eventData = new HashMap<>();
+            eventData.put("title", schedule.getScheduleTitle());
+            eventData.put("start", schedule.getScheduleStart());
+            eventData.put("end", schedule.getScheduleEnd());
+            eventData.put("allDay", false); // 현재 데이터에 allDay 정보가 없으므로 기본값으로 설정
+            eventDataList.add(eventData);
+        }
+        
+        // JSON 형식의 데이터를 ResponseEntity에 넣어서 반환
+        return new ResponseEntity<>(eventDataList, HttpStatus.OK);
+    }
 		
 	// 개인 일정 출력 페이지 (자기의 일정만 볼수있음)
 	@GetMapping("schedule/personalSchedule")
@@ -158,6 +195,34 @@ public class ScheduleController {
 	}
 	
 	// 부서 일정 추가
+	@PostMapping("/schedule/addDepartmentSchedule")
+	public ResponseEntity<Map<String, Object>> addDepartmentSchedule(@RequestBody Schedule schedule, HttpSession session) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    // 세션에서 empNo 추출
+	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		int empNo = loginAccount.getEmpNo();
+		// empNo를 schedule에 설정
+	    schedule.setEmpNo(empNo);
+	    
+		// 일정 카테고리(부서)
+		String scheduleCategory = "S0102";
+	    schedule.setScheduleCategory(scheduleCategory);
+	    
+	    log.debug(scheduleCategory);
+	    
+	    // 스케줄 추가 로직
+	    try {
+	        scheduleService.addSchedule(schedule);
+	        response.put("success", true);
+	        return new ResponseEntity<>(response, HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Failed to add personal schedule.");
+	        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
 	
 	// 개인 일정 추가
 	@PostMapping("/schedule/addPersonalSchedule")

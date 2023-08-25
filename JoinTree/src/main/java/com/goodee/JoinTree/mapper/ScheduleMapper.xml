@@ -21,7 +21,7 @@
         WHERE schedule_category = #{scheduleCategory};
 	</select>
 		
-	<!-- 부서 일정 출력
+	<!-- 부서 일정 출력 -->
 	<select id="selectDepartmentSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
 		SELECT
         	schedule_no scheduleNo,
@@ -37,8 +37,13 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE schedule_category = 's0102' AND ;
-	</select> -->
+        WHERE emp_no IN (
+    		SELECT emp_no
+    		FROM emp_info
+    		WHERE dept = #{dept}
+		)
+        AND schedule_category = #{scheduleCategory};
+	</select>
 		
 	 <!-- 개인 일정 출력 -->
 	 <select id="selectPersonalSchedules" resultType="com.goodee.JoinTree.vo.Schedule">
