@@ -21,6 +21,7 @@ public class CommuteRestController {
 	@Autowired
 	private CommuteService commuteService;
 	
+	// 출퇴근 시간 등록
 	@PostMapping("/saveCommuteTime")
 	public int saveCommuteTime(HttpSession session,
 							   @RequestParam String time, @RequestParam String type) {
@@ -66,6 +67,7 @@ public class CommuteRestController {
 		return saveCommuteTime;
 	}
 	
+	// 출퇴근 시간 조회
 	@GetMapping("/getCommuteTime")
 	public Commute getCommuteData(HttpSession session) {
 		
@@ -85,4 +87,5 @@ public class CommuteRestController {
 		
 		return commute;
 	}
+	
 }

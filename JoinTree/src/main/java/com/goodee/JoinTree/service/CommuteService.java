@@ -1,6 +1,8 @@
 package com.goodee.JoinTree.service;
 
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +102,53 @@ public class CommuteService {
 		
 		Commute commute = commuteMapper.selectCommute(empNo); 
 		return commute;
+	}
+
+	public Map<String, Object> getCommuteTimeList(int empNo, Integer targetYear, Integer targetMonth) {
+		
+		Calendar firstDay = Calendar.getInstance();
+		
+		// 첫번째 날짜 설정
+		firstDay.set(Calendar.DATE, 1);
+		
+		// 원하는 년/월이 요청 매개값으로 넘어 왔다면
+		if(targetYear != null && targetMonth != null) {
+			firstDay.set(Calendar.YEAR, targetYear);
+			// API애서 자동 분기 12입력 -> 0, 년은 +1, -1이 입력되면 11이 되고 년 -1
+			firstDay.set(Calendar.MONTH, targetMonth); 
+		}
+		
+		// 바뀐 년도와 월 정보를 다시 셋팅
+        targetYear = firstDay.get(Calendar.YEAR);
+        targetMonth = firstDay.get(Calendar.MONTH);
+        
+        int daysInMonth = firstDay.getActualMaximum(Calendar.DAY_OF_MONTH); // 해당 월의 일수
+        
+        // 요일 배열 
+        String[] daysOfWeek = {"일", "월", "화", "수", "목", "금", "토"};
+        
+        // 해당 월의 1일의 요일
+        int firstDayOfWeek = firstDay.get(Calendar.DAY_OF_WEEK);
+ 		
+		// 사원별 월 출퇴근 시간 목록
+        Map<String, Object> commuteTimeListMap = new HashMap<>();
+        commuteTimeListMap.put("empNo", empNo);
+        commuteTimeListMap.put("targetYear", targetYear);
+        commuteTimeListMap.put("targetMonth", targetMonth+1);
+        
+        List<Commute> commuteTimeList = commuteMapper.getCommuteTimeList(commuteTimeListMap);
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("targetYear", targetYear);
+        resultMap.put("targetMonth", targetMonth);
+        resultMap.put("daysInMonth", daysInMonth);
+        resultMap.put("daysOfWeek", daysOfWeek);
+        resultMap.put("firstDayOfWeek", firstDayOfWeek);
+        resultMap.put("commuteTimeList", commuteTimeList);
+        
+        log.debug(resultMap.toString() + "<-- CommuteService resultMap");
+		
+		return resultMap;
 	}
 
 }

@@ -33,7 +33,8 @@
 		UPDATE 
 			commute 
 		SET  
-			emp_off_time = CURTIME() 
+			commute = #{commute},
+			emp_off_time = CURTIME()
 		WHERE 
 			emp_no = #{empNo} AND emp_on_off_date = CURDATE()
 	</update>
@@ -51,14 +52,29 @@
 	</select>
 	
 	<!-- 금일 출퇴근 시간 기록 조회 -->
-	<select id="currentCommuteCnt" parameterType="java.util.Map"
-			resultType="int">
+	<select id="currentCommuteCnt" 
+			parameterType="java.util.Map" resultType="int">
 		SELECT 
 			COUNT(${commuteCode}) 
 		FROM 
 			commute 
 		WHERE 
-			emp_no = #{empNo} AND emp_on_off_date = CURDATE();
+			emp_no = #{empNo} AND emp_on_off_date = CURDATE()
 	</select>
-
+	
+	<!-- 사원별 월 출퇴근 시간 조회 -->
+	<select id="getCommuteTimeList" 
+			parameterType="java.util.Map" resultType="java.util.Map">
+	
+		SELECT 
+	        emp_no empNo, 
+	        emp_on_off_date empOnOffDate, 
+	        emp_on_time empOnTime, 
+	        emp_off_time empOffTime
+	    FROM commute 
+	    WHERE 
+	        emp_no = #{empNo} 
+	    AND YEAR(emp_on_off_date) = #{targetYear}
+	    AND MONTH(emp_on_off_date) = #{targetMonth}
+	</select>
 </mapper>
