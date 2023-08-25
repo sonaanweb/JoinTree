@@ -10,10 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<!-- 필수 요소-->
-<div class="container-fluid page-body-wrapper">
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+	<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+		<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 
 			<!-- 관리 회의실 리스트 -->
 			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
@@ -63,7 +64,7 @@
 			   				<input type="hidden" name="updateId" value="1111">
 			                    <div class="mb-3">
 			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
-			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName">
+			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName" placeholder="회의실 이름을 입력하세요">
 			                        <div class="check" id="rn_add_check"></div><!-- 회의실명 중복, 공백일 시 -->
 			                    </div>
 			                    <div class="mb-3">
@@ -133,6 +134,7 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#modalAddRoomCapacity").val("1");
     $("#modalAddRoomStatus").val("1");
     $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
+});
 
     $('#modalBtn').click(function() {
         const roomName = $('#modalAddRoomName').val();
@@ -158,6 +160,7 @@ $('#addModal').on('show.bs.modal', function (event) {
                     $("#modalAddRoomName").focus();
                 } else {
                     // 유효성 검사 통과시
+                    // 폼의 액션 속성과 매서드 속성을 변경. 폼을 /addMeetRoom URL로 보내는 POST 요청
                     $('#addForm').attr('action', '/addMeetRoom');
                     $('#addForm').attr('method', 'post'); // 폼 제출 방식
                     $('#addForm')[0].submit();
@@ -169,8 +172,6 @@ $('#addModal').on('show.bs.modal', function (event) {
             }
         });
     });
-});
-
 
 // 수정 모달창 스크립트
 $(document).ready(function() {
@@ -246,29 +247,31 @@ $(document).ready(function() {
     });
 });
 
-//삭제 버튼 클릭 시
+	//삭제 버튼 클릭 시
 	$('.deleteButton').click(function(event) {
-		event.preventDefault(); // 기본 폼 제출 동작 막기
-		
+	    event.preventDefault(); // 기본 폼 제출 동작 막기
+	
+	    const row = $(this).closest('tr'); // 해당 행
 	    const roomNo = $(this).data('room-no');
-	    const roomName = $(this).closest('tr').find('.roomName').text(); // 해당 회의실 이름 찾아서 가져오기
+	    const roomName = row.find('.roomName').text(); // 해당 회의실 이름 가져오기
 	
 	    const msg = "삭제된 회의실은 복구할 수 없습니다.\n'" + roomName + "' 회의실을 삭제하시겠습니까?";
 	    if (confirm(msg)) {
-	        deleteMeetRoom(roomNo);
+	        deleteMeetRoom(row, roomNo);
 	    }
 	});
 	
-	function deleteMeetRoom(roomNo) {
+	function deleteMeetRoom(row, roomNo) {
 	    $.ajax({
 	        url: '/deleteMeetRoom',
 	        type: 'post',
 	        data: { roomNo: roomNo },
 	        success: function(result) {
 	            if (result === "success") {
-	                // 삭제 성공 시 처리
+	                // 삭제 성공 시
 	                alert('회의실이 삭제되었습니다.');
-	                location.reload(); // 페이지 새로고침
+	                // 해당 행 비우기 (바로 반영)
+	                row.empty();
 	            } else {
 	                // 삭제 실패 시 처리
 	                alert('회의실 삭제에 실패했습니다.');
@@ -279,6 +282,7 @@ $(document).ready(function() {
 	        }
 	    });
 	}
+
 </script>
 </body>
 </html>

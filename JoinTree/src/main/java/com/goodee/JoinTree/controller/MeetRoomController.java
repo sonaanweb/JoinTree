@@ -47,12 +47,7 @@ public class MeetRoomController {
 	}
 	// ------------------------------------------------
 	
-	/* 회의실 추가
-    @GetMapping("/equipment/addMeetRoom")
-    public String addMeetRoom() {
-        return "/equipment/addMeetRoom";
-    }*/
-
+	// 회의실 추가
     @PostMapping("/addMeetRoom")
     public String addMeetRoom(HttpServletRequest request, MeetingRoom meetingRoom) {
     	
@@ -72,6 +67,23 @@ public class MeetRoomController {
         
         return "redirect:/equipment/meetRoomList";
     }
+    /*
+    public Map<String, String> addMeetRoom(HttpServletRequest request,@RequestBody MeetingRoom meetingRoom) {
+        Map<String, String> response = new HashMap<>();
+
+        int createId = 1111;
+        int updateId = 1111;
+        meetingRoom.setCreateId(createId);
+        meetingRoom.setUpdateId(updateId);
+
+        String equipCategory = "E0101";
+        meetingRoom.setEquipCategory(equipCategory);
+
+        meetRoomService.addMeetRoom(meetingRoom);
+
+        response.put("result", "success");
+        return response;
+    }*/
     // ------------------------------------------------
     
     // 회의실 수정 액션(post)
@@ -114,6 +126,6 @@ public class MeetRoomController {
         } else {
             return "fail";
         }
-    }
+    } 
 	
 }

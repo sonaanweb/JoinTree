@@ -25,7 +25,6 @@ public class MeetRoomReservService {
         return meetRoomMapper.selectMeetRoomAll(map);
     }
 	
-	
 	// 회의실 예약 현황 조회
    public List<Map<String, Object>> getMeetRoomReservCal(int roomNo) {
         List<Map<String, Object>> eventList = new ArrayList<>();
@@ -33,7 +32,7 @@ public class MeetRoomReservService {
         List<Reservation> reservationList = meetRoomReservMapper.selectMeetCalList(roomNo);
         for (Reservation reservation : reservationList) {
             Map<String, Object> event = new HashMap<>();
-            event.put("title", reservation.getEquipNo()); //회의실 이름이 와야 한다
+            event.put("title", reservation.getRevReason()); //회의실 이름이 와야 한다
             event.put("start", reservation.getRevStartTime());
             event.put("end", reservation.getRevEndTime());
             eventList.add(event);

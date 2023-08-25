@@ -28,7 +28,7 @@ public class MeetReservController {
 	@Autowired MeetRoomService meetRoomService;
 	
 	// 예약 가능한 회의실 List(클릭시 캘린더로 넘어가야 함)
-	@GetMapping("/reservation/meetRoomList")
+	@GetMapping("/reservation/empMeetRoomList")
 	public String meetRoomList(Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
 		
@@ -39,21 +39,10 @@ public class MeetReservController {
 		model.addAttribute("meetRoomList", meetRoomList); //view ${}
 		
 		log.debug(Sona+"MeetRoomReSERVController.meetRoomList : "+meetRoomList.toString()+RESET);
-		return "/reservation/meetRoomList"; // 뷰 이름 랜더링
+		return "/reservation/empMeetRoomList"; // 뷰 이름 랜더링
 	}
 	
-	
-	// 회의실 예약 현황 페이지
-	/*@GetMapping("/reservation/meetRoomReserv")
-	@ResponseBody
-	public String meetRoomReserv(HttpSession session,Model model) {
-		List<Reservation> meetCalList = meetRoomReservService.getMeetRoomReservCal(new HashMap<>());
-		model.addAttribute("meetCalList",meetCalList);
-		// 왜 출력 안 되지 
-		log.debug(Sona+"meetReservController.meetCalList:"+meetCalList+RESET);
-		return "/reservation/meetRoomReserv";
-	}*/
-	
+	// 특정 회의실 예약 현황
 	@GetMapping("/reservation/meetRoomReserv")
 	public String viewMeetCal(@RequestParam(name = "roomNo") int roomNo, Model model) {
 		model.addAttribute("roomNo", roomNo);
@@ -61,9 +50,12 @@ public class MeetReservController {
 		return "/reservation/meetRoomReserv";
 	}
 	
+	// 풀캘린더 사용하는 ajax url
     @GetMapping("/meetRoomReserv")
     @ResponseBody
     public List<Map<String, Object>> getMeetCal(@RequestParam(name = "roomNo") int roomNo) {
         return meetRoomReservService.getMeetRoomReservCal(roomNo);
     }
+    
+    // 회의실 예약 추가
 }
