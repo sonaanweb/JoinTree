@@ -32,7 +32,7 @@ public class CommunityService {
 	@Autowired
 	private BoardFileMapper boardFileMapper;
 	
-	// 게시판 목록 
+	// 게시판 목록 조회
 	public Map<String, Object> getCommList(String category, int currentPage, int rowPerPage) {
 		int beginRow = (currentPage - 1) * rowPerPage;
 		
@@ -44,7 +44,7 @@ public class CommunityService {
 		
 		log.debug(CYAN + map + " <-- map(CommunityService-getCommList)" + RESET);
 		
-		// 상단고정 글 가져오기
+		// 상단고정 글 가져오기 // 최대 5개?
 		List<Board> pinnedCommList = communityMapper.selectPinnedCommList(category);
 		log.debug(CYAN + pinnedCommList + " <-- pinnedCmmList(CommunityService-getCommList)" + RESET);
 		
@@ -176,18 +176,68 @@ public class CommunityService {
 	public int modifyComm(Board board) {		
 		int row = communityMapper.modifyComm(board);
 		log.debug(CYAN + row + " <-- row(CommunityService-modifyComm)" + RESET);
-		/*
-		if (row == 1) { // 게시글이 수정되었을 경우
-			int boardNo = board.getBoardNo();
-			log.debug(CYAN + boardNo + " <-- boardNo(CommunityService-modifyComm)" + RESET);
-			MultipartFile file = board.getMultipartFile();
-			// 첨부파일이 존재할 경우
-			if (file != null) {	
-			}		
-		}
-		*/
+
 
 		return row;
+	}
+	
+	// 게시글 수정 시 이미지 추가
+	public int uploadImg(int empNo, int boardNo, MultipartFile newImg, String path) {
+		String originFilename = newImg.getOriginalFilename();
+		String ext = originFilename.substring(originFilename.lastIndexOf("."));
+		String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
+		String realPath = path + newFilename;
 		
+		BoardFile boardFile = new BoardFile();
+		boardFile.setBoardNo(boardNo);
+		boardFile.setBoardOriginFilename(originFilename);
+		boardFile.setBoardSaveFilename(newFilename);
+		boardFile.setBoardFilesize(newImg.getSize());
+		boardFile.setBoardFiletype(newImg.getContentType());
+		boardFile.setCreateId(empNo);
+		boardFile.setUpdateId(empNo);
+		
+		// DB에 새 이미지 정보 저장
+		int row = boardFileMapper.insertBoardFile(boardFile);
+		
+		log.debug(CYAN + row + " <-- row(CommunityService-uploadImg)" + RESET);
+		
+		if (row == 1) {
+			// 새 이미지 파일 로컬에 저장
+			try {
+				newImg.transferTo(new File(realPath));
+				row++; // 이미지 등록 성공 시 반환값 증가
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				// 트랜잭션 작동을 위해 예외(try-catch를 강요하지 않는 예외 -> ex: RuntimeException) 발생 필요
+				throw new RuntimeException();
+			}
+		}
+		
+		return row; // 컨트롤러에서 최종 2 출력 시 DB, 로컬에 이미지 저장 완료
+	}
+	
+	// 게시글 수정 시 이미지 삭제
+	public int removeImg(int boardNo, String path) {
+		BoardFile boardFile = boardFileMapper.selectBoardFile(boardNo);
+		log.debug(CYAN + boardFile + " <-- boardFile(CommunityService-removeImg)" + RESET);
+		
+		if (boardFile != null) { // boardNo에 해당하는 이미지가 있으면 삭제
+			String saveFilename = boardFile.getBoardSaveFilename();
+			String realPath = path + saveFilename;
+			File f = new File(realPath);
+			
+			if (f.exists()) {
+				f.delete();
+				log.debug(CYAN + "이미지 파일 삭제 완료(CommunityService-removeImg)" + RESET);
+			}
+		}
+		
+		// DB에서 이미지 정보 삭제
+		int row = boardFileMapper.removeBoardFile(boardNo);
+		
+		log.debug(CYAN + row + " <-- row(CommunityService-removeImg)" + RESET);
+		
+		return row;
 	}
 }
