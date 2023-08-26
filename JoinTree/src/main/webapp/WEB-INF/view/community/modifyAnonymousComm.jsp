@@ -154,6 +154,7 @@
 			<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 				<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 	
+	
 					<a href="/JoinTree/community/freeCommList/freeCommOne?boardNo=${comm.boardNo}">이전</a>
 				
 					<h1>게시글 수정</h1>
@@ -164,13 +165,13 @@
 					</div>		
 					
 					<div>
-						카테고리: 자유게시판
+						카테고리: 익명게시판
 					</div>
 					
 					<form action="/JoinTree/community/modifyComm" method="post">
 						<input type="hidden" name="boardNo" value="${comm.boardNo}">
 						<input type="hidden" name="empNo" value="${loginAccount.empNo}">
-						<input type="hidden" name="boardCategory" value="B0103">
+						<input type="hidden" name="boardCategory" value="B0104">
 						<div>
 							<c:if test="${dept eq 'D0202'}">	
 								게시판 상단고정 <input type="checkbox" name="boardPinned" <c:if test="${comm.boardPinned eq '1'}">checked</c:if>> <!-- 기존 상단고정 상태일 경우 체크박스 선택하여 출력 -->
@@ -212,7 +213,7 @@
 							</tr>
 						</table>
 						<div>
-							<button type="submit" id="modifyFreeCommBtn">수정</button>
+							<button type="submit" id="modifyAnonymousCommBtn">수정</button>
 						</div>
 					</form>
 			</div>
