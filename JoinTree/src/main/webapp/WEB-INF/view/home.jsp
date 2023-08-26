@@ -47,7 +47,7 @@
 			function selectCommuteByDate(){
 		    	$.ajax({
     		    	type:'GET',
-    		    	url: '/getCommuteTime',
+    		    	url: '/JoinTree/getCommuteTime',
     		    	success: function(data){
     		    		
     		    		if(data){
@@ -88,7 +88,7 @@
 	            
 	            $.ajax({
 	            	type: 'post',
-	            	url: '/saveCommuteTime',
+	            	url: '/JoinTree/saveCommuteTime',
 	            	data:{
 	            		time: currentTime,
 	            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
@@ -118,7 +118,7 @@
 						<div class="card card-img-holder">
 							<div class="card-body center ">
 								<div class="home-profile">
-									<img class="mb-2" src="/empImg/tiger.png" >
+									<img class="mb-2" src="/JoinTree/empImg/tiger.png" >
 									<h1 class="mb-2 center">${empInfo.empName}${empInfo.position}</h1>
 									<h4 class="mb-2 center">${empInfo.dept}</h4>
 									<h1 class="mb-2 clock"></h1>

@@ -129,7 +129,7 @@
 		<!-- 왼쪽 - 개발팀(공통코리 관리) -->
 		<div class="line"></div>
 		<li class="nav-item">
-			<a class="nav-link" href="/code/codeList">
+			<a class="nav-link" href="/JoinTree/code/codeList">
 				<span class="menu-title">공통코드관리</span>
 				<i class="mdi mdi mdi-server menu-icon"></i>
 			</a>
