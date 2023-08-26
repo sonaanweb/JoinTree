@@ -2,10 +2,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>modifyPw</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<!-- header -->
+	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 		<script>
 			$(document).ready(function() {
 				const urlParams = new URL(location.href).searchParams;
@@ -63,30 +61,32 @@
 				});
 			});
 	  	</script>
-	</head>
-	<body>
-		<div>
-			<a href="/home">홈</a>
+		
+		<div class="container-fluid page-body-wrapper">
+		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+
+	
+				<h1>비밀번호 변경</h1>
+				<form action="/JoinTree/empInfo/modifyPw" method="post" id="modifyPw">
+					<div>
+						<label for="empPw">현재 비밀번호 입력</label>
+						<input type="password" name="empPw" id="empPw">
+					</div>
+					
+					<div>
+						<label for="newPw">새 비밀번호 입력</label>
+						<input type="password" name="newPw" id="newPw">
+						<span style="color: red;" id="newPwError" class="error-message"></span>
+					</div>
+					
+					<div>
+						<label for="newPw2">새 비밀번호 다시 입력</label>
+						<input type="password" name="newPw2" id="newPw2">
+						<span style="color: red;" id="newPw2Error" class="error-message"></span>
+					</div>
+					<button type="button" id="modifyPwBtn">비밀번호 변경</button>
+				</form>
+			</div>
 		</div>
-		<h1>비밀번호 변경</h1>
-		<form action="/empInfo/modifyPw" method="post" id="modifyPw">
-			<div>
-				<label for="empPw">현재 비밀번호 입력</label>
-				<input type="password" name="empPw" id="empPw">
-			</div>
-			
-			<div>
-				<label for="newPw">새 비밀번호 입력</label>
-				<input type="password" name="newPw" id="newPw">
-				<span style="color: red;" id="newPwError" class="error-message"></span>
-			</div>
-			
-			<div>
-				<label for="newPw2">새 비밀번호 다시 입력</label>
-				<input type="password" name="newPw2" id="newPw2">
-				<span style="color: red;" id="newPw2Error" class="error-message"></span>
-			</div>
-			<button type="button" id="modifyPwBtn">비밀번호 변경</button>
-		</form>
-	</body>
 </html>

@@ -35,14 +35,14 @@
 	                    const fileSize = file.size;
 	                    const maxSize = 3 * 1024 * 1024; // 3MB
 	                    const allowedExtensions = ['.jpg', '.jpeg', '.png', 'gif', '.bmp'];
-	                    const fileExtension = file.name.substr(file.name.lastIndexOf('.')).toLowerCase();
+	                    const fileExtensions = file.name.substr(file.name.lastIndexOf('.')).toLowerCase();
 	                    
 	                    if (fileSize > maxSize) {
 	                    	alert("파일 크기가 3MB를 초과합니다.");
 	                    	fileInput.val(''); // 파일 선택 초기화
 	                    	previewImage.attr('src', ''); // 미리보기 초기화
 	                    	// removeBtn.hide(); // 파일 삭제 버튼 숨기기
-	                    } else if (!allowedExtensions.includes(fileExtension)) {
+	                    } else if (!allowedExtensions.includes(fileExtensions)) {
 	                    	alert("이미지 파일만 첨부 가능합니다.");
 	                    	fileInput.val(''); // 파일 선택 초기화
 	                    	previewImage.attr('src', ''); // 미리보기 초기화
@@ -98,7 +98,7 @@
 				<div>
 					카테고리: 자유게시판
 				</div>
-				<form action="/community/freeCommList/addFreeComm" method="post" enctype="multipart/form-data" id="addFreeComm">
+				<form action="/JoinTree/community/addComm" method="post" enctype="multipart/form-data" id="addFreeComm">
 					<input type="hidden" name="empNo" value="${loginAccount.empNo}">
 					<input type="hidden" name="boardCategory" value="B0103">
 					<div>
@@ -118,7 +118,7 @@
 						</tr>
 						<tr>
 							<td>
-								<input type="file" name="multipartFile" id="fileInput">
+								<input type="file" name="multipartFile" id="fileInput" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
 								<button type="button" id="removeBtn">파일 삭제</button>
 								(3MB 이하의 이미지 파일만 첨부 가능합니다.)<br>
 								<img id="previewImage" src="" style="max-width: 300px; max-height: 300px;">

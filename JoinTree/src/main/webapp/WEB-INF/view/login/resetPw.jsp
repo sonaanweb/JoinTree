@@ -49,7 +49,7 @@
 						// AJAX 요청을 통해 인증 여부 확인
 						$.ajax({
 							type: "POST", 
-							url: "/login/resetPw",
+							url: "/JoinTree/login/resetPw",
 							data: {
 								empNo: empNo, 
 								juminNo: juminNo
@@ -97,10 +97,10 @@
 	<body>
 		<h1>비밀번호 재설정</h1>
 		<div>
-			<a href="/home">홈</a>
+			<a href="/JoinTree/login/login">이전</a>
 		</div>
 		
-		<form action="/login/resetPw" method="post">
+		<form action="/JoinTree/login/resetPw" method="post">
 			<div>
 				<label for="empNo">사번</label>
 				<input type="number" name="empNo" id="empNo">
@@ -114,7 +114,7 @@
 			<button type="button" id="authBtn">인증</button>
 		</form>
 				
-		<form action="/login/resetPw/reset" method="post" id="reset">
+		<form action="/JoinTree/login/resetPw/reset" method="post" id="reset">
 			<input type="hidden" name="empNo" id="empNoHidden" value="">
 			<div id="resetPwSection" style="display: none;">
 				<div>
