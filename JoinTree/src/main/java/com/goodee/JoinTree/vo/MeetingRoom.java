@@ -7,6 +7,7 @@ public class MeetingRoom {
 
 	private int roomNo;
 	private String equipCategory;
+	private int empNo;
 	private String roomName;
 	private int roomCapacity;
 	private String roomStatus;

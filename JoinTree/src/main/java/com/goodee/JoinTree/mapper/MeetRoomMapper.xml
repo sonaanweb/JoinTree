@@ -29,13 +29,6 @@
 		ORDER BY createdate DESC;
 	</select>
 	
-	<!-- 회의실 공통코드 E0101 가져오기
-	<select id="getCommonCodeByCode" parameterType="String" resultType="String">
-    SELECT code
-    FROM common_code
-    WHERE code = #{equipCategoryCode}
-	</select> -->
-	
 	<!-- 경영지원 회의실 추가 / 공통코드 사용-->
 	<insert id="insertMeetRoom" parameterType="com.goodee.JoinTree.vo.MeetingRoom" >
 	    <selectKey order="AFTER" keyProperty="roomNo" resultType="int">
@@ -43,6 +36,7 @@
 	    </selectKey>
 	    INSERT INTO meeting_room(
 	        equip_category,
+	        emp_no,
 	        room_name,
 	        room_capacity,
 	        room_status,
@@ -53,13 +47,14 @@
 	    )
 	    VALUES(
 	        #{equipCategory},
+	        #{empNo},
 	        #{roomName},
 	        #{roomCapacity},
 	        #{roomStatus},
 	        NOW(),
 	        NOW(),
-	        #{createId},
-	        #{updateId}
+	        #{empNo},
+	        #{empNo}
 	    )
 	</insert>
 	
@@ -78,6 +73,7 @@
 		SELECT
 			room_no roomNo,
 			equip_category equipCategory,
+			emp_no empNo,
 			room_name roomName,
 			room_Capacity roomCapacity,
 			room_status roomStatus,

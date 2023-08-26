@@ -1,7 +1,5 @@
 package com.goodee.JoinTree.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,19 +24,24 @@ public class MeetRoomReservService {
     }
 	
 	// 회의실 예약 현황 조회
-   public List<Map<String, Object>> getMeetRoomReservCal(int roomNo) {
-        List<Map<String, Object>> eventList = new ArrayList<>();
-        
-        List<Reservation> reservationList = meetRoomReservMapper.selectMeetCalList(roomNo);
-        for (Reservation reservation : reservationList) {
-            Map<String, Object> event = new HashMap<>();
-            event.put("title", reservation.getRevReason()); //회의실 이름이 와야 한다
-            event.put("start", reservation.getRevStartTime());
-            event.put("end", reservation.getRevEndTime());
-            eventList.add(event);
-            System.out.print(reservationList);
-        }
-        
-        return eventList;
-    }
+   public List<Reservation> getMeetRoomReservCal(int roomNo) {
+	   return meetRoomReservMapper.selectMeetCalList(roomNo);
+   }
+   
+   
+	// 회의실 예약 추가 메서드
+	public int addMeetRoomCal(Reservation reservation) {
+       return meetRoomReservMapper.insertMeetCal(reservation);
+   }
+	
+	// 회의실 예약 상태 수정 메서드
+	public void modifyMeetRoomCal(Reservation reservation) {
+		meetRoomReservMapper.insertMeetCal(reservation);
+	}
+	
+	/*
+	 * // 회의실 수정 객체 public MeetingRoom getMeetRoomNo(MeetingRoom meetingRoom) {
+	 * MeetingRoom modiMeetingRoom = meetRoomMapper.selectMeetRoomOne(meetingRoom);
+	 * return modiMeetingRoom; }
+	 */
 }

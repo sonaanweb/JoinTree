@@ -60,8 +60,7 @@
 			            <div class="modal-body">
 			                <form id="addForm">
 			                <input type="hidden" id="modalAddCate" name="equipCategory">
-			                <input type="hidden" name="createId" value="1111"> <!-- testId -->
-			   				<input type="hidden" name="updateId" value="1111">
+			                <input type="hidden" name="empNo" value="11111111"> <!-- testId -->
 			                    <div class="mb-3">
 			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
 			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName" placeholder="회의실 이름을 입력하세요">
@@ -149,7 +148,7 @@ $('#addModal').on('show.bs.modal', function (event) {
         }
 
         $.ajax({
-            url: '/cntRoomName',
+            url: '/JoinTree/cntRoomName',
             type: 'post',
             data: roomName,
             contentType: 'application/json',
@@ -161,7 +160,7 @@ $('#addModal').on('show.bs.modal', function (event) {
                 } else {
                     // 유효성 검사 통과시
                     // 폼의 액션 속성과 매서드 속성을 변경. 폼을 /addMeetRoom URL로 보내는 POST 요청
-                    $('#addForm').attr('action', '/addMeetRoom');
+                    $('#addForm').attr('action', '/JoinTree/addMeetRoom');
                     $('#addForm').attr('method', 'post'); // 폼 제출 방식
                     $('#addForm')[0].submit();
                     alert('회의실이 추가되었습니다.');
@@ -182,7 +181,7 @@ $(document).ready(function() {
         originalRoomName = $(this).closest('tr').find('.roomName').text(); // 기존 회의실 이름 저장
         
         $.ajax({
-            url: '/modifyMeetRoom',
+            url: '/JoinTree/modifyMeetRoom',
             type: 'post',
             data: { roomNo: roomNo }, // 가져온 roomNo 전달
             success: function(meetroom) {
@@ -216,13 +215,13 @@ $(document).ready(function() {
              $("#rn_check").css("color", "red");
              $("#modalRoomName").focus();
         } else if (roomName === originalRoomName){
-            $('#updateForm').attr('action', '/equipment/modifyMeetRoom');
+            $('#updateForm').attr('action', '/JoinTree/equipment/modifyMeetRoom');
             $('#updateForm').attr('method', 'post');
             $('#updateForm')[0].submit();
             alert('수정이 완료되었습니다.');
         } else { // 둘 다 통과시
             $.ajax({
-                url: '/cntRoomName',
+                url: '/JoinTree/cntRoomName',
                 type: 'post',
                 data: roomName,
                 contentType: 'application/json',
@@ -233,7 +232,7 @@ $(document).ready(function() {
 	                     $("#modalRoomName").focus();
                     } else {
                         // 유효성 검사 통과시
-	                    $('#updateForm').attr('action', '/equipment/modifyMeetRoom');
+	                    $('#updateForm').attr('action', '/JoinTree/equipment/modifyMeetRoom');
 	                    $('#updateForm').attr('method', 'post'); // 폼 제출 방식
 	                    $('#updateForm')[0].submit();
 	                    alert('수정이 완료되었습니다.');
@@ -263,7 +262,7 @@ $(document).ready(function() {
 	
 	function deleteMeetRoom(row, roomNo) {
 	    $.ajax({
-	        url: '/deleteMeetRoom',
+	        url: '/JoinTree/deleteMeetRoom',
 	        type: 'post',
 	        data: { roomNo: roomNo },
 	        success: function(result) {

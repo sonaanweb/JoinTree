@@ -52,10 +52,9 @@ public class MeetRoomController {
     public String addMeetRoom(HttpServletRequest request, MeetingRoom meetingRoom) {
     	
     	// 임시 아이디값 ---
-    	int createId = 1111;
-    	int updateId = 1111;
-    	meetingRoom.setCreateId(createId);
-    	meetingRoom.setUpdateId(updateId);
+    	int empNo = 11111111;
+    	meetingRoom.setCreateId(empNo);
+    	meetingRoom.setUpdateId(empNo);
     	
         String equipCategory = "E0101"; // 회의실 공통 코드 IN
         meetingRoom.setEquipCategory(equipCategory);

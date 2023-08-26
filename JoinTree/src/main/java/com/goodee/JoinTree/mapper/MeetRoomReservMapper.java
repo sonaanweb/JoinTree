@@ -16,4 +16,11 @@ public interface MeetRoomReservMapper {
 	// 예약 캘린더 데이터 출력
 	// List<vo name> 회의실 예약 목록 메서드
 	List<Reservation> selectMeetCalList(int roomNo);
+	
+	// 회의실 예약 일정 추가
+	int insertMeetCal(Reservation reservation);
+	
+	// 회의실 예약 상태 수정 메서드
+	int updateMeetCal(Reservation reservation);
+	
 }

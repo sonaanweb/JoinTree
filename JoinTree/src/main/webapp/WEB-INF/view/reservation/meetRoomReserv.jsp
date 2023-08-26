@@ -49,9 +49,11 @@
 			                </div>
 			                <div class="modal-body">
 			                    <div class="form-group">
-			                    	<!-- 회의실 이름 끌고오기 -->
+			                    	<!-- 회의실 이름 끌고오기 , roomNo를 할당해줍니다 -->
+			                    	<input type="hidden" id="equipNo" name="equipNo" value="${roomNo}">
 			                        <label for="taskId" class="col-form-label">회의실 이름</label>
 			                        <input type="text" class="form-control" id="roomName" name="roomName" readonly="readonly">
+			                        <!-- 날짜와 시간을 따로 두었기 때문에 합쳐서 DB에 들어가는 작업이 필요함 -->
 			 						<label for="selectedDate" class="col-form-label">선택 날짜</label>
 			        				<input type="text" class="form-control" id="selectedDate" name="selectedDate" readonly="readonly">
 						            <label for="revStartTime" class="col-form-label">시작 시간</label>
@@ -110,11 +112,12 @@
    				</div>				
 			</div><!-- 컨텐츠 끝 -->
 		</div><!-- 컨텐츠전체 끝 -->
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    var roomName = '<%= request.getParameter("roomName") %>';
+    var urlParams = new URLSearchParams(window.location.search);
+    var roomNo = urlParams.get('roomNo'); // URL 매개변수에서 roomNo 값을 가져옵니다.
+    var roomName = urlParams.get('roomName'); // URL 매개변수에서 roomName 값을 가져옵니다.
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
     	timeZone: 'Asia/Seoul',
@@ -145,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: false,
         
         events: function(info, successCallback, failureCallback) {
-            var roomNo = ${roomNo};
             
-            $.ajax({
+            $.ajax({//캘린더조회
                 url: '/JoinTree/meetRoomReserv?roomNo=' + roomNo,
                 type: 'GET',
                 dataType: 'json',
@@ -185,26 +187,36 @@ document.addEventListener('DOMContentLoaded', function() {
             // 추가 버튼을 클릭하면 예약 추가
             $('#addCalendar').click(function() {
                 var reservationInfo = {
-                    roomName: $('#roomName').val(),
-                    startTime: $('#revStartTime').val(),
-                    endTime: $('#revEndTime').val(),
-                    reason: $('#revReason').val()
+                	equipNo: roomNo,
+                    revStartTime: selectedDate + ' ' + $('#revStartTime').val(),
+                    revEndTime: selectedDate + ' ' + $('#revEndTime').val(),
+                    revReason: $('#revReason').val()
                 };
-             
+                $.ajax({
+                	url :'/JoinTree/addReservation',
+             		type: 'POST',
+             		dataType: 'json',
+             		data: JSON.stringify(reservationInfo),
+             		contentType: 'application/json',
+             		success: function(response){
                 // 캘린더에 해당 예약 이벤트를 추가합니다.
                 calendar.addEvent({
-                    title: reservationInfo.roomName,
-                    start: reservationInfo.startTime,
-                    end: reservationInfo.endTime
+                    title: reservationInfo.revReason,
+                    start: reservationInfo.revStartTime,
+                    end: reservationInfo.revEndTime
                 });
-
                 // 모달 창을 닫습니다.
                 $('#calendarModal').modal('hide');
+                    
+             		},
+             		error: function() {
+                        // 에러 처리
+                    }
+                });
             });
         }
     });
-
-    calendar.render();
+   calendar.render();
 });
 </script>
 </body>

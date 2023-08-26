@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회의실 목록(사원)- 클릭하면 해당 회의실 캘린더로 넘어가게 할 예정</title>
+<title>예약 회의실</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -26,7 +26,7 @@
 			    </thead>
 				<tbody>
 				    <c:forEach var="m" items="${meetRoomList}">
-				        <c:if test="${m.roomStatus == 1}"> <!-- 사용 가능한 회의실만 표시 -->
+				        <c:if test="${m.roomStatus == 1}"> <!-- 사용 가능 상태인 회의실만 표시 -->
 				            <tr>
 				                <td class="roomName">
 				                    <a href="/JoinTree/reservation/meetRoomReserv?roomNo=${m.roomNo}&roomName=${m.roomName}">

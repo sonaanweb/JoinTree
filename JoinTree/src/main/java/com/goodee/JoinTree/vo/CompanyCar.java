@@ -7,6 +7,7 @@ public class CompanyCar {
 
 	private int carNo;
 	private String equipCategory;
+	private int empNo;
 	private String carType;
 	private int carCapacity;
 	private String carStatus;

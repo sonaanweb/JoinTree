@@ -48,4 +48,37 @@
 		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
 		WHERE m.room_no = #{roomNo}
 	</select>
+	
+	<!-- 회의실 예약 하기 -->
+	<insert id="insertMeetCal" parameterType="com.goodee.JoinTree.vo.Reservation">
+	 	<selectKey order="AFTER" keyProperty="revNo" resultType="int">
+	        SELECT last_insert_id()
+	    </selectKey>
+		INSERT INTO reservation(
+			emp_no,
+			equip_no,
+			equip_category,
+			rev_start_time,
+			rev_end_time,
+			rev_status,
+			rev_reason,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		)
+		VALUES(
+			#{empNo},
+			#{equipNo},
+			#{equipCategory},
+			#{revStartTime},
+			#{revEndTime},
+			#{revStatus},
+			#{revReason},
+			NOW(),
+	        NOW(),
+			#{empNo},
+			#{empNo}
+		)	
+	</insert>
 </mapper>
