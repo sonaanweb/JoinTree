@@ -146,11 +146,11 @@
 					</div>	
                   <p class="card-description">
                     Add class <code>.table-bordered</code><br>
-                  	카테고리: 자유게시판
+                  	카테고리: 중고장터 게시판
                   </p>
                   <form action="/JoinTree/community/addComm" method="post" enctype="multipart/form-data" id="addFreeComm">
 					<input type="hidden" name="empNo" value="${loginAccount.empNo}">
-					<input type="hidden" name="boardCategory" value="B0103">
+					<input type="hidden" name="boardCategory" value="B0105">
         			<div>
 						<c:if test="${dept eq 'D0202'}">	
 							게시판 상단고정 <input type="checkbox" name="boardPinned"> <!-- value 지정하지 않았을 경우 체크박스 선택 시 boardPinned="on" 과 같이 넘어감 -->
