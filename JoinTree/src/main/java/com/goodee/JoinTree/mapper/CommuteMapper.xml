@@ -71,10 +71,60 @@
 	        emp_on_off_date empOnOffDate, 
 	        emp_on_time empOnTime, 
 	        emp_off_time empOffTime
-	    FROM commute 
+	    FROM 
+	    	commute 
 	    WHERE 
 	        emp_no = #{empNo} 
 	    AND YEAR(emp_on_off_date) = #{targetYear}
 	    AND MONTH(emp_on_off_date) = #{targetMonth}
+	</select>
+	
+	<select id="getEmpHireDate"
+			parameterType="int" resultType="com.goodee.JoinTree.vo.EmpInfo">
+		
+		SELECT 
+			emp_hire_date empHireDate 
+		FROM 
+			emp_info 
+		WHERE 
+			emp_no = #{empNo}
+	</select>
+	
+	<!-- 월 별 근로시간 통계 조회 -->
+	<select id="getMonthWorkTimeDate"
+			parameterType="java.util.Map" resultType="java.util.Map">
+			
+		SELECT
+		    YEAR(emp_on_off_date) year,
+		    MONTH(emp_on_off_date) month,
+		    TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(emp_off_time) - TIME_TO_SEC(emp_on_time))), '%H:%i:%s') totalWorkTime
+		FROM
+		    commute
+		WHERE
+		    YEAR(emp_on_off_date) = #{year} AND emp_no = #{empNo}
+		GROUP BY
+		    YEAR(emp_on_off_date),
+		    MONTH(emp_on_off_date)
+		ORDER BY
+		    YEAR(emp_on_off_date), MONTH(emp_on_off_date);  	
+	</select>
+	
+	<!-- 주 별 근로시간 통계 조회 -->
+	<select id="getWeekWorkTimeDate">
+		SELECT
+			YEAR(emp_on_off_date) year, 
+			MONTH(emp_on_off_date) month,
+			WEEK(emp_on_off_date) week,
+			TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(emp_off_time) - TIME_TO_SEC(emp_on_time))), '%H:%i:%s') totalWorkTime
+		FROM
+		    commute
+		WHERE
+		    YEAR(emp_on_off_date) = #{year} AND
+		    MONTH(emp_on_off_date) = #{month} AND
+		    emp_no = #{empNo}
+		GROUP BY
+		    YEAR(emp_on_off_date),
+		    MONTH(emp_on_off_date),
+		    WEEK(emp_on_off_date)
 	</select>
 </mapper>

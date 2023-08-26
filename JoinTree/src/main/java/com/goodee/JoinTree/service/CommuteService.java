@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.goodee.JoinTree.mapper.CommuteMapper;
 import com.goodee.JoinTree.vo.Commute;
+import com.goodee.JoinTree.vo.EmpInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,13 +98,14 @@ public class CommuteService {
 		return modifyCommuteResult;
 	}
 	
-	// 출퇴근 시간 조회
+	// 일별 출퇴근 시간 조회
 	public Commute selectCommute(int empNo) {
 		
 		Commute commute = commuteMapper.selectCommute(empNo); 
 		return commute;
 	}
-
+	
+	// 월별 출퇴근 시간 조회
 	public Map<String, Object> getCommuteTimeList(int empNo, Integer targetYear, Integer targetMonth) {
 		
 		Calendar firstDay = Calendar.getInstance();
@@ -149,6 +151,29 @@ public class CommuteService {
         log.debug(resultMap.toString() + "<-- CommuteService resultMap");
 		
 		return resultMap;
+	}
+	
+	// 사원별 입사일 조회
+	public EmpInfo getEmpHireDate(int empNo) {
+		
+		EmpInfo empHireDate = commuteMapper.getEmpHireDate(empNo);
+		return empHireDate;
+	}
+	
+	// 월 별 근로시간 통계 조회
+	public List<Map<String, Object>> getMonthWorkTimeData(Map<String, Object> monthWorkTimeDataMap) {
+		
+		List<Map<String, Object>> monthWorkTimeDataResult = commuteMapper.getMonthWorkTimeDate(monthWorkTimeDataMap);
+		log.debug(monthWorkTimeDataResult.toString() + "<-- CommuteService monthWorkTimeDataResult");
+		return monthWorkTimeDataResult;
+	}
+	
+	// 주 별 근로시간 통계 조회
+	public List<Map<String, Object>> getWeekWorkTimeData(Map<String, Object> weekWorkTimeDataMap) {
+		
+		List<Map<String, Object>> weekWorkTimeDataResult = commuteMapper.getWeekWorkTimeDate(weekWorkTimeDataMap);
+		log.debug(weekWorkTimeDataResult.toString() + "<-- CommuteService weekWorkTimeDataResult");
+		return weekWorkTimeDataResult;
 	}
 
 }

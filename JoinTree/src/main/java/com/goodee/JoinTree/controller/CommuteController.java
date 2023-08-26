@@ -19,6 +19,7 @@ public class CommuteController {
 	@Autowired
 	private CommuteService commuteService;
 	
+	// commuteList.jsp
 	@GetMapping("/commute/commuteList")
 	public String commuteList(Model model,
 							  HttpSession session, 
@@ -47,5 +48,12 @@ public class CommuteController {
 		model.addAttribute("commuteTimeList", resultMap.get("commuteTimeList")); // 해당 월의 출퇴근 리스트
 		
 		return "/commute/commuteList";
+	}
+	
+	// commuteChart.jsp
+	@GetMapping("/commute/commuteChart")
+	public String commuteChart() {
+		
+		return "/commute/commuteChart";
 	}
 }

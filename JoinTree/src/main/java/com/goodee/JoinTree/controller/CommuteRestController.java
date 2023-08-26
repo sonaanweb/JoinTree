@@ -1,8 +1,13 @@
 package com.goodee.JoinTree.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.goodee.JoinTree.service.CommuteService;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.Commute;
+import com.goodee.JoinTree.vo.EmpInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@CrossOrigin
 @RestController
 public class CommuteRestController {
 
@@ -86,6 +93,84 @@ public class CommuteRestController {
 		Commute commute = commuteService.selectCommute(empNo);
 		
 		return commute;
+	}
+	
+	// 사원별 입사일 조회
+	@GetMapping("/getEmpHireDate")
+	public EmpInfo getEmpHireDate(HttpSession session) {
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int empNo = 0; // 사번
+		
+		if(loginAccount != null) {
+			
+			empNo = loginAccount.getEmpNo();
+		}
+		
+		EmpInfo empHireDate = commuteService.getEmpHireDate(empNo);
+		log.debug(empHireDate+"<-- CommuteRestController empHireDate");
+		
+		return empHireDate;
+	}
+	
+	// 월 별 근로시간 통계 조회
+	@GetMapping("/getMonthWorkTimeData")
+	public List<Map<String, Object>> getMonthWorkTimeData(HttpSession session,
+														  @RequestParam String year){
+		log.debug(year+"<-- CommuteRestController year");
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int empNo = 0; // 사번
+		
+		if(loginAccount != null) {
+			
+			empNo = loginAccount.getEmpNo();
+		}
+		
+		// 서비스에 보낼 값 map에 저장
+		Map<String, Object> monthWorkTimeDataMap = new HashMap<>();
+		monthWorkTimeDataMap.put("empNo", empNo);
+		monthWorkTimeDataMap.put("year", year);
+		
+		// 월별 근로시간 통계 조회
+		List<Map<String, Object>> monthWorkTimeDataResult = commuteService.getMonthWorkTimeData(monthWorkTimeDataMap);
+		
+		return monthWorkTimeDataResult;
+	}
+	
+	// 주 별 근로시간 통계 조회
+	@GetMapping("/getWeekWorkTimeData")
+	public List<Map<String, Object>> getWeekWorkTimeData(HttpSession session,
+														  @RequestParam String year, @RequestParam String month){
+		log.debug(year+"<-- CommuteRestController year");
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int empNo = 0; // 사번
+		
+		if(loginAccount != null) {
+			
+			empNo = loginAccount.getEmpNo();
+		}
+		
+		// 서비스에 보낼 값 map에 저장
+		Map<String, Object> weekWorkTimeDataMap = new HashMap<>();
+		weekWorkTimeDataMap.put("empNo", empNo);
+		weekWorkTimeDataMap.put("year", year);
+		weekWorkTimeDataMap.put("month", month);
+		
+		// 월별 근로시간 통계 조회
+		List<Map<String, Object>> weekWorkTimeDataMapResult = commuteService.getWeekWorkTimeData(weekWorkTimeDataMap);
+		
+		return weekWorkTimeDataMapResult;
 	}
 	
 }
