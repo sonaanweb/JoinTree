@@ -58,17 +58,18 @@
                   <input type="password" class="form-control form-control-lg" id="empPw" name="empPw" placeholder="Password" required>
              </div>
              <div class="mt-3">
-                  <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" type="submit">Login</button >
+                  <button class="btn btn-block btn-success btn-lg font-weight-medium auth-form-btn" type="submit">Login</button >
                 </div>
                 <div class="my-2 d-flex justify-content-between align-items-center">
-                  <div class="form-check">
+                  <div class="form-check form-check-success">
                     <label class="form-check-label text-muted">
                       <input type="checkbox" class="form-check-input" id="saveId" name="saveId" value="y">
-                      Save ID
+                      	사번 저장
                     </label>
                   </div>
-                  <a href="/JoinTree/login/resetPw" class="auth-link text-black">Forgot password?</a>
+                  <a href="/JoinTree/login/resetPw" class="auth-link text-black">비밀번호를 잊으셨나요?</a>
                 </div>
+        </form>
             
             
 	        
@@ -82,7 +83,7 @@
 	        <label for="saveId">Save ID</label><br> -->
 	        
 	       <!--  <button type="submit">Login</button> -->
-   		</form>
+   		
 <!-- 		<div>
 			<a href="/login/resetPw">비밀번호를 잊으셨나요?</a>
 		</div> -->
