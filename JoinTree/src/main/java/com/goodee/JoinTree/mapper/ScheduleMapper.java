@@ -18,10 +18,8 @@ public interface ScheduleMapper {
 	// 개인 일정 출력
 	List<Schedule> selectPersonalSchedules(int empNo, String scheduleCategory);
 	
-	// 전사 일정 추가
-	//int addCompanySchedule(Schedule schedule);
-	// 부서 일정 추가
-	// 개인 일정 추가
+	
+	// 일정 추가
 	int addSchedule(Schedule schedule);
 	
 	// 일정 상세보기

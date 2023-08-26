@@ -34,14 +34,10 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 	
 	// 전사 일정 출력 페이지 (모두 볼수 있음)
-	@GetMapping("schedule/companySchedule")
-    public String companySchedulePage(Model model,
-    		@RequestParam(name="scheduleCategory", defaultValue = "S0101") String scheduleCategory) {
+	@GetMapping("/schedule/companySchedule")
+    public String companySchedulePage() {
 		
-		List<Schedule> schedules = scheduleService.selectCompanySchedules(scheduleCategory);
-		model.addAttribute("scheduleCategory", scheduleCategory);
-		model.addAttribute("schedules", schedules);
-		return "schedule/companySchedule";
+		return "/schedule/companySchedule";
     }
 	
 	// 전사 일정 데이터를 JSON 형태로 반환
@@ -57,6 +53,7 @@ public class ScheduleController {
         List<Map<String, Object>> eventDataList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             Map<String, Object> eventData = new HashMap<>();
+            eventData.put("id", schedule.getScheduleNo());
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());
@@ -69,18 +66,10 @@ public class ScheduleController {
     }
 		
 	// 부서 일정 출력 페이지 (같은 부서끼리만 볼수있음)
-	@GetMapping("schedule/departmentSchedule")
-    public String departmentSchedulePage(Model model,  HttpSession session,
-    		@RequestParam(name="scheduleCategory", defaultValue = "S0102") String scheduleCategory) {
+	@GetMapping("/schedule/departmentSchedule")
+    public String departmentSchedulePage() {
 		
-		// 세션에서 dept 정보 추출
-	    String dept = (String) session.getAttribute("dept");
-	    
-		List<Schedule> schedules = scheduleService.selectDepartmentSchedules(dept, scheduleCategory);
-		
-		model.addAttribute("scheduleCategory", scheduleCategory);
-		model.addAttribute("schedules", schedules);
-		return "schedule/departmentSchedule";
+		return "/schedule/departmentSchedule";
     }
 		
 	// 부서 일정 데이터를 JSON 형태로 반환
@@ -99,6 +88,7 @@ public class ScheduleController {
         List<Map<String, Object>> eventDataList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             Map<String, Object> eventData = new HashMap<>();
+            eventData.put("id", schedule.getScheduleNo());
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());
@@ -111,21 +101,10 @@ public class ScheduleController {
     }
 		
 	// 개인 일정 출력 페이지 (자기의 일정만 볼수있음)
-	@GetMapping("schedule/personalSchedule")
-    public String personalSchedulePage(Model model, HttpSession session,
-    		@RequestParam(name="scheduleCategory", defaultValue = "S0103") String scheduleCategory) {
+	@GetMapping("/schedule/personalSchedule")
+    public String personalSchedulePage() {
 		
-		// 세션에서 empNo 추출
-	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-		int empNo = loginAccount.getEmpNo();
-		// 일정 분류 코드
-		
-		List<Schedule> schedules = scheduleService.selectPersonalSchedules(empNo, scheduleCategory);
-		
-		model.addAttribute("empNo", empNo);
-		model.addAttribute("schedules", schedules);
-		
-		return "schedule/personalSchedule";
+		return "/schedule/personalSchedule";
     }
 	
 	// 개인 일정 데이터를 JSON 형태로 반환
@@ -145,6 +124,8 @@ public class ScheduleController {
         List<Map<String, Object>> eventDataList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             Map<String, Object> eventData = new HashMap<>();
+            // FullCalendar 필수데이터
+            eventData.put("id", schedule.getScheduleNo());
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());

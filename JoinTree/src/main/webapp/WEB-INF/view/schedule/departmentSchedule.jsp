@@ -100,51 +100,19 @@
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	        timeZone: 'Asia/Seoul',
 	        selectable: true,
-	        events: '/schedule/getDepartmentSchedules',
-	        eventClick: function(info) {
-	            var scheduleNo = parseInt(info.event.extendedProps.scheduleNo);
-	            console.log(scheduleNo);
-	            if (!isNaN(scheduleNo)) {
-	                // 일정 번호를 가져와서 서버에서 상세 정보를 요청
-	                fetchScheduleDetails(scheduleNo);
-	            } else {
-	                console.error('Invalid schedule number:', info.event.extendedProps.scheduleNo);
-	            }
-	        },
+	        events: '/JoinTree/schedule/getDepartmentSchedules',
 	        select: function(info) {
 				var startDate = info.start;
 				var endDate = info.end;
 				openModal(startDate, endDate);
+			},
+			eventClick: function(info) {
+				var event = info.event;
+				openEventModal(event);
 			}
 	       
 	    });
 	
-	    // 상세보기 모달창
-	    function fetchScheduleDetails(scheduleNo) {
-	        $.ajax({
-	            type: 'GET',
-	            url: '/schedule/selectScheduleOne',
-	            data: { scheduleNo: scheduleNo },
-	            dataType: 'json',
-	            success: function(schedule) {
-	                // 상세 정보를 모달 창에 표시하는 함수를 호출
-	                displayScheduleDetails(schedule);
-	            },
-	            error: function(error) {
-	                console.error('Failed to fetch schedule details.', error);
-	            }
-	        });
-	    }
-	
-	    function displayScheduleDetails(schedule) {
-	        $('#viewTitle').text(schedule.scheduleTitle);
-	        $('#viewContent').text(schedule.scheduleContent);
-	        $('#viewLocation').text(schedule.scheduleLocation);
-	        $('#viewStart').text(schedule.scheduleStart);
-	        $('#viewEnd').text(schedule.scheduleEnd);
-	
-	        $('#scheduleOneModal').modal('show');
-	    }
 	
 	    // 일정추가 모달창
 	    function openModal(startDate, endDate) {
@@ -204,7 +172,7 @@
 	        // 일정 추가 비동기 처리
 	        $.ajax({
 	            type: 'POST',
-	            url: '/schedule/addDepartmentSchedule',
+	            url: '/JoinTree/schedule/addDepartmentSchedule',
 	            contentType: 'application/json',
 	            data: JSON.stringify(eventData),
 	            success: function(response) {
@@ -231,6 +199,27 @@
 	        calendar.refetchEvents();
 	    }
 		
+	    function openEventModal(event) {
+	        // 일정 상세 정보를 가져오는 Ajax 요청
+	        $.ajax({
+	            type: 'GET',
+	            url: '/JoinTree/schedule/selectScheduleOne',
+	            data: { scheduleNo: event.id }, // 해당 일정의 id 값을 전달
+	            success: function(response) {
+	                $('#scheduleOneModal').modal('show');
+	                $('#viewTitle').text(response.scheduleTitle);
+	                $('#viewContent').text(response.scheduleContent);
+	                $('#viewLocation').text(response.scheduleLocation);
+	                $('#viewStart').text(response.scheduleStart);
+	                $('#viewEnd').text(response.scheduleEnd);
+	            },
+	            error: function() {
+	                console.error('Failed to fetch schedule details.');
+	            }
+	        });
+	    }
+	       
+	    
 	    calendar.render();
 	    
 	});
