@@ -44,7 +44,24 @@
 			up_code = #{upCode}
 	</select>
 	
-	<!-- 상세보기 디테일 -->
+	<!-- 상위코드 상세정보 출력 -->
+	<select id ="selectUpCodeOne"
+			resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			up_code upCode,
+			code_name codeName,
+			status,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM common_code
+		WHERE
+			code = #{code}
+	</select>
+	
+	<!-- 하위코드 상세정보 출력 -->
 	<select id ="selectCodeOne"
 			parameterType="com.goodee.JoinTree.vo.CommonCode"
 			resultType="com.goodee.JoinTree.vo.CommonCode">
@@ -115,10 +132,25 @@
 			parameterType="com.goodee.JoinTree.vo.CommonCode">
 		UPDATE common_code 
 		SET
+			code_name = #{codeName},
 			status = #{status},
 			updatedate = NOW(),
 			update_id = #{updateId}
 		WHERE
 			code = #{code}
 	</update>
+	
+	<!-- 공통코드 수정 -->
+	<update id="modifyUpCommonCode"
+			parameterType="com.goodee.JoinTree.vo.CommonCode">
+		UPDATE common_code 
+		SET
+			status = #{status},
+			updatedate = NOW(),
+			update_id = #{updateId}
+		WHERE
+			code = #{code}
+			OR up_code = #{code}
+	</update>
+	
 </mapper>

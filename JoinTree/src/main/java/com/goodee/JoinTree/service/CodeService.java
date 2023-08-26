@@ -30,7 +30,16 @@ public class CodeService {
 		return childCodeList;
 	}
 	
-	// 코드 상세보기 
+	// 상위코드 상세보기 
+	public List<CommonCode> selectUpCodeOne(String code) {
+		// db에서 가져온 코드내용 조회
+		List<CommonCode> upCodeOneList = codeMapper.selectUpCodeOne(code);
+		
+		// 리스트 반환
+		return upCodeOneList;
+	}
+	
+	// 하위코드 상세보기 
 	public List<CommonCode> selectCodeOne(String code) {
 		// db에서 가져온 코드내용 조회
         List<CommonCode> CodeOneList = codeMapper.selectCodeOne(code);
@@ -40,17 +49,22 @@ public class CodeService {
 	}
 	
 	// 상위코드 추가
-		public int addUpCommonCode(CommonCode commenCode) {
-			return codeMapper.addUpCommonCode(commenCode);
-		}
+	public int addUpCommonCode(CommonCode commenCode) {
+		return codeMapper.addUpCommonCode(commenCode);
+	}
 	
 	// 하위코드 추가
 	public int addCommonCode(CommonCode commenCode) {
 		return codeMapper.addCommonCode(commenCode);
 	}
-	
-	// 하위코드 수정
+
+	// 공통코드 수정
 	public int modifyCommonCode(CommonCode commenCode) {
 		return codeMapper.modifyCommonCode(commenCode);
+	}
+	
+	// 공통코드 수정
+	public int modifyUpCommonCode(CommonCode commenCode) {
+		return codeMapper.modifyUpCommonCode(commenCode);
 	}
 }
