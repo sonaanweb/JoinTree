@@ -527,7 +527,7 @@
 	function selectEmpInfoOne(empNo){
 		// 상세 정보 가져오기
         $.ajax({
-			url: '/JoinTree/empManage/selctEmpOne',
+			url: '/JoinTree/empManage/selectEmpOne',
 			type: 'GET',
 			data: {empNo: empNo},
 			success: function(data){

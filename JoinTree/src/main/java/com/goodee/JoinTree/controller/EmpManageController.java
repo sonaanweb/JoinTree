@@ -79,7 +79,7 @@ public class EmpManageController {
 	}
 	
 	// 사원 상세정보 조회
-	@GetMapping("/empManage/selctEmpOne")
+	@GetMapping("/empManage/selectEmpOne")
 	@ResponseBody
 	public Map<String, Object> selectEmpOne(@RequestParam(name="empNo") int empNo) {
 		
