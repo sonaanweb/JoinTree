@@ -61,7 +61,7 @@
 
 		<!-- 왼쪽 - 프로젝트 -->
 		<li class="nav-item">
-			<a class="nav-link" href="/project/projectList">
+			<a class="nav-link" href="/JoinTree/project/projectList">
 				<span class="menu-title">프로젝트</span>
 				<i class="mdi mdi-newspaper menu-icon"></i>
 			</a>

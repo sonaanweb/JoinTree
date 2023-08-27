@@ -72,7 +72,7 @@
            // 세션 연장 및 새로운 타이머 시작 함수
            function extendSessionAndResetTimer(newDuration) {
                $.ajax({
-                   url: '/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
+                   url: '/JoinTree/extendSession', // 세션 연장 처리를 수행하는 서버의 URL
                    type: 'POST', 
                    success: function(response) {
                        if (response === "success") {
