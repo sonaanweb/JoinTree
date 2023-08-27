@@ -39,12 +39,30 @@ public class CommunityController {
 	@GetMapping("/community/freeCommList")
 	public String freeCommList(Model model, @RequestParam(name = "currentPage", defaultValue = "1") int currentPage,
 			@RequestParam(name = "rowPerPage", defaultValue = "10") int rowPerPage, 
-			@RequestParam(name = "category", defaultValue = "B0103") String category) {
+			@RequestParam(name = "category", defaultValue = "B0103") String category, 
+			@RequestParam(name = "searchOption", required = false) String searchOption,
+		    @RequestParam(name = "searchText", required = false) String searchText) {
 		
-		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage);
+		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage, searchOption, searchText);
 		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-freeCommList)" + RESET);
 		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-freeCommList)" + RESET);
+		
+		// 페이지 블럭
+		int currentBlock = 0; // 현재 페이지 블럭 (currenetPage / pageLength)
+		int pageLength = 10; // 현재 페이지 블럭에 들어갈 페이지 수 (1~10/다음)
+		if (currentPage % pageLength == 0) {
+			currentBlock = currentPage / pageLength;
+		} else {
+			currentBlock = (currentPage / pageLength) + 1;
+		}
+		
+		int startPage = (currentBlock - 1) * pageLength + 1; // 블럭의 시작페이지 (1, 11, 21, ...)
+		int endPage = startPage + pageLength - 1; // 블럭의 마지막 페이지 (10, 20, 30, ...)
+		int lastPage = (int) resultMap.get("lastPage");
+		if (endPage > lastPage) {
+			endPage = lastPage;
+		}
 		
 		// view로 값 넘길 때는 분리
 		model.addAttribute("category", category);
@@ -53,18 +71,15 @@ public class CommunityController {
 		
 		model.addAttribute("lastPage", resultMap.get("lastPage"));
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("startPage", startPage); // 블럭(페이징) 버튼 시작 페이지 정보 추가
+		model.addAttribute("endPage", endPage); // 블럭(페이징) 버튼 끝 페이지 정보 추가
+		
+		
 		
 		return "/community/freeCommList";
 	}
 	
-	// 자유 게시판 검색된 게시글 목록
-	@GetMapping("/community/searchFreeCommList")
-	public String searchFreeCommList() {
-		
-		return "";
-	}
-
-	
+	/*
 	
 	// 익명 게시판 게시글 목록
 	@GetMapping("/community/anonymousCommList")
@@ -129,6 +144,7 @@ public class CommunityController {
 		return "/community/lifeEventCommList";
 	}
 	
+	*/
 	// 자유 게시판 게시글 상세보기
 	@GetMapping("/community/freeCommList/freeCommOne")
 	public String freeCommOne(Model model, @RequestParam(name="boardNo") int boardNo) {
@@ -286,7 +302,7 @@ public class CommunityController {
 		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
 		HttpSession session = request.getSession();
 		String dept = (String) session.getAttribute("dept");
-		log.debug(CYAN + dept + " <-- row(CommunityController-addLifeEventComm)" + RESET);
+		log.debug(CYAN + dept + " <-- row(CommunityController-addComm)" + RESET);
 		
 		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
 		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
@@ -297,7 +313,7 @@ public class CommunityController {
 		
 		int row = communityService.addComm(board, path);
 		
-		log.debug(CYAN + row + " <-- row(CommunityController-addLifeEventComm)" + RESET);
+		log.debug(CYAN + row + " <-- row(CommunityController-addComm)" + RESET);
 		
 		if (row == 1) {
 			msg = URLEncoder.encode("게시글이 등록되었습니다.", "UTF-8");
@@ -308,9 +324,12 @@ public class CommunityController {
 				return "redirect:/community/anonymousCommList?msg=" + msg;
 			} else if (board.getBoardCategory().equals("B0105")) {
 				return "redirect:/community/secondhandCommList?msg=" + msg;
-			} else {
+			} else if (board.getBoardCategory().equals("B0106")) {
 				return "redirect:/community/lifeEventCommList?msg=" + msg;
 			}
+			
+			log.debug(CYAN + " <-- 게시글 등록 후 오류 발생(CommunityController-addComm)" + RESET);
+			return "";
 			
 			
 		} else {
@@ -322,9 +341,12 @@ public class CommunityController {
 				return "redirect:/community/anonymousEventCommList/addAnonymousComm?msg=" + msg;
 			} else if (board.getBoardCategory().equals("B0105")) {
 				return "redirect:/community/secondhandEventCommList/addSecondhandComm?msg=" + msg;
-			} else {
+			} else if (board.getBoardCategory().equals("B0106")) {
 				return "redirect:/community/lifeEventCommList/addLifeEventComm?msg=" + msg;
 			}
+			
+			log.debug(CYAN + " <-- 게시글 등록 실패. 오류 발생(CommunityController-addComm)" + RESET);
+			return "";
 		}
 	}
 	
@@ -460,12 +482,15 @@ public class CommunityController {
 			if (board.getBoardCategory().equals("B0103")) {
 				return "redirect:/community/freeCommList/freeCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
 			} else if (board.getBoardCategory().equals("B0104")) {
-				return "redirect:/community/anonymousList/anonymousCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+				return "redirect:/community/anonymousCommList/anonymousCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
 			} else if (board.getBoardCategory().equals("B0105")) {
-				return "redirect:/community/secondhandList/secondhandCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-			} else {
+				return "redirect:/community/secondhandCommList/secondhandCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+			} else if (board.getBoardCategory().equals("B0106")){
 				return "redirect:/community/lifeEventCommList/lifeEventCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
 			}
+			
+			log.debug(CYAN + " <-- 게시글 수정 후 오류 발생(CommunityController-modifyComm)" + RESET);
+			return "";
 			
 		} else {
 			msg = URLEncoder.encode("게시글 수정에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
@@ -476,9 +501,12 @@ public class CommunityController {
 				return "redirect:/community/anonymousList/anonynousCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
 			} else if (board.getBoardCategory().equals("B0105")) {
 				return "redirect:/community/secondhandList/secondhandCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-			} else {
+			} else if (board.getBoardCategory().equals("B0106")) {
 				return "redirect:/community/lifeEventCommList/lifeEventCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
 			}
+			
+			log.debug(CYAN + " <-- 게시글 수정 실패. 오류 발생(CommunityController-modifyComm)" + RESET);
+			return "";
 		}
 	}
 	
@@ -525,7 +553,8 @@ public class CommunityController {
 		}
 	}
 	
-	// 자유 게시판 게시글 삭제
+	// (자유) 게시판 게시글 삭제
+	/*
 	@GetMapping("/community/freeCommList/removeFreeComm")
 	public String removeFreeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {
 		String path = request.getServletContext().getRealPath("/commImg/");
@@ -539,6 +568,50 @@ public class CommunityController {
 		} else {
 			msg = URLEncoder.encode("게시글 삭제에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
 			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + boardNo + "&msg=" + msg;
+		}	
+	}
+	*/
+	
+	// 게시글 삭제 액션
+	@GetMapping("/community/removeComm")
+	public String removeFreeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {
+		String path = request.getServletContext().getRealPath("/commImg/");
+		String category = communityService.getBoardCategory(boardNo);
+		log.debug(CYAN  + category + " <-- category(CommunityController-removeComm)" + RESET);
+		
+		int row = communityService.removeComm(boardNo, path);
+		log.debug(CYAN  + row + " <-- row(CommunityController-removeComm)" + RESET);
+	
+		if (row == 1) {
+			msg = URLEncoder.encode("게시글이 삭제되었습니다.", "UTF-8");
+			
+			if (category.equals("B0103")) {
+				return "redirect:/community/freeCommList?msg=" + msg;
+			} else if (category.equals("B0104")) {
+				return "redirect:/community/anonymousCommList?msg=" + msg;
+			} else if (category.equals("B0105")) {
+				return "redirect:/community/secondhandCommList?msg=" + msg;
+			} else if (category.equals("B0106")) {
+				return "redirect:/community/lifeEventCommList?msg=" + msg;
+			} else {
+				log.debug(CYAN  + " <-- 게시글 삭제 후 오류 발생(CommunityController-removeComm)" + RESET);
+				return "";
+			}
+		} else {
+			msg = URLEncoder.encode("게시글 삭제에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
+			
+			if (category.equals("B0103")) {
+				return "redirect:/community/freeCommList/freeCommOne?boardNo=" + boardNo + "&msg=" + msg;
+			} else if (category.equals("B0104")) {
+				return "redirect:/community/anonymousCommList/anonymousCommOne?boardNo=" + boardNo + "&msg=" + msg;
+			} else if (category.equals("B0105")) {
+				return "redirect:/community/secondhandCommList/secondhandCommOne?boardNo=" + boardNo + "&msg=" + msg;
+			} else if (category.equals("B0106")) {
+				return "redirect:/community/lifeEventCommList/lifeEventCommOne?boardNo=" + boardNo + "&msg=" + msg;
+			} else {
+				log.debug(CYAN  + " <-- 게시글 삭제 실패. 오류 발생(CommunityController-removeComm)" + RESET);
+				return "";
+			}
 		}	
 	}
 }
