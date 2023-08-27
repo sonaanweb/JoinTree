@@ -1,4 +1,4 @@
-package com.goodee.JoinTree.controller;
+package com.goodee.JoinTree.restapi;
 
 import java.util.HashMap;
 import java.util.List;
