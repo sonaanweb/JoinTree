@@ -116,5 +116,12 @@
         FROM schedule
         WHERE schedule_no = #{scheduleNo};
     </select>
+    
+    <!-- 일정 삭제 -->
+    <delete id="removeSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
+        DELETE FROM schedule
+        WHERE schedule_no = #{scheduleNo}
+			AND emp_no = #{empNo}
+    </delete>
 
 </mapper>

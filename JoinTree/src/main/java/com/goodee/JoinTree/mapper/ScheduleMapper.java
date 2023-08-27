@@ -22,9 +22,13 @@ public interface ScheduleMapper {
 	// 일정 추가
 	int addSchedule(Schedule schedule);
 	
+	
 	// 일정 상세보기
 	Schedule selectScheduleOne(int scheduleNo);
 	
+	// 일정 삭제
+	int removeSchedule(Schedule schedule);
+
 
 
 }

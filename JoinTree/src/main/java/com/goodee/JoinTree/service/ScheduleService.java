@@ -11,7 +11,7 @@ import com.goodee.JoinTree.vo.Schedule;
 @Service
 public class ScheduleService {
 	@Autowired
-    private ScheduleMapper scheduleMapper;
+	private ScheduleMapper scheduleMapper;
 	
 	// 전사 일정 출력
 	public List<Schedule> selectCompanySchedules(String scheduleCategory) {
@@ -37,10 +37,21 @@ public class ScheduleService {
 	}
 	
 	// 일정 상세보기
-	 public Schedule selectScheduleOne(int scheduleNo) {
-		 Schedule scheduleOne = scheduleMapper.selectScheduleOne(scheduleNo);
-		 return scheduleOne;
+	public Schedule selectScheduleOne(int scheduleNo) {
+		Schedule scheduleOne = scheduleMapper.selectScheduleOne(scheduleNo);
+		return scheduleOne;
     }
+	
+	// 일정 삭제
+	public int removeSchedule(Schedule schedule) {
+		return scheduleMapper.removeSchedule(schedule);
+	}
+	
+	 
+	 
+	 
+	 
+	
 
 
 }

@@ -53,6 +53,7 @@ public class ScheduleController {
         List<Map<String, Object>> eventDataList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             Map<String, Object> eventData = new HashMap<>();
+            // FullCalendar 필수데이터
             eventData.put("id", schedule.getScheduleNo());
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
@@ -88,6 +89,7 @@ public class ScheduleController {
         List<Map<String, Object>> eventDataList = new ArrayList<>();
         for (Schedule schedule : schedules) {
             Map<String, Object> eventData = new HashMap<>();
+            // FullCalendar 필수데이터
             eventData.put("id", schedule.getScheduleNo());
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
@@ -242,6 +244,33 @@ public class ScheduleController {
         Schedule scheduleOne = scheduleService.selectScheduleOne(scheduleNo);
         return new ResponseEntity<>(scheduleOne, HttpStatus.OK);
 	}
+	
+	// 일정 삭제
+	@PostMapping("/schedule/removeSchedule")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> removeSchedule(
+	        @RequestBody Schedule schedule, HttpSession session) {
+	    Map<String, Object> response = new HashMap<>();
+
+	    try {
+	        int deletedRows = scheduleService.removeSchedule(schedule);
+	        if (deletedRows > 0) {
+	            response.put("success", true);
+	            return new ResponseEntity<>(response, HttpStatus.OK);
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Failed to delete the schedule.");
+	            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "An error occurred while deleting the schedule.");
+	        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+
 	
 	
 

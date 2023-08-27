@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.goodee.JoinTree.vo.AccountList" %>
 <!DOCTYPE html>
 <html>
 	<!-- header -->
@@ -29,30 +30,8 @@
 	
 	<!-- footer -->
 	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>				
-
-	<!-- 상세보기 모달창 -->
-	<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	            </div>
-	            <div class="modal-body">
-	                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
-	                <p><strong>내용:</strong> <span id="viewContent"></span></p>
-	                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
-	                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
-	                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
-	            </div>
-	            <div class="modal-footer">
-	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-
-	<!-- 스케줄 추가 모달창 -->
+	
+	<!-- 일정 추가 모달창 -->
 	<div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -89,12 +68,33 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 상세보기 모달창 -->
+	<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+	                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
+	                <p><strong>내용:</strong> <span id="viewContent"></span></p>
+	                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
+	                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
+	                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                <button type="button" class="btn btn-danger" id="deleteScheduleBtn">삭제</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 
 <script>
 	// 페이지 로드 되면 부서 일정 출력
 	$(document).ready(function() {
-		// 세션에서 dept 값을 가져와서 dept 변수에 할당
-		var dept = '<%= session.getAttribute("dept") %>'; 
 		
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -212,12 +212,54 @@
 	                $('#viewLocation').text(response.scheduleLocation);
 	                $('#viewStart').text(response.scheduleStart);
 	                $('#viewEnd').text(response.scheduleEnd);
+	                
+	             	// 기존의 click 이벤트 핸들러를 제거
+	                $('#deleteScheduleBtn').off('click');
+	             	
+	             	// 일정상세에서 '삭제' 버튼 클릭 -> '확인' 클릭시 삭제 
+	                $('#deleteScheduleBtn').on('click', function() {
+	                    if (confirm('진짜 삭제하시겠습니까?')) {
+	                        deleteSchedule(event.id);
+	                    }
+	                });
 	            },
 	            error: function() {
 	                console.error('Failed to fetch schedule details.');
 	            }
 	        });
 	    }
+	    
+		 // 일정 삭제
+	    function deleteSchedule(scheduleNo) {
+		    // 세션에서 empNo 추출
+	    	var empNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;
+	    	console.log(empNo);
+		        
+            $.ajax({
+                type: 'POST',
+                url: '/JoinTree/schedule/removeSchedule',
+                contentType: 'application/json',
+                data: JSON.stringify({ scheduleNo: scheduleNo, empNo: empNo }), // 객체 형태로 전달
+                success: function(response) {
+                    if (response.success) {
+                        // 캘린더를 새로 고치기 위해 함수 호출
+                        fetchAndRenderCalendarEvents();
+                        $('#scheduleOneModal').modal('hide');
+                        
+	                     // 삭제 성공 알림창 띄우기
+	                     alert('일정이 성공적으로 삭제되었습니다.');
+                    } else {
+                    	
+                        console.error('Failed to delete schedule.');
+                    }
+                },
+                error: function() {
+                	// 삭제 실패 알림창 띄우기
+                	alert('작성자만 삭제할 수 있습니다.');
+                    console.error('Failed to delete schedule.');
+                }
+            });
+        }
 	       
 	    
 	    calendar.render();
