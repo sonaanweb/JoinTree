@@ -45,6 +45,14 @@ public class EmpManageService {
 		return activeCodeList;
 	}
 	
+	// 연가 조회
+	public List<CommonCode> leaveCodeList() {
+		
+		List<CommonCode> leaveCodeList = empManageMapper.selectLeaveCodeList();
+		log.debug(leaveCodeList+"<-- EmpManageService leaveCodeList");
+		return leaveCodeList;
+	}
+	
 	// 사원정보 등록
 	public int addEmpInfo(Map<String, Object> empInfo) {
 		

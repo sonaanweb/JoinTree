@@ -22,6 +22,9 @@ public interface EmpManageMapper {
 	// 사원 상태 코드 조회
 	List<CommonCode> selectActiveCodeList();
 	
+	// 연가 코드 조회
+	List<CommonCode> selectLeaveCodeList();
+	
 	// 사원정보 등록
 	int addEmpInfo(Map<String, Object> empInfo);
 	
@@ -48,6 +51,8 @@ public interface EmpManageMapper {
 	
 	// 사원 정보 수정
 	int modifyEmpInfo(Map<String, Object> modifyEmpOneMap);
+	
+	
 	
 	
 	

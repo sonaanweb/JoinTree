@@ -479,7 +479,7 @@
 			},
 			success: function(data){
 				console.log(data);
-		        updateTableWithData(data), // 테이블 데이터 수정 함수
+		        updateTableWithData(data); // 테이블 데이터 수정 함수
 		        updatePagination(data); // 페이지 네비게이션 데이터 수정 함수
 			},
 			error: function(){

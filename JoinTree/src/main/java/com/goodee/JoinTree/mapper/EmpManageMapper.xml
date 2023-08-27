@@ -38,6 +38,15 @@
 		WHERE up_code = 'A01'
 	</select>
 	
+	<!-- 연가 코드 조회 -->
+	<select id="selectLeaveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'L01'
+	</select>
+	
 	<!-- 사원 등록 -->
 	<insert id="addEmpInfo" parameterType="java.util.Map">
 		INSERT INTO emp_info (
