@@ -1,16 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.7/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.36/moment-timezone-with-data.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+
 <style>
   html, body {
     margin: 0;
@@ -27,7 +27,6 @@
 	    background-color: #C8E4B2;
 }
 </style>
-<!-- 캘린더 문제로 회의실별 예약 현황 캘린더로 수정해야 합니다 -->
 <title>예약 현황 창(캘린더) + 예약하기</title>
 </head>
 <body>
@@ -99,8 +98,8 @@
 										<option value="18:00">18:00</option>
 							        </select>
 			                        <label for="taskId" class="col-form-label">내용</label>
-			                        <input type="text" class="form-control" id="revReason" name="revReason" placeholder="간단히 예약 사유를 적어주세요 :)">
-			                        <!-- rev_status = 기본값 주기... 회의실 = A0302예약완료 A0303예약취소 -->
+			                        <input type="text" class="form-control" id="revReason" name="revReason" placeholder="예약 내용을 적어주세요 :) 캘린더에 함께 표시됩니다.">
+			                    	<div class="check" id="rn_check"></div>
 			                    </div>
 			                </div>
 			                <div class="modal-footer">
@@ -116,8 +115,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
     var urlParams = new URLSearchParams(window.location.search);
-    var roomNo = urlParams.get('roomNo'); // URL 매개변수에서 roomNo 값을 가져옵니다.
-    var roomName = urlParams.get('roomName'); // URL 매개변수에서 roomName 값을 가져옵니다.
+    var roomNo = urlParams.get('roomNo'); // URL 매개변수에서 roomNo 호출
+    var roomName = urlParams.get('roomName'); // URL 매개변수에서 roomName 호출
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
     	timeZone: 'Asia/Seoul',
@@ -134,22 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         selectable : true,
         droppable : true,
-        editable : true,
+        editable : false,
         nowIndicator: true,
+        allDaySlot: false,
+        slotLabelFormat: '',
         height: 'auto',
         slotDuration: '00:30:00',
-        slotMinTime: '09:00:00',
-        slotMaxTime: '18:00:00',
+        slotMinTime: '09:00:00', // 오전 9시부터 슬롯 시작
+        slotMaxTime: '18:00:00', // 오후 6시까지 슬롯 끝
         slotLabelInterval: { hours: 1 },
         slotLabelFormat: {
             hour: 'numeric',
             hour12: true
         },
-        editable: false,
-        
         events: function(info, successCallback, failureCallback) {
-            
-            $.ajax({//캘린더조회
+            $.ajax({
                 url: '/JoinTree/meetRoomReserv?roomNo=' + roomNo,
                 type: 'GET',
                 dataType: 'json',
@@ -170,53 +168,78 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         },
         
-        // 빈 시간대 클릭 시 예약 모달 창 띄우기 -- 닫아줘야해요
         select: function(info) {
-            $('#calendarModal').modal('show');
-			
-            var selectedDate = info.startStr.split("T")[0];
-            var selectedStartTime = info.startStr.split("T")[1].substring(0, 5); // HH:MM 형식으로 추출
-            var selectedEndTime = info.endStr.split("T")[1].substring(0, 5); // HH:MM 형식으로 추출
-           
-         	// 선택한 날짜 정보를 모달 창에 전달
-		 	$('#selectedDate').val(selectedDate);
-		    $('#revStartTime').val(selectedStartTime);
-		    $('#revEndTime').val(selectedEndTime);
-		    $('#roomName').val(roomName);
+        	 var now = moment(); // 현재 날짜와 시간
+       	     var selectedDateTime = moment.tz(info.startStr, 'Asia/Seoul'); //오류 기록해둬야지..
+        	 console.log(selectedDateTime);
 
-            // 추가 버튼을 클릭하면 예약 추가
-            $('#addCalendar').click(function() {
-                var reservationInfo = {
-                	equipNo: roomNo,
-                    revStartTime: selectedDate + ' ' + $('#revStartTime').val(),
-                    revEndTime: selectedDate + ' ' + $('#revEndTime').val(),
-                    revReason: $('#revReason').val()
-                };
-                $.ajax({
-                	url :'/JoinTree/addReservation',
-             		type: 'POST',
-             		dataType: 'json',
-             		data: JSON.stringify(reservationInfo),
-             		contentType: 'application/json',
-             		success: function(response){
-                // 캘린더에 해당 예약 이벤트를 추가합니다.
-                calendar.addEvent({
-                    title: reservationInfo.revReason,
-                    start: reservationInfo.revStartTime,
-                    end: reservationInfo.revEndTime
-                });
-                // 모달 창을 닫습니다.
-                $('#calendarModal').modal('hide');
-                    
-             		},
-             		error: function() {
-                        // 에러 처리
-                    }
-                });
-            });
+       	    // 선택한 날짜와 시간이 현재 날짜와 시간보다 이전인 경우
+       	    if (selectedDateTime.isBefore(now)) {
+       	        alert("지난 날짜와 시간에는 예약할 수 없습니다.");
+       	        return;
+       	    }
+
+       	    // 선택한 날짜와 시간이 현재 날짜와 같고 현재 시간보다 이전인 경우
+       	    if (selectedDateTime.isSame(now, 'day') && selectedDateTime.isBefore(now, 'hour')) {
+       	        alert("현재 날짜의 지난 시간에는 예약할 수 없습니다.");
+       	        return;
+       	    }
+            
+            $('#calendarModal').modal('show');
+            
+            var selectedDate = info.startStr.split("T")[0];
+            var selectedStartTime = info.startStr.split("T")[1].substring(0, 5);
+            var selectedEndTime = info.endStr.split("T")[1].substring(0, 5);
+            
+            $('#selectedDate').val(selectedDate);
+            $('#revStartTime').val(selectedStartTime);
+            $('#revEndTime').val(selectedEndTime);
+            $('#roomName').val(roomName);
         }
     });
-   calendar.render();
+    
+    
+    // 추가 버튼 클릭 이벤트 처리
+    $('#addCalendar').click(function() {
+        var revReason = $('#revReason').val().trim();
+
+        if (revReason === "") {
+            $("#rn_check").text("공백은 입력할 수 없습니다.");
+            $("#rn_check").css("color", "red");
+            $("#revReason").focus();
+            return;
+        }
+
+        var reservationInfo = {
+            equipNo: roomNo,
+            revStartTime: $('#selectedDate').val() + ' ' + $('#revStartTime').val(),
+            revEndTime: $('#selectedDate').val() + ' ' + $('#revEndTime').val(),
+            revReason: revReason // 변경된 예약 사유 사용
+        };
+
+        $.ajax({
+            url: '/JoinTree/addReservation',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(reservationInfo),
+            contentType: 'application/json',
+            success: function(response) {
+                calendar.addEvent(reservationInfo);
+                alert("예약이 성공적으로 완료되었습니다");
+                $('#calendarModal').modal('hide'); 
+                calreload(); // 목록 동적 생성
+            },
+            error: function() {
+                //console.log('Reservation Info:', reservationInfo);
+                console.error('예약 추가 실패');
+            }
+        });
+    });
+
+    function calreload() {
+        calendar.refetchEvents(); // 풀캘린더 reload 함수
+    }
+    calendar.render();
 });
 </script>
 </body>
