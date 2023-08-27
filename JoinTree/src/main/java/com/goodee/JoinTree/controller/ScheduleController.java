@@ -249,7 +249,7 @@ public class ScheduleController {
 	@PostMapping("/schedule/removeSchedule")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> removeSchedule(
-	        @RequestBody Schedule schedule, HttpSession session) {
+	        @RequestBody Schedule schedule) {
 	    Map<String, Object> response = new HashMap<>();
 
 	    try {
@@ -269,9 +269,26 @@ public class ScheduleController {
 	        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-
-
 	
-	
+	// 일정 수정
+	@PostMapping("/schedule/modifySchedule")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> modifySchedule(
+	        @RequestBody Schedule schedule) {
+	    Map<String, Object> response = new HashMap<>();
+
+	    try {
+	        // 스케줄 업데이트 로직
+	        scheduleService.modifySchedule(schedule);
+	        response.put("success", true);
+	        return new ResponseEntity<>(response, HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("success", false);
+	        response.put("message", "Failed to update the schedule.");
+	        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
 
 }

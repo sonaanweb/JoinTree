@@ -86,7 +86,38 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                <button type="button" class="btn btn-warning" id="editScheduleBtn">수정</button>
 	                <button type="button" class="btn btn-danger" id="deleteScheduleBtn">삭제</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- 수정 모달창 -->
+	<div class="modal fade" id="editScheduleModal" tabindex="-1" role="dialog" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="exampleModalLabel">일정 수정</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+                    <input type="text" id="editScheduleTitle" class="form-control">
+                    <br>
+                    <input type="text" id="editScheduleContent" class="form-control">
+                    <br>
+                    <input type="text" id="editScheduleLocation" class="form-control">
+                    <br>
+                    시작일
+                    <input type="datetime-local" id="editScheduleStart" class="form-control">
+                    <br>
+                    종료일
+                    <input type="datetime-local" id="editScheduleEnd" class="form-control">
+                    <br>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                <button type="button" class="btn btn-primary" id="updateScheduleBtn">수정</button>
 	            </div>
 	        </div>
 	    </div>
@@ -95,7 +126,6 @@
 <script>
 	// 페이지 로드 되면 부서 일정 출력
 	$(document).ready(function() {
-		
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	        timeZone: 'Asia/Seoul',
@@ -108,6 +138,7 @@
 			},
 			eventClick: function(info) {
 				var event = info.event;
+				selectedEvent = event; // 선택한 일정을 selectedEvent 변수에 저장
 				openEventModal(event);
 			}
 	       
@@ -199,6 +230,7 @@
 	        calendar.refetchEvents();
 	    }
 		
+	    // 상세보기
 	    function openEventModal(event) {
 	        // 일정 상세 정보를 가져오는 Ajax 요청
 	        $.ajax({
@@ -213,6 +245,26 @@
 	                $('#viewStart').text(response.scheduleStart);
 	                $('#viewEnd').text(response.scheduleEnd);
 	                
+	             	// 작성자(empNo)와 로그인한 사용자의 empNo 비교
+	                var loginEmpNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;
+	                if (response.empNo === loginEmpNo) {
+	                    $('#editScheduleBtn').show(); // 작성자와 일치할 경우 수정 버튼 보이기
+	                    $('#deleteScheduleBtn').show(); // 작성자와 일치할 경우 삭제 버튼 보이기
+	                } else {
+	                    $('#editScheduleBtn').hide(); // 작성자와 불일치할 경우 수정 버튼 숨기기
+	                    $('#deleteScheduleBtn').hide(); // 작성자와 불일치할 경우 삭제 버튼 숨기기
+	                }
+	                
+	             	// response 객체에서 일정 정보를 읽어와서 selectedEvent 객체 생성
+	                var selectedEvent = {
+	                    id: response.scheduleNo,
+	                    scheduleTitle: response.scheduleTitle,
+	                    scheduleContent: response.scheduleContent,
+	                    scheduleLocation: response.scheduleLocation,
+	                    scheduleStart: response.scheduleStart,
+	                    scheduleEnd: response.scheduleEnd
+	                };
+	                
 	             	// 기존의 click 이벤트 핸들러를 제거
 	                $('#deleteScheduleBtn').off('click');
 	             	
@@ -222,6 +274,12 @@
 	                        deleteSchedule(event.id);
 	                    }
 	                });
+	             	
+	             	// 수정 버튼 클릭
+	    	        $('#editScheduleBtn').on('click', function() {
+	    	        	openEditModal(selectedEvent);
+	    	        });
+	             
 	            },
 	            error: function() {
 	                console.error('Failed to fetch schedule details.');
@@ -245,23 +303,65 @@
                         // 캘린더를 새로 고치기 위해 함수 호출
                         fetchAndRenderCalendarEvents();
                         $('#scheduleOneModal').modal('hide');
-                        
-	                     // 삭제 성공 알림창 띄우기
-	                     alert('일정이 성공적으로 삭제되었습니다.');
+						// 삭제 성공 알림창 띄우기
+						alert('일정이 성공적으로 삭제되었습니다.');
                     } else {
                     	
                         console.error('Failed to delete schedule.');
                     }
-                },
-                error: function() {
-                	// 삭제 실패 알림창 띄우기
-                	alert('작성자만 삭제할 수 있습니다.');
-                    console.error('Failed to delete schedule.');
                 }
             });
         }
+		 
+	 	// 일정 수정
+	    function openEditModal(selectedEvent) {
+	    	
+	    	console.log(selectedEvent);
+	    	// 기존값 불러오기
+	        $('#editScheduleTitle').val(selectedEvent.scheduleTitle);
+	        $('#editScheduleContent').val(selectedEvent.scheduleContent);
+	        $('#editScheduleLocation').val(selectedEvent.scheduleLocation);
+	        $('#editScheduleStart').val(selectedEvent.scheduleStart);
+	        $('#editScheduleEnd').val(selectedEvent.scheduleEnd);
+	        
+	     	// '수정' 버튼 클릭 시 수정 액션에 필요한 값들을 설정합니다.
+	        $('#updateScheduleBtn').off('click'); // 기존 클릭 이벤트 핸들러 제거
+			$('#updateScheduleBtn').on('click', function() {
+				// 세션에서 empNo 추출
+	            var scheduleNo = selectedEvent.id;
+	            var empNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;
+	            
+	         	// 서버로 수정된 일정 정보 전송
+	            $.ajax({
+	                type: 'POST',
+	                url: '/JoinTree/schedule/modifySchedule',
+	                contentType: 'application/json',
+	                data: JSON.stringify({
+	                    scheduleNo: scheduleNo,
+	                    empNo: empNo,
+	                    scheduleTitle: $('#editScheduleTitle').val(),
+		                scheduleContent: $('#editScheduleContent').val(),
+		                scheduleLocation: $('#editScheduleLocation').val(),
+		                scheduleStart: $('#editScheduleStart').val(),
+		                scheduleEnd: $('#editScheduleEnd').val()
+	                }),
+	                success: function(response) {
+	                    if (response.success) {
+	                        // 일정을 다시 불러와서 FullCalendar에 업데이트
+	                        fetchAndRenderCalendarEvents();
+	                        $('#editScheduleModal').modal('hide');
+	                     	// 수정된 내용으로 상세보기 모달창 다시 열기
+	                        openEventModal(selectedEvent);
+	                    } else {
+	                        console.error('Failed to update schedule.');
+	                    }
+	                }
+	            });
+	        });
+
+	        $('#editScheduleModal').modal('show');
+	    }
 	       
-	    
 	    calendar.render();
 	    
 	});

@@ -18,7 +18,7 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE schedule_category = #{scheduleCategory};
+        WHERE schedule_category = #{scheduleCategory}
 	</select>
 		
 	<!-- 부서 일정 출력 -->
@@ -42,7 +42,7 @@
     		FROM emp_info
     		WHERE dept = #{dept}
 		)
-        AND schedule_category = #{scheduleCategory};
+        AND schedule_category = #{scheduleCategory}
 	</select>
 		
 	 <!-- 개인 일정 출력 -->
@@ -61,9 +61,9 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE emp_no = #{empNo} AND schedule_category = #{scheduleCategory};
+        WHERE emp_no = #{empNo}
+        	AND schedule_category = #{scheduleCategory}
     </select>
-    
     
     <!-- 일정 추가 -->
     <insert id="addSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
@@ -97,7 +97,6 @@
         )
     </insert>
     
-    
     <!-- 일정 상세보기 -->
     <select id="selectScheduleOne" resultType="com.goodee.JoinTree.vo.Schedule">
         SELECT
@@ -114,7 +113,7 @@
         	create_id createId,
         	update_id updateId
         FROM schedule
-        WHERE schedule_no = #{scheduleNo};
+        WHERE schedule_no = #{scheduleNo}
     </select>
     
     <!-- 일정 삭제 -->
@@ -123,5 +122,19 @@
         WHERE schedule_no = #{scheduleNo}
 			AND emp_no = #{empNo}
     </delete>
+    
+    <!-- 일정 수정 -->
+    <update id="modifySchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
+        UPDATE schedule
+        SET
+        schedule_title = #{scheduleTitle},
+        schedule_content = #{scheduleContent},
+        schedule_location = #{scheduleLocation},
+        schedule_start = #{scheduleStart},
+        schedule_end = #{scheduleEnd},
+        updatedate = now()
+        WHERE schedule_no = #{scheduleNo}
+        	AND emp_no = #{empNo}
+    </update>
 
 </mapper>

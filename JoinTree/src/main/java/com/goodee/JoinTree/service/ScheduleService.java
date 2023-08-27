@@ -47,6 +47,11 @@ public class ScheduleService {
 		return scheduleMapper.removeSchedule(schedule);
 	}
 	
+	// 일정 수정
+	public int modifySchedule(Schedule schedule) {
+		return scheduleMapper.modifySchedule(schedule);
+	}
+	
 	 
 	 
 	 

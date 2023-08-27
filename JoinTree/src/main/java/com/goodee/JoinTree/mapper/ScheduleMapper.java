@@ -28,6 +28,9 @@ public interface ScheduleMapper {
 	
 	// 일정 삭제
 	int removeSchedule(Schedule schedule);
+	
+	// 일정 수정
+	int modifySchedule(Schedule schedule);
 
 
 
