@@ -2,17 +2,35 @@
 <!DOCTYPE html>
 <html>
 	<!-- css - 우선순위를 위해 한 번 더 -->
-	<link rel="stylesheet" href="/resource/css/style2.css">
-	<link rel="stylesheet" href="/resource/css/style.css">
+	<link rel="stylesheet" href="/JoinTree/resource/css/style2.css">
+	<link rel="stylesheet" href="/JoinTree/resource/css/style.css">
 	<script>
 		$(document).ready(function() {
 			const today = new Date();
-		    const year = today.getFullYear();
-		    const month = String(today.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 1을 더해준다
-		    const day = String(today.getDate()).padStart(2, '0');
-		    const formattedDate = year + "-" + month + "-" + day;
-		    
-		    $("#draftDate").val(formattedDate); // 오늘날짜 출력
+			const year = today.getFullYear();
+			const month = String(today.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 1을 더해준다
+			const day = String(today.getDate()).padStart(2, '0');
+			const formattedDate = year + "-" + month + "-" + day;
+			
+			$("#draftDate").val(formattedDate); // 오늘날짜 출력
+	
+			$('#docOriginFilename').on("change", function() {
+				const selectedFile = event.target.files[0];
+				console.log("selectedFile", selectedFile);
+			
+				if (selectedFile) {
+					const allowedFormats = ['jpg', 'jpeg', 'png', 'zip', 'pdf'];
+					const fileExtension = selectedFile.name.slice(selectedFile.name.lastIndexOf('.') + 1).toLowerCase();
+					console.log("파일 들어옴",fileExtension);
+				
+					if (allowedFormats.includes(fileExtension)) {
+						console.log("파일 정상");
+					} else {
+						$('#docOriginFilename').val('');
+						console.log("파일 비정상");
+					}
+				}
+			});
 		});
 	</script>
 <div class="doc">

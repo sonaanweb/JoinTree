@@ -6,12 +6,12 @@
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 
 	<!-- jQuery 트리뷰 및 쿠키 라이브러리 -->
-	<script src="/resource/lib/jquery.cookie.js" type="text/javascript"></script>
-	<script src="/resource/lib/jquery.treeview.js" type="text/javascript"></script>
+	<script src="/JoinTree/resource/lib/jquery.cookie.js" type="text/javascript"></script>
+	<script src="/JoinTree/resource/lib/jquery.treeview.js" type="text/javascript"></script>
 	
 	<!-- 트리뷰 스타일 시트 -->
-	<link rel="stylesheet" href="/resource/jquery.treeview.css">
-	<link rel="stylesheet" href="/resource/screen.css">
+	<link rel="stylesheet" href="/JoinTree/resource/jquery.treeview.css">
+	<link rel="stylesheet" href="/JoinTree/resource/screen.css">
 <script>
 	$(document).ready(function() {
 		 
@@ -22,7 +22,7 @@
 			
 			$.ajax({
 				type: "GET",
-				url: "/org/orgEmpList",
+				url: "/JoinTree/org/orgEmpList",
 				dataType: "json",
 				data: { dept: dept },
 				success: function(data) {
@@ -232,7 +232,7 @@
 		function updateSelectDocument(selectForm){
 			$.ajax({
 				type: 'GET',
-				url: '/document/getDocumentForm',
+				url: '/JoinTree/document/getDocumentForm',
 				data: {
 					selectedForm: selectForm
 				},
@@ -353,7 +353,7 @@
 			// 기본 기안서 값 넘기기
 			$.ajax({
 				type: 'POST',
-				url: '/document/docDefault',
+				url: '/JoinTree/document/docDefault',
 				data: {
 					empNo: empNo,
 					writer: writer,
@@ -370,9 +370,11 @@
 					console.log("docNo:", docNo);
 					alert("성공");
 					
+					let allFunctionsSucceeded = true;
+					
 					// 문서에 첨부파일이 있는 경우
 					if (docOriginFilename) {
-						uploadDocument(docNo, category, writer); // uploadDocument 함수 호출
+						uploadDocument(docNo, category, writer); 
 					}
 					
 					// 결재자가 한명만 있을 경우
@@ -387,6 +389,9 @@
 					if(category === 'D0102') {
 						submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel);
 					}
+
+					window.location.href = '/JoinTree/home'; // 홈 페이지 URL로 변경
+					
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					console.log("Error:", textStatus, errorThrown);
@@ -400,14 +405,6 @@
 				
 				// .을 제거한 확장자만 얻어내서 소문자로 변경
 				file = file.slice(file.indexOf('.')+1).toLowerCase();
-				
-				// 파일타입 제한
-				if (file !== 'jpg' && file !== 'png' && file !== 'jpeg' && file !== 'zip' && file !== 'pdf'){
-					alert("jpg, png, jpeg, zip, pdf 확장자만 등록하실 수 있습니다.");
-					$('#file').val('');
-					// 사용자가 등록한 file의 value를 지움 
-					return;
-				}
 				
 				const formData = new FormData();
 				const files = $('#docOriginFilename')[0].files;
@@ -425,7 +422,7 @@
 				console.log(files[0].files);
 					// 파일등록 하러 비동기로
 					$.ajax({
-						url: '/document/fileUpload',
+						url: '/JoinTree/document/fileUpload',
 						type: 'post',
 						data: formData,
 						contentType: false, // 비동기로 파일을 등록할 때 필수
@@ -434,7 +431,7 @@
 							
 							if(data === 'success'){
 								$('#docOriginFilename').val('');
-								alert("업로드 성공");
+								// alert("업로드 성공");
 							} else {
 								alert("업로드 실패");
 							}
@@ -448,7 +445,7 @@
 			function submitDocumentSigner(docNo, empSignerNo, empSignerLevel, createId, updateId) {
 				$.ajax({
 					type: 'POST',
-					url: '/document/docSigner',
+					url: '/JoinTree/document/docSigner',
 					data: {
 						docNo: docNo,
 						empSignerNo: empSignerNo,
@@ -458,7 +455,12 @@
 					},
 					success: function(response) {
 						console.log("response:", response);
-						window.location.href = '/home'; // 홈 페이지 URL로 변경
+						
+						if(response === 'success'){
+							// alert("결재자 등록성공");
+						} else {
+							alert("결재자 등록실패");
+						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Error:", textStatus, errorThrown);
@@ -470,7 +472,7 @@
 			function submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel) {
 				$.ajax({
 					type: 'POST',
-					url: '/document/',
+					url: '/JoinTree/document/',
 					data: {
 						leave: leaveCate,
 						docLeaveStartDate: docLeaveStartDate,
