@@ -10,6 +10,7 @@ public class Project {
 	private String empName; // emp정보 join용
 	private int EmpCnt; // 인원 확인용
 	private String projectName;
+	private String projectColor;
 	private String projectStartDate;
 	private String projectEndDate;
 	private String projectContent;

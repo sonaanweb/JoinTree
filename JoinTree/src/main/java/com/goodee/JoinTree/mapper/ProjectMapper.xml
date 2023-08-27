@@ -8,17 +8,17 @@
 		SELECT COUNT(*)
 		FROM project
 		<where>
-			<!-- 타이틀이 있을때 -->
-			<if test="title != null and title != ''">
-			AND projectName LIKE CONCAT('%', #{title}, '%')
+			<if test="searchName != null and searchName != ''">
+				AND (
+					project_name LIKE CONCAT('%', #{searchName}, '%')
+					OR emp_no IN (SELECT emp_no FROM emp_info WHERE emp_name LIKE CONCAT('%', #{searchName}, '%'))
+				)
 			</if>
-			<!-- startDate가 있을때-->
-			<if test="startDate != null">
-			AND project_start_date >= #{startDate}
+			<if test="startDate != null and startDate != ''">
+				AND project_start_date >= #{startDate}
 			</if>
-			<!-- endDate가 있을때-->
-			<if test="endDate != null">
-			AND project_end_date &lt;= #{endDate}
+			<if test="endDate != null and endDate != ''">
+				AND project_end_date &lt;= #{endDate}
 			</if>
 		</where>
 	</select>
@@ -30,6 +30,7 @@
 			project_no projectNo,
 			emp_no empNo,
 			project_name projectName,
+			project_color projectColor,
 			project_start_date projectStartDate, 
 			project_end_date projectEndDate,
 			project_content projectContent,
@@ -39,7 +40,25 @@
 			create_id createId,
 			update_id updateId
 		FROM project
-		ORDER BY projectNo asc
+		<where>
+			<if test="searchName != null and searchName != ''">
+				AND (
+					project_name LIKE CONCAT('%', #{searchName}, '%')
+					OR emp_no IN (SELECT emp_no FROM emp_info WHERE emp_name LIKE CONCAT('%', #{searchName}, '%'))
+				)
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND project_start_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND project_end_date &lt;= #{endDate}
+			</if>
+		</where>
+		ORDER BY 
+				<!-- 1. 진행중인 프로젝트 -> 2. 프로젝트 번호 3. 생성일 -->
+				CASE WHEN project_status = 'A0502' THEN 1 ELSE 2 END,
+				project_no ASC, 
+				createdate DESC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
@@ -48,7 +67,7 @@
 		SELECT 
 			COUNT(emp_no) empCnt
 		FROM project_member
-		where project_no = #{projectNo};
+		WHERE project_no = #{projectNo};
 	</select>
 	
 	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)  -->
@@ -59,6 +78,7 @@
 			p.emp_no empNo,
 			pm.emp_no memberNo,
 			p.project_name projectName,
+			p.project_color projectColor,
 			p.project_start_date projectStartDate, 
 			p.project_end_date projectEndDate,
 			p.project_content projectContent,
@@ -74,7 +94,23 @@
 			pm.emp_no = #{empNo}
 			AND
 			p.project_status= 'A0502'
-		ORDER BY p.createdate DESC, p.project_no ASC
+			<!-- 타이틀이 있을때 -->
+			<if test="searchName != null and searchName != ''">
+				AND (
+					project_name LIKE CONCAT('%', #{searchName}, '%')
+					OR p.emp_no IN (SELECT emp_no FROM emp_info WHERE emp_name LIKE CONCAT('%', #{searchName}, '%'))
+				)
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND project_start_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND project_end_date &lt;= #{endDate}
+			</if>
+		ORDER BY 
+				<!-- 1. 프로젝트 번호 -> 2. 생성일 -->
+				p.createdate DESC, 
+				p.project_no ASC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
@@ -85,6 +121,7 @@
 			project_no projectNo,
 			emp_no empNo,
 			project_name projectName,
+			project_color projectColor,
 			project_start_date projectStartDate, 
 			project_end_date projectEndDate,
 			project_content projectContent,
@@ -96,7 +133,22 @@
 		FROM project
 		WHERE 
 			project_status= 'A0503'
-		ORDER BY createdate DESC, projectNo ASC
+			<!-- 타이틀이 있을때 -->
+			<if test="searchName != null and searchName != ''">
+				AND (
+					project_name LIKE CONCAT('%', #{searchName}, '%')
+					OR emp_no IN (SELECT emp_no FROM emp_info WHERE emp_name LIKE CONCAT('%', #{searchName}, '%'))
+				)
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND project_start_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND project_end_date &lt;= #{endDate}
+			</if>
+		ORDER BY 
+				createdate DESC, 
+				projectNo ASC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
@@ -108,6 +160,7 @@
 			p.emp_no empNo,
 			e.emp_name empName,
 			p.project_name projectName,
+			p.project_color projectColor,
 			p.project_start_date projectStartDate, 
 			p.project_end_date projectEndDate,
 			p.project_content projectContent,
@@ -130,11 +183,45 @@
 			pm.emp_no = #{empNo}
 			AND
 			p.project_status= 'A0502'
-		ORDER BY p.createdate DESC, p.project_no ASC
+		ORDER BY 
+				p.createdate DESC, 
+				p.project_no ASC
 		LIMIT 0, 5
 	</select>
 
-
+	<!-- 프로젝트 상세보기 -->
+	<select id="selectProjectOne"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			p.project_no projectNo,
+			p.emp_no empNo,
+			e.emp_name empName,
+			p.project_name projectName,
+			p.project_color projectColor,
+			p.project_start_date projectStartDate, 
+			p.project_end_date projectEndDate,
+			p.project_content projectContent,
+			p.createdate,
+			p.updatedate,
+			p.create_id createId,
+			p.update_id updateId
+		FROM project p
+		INNER JOIN emp_info e
+		ON p.emp_no = e.emp_no
+		WHERE p.project_no = #{projectNo};
+	</select>
+	
+	<!-- 프로젝트 멤버 수 구하기 -->
+	<select id="selectProejectMember"
+			resultType="com.goodee.JoinTree.vo.Project">
+		SELECT 
+			pm.emp_no empNo,
+			e.emp_name empName
+		FROM project_member pm
+		INNER JOIN emp_info e
+		ON pm.emp_no = e.emp_no
+		WHERE project_no = #{projectNo};
+	</select>
 
 
 </mapper>

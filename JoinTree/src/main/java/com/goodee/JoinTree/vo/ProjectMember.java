@@ -7,6 +7,7 @@ public class ProjectMember {
 
 	private int projectNo;
 	private int empNo;
+	private int empName; // emp정보 join용
 	private String createdate;
 	private String updatedate;
 	private int createId;
