@@ -224,7 +224,7 @@
 	<select id="selectBoardCategory">
 		SELECT board_category
 		FROM board
-		WHERE board_no =#{boardNo}
+		WHERE board_no = #{boardNo}
 	</select>
 
 </mapper>

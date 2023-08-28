@@ -2,6 +2,7 @@ package com.goodee.JoinTree.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.controller.CommunityController;
+import com.goodee.JoinTree.service.CommentService;
 import com.goodee.JoinTree.service.CommunityService;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.Board;
 import com.goodee.JoinTree.vo.BoardFile;
+import com.goodee.JoinTree.vo.Comment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +37,9 @@ public class CommunityController {
 	
 	@Autowired
 	private CommunityService communityService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	// 자유 게시판 게시글 목록
 	@GetMapping("/community/freeCommList")
@@ -77,6 +83,20 @@ public class CommunityController {
 		
 		
 		return "/community/freeCommList";
+	}
+	
+	// JSON 데이터를 반환하는 컨트롤러 메소드
+	@GetMapping("/community/freeCommListData")
+	@ResponseBody // JSON 형식으로 응답을 처리
+	public Map<String, Object> freeCommListData(
+	        @RequestParam(name = "currentPage", defaultValue = "1") int currentPage,
+	        @RequestParam(name = "rowPerPage", defaultValue = "10") int rowPerPage, 
+	        @RequestParam(name = "category", defaultValue = "B0103") String category, 
+	        @RequestParam(name = "searchOption", required = false) String searchOption,
+	        @RequestParam(name = "searchText", required = false) String searchText) {
+	    
+	    Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage, searchOption, searchText);
+	    return resultMap;
 	}
 	
 	/*
@@ -158,8 +178,19 @@ public class CommunityController {
 		// 조회수 증가 처리
 		communityService.increaseCommCount(boardNo);
 		
+		// 댓글 목록 가져오기
+		List<Comment> comments = commentService.getCommentsByBoardNo(boardNo);
+		
+		// 댓글 작성자 empNo -> empName 변환
+		for (Comment comment : comments) {
+			int empNo = comment.getEmpNo();
+			String empName = commentService.getEmpName(empNo);
+			comment.setEmpName(empName);
+		}
+		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
+		model.addAttribute("comments", comments);
 		
 		log.debug(CYAN + comm + " <-- comm(CommunityController-freeCommOne)" + RESET);
 		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-freeCommOne)" + RESET);
@@ -296,7 +327,7 @@ public class CommunityController {
 	
 	// 게시판 게시글 작성 액션
 	@PostMapping("/community/addComm")
-	public String addLifeEventComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
+	public String addComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
 		String path = request.getServletContext().getRealPath("/commImg/");
 		
 		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
@@ -574,7 +605,7 @@ public class CommunityController {
 	
 	// 게시글 삭제 액션
 	@GetMapping("/community/removeComm")
-	public String removeFreeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {
+	public String removeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {
 		String path = request.getServletContext().getRealPath("/commImg/");
 		String category = communityService.getBoardCategory(boardNo);
 		log.debug(CYAN  + category + " <-- category(CommunityController-removeComm)" + RESET);

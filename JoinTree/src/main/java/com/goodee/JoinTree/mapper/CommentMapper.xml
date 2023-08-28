@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.CommentMapper">
+	<!-- 게시글별 댓글 조회  -->
+	<select id="selectCommentsByBoardNo" resultType="com.goodee.JoinTree.vo.Comment">
+		SELECT comment_no commentNo, board_no boardNo, parent_comment_no parentCommentNo, emp_no empNo,
+		 	   comment_group_no commentGroupNo, comment_content commentContent, 
+		 	   createdate, updatedate, create_id createId, update_id updateId
+	 	FROM comment
+	 	WHERE board_no = #{boardNo}
+	</select>
+	
+	<!-- 게시글별 댓글 개수  -->
+	<select id="selectCommentsCnt">
+		SELECT COUNT(*)
+		FROM COMMENT
+		WHERE board_no = #{boardNo}
+	</select>
+	
+	<!-- 댓글 입력 -->
+	<insert id="addComment" parameterType="com.goodee.JoinTree.vo.Comment">
+		INSERT INTO comment(
+			board_no, 
+			emp_no, 
+			comment_group_no, 
+			comment_content,
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+		) VALUES (
+			#{boardNo}, 
+			#{empNo},
+			#{commentGroupNo},
+			#{commentContent}, 
+			NOW(),
+			NOW(),
+			#{empNo}, 
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 대댓글 입력 -->
+	<insert id="addReply" parameterType="com.goodee.JoinTree.vo.Comment">
+		INSERT INTO comment(
+			board_no, 
+			emp_no, 
+			parent_comment_no, 
+			comment_group_no, 
+			comment_content,
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+		) VALUES (
+			#{boardNo}, 
+			#{empNo},
+			#{parentCommentNo},
+			#{commentGroupNo},
+			#{commentContent}, 
+			NOW(),
+			NOW(),
+			#{empNo}, 
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 댓글/대댓글 삭제  -->
+	<delete id="removeCommentReply">
+		DELETE FROM comment
+		WHERE comment_no = #{commentNo}
+		
+	</delete>
+	
+	<!-- 댓글 작성자 출력 -->
+	<select id="selectEmpName">
+		SELECT emp_name empName
+		FROM emp_info
+		WHERE emp_no = #{empNo}
+	</select>
+	
+</mapper>
