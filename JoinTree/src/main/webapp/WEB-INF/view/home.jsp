@@ -163,15 +163,6 @@
 												${p.projectName}(${p.empName})
 											</li>
 										</c:forEach>
-										<li>
-											테스트
-											</li>
-											<li>
-											테스트
-											</li>
-											<li>
-											테스트
-											</li>
 									</ul>
 								</div>
 							</div>
@@ -181,7 +172,7 @@
 					<div class="col-md-3 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								오늘일정
+								todo
 							</div>
 						</div>
 					</div>
@@ -201,7 +192,7 @@
 					<div class="col-md-3 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								todo
+								오늘일정
 							</div>
 						</div>
 					</div>					
