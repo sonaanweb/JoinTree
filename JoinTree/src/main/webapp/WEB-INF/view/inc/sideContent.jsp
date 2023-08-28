@@ -164,7 +164,7 @@
 			</a>
 			<div class="collapse" id="reservation">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="">회의실</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/empMeetRoomList">회의실</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">법인차량</a></li>
 				</ul>
 			</div>
@@ -178,7 +178,7 @@
 			</a>
 			<div class="collapse" id="equipment">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="">회의실</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/equipment/meetRoomList">회의실</a></li>
 					<li class="nav-item"> <a class="nav-link" href="">법인차량</a></li>
 				</ul>
 			</div>

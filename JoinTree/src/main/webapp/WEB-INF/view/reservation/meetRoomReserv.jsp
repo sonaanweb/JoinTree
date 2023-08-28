@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     successCallback(events);
                 },
                 error: function() {
-                    failureCallback('There was an error while fetching events.');
+                    failureCallback('캘린더 값 오류');
                 }
             });
         },
@@ -173,15 +173,15 @@ document.addEventListener('DOMContentLoaded', function() {
        	     var selectedDateTime = moment.tz(info.startStr, 'Asia/Seoul'); //오류 기록해둬야지..
         	 console.log(selectedDateTime);
 
-       	    // 선택한 날짜와 시간이 현재 날짜와 시간보다 이전인 경우
+       	    // 선택한 날짜와 시간 둘 다 이전인 경우
        	    if (selectedDateTime.isBefore(now)) {
        	        alert("지난 날짜와 시간에는 예약할 수 없습니다.");
        	        return;
        	    }
 
-       	    // 선택한 날짜와 시간이 현재 날짜와 같고 현재 시간보다 이전인 경우
+       	    // 날짜는 같지만 시간이 현재시간 기준으로 이전인 경우
        	    if (selectedDateTime.isSame(now, 'day') && selectedDateTime.isBefore(now, 'hour')) {
-       	        alert("현재 날짜의 지난 시간에는 예약할 수 없습니다.");
+       	        alert("지난 시간에는 예약할 수 없습니다.");
        	        return;
        	    }
             
