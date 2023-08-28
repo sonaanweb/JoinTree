@@ -23,4 +23,7 @@ public interface MeetRoomReservMapper {
 	// 회의실 예약 상태 수정 메서드
 	int updateMeetCal(Reservation reservation);
 	
+	// 회의실 예약 조회(emp)
+	List<Reservation> selectMeetReserved(Map<String, Object> map);
+	
 }

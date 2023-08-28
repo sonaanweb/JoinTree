@@ -7,6 +7,7 @@ public class Reservation {
 
 	private int revNo;
 	private int empNo;
+	private String roomName; // 회의실 이름 join용
 	private int equipNo;
 	private String equipCategory;
 	private String revStartTime;

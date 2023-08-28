@@ -28,7 +28,7 @@
 		ORDER BY createdate DESC;	
 	</select>
 	
-	<!-- 회의실 별 캘린더(예약현황 조회) -->
+	<!-- 회의실 별 캘린더(예약현황 조회) 예약완료인 건들만 -->
 	<select id="selectMeetCalList" resultType="com.goodee.JoinTree.vo.Reservation">
 		SELECT
 			r.rev_no revNo,
@@ -43,10 +43,10 @@
 			r.updatedate,
 			r.create_id createId,
 			r.update_id updateId,
-			m.room_no AS equip_no
+			m.room_no roomNo
 		FROM reservation r
 		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
-		WHERE m.room_no = #{roomNo}
+		WHERE m.room_no = #{roomNo} AND r.rev_status = 'A0302'
 	</select>
 	
 	<!-- 회의실 예약 하기 -->
@@ -81,4 +81,36 @@
 			#{empNo}
 		)	
 	</insert>
+	
+	<!-- 사원 별 회의실 예약 목록 조회 (회의실 이름도 가져와야함)-->
+	<select id="selectMeetReserved" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Reservation">
+		SELECT
+			r.rev_no revNo,
+			r.emp_no empNo,
+			r.equip_no equipNo,
+			r.equip_category equipCategory,
+			r.rev_start_time revStartTime,
+			r.rev_end_time revEndTime,
+			r.rev_status revStatus,
+			r.rev_reason revReason,
+			r.createdate,
+			r.updatedate,
+			r.create_id createId,
+			r.update_id updateId,
+			m.room_name roomName
+		FROM reservation r
+		
+		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
+		WHERE r.emp_no = #{empNo} AND r.equip_category = #{equipCategory}
+		ORDER BY createdate DESC;
+	</select>
+	
+	<!-- 회의실 예약취소(상태만 변경) : 코드 A0303(예약취소)-->
+	<update id="updateMeetCal" parameterType="com.goodee.JoinTree.vo.Reservation">
+		UPDATE reservation
+		SET rev_status = #{revStatus},
+		updatedate = NOW(),
+		update_id = #{empNo}
+		WHERE rev_no = #{revNo};
+	</update>
 </mapper>

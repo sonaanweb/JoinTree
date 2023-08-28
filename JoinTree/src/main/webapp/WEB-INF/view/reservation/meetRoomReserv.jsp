@@ -12,19 +12,25 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
 
-  #calendar {
-    max-width: 1100px;
-    margin: 40px auto;
-  }
+#calendar {
+  max-width: 1400px;
+  margin: 40px auto;
+}
+
+
 .fc .fc-button-primary {
 	    background-color: #C8E4B2;
+}
+
+.fc .fc-timegrid-slot {
+    height: 2em;
 }
 </style>
 <title>예약 현황 창(캘린더) + 예약하기</title>
@@ -156,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     var events = [];
                     for (var i = 0; i < response.length; i++) {
                         events.push({
-                            title: response[i].title,
+                            title: response[i].title, // '', - 타이틀 안 보이게
                             start: response[i].start,
                             end: response[i].end
                         });
@@ -171,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         select: function(info) {
         	
-        	// --- 예약 중복 검사 LIST
+        	// --- 예약 중복 검사 LIST(select option창에서도 선택 불가능하게 제어해야함)
             var selectedStart = moment(info.startStr);
             var selectedEnd = moment(info.endStr);
 
@@ -229,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     
-    // 추가 버튼 클릭 이벤트 처리
+    // 추가 버튼 클릭 이벤트 처리 -----> 모달창에선 지난 시간들 예약 처리되는 오류 수정해야함
     $('#addCalendar').click(function() {
         var revReason = $('#revReason').val().trim();
 
@@ -299,6 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 $('#calendarModal').on('hidden.bs.modal', function () {
     $("#rn_check").text("");
+    $("#revReason").val("");
 });
 
     function calreload() {

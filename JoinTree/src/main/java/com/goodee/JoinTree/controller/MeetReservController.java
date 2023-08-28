@@ -68,7 +68,7 @@ public class MeetReservController {
             event.put("start", reservation.getRevStartTime());
             event.put("end", reservation.getRevEndTime());
             eventList.add(event);
-            System.out.print(reservationList);
+            System.out.print("reservationList"+reservationList);
         }
         return new ResponseEntity<>(eventList, HttpStatus.OK);//ResponseEntity를 통한 반환
     }
@@ -76,7 +76,6 @@ public class MeetReservController {
     
     // 요구사항 : 겹치는 시간 예약 불가능, select내에 현재 시간 이전이나 이미 예약 된 시간은 회색표시로 선택 불가능
     // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시 alert창으로 제어
-    // 캘린더에 표시될 content는 모달창에서 요구한 메모내용이 같이 띄어짐
     // 예약 취소는 삭제가 되는 게 아니라 상태가 변하는 것. 예약완료인 예약건만 캘린더에 띄움 A0302(예약완료 기본값) A0303(예약취소)
 
     // 회의실 예약 추가
@@ -94,15 +93,67 @@ public class MeetReservController {
             reservation.setEquipNo(reservation.getEquipNo()); //equipNo = roomNo 할당
             meetRoomReservService.addMeetRoomCal(reservation);
             response.put("success", true);
-            response.put("message", "Reservation added successfully.");
+            response.put("message", "controller 예약 성공");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
-            response.put("message", "Failed to add reservation.");
+            response.put("message", "controller 예약 실패");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    // (emp) 예약한 회의실 조회(예약 취소 가능)
+    @GetMapping("reservation/empMeetRoomReservedList")
+	public String empMeetReserved(HttpSession session, Model model, 
+			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
+    	
+    	//AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+ 		//int empNo = loginAccount.getEmpNo();
+ 		int empNo = 11111111;
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("equipCategory", equipCategory);
+		paramMap.put("empNo", empNo);
+			
+		List<Reservation> empMeetReserved = meetRoomReservService.getReservations(paramMap);
+		model.addAttribute("empMeetReserved", empMeetReserved); //view ${}
+		
+		log.debug(AN+"empMeetReserved.empMeetReserved : "+empMeetReserved.toString()+RE);
+		return "/reservation/empMeetRoomReservedList";
+	}
+    
+    // (emp) 예약 취소 메서드
+    @PostMapping("/cancelReserved") // ajax url
+    @ResponseBody
+    public String cancelReserved(HttpSession session, @RequestBody Reservation reservation) {
+        try {
+            int empNo = 11111111; // 임시 --> 회의실 조회 그대로
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("equipCategory", "E0101");
+            paramMap.put("empNo", empNo);
+            
+            List<Reservation> empMeetReserved = meetRoomReservService.getReservations(paramMap);
+            
+            Reservation Reserved = empMeetReserved.stream() // revNo를 가져오는 메서드가 따로 없으니, filter를 통한 검사
+                    .filter(r -> r.getRevNo() == reservation.getRevNo()) // R
+                    .findFirst() // 일치하는 예약 찾기
+                    .orElse(null); // error = null 반환
 
+            if (Reserved != null && Reserved.getRevStatus().equals("A0302")) { // null 값도 아니고 예약 완료 상태라면
+            	Reserved.setRevStatus("A0303"); // 취소 상태로 SET
+                int result = meetRoomReservService.modifyMeetRoomCal(Reserved);
+
+                if (result > 0) { // 메세지 확인용
+                    return "예약취소 완료";
+                } else {
+                    return "예약취소 신청 오류";
+                }
+            } else {
+                return "예약취소가 불가능한 상태입니다";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
 }
-

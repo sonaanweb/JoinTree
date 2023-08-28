@@ -18,7 +18,7 @@ public class MeetRoomReservService {
 	@Autowired
 	MeetRoomMapper meetRoomMapper;
 	
-	// 회의실 리스트 (사원)
+	// 예약 가능한 회의실 목록 (사원)
 	public List<MeetingRoom> getMeetRoomList(Map<String, Object> map) {
         return meetRoomMapper.selectMeetRoomAll(map);
     }
@@ -27,21 +27,20 @@ public class MeetRoomReservService {
    public List<Reservation> getMeetRoomReservCal(int roomNo) {
 	   return meetRoomReservMapper.selectMeetCalList(roomNo);
    }
-   
-   
+  
 	// 회의실 예약 추가 메서드
 	public int addMeetRoomCal(Reservation reservation) {
        return meetRoomReservMapper.insertMeetCal(reservation);
    }
 	
 	// 회의실 예약 상태 수정 메서드
-	public void modifyMeetRoomCal(Reservation reservation) {
-		meetRoomReservMapper.insertMeetCal(reservation);
+	public int modifyMeetRoomCal(Reservation reservation) {
+		return meetRoomReservMapper.updateMeetCal(reservation);
 	}
 	
-	/*
-	 * // 회의실 수정 객체 public MeetingRoom getMeetRoomNo(MeetingRoom meetingRoom) {
-	 * MeetingRoom modiMeetingRoom = meetRoomMapper.selectMeetRoomOne(meetingRoom);
-	 * return modiMeetingRoom; }
-	 */
+	// 회의실 예약 목록 (사원)
+	public List<Reservation> getReservations(Map<String, Object> map){
+		return meetRoomReservMapper.selectMeetReserved(map);
+	}
+	
 }
