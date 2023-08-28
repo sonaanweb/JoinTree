@@ -2,6 +2,7 @@ package com.goodee.JoinTree.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.goodee.JoinTree.service.CodeService;
 import com.goodee.JoinTree.service.LoginService;
 import com.goodee.JoinTree.vo.AccountList;
+import com.goodee.JoinTree.vo.CommonCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +33,8 @@ public class LoginController {
 	String msg = "";
 	@Autowired 
 	private LoginService loginService;
+	@Autowired 
+	private CodeService codeService;
 	
 	// 로그인 페이지로 이동
 	@GetMapping("/login/login")
@@ -71,10 +76,15 @@ public class LoginController {
 			String empName = loginService.getEmpName(empNo);
 			String dept = loginService.getEmpDept(empNo);
 			String signImg = loginService.getSignImg(empNo);
+			// 사이드바 내용을 위해 리스트도 함께 추가
+			String upCode = null;
+			List<CommonCode> childCodeList = codeService.selectChildCode(upCode);
+			
 			log.debug(CYAN + empName + " <-- empName(LoginController)"+ RESET); // 디버그 로그
 			log.debug(CYAN + dept + " <-- dept(LoginController)"+ RESET);
 			log.debug(CYAN + signImg + " <-- signImg(LoginController)"+ RESET);
 			
+			session.setAttribute("childCodeList", childCodeList);
 			session.setAttribute("loginAccount", loginAccount);
 			session.setAttribute("empName", empName);
 			session.setAttribute("dept", dept);

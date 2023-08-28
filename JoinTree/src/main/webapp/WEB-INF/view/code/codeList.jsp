@@ -45,7 +45,7 @@
 						$("#childCodeList").empty(); // 초기화
 						
 						if (data.length === 0) {
-							childCodeT.append("<tr><td colspan=\"3\">하위코드가 추가해주세요</td></tr>");
+							$("#childCodeList").append("<tr><td colspan=3>" + "하위코드를 추가해주세요" + "</td></tr>");
 							return; // 하위 코드가 없으면 여기서 처리 중단
 						} else {
 							
@@ -303,7 +303,7 @@
 				
 				if (upCode) {//상위코드가 선택되어 있을 때만 추가 가능
 					if ($("#childCodeT").find(".newRow").length === 0) {
-						$("#childCodeT").find("td:contains('하위코드가 추가해주세요')").remove();
+						$("#childCodeT").find("td:contains('하위코드를 추가해주세요')").remove();
 						
 						// 버튼 상태 변경: 코드를 추가하는 버튼은 표시 / 상세정보를 저장하는 버튼은 숨기기
 						$("#saveCodeBtn").show();
@@ -448,7 +448,7 @@
 				// 값이 변화했는지 체크
 				const updateChecked = $("#chileCodeOneList4 .toggleSwitch").prop("checked");
 				
-				const valueChanged = currentDetailCodeName !== updatedCodeName || currentChecked !== updateChecked;
+				const valueChanged = currentCodeName !== updatedCodeName || currentChecked !== updateChecked;
 				console.log(" currentChecked", currentChecked);
 				console.log(" updateChecked", updateChecked);
 				if (valueChanged) {

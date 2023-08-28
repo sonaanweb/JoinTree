@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.ProjectService;
 import com.goodee.JoinTree.vo.AccountList;
+import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.Project;
 
 @Controller
@@ -39,6 +40,16 @@ public class HomeController {
 		model.addAttribute("homeProejctList", homeProejctList); // 프로젝트 정보
 		
 		return "home"; // 포워딩
+	}
+	
+	// 사이드바 값 출력
+	@GetMapping("/sideContent")
+	public String sideContect(HttpSession session) {
+		
+		List<CommonCode> childCodeList = (List<CommonCode>) session.getAttribute("childCodeList");
+		
+		session.setAttribute("childCodeList", childCodeList);
+		return "inc/sideContent";
 	}
 	
 }
