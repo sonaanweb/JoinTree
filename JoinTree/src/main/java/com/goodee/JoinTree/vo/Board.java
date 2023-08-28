@@ -23,4 +23,6 @@ public class Board {
 	private MultipartFile multipartFile;
 	
 	private String empName; // DB에 없음, 작성자 이름 출력을 위해 추가
+	
+	private int commentCnt; // DB에 없음, 게시글별 댓글 개수 출력을 위해 추가
 }

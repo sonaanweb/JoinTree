@@ -32,6 +32,8 @@
 	            
 	            setPlaceholder($('#commentContent'), '댓글을 입력해주세요.');
 	            
+	            
+	            
 	            $("#addCommentBtn").click(function() {
 	                const commentContent = $("#commentContent").val();
 	                if (commentContent.trim() === "") {
@@ -41,9 +43,32 @@
 	                    $("#addComment").submit();
 	                }
 	            });
+	            
+	            $(".reply-btn").click(function() {
+	                $(this).closest("tr").next(".reply-form-row").toggle();
+	            });
+
+	            $(".add-reply-btn").click(function() {
+	                const replyForm = $(this).closest(".reply-form");
+	                const commentContent = replyForm.find(".reply-content").val();
+	                
+	                if (commentContent.trim() === "") {
+	                    alert("답글을 입력해주세요.");
+	                    replyForm.find(".reply-content").focus();
+	                } else {
+	                    replyForm.submit();
+	                }
+	            });
+	            
+	        	 // 댓글 추가 함수
+	            function addComment(comment) {
+	                // 새로운 댓글을 생성하고 comment-section에 추가
+	                $(".comment-section table").append("<tr>...</tr>");
+	                
+	                // 스크롤을 아래로 내려서 새로운 댓글이 보이도록 함
+	                $(".comment-section").scrollTop($(".comment-section")[0].scrollHeight);
+	            }
 					
-					
-				
 					
 				// 새로고침 시 메시지 알림창 출력하지 않음
 		        // urlParams.delete("msg");
@@ -51,6 +76,16 @@
 		        //history.replaceState({}, document.title, newUrl);
 			});
 		</script>
+		<style>
+			.comment-section {
+			    max-height: 400px; /* 원하는 높이로 설정 */
+			    overflow-y: auto;
+			    border: 1px solid #ccc;
+			    padding: 10px;
+			}
+					
+		</style>
+		
 		
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
@@ -108,29 +143,50 @@
 				
 				<!-- 댓글 목록 -->
 				<h2>댓글</h2>
-				<table border="1">
-					<tr>
-						<th>작성자</th>
-						<th>내용</th>
-						<th>작성일자</th>
-						<th></th>
-						<th></th>
-					</tr>
-					<c:forEach items="${comments}" var="comment">
+				<div class="comment-section">
+					<table border="1">
 						<tr>
-							<td>${comment.empName}</td>
-							<td>${comment.commentContent}</td>
-							<td>${comment.createdate}</td>
-							<td>
-								<!-- 자신이 작성한 댓글일 경우에만 수정, 삭제 버튼 노출 -->
-								<c:if test="${loginAccount.empNo eq comment.empNo}">
-									<a href="/JoinTree/comment/removeComment?commentNo=${comment.commentNo}&boardNo=${comment.boardNo}">삭제</a>
-								</c:if>
-							</td>
-							<td><button type="button">답글</button></td>
+							<th>작성자</th>
+							<th>내용</th>
+							<th>작성일자</th>
+							<th></th>
+							<th></th>
 						</tr>
-					</c:forEach>
-				</table>
+						<c:forEach items="${comments}" var="comment">
+							<tr>
+								<td>${comment.empName}</td>
+								<td>${comment.commentContent}</td>
+								<td>${comment.createdate}</td>
+								<td>
+									<!-- 자신이 작성한 댓글일 경우에만 수정, 삭제 버튼 노출 -->
+									<c:if test="${loginAccount.empNo eq comment.empNo}">
+										<a href="/JoinTree/comment/removeComment?commentNo=${comment.commentNo}&boardNo=${comment.boardNo}">삭제</a>
+									</c:if>
+								</td>
+								<td>
+									<!-- 클릭 시 jQuery 이벤트 바인딩 -->
+									<button type="button" class="reply-btn">답글</button>
+									${comment.commentNo}
+								</td>
+							</tr>
+							<tr class="reply-form-row" style="display: none;">
+								<td colspan="5">
+					          		<form action="/JoinTree/comment/addReply" method="POST" class="reply-form">
+						                <input type="hidden" name="boardNo" value="${comm.boardNo}">
+						                <input type="hidden" name="empNo" value="${loginAccount.empNo}">
+						                <input type="hidden" name="category" value="${comm.boardCategory}">
+						                <input type="hidden" name="commentGroupNo" value="2">
+						                <input type="hidden" name="parentCommentNo" value="${comment.commentNo}">
+						                <textarea name="commentContent" class="reply-content" rows="3" cols="50"></textarea><br>
+						                <button type="button" class="add-reply-btn">등록</button>
+	           					 	</form>
+	           					 </td>
+							</tr>
+							
+							
+						</c:forEach>
+					</table>
+				</div>
 				<hr>
 				
 				<!-- 댓글 작성 폼 -->

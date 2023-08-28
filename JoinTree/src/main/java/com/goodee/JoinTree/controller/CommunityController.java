@@ -51,6 +51,20 @@ public class CommunityController {
 		
 		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage, searchOption, searchText);
 		
+		// 댓글 개수 가져와서 모델에 추가
+		List<Board> pinnedCommList = (List<Board>) resultMap.get("pinnedCommList");
+		for (Board comm : pinnedCommList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		List<Board> commList = (List<Board>) resultMap.get("commList"); // 게시글 목록 가져오는 로직
+		for (Board comm : commList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-freeCommList)" + RESET);
 		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-freeCommList)" + RESET);
 		
@@ -69,6 +83,7 @@ public class CommunityController {
 		if (endPage > lastPage) {
 			endPage = lastPage;
 		}
+		
 		
 		// view로 값 넘길 때는 분리
 		model.addAttribute("category", category);
