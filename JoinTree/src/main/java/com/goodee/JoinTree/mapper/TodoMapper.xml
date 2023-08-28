@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.JoinTree.mapper.TodoMapper">
+	
+	<!-- todo 출력 -->
+	<select id="selectTodo" resultType="com.goodee.JoinTree.vo.Todo">
+		SELECT
+			todo_no todoNo,
+			emp_no empNo,
+			todo_content todoContent,
+			todo_status todoStatus,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateID
+		FROM todo
+		WHERE emp_no = #{empNo}
+	</select>
+	
+	<!-- todo 추가 -->
+	<insert id="addTodo" parameterType="com.goodee.JoinTree.vo.Todo">
+		<selectKey order="AFTER" keyProperty="todoNo" resultType="int">
+			SELECT last_insert_id()
+		</selectKey>
+		INSERT INTO todo(
+			emp_no,
+			todo_content,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{empNo},
+			#{todoContent},
+			now(),
+			now(),
+			#{empNo},
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- todo 상태 업데이트 -->
+    <update id="updateTodoStatus" parameterType="map">
+        UPDATE todo
+        SET todo_status = #{todoStatus}
+        WHERE todo_no = #{todoNo}
+    </update>
+	
+	<!-- todo 삭제 -->
+	<delete id="removeTodo" parameterType="com.goodee.JoinTree.vo.Todo">
+        DELETE FROM todo
+        WHERE todo_no = #{todoNo}
+	</delete>
+</mapper>
