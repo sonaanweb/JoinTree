@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class MeetReservController {
-	static final String Sona = "\u001B[34m";
-	static final String RESET = "\u001B[0m";
+	static final String AN = "\u001B[34m";
+	static final String RE = "\u001B[0m";
 	
 	@Autowired MeetRoomReservService meetRoomReservService;	
 	@Autowired MeetRoomService meetRoomService;
@@ -44,7 +44,7 @@ public class MeetReservController {
 		List<MeetingRoom> meetRoomList = meetRoomService.getMeetRoomList(paramMap);
 		model.addAttribute("meetRoomList", meetRoomList); //view ${}
 		
-		log.debug(Sona+"MeetRoomReSERVController.meetRoomList : "+meetRoomList.toString()+RESET);
+		log.debug(AN+"MeetRoomReSERVController.meetRoomList : "+meetRoomList.toString()+RE);
 		return "/reservation/empMeetRoomList"; // 뷰 이름 랜더링
 	}
 	
@@ -52,7 +52,7 @@ public class MeetReservController {
 	@GetMapping("/reservation/meetRoomReserv")
 	public String viewMeetCal(@RequestParam(name = "roomNo") int roomNo, Model model) {
 		model.addAttribute("roomNo", roomNo);
-		log.debug(Sona+"Room No: " + roomNo+RESET); // 값 정상
+		log.debug(AN+"Room No: " + roomNo+RE); // 값 정상
 		return "/reservation/meetRoomReserv";
 	}
 	

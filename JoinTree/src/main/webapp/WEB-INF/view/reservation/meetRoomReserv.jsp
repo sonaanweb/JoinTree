@@ -131,10 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
             var formattedDate = date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
             return formattedDate + ' - ' + roomName + ' 예약현황';
         },
+        selectOverlap: false, // 중복 불가
         selectable : true,
         droppable : true,
         editable : false,
-        nowIndicator: true,
+        nowIndicator: false,
         allDaySlot: false,
         slotLabelFormat: '',
         height: 'auto',
@@ -169,9 +170,36 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         
         select: function(info) {
+        	
+        	// --- 예약 중복 검사 LIST
+            var selectedStart = moment(info.startStr);
+            var selectedEnd = moment(info.endStr);
+
+            // 캘린더 확인 후 중복검사
+            var overlappingEvent = calendar.getEvents().find(function(event) {
+            	
+                var eventStart = moment.tz(event.startStr, 'Asia/Seoul'); // start, end 뒤에 str 붙여야 적용 - 문자열 형식
+                var eventEnd = moment.tz(event.endStr, 'Asia/Seoul');  
+                //console.log(eventStart);
+                //console.log(eventEnd);
+                
+                return (
+                        (selectedStart.isSameOrAfter(eventStart) && selectedStart.isBefore(eventEnd)) ||
+                        (selectedEnd.isAfter(eventStart) && selectedEnd.isSameOrBefore(eventEnd)) ||
+                        (selectedStart.isSameOrBefore(eventStart) && selectedEnd.isSameOrAfter(eventEnd))
+                    );
+                });
+
+                if (overlappingEvent) {
+                    alert("이미 예약된 시간입니다.");
+                    return;
+                }
+        	// ----
+        	
+        	// ---- 시간 유효성 검사
         	 var now = moment(); // 현재 날짜와 시간
        	     var selectedDateTime = moment.tz(info.startStr, 'Asia/Seoul'); //오류 기록해둬야지..
-        	 console.log(selectedDateTime);
+        	 //console.log(selectedDateTime);
 
        	    // 선택한 날짜와 시간 둘 다 이전인 경우
        	    if (selectedDateTime.isBefore(now)) {
@@ -184,9 +212,11 @@ document.addEventListener('DOMContentLoaded', function() {
        	        alert("지난 시간에는 예약할 수 없습니다.");
        	        return;
        	    }
+       	    
+       	    // -----
             
             $('#calendarModal').modal('show');
-            
+ 
             var selectedDate = info.startStr.split("T")[0];
             var selectedStartTime = info.startStr.split("T")[1].substring(0, 5);
             var selectedEndTime = info.endStr.split("T")[1].substring(0, 5);
@@ -209,7 +239,38 @@ document.addEventListener('DOMContentLoaded', function() {
             $("#revReason").focus();
             return;
         }
+        
+        // 예약 중복 검사
+        var selectedStart = moment.tz($('#selectedDate').val() + ' ' + $('#revStartTime').val(), 'Asia/Seoul');
+        var selectedEnd = moment.tz($('#selectedDate').val() + ' ' + $('#revEndTime').val(), 'Asia/Seoul');
+        console.log("추가 선택 시작 시간:",selectedStart);
+        console.log("추가 선택 종료 시간:",selectedEnd);
+        
+        // 예약 시작시간이 종료 시간보다 느릴 경우 메시지 표시
+        if (selectedStart.isSameOrAfter(selectedEnd)) {
+            $("#rn_check").text("예약 시작시간이 종료 시간보다 늦거나 같을 수 없습니다.");
+            $("#rn_check").css("color", "red");
+            return;
+        }
+        
+        var overlappingEvent = calendar.getEvents().find(function(event) {
+            var eventStart = moment.tz(event.startStr, 'Asia/Seoul');
+            var eventEnd = moment.tz(event.endStr, 'Asia/Seoul');
+            console.log("예약중복검사 이미 존재하는 시작 시간:",eventStart);
+            console.log("예약중복검사 이미 존재하는 종료 시간:",eventEnd);
+            
+            return (
+                (selectedStart.isSameOrAfter(eventStart) && selectedStart.isBefore(eventEnd)) ||
+                (selectedEnd.isAfter(eventStart) && selectedEnd.isSameOrBefore(eventEnd)) ||
+                (selectedStart.isSameOrBefore(eventStart) && selectedEnd.isSameOrAfter(eventEnd))
+            );
+        });
 
+        if (overlappingEvent) {
+            alert("이미 예약된 시간입니다.");
+            return;
+        }
+        
         var reservationInfo = {
             equipNo: roomNo,
             revStartTime: $('#selectedDate').val() + ' ' + $('#revStartTime').val(),
@@ -235,6 +296,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+$('#calendarModal').on('hidden.bs.modal', function () {
+    $("#rn_check").text("");
+});
 
     function calreload() {
         calendar.refetchEvents(); // 풀캘린더 reload 함수

@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class MeetRoomController {
-	static final String Sona = "\u001B[34m";
-	static final String RESET = "\u001B[0m";
+	static final String AN = "\u001B[34m";
+	static final String RE = "\u001B[0m";
 	
 	@Autowired
 	private MeetRoomService meetRoomService;
@@ -42,7 +42,7 @@ public class MeetRoomController {
 		List<MeetingRoom> meetRoomList = meetRoomService.getMeetRoomList(paramMap);
 		model.addAttribute("meetRoomList", meetRoomList); //view ${}
 		
-		log.debug(Sona+"MeetRoomController.meetRoomList : "+meetRoomList.toString()+RESET);
+		log.debug(AN+"MeetRoomController.meetRoomList : "+meetRoomList.toString()+RE);
 		return "/equipment/meetRoomList"; // 뷰 이름 랜더링
 	}
 	// ------------------------------------------------
@@ -61,8 +61,8 @@ public class MeetRoomController {
     	meetRoomService.addMeetRoom(meetingRoom);
         //meetRoomService.addMeetRoom(meetingRoom);
         
-        log.debug(Sona+"MeetRoomController.equipCategory : "+equipCategory.toString()+RESET);
-        log.debug(Sona+"MeetRoomController.addmeetingRoom : "+meetingRoom.toString()+RESET);
+        log.debug(AN+"MeetRoomController.equipCategory : "+equipCategory.toString()+RE);
+        log.debug(AN+"MeetRoomController.addmeetingRoom : "+meetingRoom.toString()+RE);
         
         return "redirect:/equipment/meetRoomList";
     }
@@ -89,7 +89,7 @@ public class MeetRoomController {
     @PostMapping("/equipment/modifyMeetRoom")
     public String updateMeetRoom(HttpSession session,MeetingRoom meetingRoom) {
         meetRoomService.modifyMeetRoom(meetingRoom);
-        log.debug(Sona+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RESET);
+        log.debug(AN+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RE);
         return "redirect:/equipment/meetRoomList";
     }
     // ------------------------------------------------
@@ -108,7 +108,7 @@ public class MeetRoomController {
     	MeetingRoom meetingRoom = new MeetingRoom();
     	meetingRoom.setRoomName(roomName);
         int cnt = meetRoomService.getRoomNameCnt(meetingRoom);
-        log.debug(Sona+"MeetRoomController.cnt: "+cnt+RESET);
+        log.debug(AN+"MeetRoomController.cnt: "+cnt+RE);
         return cnt;
     }
     
