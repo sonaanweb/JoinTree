@@ -55,10 +55,9 @@
 			</if>
 		</where>
 		ORDER BY 
-				<!-- 1. 진행중인 프로젝트 -> 2. 프로젝트 번호 3. 생성일 -->
-				CASE WHEN project_status = 'A0502' THEN 1 ELSE 2 END,
-				project_no ASC, 
-				createdate DESC
+				<!-- 생성일 -->
+				createdate DESC,
+				project_no ASC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
@@ -108,7 +107,7 @@
 				AND project_end_date &lt;= #{endDate}
 			</if>
 		ORDER BY 
-				<!-- 1. 프로젝트 번호 -> 2. 생성일 -->
+				<!-- 1. 생성일 -> 2. 프로젝트 번호 -->
 				p.createdate DESC, 
 				p.project_no ASC
 		LIMIT #{startRow}, #{rowPerPage}
@@ -160,7 +159,6 @@
 			p.emp_no empNo,
 			e.emp_name empName,
 			p.project_name projectName,
-			p.project_color projectColor,
 			p.project_start_date projectStartDate, 
 			p.project_end_date projectEndDate,
 			p.project_content projectContent,
@@ -222,6 +220,34 @@
 		ON pm.emp_no = e.emp_no
 		WHERE project_no = #{projectNo};
 	</select>
-
+	
+	<insert id="addProject"
+			parameterType="com.goodee.JoinTree.vo.Project">
+		INSERT INTO project(
+			emp_no,
+			project_name,
+			project_color,
+			project_start_date,
+			project_end_date,
+			project_content,
+			project_status,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{empNo},
+			#{projectName},
+			#{projectColor},
+			#{projectStartDate},
+			#{projectEndDate},
+			#{projectContent},
+			'A0501',
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
+		)
+	</insert>
 
 </mapper>
