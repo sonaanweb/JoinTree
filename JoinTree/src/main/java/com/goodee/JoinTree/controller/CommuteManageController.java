@@ -47,7 +47,7 @@ public class CommuteManageController {
 	}
 	
 	// leaveRecodeList.jsp(연가 조회)
-	@GetMapping("/commuteManage/leaveRecodeList")
+	@GetMapping("/commuteManage/leaveList")
 	public String selectLeaveRecodeList(Model model) {
 		
 		// 연가 조회
@@ -61,7 +61,7 @@ public class CommuteManageController {
 		model.addAttribute("leaveCodeList",leaveCodeList);
 		model.addAttribute("activeCodeList",activeCodeList);
 		
-		return "/commuteManage/leaveRecodeList";
+		return "/commuteManage/leaveList";
 	}
 	
 }
