@@ -193,7 +193,7 @@
 			</c:forEach>	
 		</li>
 		
-		<c:if test="${dept == 'D0203' || empNo == '11111111'}">
+		<c:if test="${dept == 'D0203' || loginAccount.empNo == '11111111'}">
 			<!-- 왼쪽 - 개발팀(공통코리 관리) -->
 			<div class="line"></div>
 			<li class="nav-item">
@@ -210,7 +210,7 @@
 		
 		
 		<!-- 왼쪽 - 인사팀(인사관리) -->
-		<c:if test="${dept == 'D0201' || empNo == '11111111'}">
+		<c:if test="${dept == 'D0201' || loginAccount.empNo == '11111111'}">
 			<div class="line"></div>
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
@@ -234,7 +234,7 @@
 		</c:if>
 		
 		<!-- 왼쪽 - 경영개발팀 -->
-		<c:if test="${dept == 'D0202' || empNo == '11111111'}">
+		<c:if test="${dept == 'D0202' || loginAccount.empNo == '11111111'}">
 			<div class="line"></div>
 			<!-- 왼쪽 - 예약관리 -->
 			<li class="nav-item">
