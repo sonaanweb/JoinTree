@@ -86,6 +86,7 @@ public class LoginController {
 			
 			session.setAttribute("childCodeList", childCodeList);
 			session.setAttribute("loginAccount", loginAccount);
+			session.setAttribute("empNo", empNo);
 			session.setAttribute("empName", empName);
 			session.setAttribute("dept", dept);
 			session.setAttribute("signImg", signImg);
