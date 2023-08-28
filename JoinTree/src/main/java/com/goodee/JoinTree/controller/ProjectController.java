@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -121,7 +122,6 @@ public class ProjectController {
 		project.setProjectNo(projectNo);
 		project = projectService.selectProejctOne(project);
 		
-		
 		List<ProjectMember> projectMemeber= projectService.selectProejectMember(projectNo);
 		
 		model.addAttribute("project",project);
@@ -130,4 +130,15 @@ public class ProjectController {
 		return "project/projectOne";
 	}
 	
+	// 프로젝트 추가 
+	@PostMapping("project/addProject")
+	@ResponseBody
+	public String addProject(Project project) {
+		int row = projectService.addProject(project);
+		
+		if(row != 1) {
+			return "fail";
+		} 
+		return "success";
+	}
 }

@@ -185,8 +185,24 @@ input:checked + .slider:before {
 }
 /*프로젝트*/
 .project .card{
-	height: 230px;
+	width: 300px;
+	height: 300px;
+	margin: 30px 0px 0px 0px;
 }
-.project .warpper {
+.project .wrapper {
 	height: 650px;
+}
+.project .paging {
+	margin-top: 70px;
+}
+.project-modal .wrapper{
+	align-items: center;
+}
+.color {
+	display: flex;
+	width: 20px; 
+	height:20px; 
+	border:1px solid #999; 
+	background-color: #B7B7B7;
+	margin: 0px 10px 0px 1px;
 }

@@ -208,7 +208,6 @@
 			</li>
 		</c:if>
 		
-		
 		<!-- 왼쪽 - 인사팀(인사관리) -->
 		<c:if test="${dept == 'D0201' || loginAccount.empNo == '11111111'}">
 			<div class="line"></div>
@@ -254,6 +253,7 @@
 					</ul>
 				</div>
 			</li>
+			
 			<!-- 왼쪽 - 기자재관리 -->
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">

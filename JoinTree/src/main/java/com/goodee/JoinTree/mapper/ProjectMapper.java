@@ -33,4 +33,10 @@ public interface ProjectMapper {
 	
 	// 프로젝트 멤버 리스트
 	List<ProjectMember> selectProejectMember(int projectNo);
+	
+	// 프로젝트 추가
+	int addProject(Project prooject);
+	// 프로젝트 수정 
+	
+	// 프로젝트 삭제
 }

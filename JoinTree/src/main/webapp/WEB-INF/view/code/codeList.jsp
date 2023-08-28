@@ -269,7 +269,9 @@
 					type: "POST",
 					data: {
 						code : newUpCode,
-						codeName : newUpCodeName
+						codeName : newUpCodeName,
+						createId : ${loginAccount.empNo},
+						updateId : ${loginAccount.empNo}
 					},
 					success: function(response) {
 						console.log("response:", response);
@@ -367,7 +369,9 @@
 					data: {
 						upCode : upCode,
 						code : newCode,
-						codeName : newCodeName
+						codeName : newCodeName,
+						createId : ${loginAccount.empNo},
+						updateId : ${loginAccount.empNo}
 					},
 					success: function(response) {
 						console.log("response:", response);
@@ -422,7 +426,8 @@
 						data: { 
 							code: currentUpCode,
 							codeName: currentUpCodeName,
-							status: updateUpChecked ? "Y" : "N"
+							status: updateUpChecked ? "Y" : "N",
+							updateId : ${loginAccount.empNo}
 						},
 						success: function(response) {
 								console.log("response:", response);
@@ -464,7 +469,8 @@
 						data: { 
 							code: currentCode,
 							codeName: currentCodeName,
-							status: updateChecked ? "Y" : "N"
+							status: updateChecked ? "Y" : "N",
+							updateId : ${loginAccount.empNo}
 						},
 						success: function(response) {
 								console.log("response:", response);

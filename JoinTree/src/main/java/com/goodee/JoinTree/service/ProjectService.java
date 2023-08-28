@@ -110,4 +110,8 @@ public class ProjectService {
 		return projectMapper.selectProejectMember(projectNo);
 	}
 	
+	// 프로젝트 추가
+	public int addProject(Project project) {
+		return projectMapper.addProject(project);
+	}
 }
