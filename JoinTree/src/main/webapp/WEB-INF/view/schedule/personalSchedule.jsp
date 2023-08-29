@@ -128,6 +128,15 @@
 	$(document).ready(function() {
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	    	// 공휴일 추가를 위한 구글캘린더 연동
+	    	googleCalendarApiKey : "AIzaSyBUdKm-pJMILaqOkkO1YcoMB9Ib4P0TpQA",
+	        eventSources :[ 
+	            {
+	                googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
+	                , textcolor: 'white'
+	                , color: 'red'
+	            }
+	    	],
 	        timeZone: 'Asia/Seoul',
 	        selectable: true,
 	        events: '/JoinTree/schedule/getPersonalSchedules',
@@ -137,6 +146,9 @@
 	            openModal(startDate, endDate);
 	        },
 	        eventClick: function(info) {
+	        	// 공휴일 일정 클릭시 기본동작 막기
+	        	info.jsEvent.preventDefault();
+	        	
 	            var event = info.event;
 	            selectedEvent = event; // 선택한 일정을 selectedEvent 변수에 저장
 	            openEventModal(event);
