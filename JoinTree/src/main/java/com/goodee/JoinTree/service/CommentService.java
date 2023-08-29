@@ -32,7 +32,6 @@ public class CommentService {
         for (Comment comment : comments) {
         	log.debug(CYAN + comment.getCommentContent() + " <-- Comment(CommentService-getCommentsByBoardNo) " + RESET); // 댓글 내용을 로그로 출력
         }
-		
 	
 		return comments;
 	}
@@ -40,7 +39,7 @@ public class CommentService {
 	// 게시글별 댓글 개수
 	public int getCommentsCnt(int boardNo) {
 		int row = commentMapper.selectCommentsCnt(boardNo);
-		log.debug(CYAN + row + "<-- row(CommentService-getCommentsCnt)" + RESET);
+		log.debug(CYAN + row + " <-- row(CommentService-getCommentsCnt)" + RESET);
 		
 		return row;
 	}
@@ -48,16 +47,15 @@ public class CommentService {
 	// 댓글 입력
 	public int addComment(Comment comment) {
 		int row = commentMapper.addComment(comment);
-		log.debug(CYAN + row + "<-- row(CommentService-addComment)" + RESET);
+		log.debug(CYAN + row + " <-- row(CommentService-addComment)" + RESET);
 		
 		return row;
 	}
 	
 	// 대댓글 입력
-	// 댓글 입력
 	public int addReply(Comment comment) {
-		int row = commentMapper.addComment(comment);
-		log.debug(CYAN + row + "<-- row(CommentService-addReply)" + RESET);
+		int row = commentMapper.addReply(comment);
+		log.debug(CYAN + row + " <-- row(CommentService-addReply)" + RESET);
 		
 		return row;
 	}
@@ -65,7 +63,7 @@ public class CommentService {
 	// 댓글/대댓글 삭제
 	public int removeCommentReply(int commentNo) {
 		int row = commentMapper.removeCommentReply(commentNo);
-		log.debug(CYAN + row + "<-- row(CommentService-removeCommentReply)" + RESET);
+		log.debug(CYAN + row + " <-- row(CommentService-removeCommentReply)" + RESET);
 		
 		return row;
 	}
