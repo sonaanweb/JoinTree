@@ -64,8 +64,10 @@
 	<select id="getDraftDocList"
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
+			d.doc_no docNo,
 			d.createdate createdate, 
-			doc.code_name category, 
+			doc.code_name category,
+			doc.code docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -85,8 +87,10 @@
 	<select id="getApprovalDocList"
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
+			d.doc_no docNo,
 			d.createdate createdate, 
-			doc.code_name category, 
+			doc.code_name category,
+			doc.code docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -106,8 +110,10 @@
 	<select id="getIndividualDocList"
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
+			d.doc_no docNo,
 			d.createdate createdate, 
-			doc.code_name category, 
+			doc.code_name category,
+			doc.code docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -134,8 +140,10 @@
 	<select id="getTeamDocList"
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
+			d.doc_no docNo,
 			d.createdate createdate, 
-			doc.code_name category, 
+			doc.code_name category,
+			doc.code docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -147,4 +155,5 @@
 			d.doc_status = 'A0203' 
 			AND d.receiver_team = #{dept}
 	</select>
+	
 </mapper>
