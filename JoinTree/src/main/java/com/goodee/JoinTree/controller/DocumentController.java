@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.goodee.JoinTree.mapper.DocumentFileMapper;
 import com.goodee.JoinTree.service.CodeService;
+import com.goodee.JoinTree.service.DocumentListService;
 import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.OrgChartService;
@@ -43,6 +44,8 @@ public class DocumentController {
 	private EmpInfoService empInfoService;
 	@Autowired
 	private CodeService codeService;
+	@Autowired
+	DocumentListService documentListService;
 	
 	// document.jsp
 	@GetMapping("/document/document")
@@ -144,6 +147,18 @@ public class DocumentController {
 		
 		return fileUpload;
 
+	}
+	
+	@GetMapping("/document/documentList")
+	public String documentList(Model model,
+							   @RequestParam String listId) {
+		
+		log.debug(listId+"<-- DocumentListController listId");
+		
+		// 문서함별 id
+		model.addAttribute("listId", listId);
+		
+		return "/document/documentList";
 	}
 	
 }
