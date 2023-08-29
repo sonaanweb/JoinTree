@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.goodee.JoinTree.service.DocumentListService;
+import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.vo.AccountList;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ public class DocumentRestController {
 	
 	@Autowired
 	private DocumentListService documentListService;
+	@Autowired
+	private DocumentService documentService;
 	
 	// 검색별 문서 리스트 조회
 	@GetMapping("/getDocumentList")
@@ -49,5 +52,18 @@ public class DocumentRestController {
 		log.debug(getDocumentListResult +"<-- DocumentListRestController getDocumentListResult");
 		
 		return getDocumentListResult;
+	}
+	
+	// 결재문서 상세 조회
+	@GetMapping("/getDocumentOne")
+	public Map<String, Object> getDocumentOne(@RequestParam int docNo){
+		
+		log.debug(docNo + "<-- DocumentListRestController docNo");
+		
+		// 결제문서 상세 조회
+		Map<String, Object> getDocumentOne = documentService.getDocumentOne(docNo);
+		log.debug(getDocumentOne + "<-- DocumentListRestController getDocumentOne");
+		
+		return getDocumentOne;
 	}
 }

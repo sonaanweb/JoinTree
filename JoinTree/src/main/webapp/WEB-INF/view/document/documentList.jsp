@@ -42,6 +42,7 @@
 					<table class="table">
 						<thead>
 							<tr>
+								<th>문서번호</th>
 								<th>기안일</th>
 								<th>기안양식</th>
 								<th>제목</th>
@@ -59,13 +60,40 @@
 					<div id="pagination">
 					
 					</div>
-					
+					 
 				</div>
 			</div>
 		</div>
 	
 	</div>
 </div>
+
+	<!-- 문서 상세정보 모달창 -->
+	<div class="modal" id="docOneModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content" id="docOneModalContent">
+				
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title"></h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+					<!-- 결재 문서 상세조회 폼 -->
+					<div id="documentOneForm">
+					
+					</div>
+					
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
 <script>
 	
 	$(document).ready(function(){
@@ -119,12 +147,19 @@
 	    for (let i = 0; i < data.length; i++) {
 	        let doc = data[i];
 	        let row = $('<tr>');
-	        let dateOnly = doc.createdate.split("T")[0];
+	        row.append($('<td>').text(doc.docNo)); // 문서번호
+	        
+	        let dateOnly = doc.createdate.split("T")[0]; // 기안일 날짜 값만 저장
 	        row.append($('<td>').text(dateOnly)); // 기안일
+	        
 	        row.append($('<td>').text(doc.category)); // 기안 양식
 	        row.append($('<td>').text(doc.docTitle)); // 부서명
 	        row.append($('<td>').text(doc.empNo + " " + doc.writer)); // 기안자(사번 + 이름)
 	        row.append($('<td>').text(doc.docStatus)); // 상태
+	        
+	        // 문서 카테고리 숨김 요소로 추가
+	        let docCode = $('<input id="docCode">').attr('type', 'hidden').val(doc.docCode);
+	        row.append(docCode);
 	        tbody.append(row);
 	    }
 	}
@@ -149,6 +184,8 @@
 				console.log(data);
 				
 				let docList = data.searchDocListbyPage; // 문서 목록
+				let docCode = docList.docCode; // 문서 카테고리
+				
 				updateDocListTableData(docList); // 테이블 데이터 수정 함수
 				updatePagination(data); // 페이지 네비게이션 데이터 수정 함수
 			},
@@ -169,5 +206,117 @@
 		docListResults();
 	});
 	
+	// 결재자 서명 경로 설정 함수
+	function setDocStamp(docStampId, docStampValue){
+		let docStampSrc = $(docStampId);
+		if(docStampValue){
+			docStampSrc.attr('src', '${pageContext.request.contextPath}/empImg/' + docStampValue);	
+		} else{
+			docStampSrc.hide();
+		}
+	}
+	
+	
+	
+	// 문서별 상세문서 양식 모달창 업데이트
+	async function updateDocumentOneForm(documentCode) {
+	    return new Promise((resolve, reject) => {
+	        $.ajax({
+	            type: 'GET',
+	            url: '/JoinTree/document/getDocumentOneForm',
+	            data: {
+	                docCode: documentCode
+	            },
+	            success: function (data) {
+	                $('#documentOneForm').html(data);
+	                resolve(); // 업데이트 완료 후 프로미스 resolve 호출
+	            }
+	        });
+	    });
+	}
+	
+	// 문서결재 상세정보 조회
+	async function getDocOne(documentNo, documentCode) {
+	    return new Promise((resolve, reject) => {
+	        // 상세 정보 가져오기
+	        $.ajax({
+	            url: '/JoinTree/getDocumentOne',
+	            type: 'GET',
+	            data: {
+	                docNo: documentNo,
+	                docCode: documentCode
+	            },
+	            success: function (data) {
+	                
+	            	// 결재문서 상세정보 값 변수에 저장
+					let docNo = data.docNo; // 문서번호
+					let createdate = data.createdate.split("T")[0]; // 기안일
+					let writer = data.writer; // 기안자
+					let docStamp1 = data.docStamp1; // 기안자 서명
+					let docStamp2= data.docStamp2; // 결제자1 서명
+					let docStamp3 = data.docStamp3; // 결제자2 서명
+					let reference = data.reference; // 참조자
+					let receiverTeam = data.receiverTeam; // 수신팀
+					let docTitle = data.docTitle; // 문서 제목
+					let docContent = data.docContent; // 문서 내용
+					let dept = data.dept; // 기안부서
+					let position = data.position; // 기안자 직급
+					let docSaveFileName = data.docSaveFileName; // 첨부파일
+					let signer1Name = data.signer1Name; // 결제자1 사원명
+					let signer1Position = data.signer1Position; // 결제자1 직급
+					let signer2Name = data.signer2Name; // 결제자2 사원명
+					let signer2Position = data.signer2Position; // 결제자2 직급
+					
+					// 사원 상세정보 값 설정
+					$('#docNo').text(docNo);
+					$('#createdate').text(createdate);
+					$('.writer').text(writer);
+					$('#reference').text(reference);
+					$('#receiverTeam').text(receiverTeam);
+					$('#docTitle').text(docTitle);
+					$('#docContent').text(docContent);
+					$('#dept').text(dept);
+					$('#position').text(position);
+					$('#signer1Name').text(signer1Name);
+					$('#signer1Position').text(signer1Position);
+					$('#signer2Name').text(signer2Name);
+					$('#signer2Position').text(signer2Position);
+					
+					// 서명 경로 설정(setDocStamp : 결재자 서명 경로 설정 함수)
+					setDocStamp('#docStamp1', docStamp1); // 기안자 서명 경로 설정
+					setDocStamp('#docStamp2', docStamp2); // 결재자2 서명 경로 설정
+					setDocStamp('#docStamp3', docStamp3); // 결재자3 서명 경로 설정
+					
+					// 첨부파일 경로 설정
+					let docSaveFileNameHref = $('#docSaveFileName');
+					docSaveFileNameHref.attr('href', '${pageContext.request.contextPath}/docFile/' + docSaveFileName); // 파일 경로설정
+					docSaveFileNameHref.download = docSaveFileName; // 다운로드할 파일 이름
+	            	
+	                resolve(); // 호출 완료 후 프로미스 resolve 호출
+	            },
+	            error: function () {
+	                console.log('error');
+	                reject(); // 에러 발생 시 프로미스 reject 호출
+	            }
+	        });
+	    });
+	}
+
+	// 문서결재 상세폼
+	$('#docList').on('click', 'tr', async function () {
+	    try {
+	        let documentNo = $(this).find('td:eq(0)').text(); // docNo 값
+	        let documentCode = $('#docCode').val(); // docCode 값
+	
+	        await updateDocumentOneForm(documentCode); // 상세 문서양식 폼
+	        await getDocOne(documentNo, documentCode); // 문서 상세내용 조회
+	
+	        // 모든 비동기 작업이 완료된 후에 모달창을 열어줌
+	        $('#docOneModal').modal('show');
+	    } catch (error) {
+	        console.error(error);
+	    }
+	});
+
 </script>
 </html>

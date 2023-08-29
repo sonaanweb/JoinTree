@@ -149,6 +149,7 @@ public class DocumentController {
 
 	}
 	
+	// documentList.jsp
 	@GetMapping("/document/documentList")
 	public String documentList(Model model,
 							   @RequestParam String listId) {
@@ -161,4 +162,12 @@ public class DocumentController {
 		return "/document/documentList";
 	}
 	
+	// 결재문서 상세 조회 폼 업로드
+	@GetMapping("/document/getDocumentOneForm")
+	public ModelAndView getDocumentOneForm(@RequestParam String docCode) {
+		
+		String path = "document/" + docCode + "One";
+		
+		return new ModelAndView(path);
+	}
 }

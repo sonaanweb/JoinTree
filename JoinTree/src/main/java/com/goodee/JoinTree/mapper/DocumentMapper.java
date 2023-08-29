@@ -1,6 +1,7 @@
 package com.goodee.JoinTree.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -71,4 +72,7 @@ public interface DocumentMapper {
 	
 	// 문서결제양식 코드 조회
 	List<CommonCode> selectDocumentCodeList();
+	
+	// 문서결재 상세 조회
+	Map<String, Object> getDocumentOne(int docNo); 
 }

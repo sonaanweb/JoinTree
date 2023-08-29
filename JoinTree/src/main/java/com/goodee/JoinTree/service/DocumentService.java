@@ -2,6 +2,7 @@ package com.goodee.JoinTree.service;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +118,15 @@ public class DocumentService {
 	public int addDocSigner(DocumentSigner documentSigner) {
 		return documentSignerMapper.addDocSigner(documentSigner);
 	}
-
+	
+	
+	// 문서결재 상세 조회
+	public Map<String, Object> getDocumentOne(int docNo) {
+		
+		// 문서결재 상세 조회
+		Map<String, Object> getDocumentOne = documentMapper.getDocumentOne(docNo);
+		
+		return getDocumentOne;
+	}
 
 }
