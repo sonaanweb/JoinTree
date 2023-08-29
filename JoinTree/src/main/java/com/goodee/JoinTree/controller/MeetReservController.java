@@ -1,5 +1,7 @@
 package com.goodee.JoinTree.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +30,7 @@ import com.goodee.JoinTree.vo.Reservation;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
+@EnableScheduling // 스케줄링 활성화
 public class MeetReservController {
 	static final String AN = "\u001B[34m";
 	static final String RE = "\u001B[0m";
@@ -73,10 +78,7 @@ public class MeetReservController {
         return new ResponseEntity<>(eventList, HttpStatus.OK);//ResponseEntity를 통한 반환
     }
     
-    
-    // 요구사항 : 겹치는 시간 예약 불가능, select내에 현재 시간 이전이나 이미 예약 된 시간은 회색표시로 선택 불가능
-    // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시 alert창으로 제어
-    // 예약 취소는 삭제가 되는 게 아니라 상태가 변하는 것. 예약완료인 예약건만 캘린더에 띄움 A0302(예약완료 기본값) A0303(예약취소)
+    // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시...?)
 
     // 회의실 예약 추가
     @PostMapping("/addReservation")
@@ -156,4 +158,31 @@ public class MeetReservController {
             return "error";
         }
     }
+    
+    // 현재시간 기준 예약 종료시간 이후면 사용완료로 변경하기 위한 메서드
+    /*@Scheduled(cron = "10 * * * * *") // 임시 - 10초마다 실행
+    public void updateReservStatus() {
+        //log.debug("스케줄 메서드 실행");
+        List<MeetingRoom> meetRoomList = meetRoomService.getMeetRoomList(new HashMap<>());
+
+        for (MeetingRoom meetRoom : meetRoomList) {
+            int roomNo = meetRoom.getRoomNo();//회의실 별 예약된 내역을 조회해서 데려옴
+            List<Reservation> reservations = meetRoomReservService.getMeetRoomReservCal(roomNo);
+
+            LocalDateTime currentTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//date 시간 타입
+
+            for (Reservation reservation : reservations) {
+                LocalDateTime endTime = LocalDateTime.parse(reservation.getRevEndTime(), formatter);
+                LocalDateTime currentDateTime = currentTime;
+
+                if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면
+                    if (reservation.getRevStatus().equals("A0302")) {
+                        reservation.setRevStatus("A0304"); // 사용완료 상태로 변경
+                        meetRoomReservService.modifyMeetRoomCal(reservation);
+                    }
+                }
+            }
+        }
+    }*/
 }

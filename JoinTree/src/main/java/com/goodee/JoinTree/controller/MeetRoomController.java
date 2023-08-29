@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.MeetRoomService;
+import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 import lombok.extern.slf4j.Slf4j;

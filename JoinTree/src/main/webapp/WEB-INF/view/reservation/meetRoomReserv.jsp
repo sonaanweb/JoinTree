@@ -24,16 +24,18 @@ html, body {
   font-family: 'Pretendard-Regular';
   font-size: 14px;
 }
-
+.fc-event {
+    background-color: #AEC3AE;
+    border: none;
+}
 #calendar {
   max-width: 1400px;
   margin: 40px auto;
   font-family: 'Pretendard-Regular';
 }
-
-
 .fc .fc-button-primary {
-	    background-color: #C8E4B2;
+	border: none;
+	background-color: #C8E4B2;
 }
 
 .fc .fc-timegrid-slot {
@@ -53,6 +55,7 @@ html, body {
 <div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+			<div><span class="badge badge-success">notice</span></div>
 			<!-- fullCal -->
 			<div id='calendar'></div>
 			<!------------->
@@ -136,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var roomName = urlParams.get('roomName'); // URL 매개변수에서 roomName 호출
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+    	
     	timeZone: 'Asia/Seoul',
     	locale: 'ko',
         initialView : 'timeGridWeek',
@@ -316,9 +320,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 예약 중복 검사
-	         var selectedStart = moment.tz(
-	        $('#selectedDate').val() + ' ' + $('#revStartTime').val(), 
-	        'Asia/Seoul'
+        var selectedStart = moment.tz(
+        $('#selectedDate').val() + ' ' + $('#revStartTime').val(), 
+        'Asia/Seoul'
 	    );
 	    var selectedEnd = moment.tz(
 	        $('#selectedDate').val() + ' ' + $('#revEndTime').val(), 
