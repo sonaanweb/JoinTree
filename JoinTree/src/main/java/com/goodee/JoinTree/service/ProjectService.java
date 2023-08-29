@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.goodee.JoinTree.mapper.ProjectMapper;
 import com.goodee.JoinTree.vo.Project;
 import com.goodee.JoinTree.vo.ProjectMember;
+import com.goodee.JoinTree.vo.ProjectTask;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -105,13 +106,30 @@ public class ProjectService {
 		return projectMapper.selectProjectOne(project);
 	}
 	
+	// 프로젝트 추가
+	public int addProject(Project project) {
+		return projectMapper.addProject(project);
+	}
+	/* 프로젝트 하위작업 */
+	public List<ProjectTask> selectProejectTaskList(int projectNo) {
+		// db에서 가져온 ProjectTask 정보
+		List<ProjectTask> projectTaskList = projectMapper.selectProejectTaskList(projectNo);
+		
+		return projectTaskList;
+	}
+	/* 프로젝트 멤버 */
 	// 프로젝트 참여 명단 출력
 	public List<ProjectMember> selectProejectMember(int projectNo) {
 		return projectMapper.selectProejectMember(projectNo);
 	}
 	
-	// 프로젝트 추가
-	public int addProject(Project project) {
-		return projectMapper.addProject(project);
+	// 프로젝트 멤버 추가
+	public int addProjectMember(ProjectMember projectMember) {
+		return projectMapper.addProjectMemeber(projectMember);
+	}
+	
+	// 프로젝트 멤버 삭제
+	public int romoveProjectMemeber(int empNo, int projectNo) {
+		return projectMapper.romoveProjectMemeber(empNo, projectNo);
 	}
 }

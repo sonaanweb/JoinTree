@@ -61,14 +61,6 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
-	<!-- 프로젝트 멤버 수 구하기 -->
-	<select id="selectProejectMemberCnt">
-		SELECT 
-			COUNT(emp_no) empCnt
-		FROM project_member
-		WHERE project_no = #{projectNo};
-	</select>
-	
 	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)  -->
 	<select id="selectProjectListByPersonal"
 			resultType="com.goodee.JoinTree.vo.Project">
@@ -209,18 +201,7 @@
 		WHERE p.project_no = #{projectNo};
 	</select>
 	
-	<!-- 프로젝트 멤버 수 구하기 -->
-	<select id="selectProejectMember"
-			resultType="com.goodee.JoinTree.vo.Project">
-		SELECT 
-			pm.emp_no empNo,
-			e.emp_name empName
-		FROM project_member pm
-		INNER JOIN emp_info e
-		ON pm.emp_no = e.emp_no
-		WHERE project_no = #{projectNo};
-	</select>
-	
+	<!-- 프로젝트 추가 -->
 	<insert id="addProject"
 			parameterType="com.goodee.JoinTree.vo.Project">
 		INSERT INTO project(
@@ -247,7 +228,93 @@
 			NOW(),
 			#{createId},
 			#{updateId}
+		);
+	</insert>
+	
+	<!-- 프로젝트 하위작업 -->
+	<select id="selectProejectTaskList"
+			resultType="com.goodee.JoinTree.vo.ProjectTask">
+		SELECT
+			t.task_no taskNo,
+			t.project_no projectNo,
+			t.emp_no empNo,
+			e.emp_name empName,
+			t.task_title taskTitle,
+			t.task_content taskContent,
+			t.task_start_date taskStartDate,
+			t.task_end_date taskEndDate,
+			t.task_status taskStatus,
+			t.createdate createdate,
+			t.updatedate updatedate,
+			t.create_id createId,
+			t.update_id updateId
+		FROM project_task t
+		INNER JOIN emp_info e
+		ON t.emp_no = e.emp_no
+		WHERE t.project_no = #{projectNo}
+	</select>
+	<!-- 프로젝트 멤버 -->
+	
+	<!-- 프로젝트 멤버 수 구하기 -->
+	<select id="selectProejectMemberCnt">
+		SELECT 
+			COUNT(emp_no) empCnt
+		FROM project_member
+		WHERE project_no = #{projectNo};
+	</select>
+	
+	<!-- 프로젝트 멤버 명단보기-->
+	<select id="selectProejectMember"
+			resultType="com.goodee.JoinTree.vo.ProjectMember">
+		SELECT 
+			pm.emp_no empNo,
+			e.emp_name empName
+		FROM project_member pm
+		INNER JOIN emp_info e
+		ON 
+			pm.emp_no = e.emp_no
+		WHERE project_no = #{projectNo};
+	</select>
+	
+	<!-- 프로젝트 멤버 중복검사-->
+	<select id="checkDuplicateProjectMember"
+			resultType="int">
+		SELECT 
+			COUNT(emp_no) empCnt
+		FROM project_member
+		WHERE 
+			emp_no = #{empNo}
+			AND 
+			project_no = #{projectNo};
+	</select>
+	
+	<!--  프로젝트 멤버 추가 -->
+	<insert id="addProjectMemeber"
+			parameterType="com.goodee.JoinTree.vo.ProjectMember">
+		INSERT INTO project_member(
+			project_no,
+			emp_no,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{projectNo},
+			#{empNo},
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
 		)
 	</insert>
-
+	
+	<!--  프로젝트 멤버 삭제 -->
+	<delete id="romoveProjectMemeber"
+			parameterType="com.goodee.JoinTree.vo.ProjectMember">
+		DELETE FROM project_member
+		WHERE 
+			emp_no = #{empNo}
+			AND 
+			project_no = #{projectNo};
+	</delete>
 </mapper>

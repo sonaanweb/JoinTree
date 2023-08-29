@@ -8,6 +8,7 @@ public class ProjectTask {
 	private int taskNo;
 	private int projectNo;
 	private int empNo;
+	private String empName; // emp정보 join용
 	private String taskTitle;
 	private String taskStartDate;
 	private String taskEndDate;

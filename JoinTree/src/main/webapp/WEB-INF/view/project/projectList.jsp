@@ -281,8 +281,6 @@
 					return;
 				} 
 				
-				$("#addProject").modal("hide");
-				
 				$.ajax({
 					url: "/JoinTree/project/addProject",
 					type: "POST",
@@ -298,12 +296,33 @@
 					},
 					success : function(response) {
 						console.log("response",response);
-						alert("성공");
+						//alert("성공");
+						$("#addProject").modal("hide");
+						
 						$("#projectName").val('');
-			            $("input.projectColor:checked").val('');
-			            $("#projectStartDate").val('');
-			            $("#projectEndDate").val('');
-			            $("#projectContent").val('');
+						$("input.projectColor:checked").val('');
+						$("#projectStartDate").val('');
+						$("#projectEndDate").val('');
+						$("#projectContent").val('');
+						
+						$.ajax({
+							url: "/JoinTree/project/addProjectMember",
+							type: "POST",
+							data: {
+								empNo : [empNo],
+								projectNo: response,
+								createId: empNo,
+								updateId: empNo
+							},
+							success : function(response) {
+								console.log("response",response);
+								fetchProjectListAndUpdate(selectedTab);
+								alert("성공");
+							},
+							error: function() {
+								alert("다시");
+							}
+						});
 					},
 					error: function() {
 						alert("다시");
@@ -311,6 +330,7 @@
 				});
 				
 			});
+			
 		/* 프로젝트 상세창 */
 			// 프로젝트 상세창으로
 			$("#projectData").on("click", '[data-pjNo]', function() {
@@ -387,9 +407,6 @@
 					<div>
 						프로젝트명 : <input type="text" id="projectName">
 					</div>
-					<div>
-						팀원 : <button type="button">+</button>
-					</div>
 					<div class="wrapper">
 						카드지정색 : 
 								<input type="radio" class="projectColor" name="projectColor" value="#B7B7B7"> <div class="color"></div>
@@ -404,7 +421,6 @@
 					<div>
 						<button type="button" id="addProjectSubmitBtn" class="btn btn-success">프로젝트 추가</button>
 					</div>
-						
 				</div>
 			</div>
 		</div>
