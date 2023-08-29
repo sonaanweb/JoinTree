@@ -6,34 +6,35 @@
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	
 		<!-- todo 추가 모달창 -->
-			<div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
-			    <div class="modal-dialog" role="document">
-			        <div class="modal-content">
-			            <div class="modal-header">
-			                <h5 class="modal-title" id="addTodoModalLabel">TODO 추가</h5>
-			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			                    <span aria-hidden="true">&times;</span>
-			                </button>
-			            </div>
-			            <div class="modal-body">
-			                <!-- TODO 추가 폼 -->
-			                <form id="todoForm">
-			                    <div class="form-group">
-			                        <label for="todoContent">내용</label>
-			                        <input type="text" class="form-control" id="todoContent" name="todoContent" required>
-			                    </div>
-			                </form>
-			            </div>
-			            <div class="modal-footer">
-			                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-			                <button type="button" class="btn btn-primary" id="addTodoBtn">추가</button>
-			            </div>
-			        </div>
-			    </div>
-			</div>
+		<div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="addTodoModalLabel">TODO</h5>
+		                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+		                    <span aria-hidden="true">&times;</span>
+		                </button>
+		            </div>
+		            <div class="modal-body">
+		                <!-- TODO 추가 폼 -->
+		                <form id="todoForm">
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" id="todoContent" name="todoContent" required placeholder="할일을 입력해주세요">
+		                    </div>
+		                </form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+		                <button type="button" class="btn btn-primary" id="addTodoBtn">추가</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 	<script>
 		$(document).ready(function() {
+			
 			// 로그인
 			const urlParams = new URL(location.href).searchParams;
 			const msg = urlParams.get("msg");
@@ -131,21 +132,27 @@
 	            });
 	        });
 		 	
+	    	// 초기 TODO 목록을 가져와서 표시
+		    getTodoList();
+		 	
 	     	// Todo 리스트 가져오기
 	        function getTodoList() {
 	            $.ajax({
 	                type: 'GET',
-	                url: '/JoinTree/todo/todoList', // 컨트롤러 매핑 주소
+	                url: '/JoinTree/todo/todoList',
 	                success: function(data) {
 	                	console.log('data', data);
 	                	const todoList = $('#todoList'); // Todo 리스트가 표시될 HTML 엘리먼트 선택
 	    	            todoList.empty(); // 기존 내용 삭제
-	                    data.forEach(function(todo) {
+	                    data.forEach(function(todo) { 
 	                    	const isChecked = todo.todoStatus === 'Y';
 	                    	const textDecoration = isChecked ? 'text-decoration: line-through;' : '';
-	                        
-	                    	const todoItem = '<li class="todo-item"><input type="checkbox" class="todo-checkbox" data-todoid="' + todo.todoNo + '" ' + (todo.todoStatus === 'Y' ? 'checked' : '') + '><span class="todo-content" style="' + textDecoration + '">' + todo.todoContent + '</span></li>';
-
+	                    	// id = "todoList" 영역에 리스트 출력
+	                    	const todoItem = '<div class="todo-item">' +
+	                    	   '<input type="checkbox" class="todo-checkbox " data-todono="' + todo.todoNo + '" ' + (todo.todoStatus === 'Y' ? 'checked' : '') + '>&nbsp;' +
+	                    	   '<span class="todo-content" style="' + textDecoration + '">' + todo.todoContent + '</span>&nbsp;' +
+	                    	   '<i class="mdi mdi-delete delete-todo" data-todono="' + todo.todoNo + '"></i>' +
+	                    	   '</>';
 
 	    	                todoList.append(todoItem);
 	    	            });
@@ -155,24 +162,22 @@
 	                }
 	            });
 	        }
-	     	
-	     	
+	        
 		 
-	     	// 체크박스 변경 이벤트 처리
+	     	// 체크박스 변경 이벤트
 	        $(document).on('change', '.todo-checkbox', function() {
-	            const todoId = $(this).data('todoid');
+	            const todoNo = $(this).data('todono')
 	            const isChecked = $(this).prop('checked');
 	            
 	            $.ajax({
 	                type: 'POST',
-	                url: '/JoinTree/todo/updateTodoStatus', // 컨트롤러의 매핑 주소로 변경해야 함
+	                url: '/JoinTree/todo/updateTodoStatus',
 	                contentType: "application/json",
 	                data: JSON.stringify({
-	                    todoId: todoId,
+	                    todoNo: todoNo,
 	                    isChecked: isChecked
 	                }),
 	                success: function(data) {
-	                	// 페이지를 다시 로드하여 변경된 데이터를 반영
 	                    getTodoList(); // Todo 리스트 업데이트
 	                    
 	                },
@@ -180,6 +185,12 @@
 	                    console.error('Error updating todo status', error);
 	                }
 	            });
+	        });
+	     	
+	     	// 버튼 클릭 이벤트 처리
+	        $('#openAddTodoModalButton').click(function() {
+	            // 추가 버튼 클릭 시 모달 창 열기
+	            $('#addTodoModal').modal('show');
 	        });
 	     
 	     
@@ -189,19 +200,19 @@
 	            
 	            $.ajax({
 	                type: 'POST',
-	                url: '/JoinTree/todo/addTodo', // 컨트롤러의 매핑 주소로 변경해야 함
+	                url: '/JoinTree/todo/addTodo', 
 	                contentType: "application/json",
 	                data: JSON.stringify({
 	                    todoContent: todoContent
 	                }),
 	                success: function(data) {
 	                	// TODO 추가 성공 시
+	                	console.log("todo추가성공");
+	                	
 	                    alert("todo추가성공");
-	                    $('#addTodoModal').modal('hide'); // 모달 닫기
-	                    
-	                 	// 페이지 로드시 Todo 리스트 가져오기
+	                    $('#addTodoModal').modal('hide');
+            
 	        	        getTodoList();
-	                    
 	        	     
 	                },
 	                error: function(error) {
@@ -209,9 +220,41 @@
 	                }
 	            });
 	        });
+	        
+	    	// '할일 추가' 모달 창 숨김 이벤트 감지 및 입력 필드 초기화
+	        $('#addTodoModal').on('hidden.bs.modal', function () {
+	            $('#todoContent').val(''); // 할일 내용 입력 필드 초기화
+	        });
 	     	
-	        getTodoList(); // Todo 리스트 업데이트
-
+	        // 삭제 아이콘 클릭
+	        $(document).on('click', '.delete-todo', function() {
+	            const todoNo = $(this).data('todono');
+	           	console.log(todoNo);
+	         	// 확인 알림창 띄우기
+	            if (confirm('정말로 이 할 일을 삭제하시겠습니까?')) {
+	                // "예"를 누르면 삭제 작업 실행
+	                removeTodoItem(todoNo);
+	            }
+	        });
+	        
+	     	// 할 일 항목 삭제 함수
+	        function removeTodoItem(todoNo) {
+	        	
+	            $.ajax({
+	                type: 'POST',
+	                url: '/JoinTree/todo/removeTodo', // 컨트롤러의 삭제 URL로 변경
+	                contentType: "application/json",
+	                data: JSON.stringify({
+	                    todoNo: todoNo
+	                }),
+	                success: function(data) {
+						getTodoList(); 
+	                },
+	                error: function(error) {
+	                    console.error('Error removing todo', error);
+	                }
+	            });
+	        }
 		});
 	</script>
 	
@@ -279,12 +322,17 @@
 					<div class="col-md-3 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								todo
-								<button type="button" data-toggle="modal" data-target="#addTodoModal">+</button>
+								<div class="d-flex justify-content-between align-items-center mb-3">
+					                todo
+					                <button type="button" class="btn btn-inverse-success btn-icon" id="openAddTodoModalButton">
+					                    <i class="mdi mdi-playlist-plus"></i>
+					                </button>
+					            </div>
 								<hr>
-								<ul id="todoList"> <!-- id 추가 -->
+								
+								<div id="todoList"> <!-- id 추가 -->
 					                <!-- 여기에 Todo 리스트가 동적으로 추가될 것입니다. -->
-					            </ul>
+					            </div>
 							</div>
 						</div>
 					</div>

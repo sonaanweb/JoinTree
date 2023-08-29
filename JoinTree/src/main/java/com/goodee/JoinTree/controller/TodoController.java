@@ -57,19 +57,38 @@ public class TodoController {
 	    int add = todoService.addTodo(newTodo);
 	    
 	    if (add > 0) {
-	        return "Todo added successfully.";
+	        return "success";
 	    } else {
-	        return "Failed to add todo.";
+	        return "failure";
 	    }
 	}
 	
 	// todo 상태 업데이트
 	@PostMapping("/todo/updateTodoStatus")
-    public void updateTodoStatus(@RequestBody Map<String, Object> paramMap) {
-        int todoNo = (int) paramMap.get("todoId");
+    public String updateTodoStatus(@RequestBody Map<String, Object> paramMap) {
+        int todoNo = (int) paramMap.get("todoNo");
         boolean isChecked = (boolean) paramMap.get("isChecked");
         String todoStatus = isChecked ? "Y" : "N";
-        todoService.updateTodoStatus(todoNo, todoStatus);
+        int update = todoService.updateTodoStatus(todoNo, todoStatus);
+        
+        if (update > 0) {
+	        return "redirect:/home";
+	    } else {
+	        return "failure";
+	    }
     }
+	
+	// todo 삭제
+	@PostMapping("/todo/removeTodo")
+	public String removeTodo(@RequestBody Map<String, Integer> requestBody) {
+	    int todoNo = requestBody.get("todoNo");
+	    int delete = todoService.removeTodo(todoNo);
+	    
+	    if (delete > 0) {
+	        return "redirect:/home";
+	    } else {
+	        return "failure";
+	    }
+	}
 	    
 }

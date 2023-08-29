@@ -27,18 +27,16 @@ public class TodoService {
 	}
 	
 	// todo 상태 업데이트
-	public void updateTodoStatus(int todoNo, String todoStatus) {
+	public int updateTodoStatus(int todoNo, String todoStatus) {
 	    Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("todoNo", todoNo);
 	    paramMap.put("todoStatus", todoStatus);
-	    todoMapper.updateTodoStatus(paramMap);
+	    return todoMapper.updateTodoStatus(paramMap);
 	}
 		
-        
-	
 	// todo 삭제
-	public int removeTodo(Todo todo) {
-		return todoMapper.removeTodo(todo);
+	public int removeTodo(int todoNo) {
+		return todoMapper.removeTodo(todoNo);
 	}
 
 }

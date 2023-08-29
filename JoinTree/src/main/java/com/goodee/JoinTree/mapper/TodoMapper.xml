@@ -51,4 +51,5 @@
         DELETE FROM todo
         WHERE todo_no = #{todoNo}
 	</delete>
+	
 </mapper>

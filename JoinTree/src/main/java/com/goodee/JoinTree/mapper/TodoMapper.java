@@ -17,10 +17,9 @@ public interface TodoMapper {
 	int addTodo(Todo todo);
 	
 	// todo 상태 업데이트
-	void updateTodoStatus(Map<String, Object> paramMap);
-
+	int updateTodoStatus(Map<String, Object> paramMap);
 	
 	// todo 삭제
-	int removeTodo(Todo todo);
+	int removeTodo(int todoNo);
 	
 }
