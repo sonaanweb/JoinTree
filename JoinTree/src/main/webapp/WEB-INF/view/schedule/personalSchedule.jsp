@@ -13,7 +13,7 @@
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
 	<!-- 부트스트랩 CSS CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-
+	
 
 
 	<div class="container-fluid page-body-wrapper">
@@ -132,11 +132,18 @@
 	    	googleCalendarApiKey : "AIzaSyBUdKm-pJMILaqOkkO1YcoMB9Ib4P0TpQA",
 	        eventSources :[ 
 	            {
-	                googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
-	                , textcolor: 'white'
-	                , color: 'red'
+	                googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com',
+	                color: 'transparent', // 배경색을 투명으로 설정
+	                textColor: 'red', // 글자색을 빨간색으로 설정
 	            }
 	    	],
+	    	initialView: "dayGridMonth",
+	        titleFormat: function (date) {
+	          year = date.date.year;
+	          month = date.date.month + 1;
+
+	          return year + "년 " + month + "월";
+	        },
 	        timeZone: 'Asia/Seoul',
 	        selectable: true,
 	        events: '/JoinTree/schedule/getPersonalSchedules',

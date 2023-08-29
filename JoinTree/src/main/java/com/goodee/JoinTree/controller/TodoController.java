@@ -28,10 +28,10 @@ public class TodoController {
 	@Autowired
 	private TodoService todoService;
 	
-	// todo 출력페이지
+	// todo 출력
 	@GetMapping("/todo/todoList")
 	@ResponseBody
-	public List<Todo> getTodos(HttpSession session, Model model) {
+	public List<Todo> getTodos(HttpSession session) {
 		
 		// 세션에서 empNo 추출
 	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
@@ -39,8 +39,8 @@ public class TodoController {
 		
 		List<Todo> todoList = todoService.selectTodo(empNo);
 		
-		model.addAttribute("todoList", todoList);
 		log.debug(todoList.toString());
+		
 		return todoList;
 	}
 	

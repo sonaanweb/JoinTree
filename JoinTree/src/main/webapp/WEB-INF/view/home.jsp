@@ -132,10 +132,39 @@
 	            });
 	        });
 		 	
+		 	// 오늘의 일정
+		 	// 초기 페이지 로드 시 오늘의 일정 표시
+			getTodaySchedule();
+		 	
+			// 오늘의 일정 가져오기
+			function getTodaySchedule() {
+			    $.ajax({
+			        type: 'GET',
+			        url: '/JoinTree/schedule/todayScheduleList',
+			        success: function(data) {
+			            const todayScheduleList = $('#todayScheduleList'); // 오늘의 일정이 표시될 영역 선택
+			            todayScheduleList.empty(); // 기존 내용 삭제
+
+			            data.forEach(function(schedule) {
+			            	const scheduleItem = '<li class="schedule-item">' +
+			                    '<div class="schedule-title">' + schedule.scheduleTitle + '</div>' +
+			                    '</li>';
+
+			                todayScheduleList.append(scheduleItem);
+			            });
+			        },
+			        error: function(error) {
+			            console.error('Error getting today\'s schedule', error);
+			        }
+			    });
+			}
+		 	
+		 	
+		 	// TOdO
 	    	// 초기 TODO 목록을 가져와서 표시
 		    getTodoList();
 		 	
-	     	// Todo 리스트 가져오기
+	     	// TODO 리스트 가져오기
 	        function getTodoList() {
 	            $.ajax({
 	                type: 'GET',
@@ -329,9 +358,8 @@
 					                </button>
 					            </div>
 								<hr>
-								
 								<div id="todoList"> <!-- id 추가 -->
-					                <!-- 여기에 Todo 리스트가 동적으로 추가될 것입니다. -->
+					                <!-- 여기에 Todo 리스트가 동적으로 추가 -->
 					            </div>
 							</div>
 						</div>
@@ -353,7 +381,12 @@
 						<div class="card card-img-holder">
 							<div class="card-body"> 
 								오늘일정
+								<hr>
+								<ul id="todayScheduleList" class="schedule-list"> <!-- id 추가 -->
+					                <!-- 여기에 오늘의 일정이 동적으로 추가 -->
+					            </ul>
 							</div>
+							
 						</div>
 					</div>					
 				</div>

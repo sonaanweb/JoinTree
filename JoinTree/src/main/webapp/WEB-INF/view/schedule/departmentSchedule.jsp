@@ -132,9 +132,9 @@
 	    	googleCalendarApiKey : "AIzaSyBUdKm-pJMILaqOkkO1YcoMB9Ib4P0TpQA",
 	        eventSources :[ 
 	            {
-	                googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
-	                , textcolor: 'white'
-	                , color: 'red'
+	            	googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com',
+	                color: 'transparent', // 배경색을 투명으로 설정
+	                textColor: 'red' // 글자색을 빨간색으로 설정
 	            }
 	    	],
 	        timeZone: 'Asia/Seoul',

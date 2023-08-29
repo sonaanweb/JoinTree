@@ -65,6 +65,31 @@
         	AND schedule_category = #{scheduleCategory}
     </select>
     
+    <!-- 홈 - 오늘의 일정 출력-->
+    <select id="selectTodaySchedules" resultType="com.goodee.JoinTree.vo.Schedule">
+    SELECT
+	    schedule_no scheduleNo,
+	    emp_no empNo,
+	    schedule_category scheduleCategory,
+	    schedule_title scheduleTitle,
+	    schedule_content scheduleContent,
+	    schedule_location scheduleLocation,
+	    schedule_start scheduleStart,
+	    schedule_end scheduleEnd,
+	    createdate,
+	    updatedate,
+	    create_id createId,
+	    update_id updateId
+	FROM schedule
+	WHERE ((schedule_category = 'S0101' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()) OR
+		       (emp_no IN (
+		           SELECT emp_no
+		           FROM emp_info
+		           WHERE dept = #{dept}
+	      ) AND schedule_category = 'S0102' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()) OR
+	       (emp_no = #{empNo} AND schedule_category = 'S0103' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()));
+    </select>
+    
     <!-- 일정 추가 -->
     <insert id="addSchedule" parameterType="com.goodee.JoinTree.vo.Schedule">
    		<selectKey order="AFTER" keyProperty="scheduleNo" resultType="int">
@@ -136,5 +161,5 @@
         WHERE schedule_no = #{scheduleNo}
         	AND emp_no = #{empNo}
     </update>
-
+    
 </mapper>

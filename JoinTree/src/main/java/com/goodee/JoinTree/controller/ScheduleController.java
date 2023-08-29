@@ -139,6 +139,23 @@ public class ScheduleController {
         return new ResponseEntity<>(eventDataList, HttpStatus.OK);
     }
 	
+	// 홈 - 오늘의 일정 출력
+	@GetMapping("/schedule/todayScheduleList")
+    @ResponseBody
+	public List<Schedule> todaySchedule(HttpSession session){
+		
+		// 세션에서 dept 정보 추출
+	    String dept = (String) session.getAttribute("dept");
+	    
+	    // 세션에서 empNo 추출
+	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		int empNo = loginAccount.getEmpNo();
+		
+		List<Schedule> todayScheduleList =  scheduleService.selectTodaySchedules(dept, empNo);
+		
+		return todayScheduleList;
+	}
+	
 	// 전사 일정 추가 (경영지원부만 추가가능)
 	@PostMapping("/schedule/addCompanySchedule")
 	public ResponseEntity<Map<String, Object>> addCompanySchedule(@RequestBody Schedule schedule, HttpSession session) {

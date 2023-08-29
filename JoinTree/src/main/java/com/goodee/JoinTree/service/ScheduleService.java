@@ -31,6 +31,12 @@ public class ScheduleService {
        return personalScheduleList;
 	}
 	
+	// 오늘의 일정 출력
+	public List<Schedule> selectTodaySchedules(String dept, int empNo) {
+       List<Schedule> todayScheduleList = scheduleMapper.selectTodaySchedules(dept, empNo);
+       return todayScheduleList;
+	}
+	
 	// 일정 추가
 	public int addSchedule(Schedule schedule) {
 		return scheduleMapper.addSchedule(schedule);
