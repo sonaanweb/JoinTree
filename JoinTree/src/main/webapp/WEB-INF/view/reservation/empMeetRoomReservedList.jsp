@@ -9,18 +9,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<style>
- .blink {
-     animation: blinker 1s linear infinite;
-     background-color: lightgray;
- }
-
-@keyframes blinker {
-50% {
-    opacity: 0;
-}
-}
-</style>
 <body>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
@@ -134,21 +122,6 @@ $(document).ready(function () {
             contentType: "application/json",
             success: function (response) {
                 if (response === '예약취소 완료') {
-                	
-                	 var cancelledRow = $('#reservationbody tr').find('td:first-child').filter(function () {
-                         return $(this).text() === revNo.toString();
-                     }).parent();
-
-                     // 취소된 행의 배경색을 변경하고 깜빡이는 효과 주기
-                     var blinkInterval = setInterval(function() {
-                         cancelledRow.toggleClass('blink');
-                     }, 500);
-
-                     // 일정 시간 후에 깜빡이는 효과를 멈추고 배경색을 원래대로 변경
-                     setTimeout(function() {
-                         clearInterval(blinkInterval);
-                         cancelledRow.removeClass('blink').css('background-color', 'lightcoral');
-                     }, 3000);
                 	
                     // 해당 예약 번호에 대한 취소 버튼을 없애기
                     $('#reservationbody tr').each(function () {
