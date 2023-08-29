@@ -11,8 +11,8 @@
 				const msg = urlParams.get("msg");
 					if (msg != null) {
 						alert(msg);
-					}
-					
+					}					
+				/*	
 				// textarea에 placeholder과 비슷한 기능 적용
 	            function setPlaceholder(element, placeholder) {
 	                element.val(placeholder).css('color', 'gray');
@@ -32,18 +32,56 @@
 	            
 	            setPlaceholder($('#commentContent'), '댓글을 입력해주세요.');
 	            
+	            */
 	            
-	            
+	            // 입력 버튼 클릭 시 
 	            $("#addCommentBtn").click(function() {
+	            	const boardNo = $("#boardNo").val();
+	                const empNo = $("#empNo").val();
+	                const category = $("#category").val();
+	                // const commentGroupNo = $("#commentGroupNo").val();
 	                const commentContent = $("#commentContent").val();
+	                
 	                if (commentContent.trim() === "") {
 	                    alert("댓글을 입력해주세요.");
 	                    $("#commentContent").focus();
 	                } else {
-	                    $("#addComment").submit();
+	                    // $("#addComment").submit();
+	                    $.ajax({
+	                    	type: "POST", 
+	                    	url: "/JoinTree/comment/addComment",
+	                    	data: {
+	                    		boardNo: boardNo, 
+	                    		empNo: empNo, 
+	                    		category: category, 
+	                    		commentGroupNo: 1, 
+	                    		commentContent: commentContent
+	                    	}, 
+	                    	 success: function(response) {
+	                             if (response === "success") {
+	                            	 alert("댓글이 등록되었습니다.");
+	                                 // 새 댓글 업데이트 로직
+	                                 // 예: $("#commentSection").append(...);
+	                            	 $("#commentContent").val("");
+	                            	 
+	                            	  $("#commentSection").load(location.href + " #commentSection>*", function() {
+	  		                        	// 이벤트 핸들러 다시 바인딩
+	  		                        	bindEventHandlers();
+	  		                       	  });
+	                             } else {
+	                                 alert("댓글 추가 실패");
+	                             }
+	                         },
+	                         error: function() {
+	                             alert("서버 오류 발생");
+	                         }
+	                    	
+	                    });
+	                    
 	                }
 	            });
 	            
+	            // 답글 버튼
 	            $(".reply-btn").click(function() {
 	                $(this).closest("tr").next(".reply-form-row").toggle();
 	            });
@@ -60,20 +98,71 @@
 	                }
 	            });
 	            
-	        	 // 댓글 추가 함수
-	            function addComment(comment) {
-	                // 새로운 댓글을 생성하고 comment-section에 추가
-	                $(".comment-section table").append("<tr>...</tr>");
+	            // 댓글 목록 부분 업데이트 시 이벤트 핸들러 다시 바인딩
+	            function bindEventHandlers() {
+	                $(".remove-comment-btn").off("click");
+	                $(".reply-btn").off("click");
+	                $(".add-reply-btn").off("click");
+
+	                $(".remove-comment-btn").click(function() {
+	                    const commentNo = $(this).data("comment-no");
+	                    removeComment(commentNo);
+	                });
 	                
-	                // 스크롤을 아래로 내려서 새로운 댓글이 보이도록 함
-	                $(".comment-section").scrollTop($(".comment-section")[0].scrollHeight);
+	                // 답글 버튼
+		            $(".reply-btn").click(function() {
+		                $(this).closest("tr").next(".reply-form-row").toggle();
+		            });
+	                
+		  
+
+		            $(".add-reply-btn").click(function() {
+		                const replyForm = $(this).closest(".reply-form");
+		                const commentContent = replyForm.find(".reply-content").val();
+		                
+		                if (commentContent.trim() === "") {
+		                    alert("답글을 입력해주세요.");
+		                    replyForm.find(".reply-content").focus();
+		                } else {
+		                    replyForm.submit();
+		                }
+		            });
 	            }
-					
-					
-				// 새로고침 시 메시지 알림창 출력하지 않음
-		        // urlParams.delete("msg");
-		        //const newUrl = `${location.pathname}?${urlParams.toString()}`;
-		        //history.replaceState({}, document.title, newUrl);
+	            
+	       	  	// 댓글 또는 대댓글 삭제 함수
+	       	  	function removeComment(commentNo) {
+		       		$.ajax({
+		       			type: "POST",
+		                url: "/JoinTree/comment/removeComment",
+		                data: {
+		                    commentNo: commentNo,
+		                },
+		                success: function(response) {
+		                    // alert(data); // 삭제 성공 여부 메시지 출력
+		                    if (response === "success") {
+		                        alert("삭제되었습니다.");
+		                    	
+		                        $("#commentSection").load(location.href + " #commentSection>*", function() {
+		                        	// 이벤트 핸들러 다시 바인딩
+		                        	bindEventHandlers();
+		                        });
+		                    }
+		                },
+		                error: function() {
+		                    alert("서버 오류 발생");
+		                }
+		       		});
+	       	 	 }
+	       		
+	       		// 댓글 삭제 버튼 클릭 시
+	            $(".remove-comment-btn").click(function() {
+	                const commentNo = $(this).data("comment-no");
+	                removeComment(commentNo);
+	                
+	             	// 해당 댓글 행을 비워서 제거
+	                // $(this).closest("tr").empty();
+	                
+	            });
 			});
 		</script>
 		<style>
@@ -83,7 +172,15 @@
 			    border: 1px solid #ccc;
 			    padding: 10px;
 			}
+			
+			/* 들여쓰기 스타일 */
+   			.comment-row {
+        		margin-left: 0;
+   		 	 }
 					
+			.reply-row {
+		        margin-left: 20px; /* 들여쓰기 간격 조정 */
+		    }
 		</style>
 		
 		
@@ -143,7 +240,8 @@
 				
 				<!-- 댓글 목록 -->
 				<h2>댓글</h2>
-				<div class="comment-section">
+				
+				<div class="comment-section" id="commentSection">
 					<table border="1">
 						<tr>
 							<th>작성자</th>
@@ -153,22 +251,51 @@
 							<th></th>
 						</tr>
 						<c:forEach items="${comments}" var="comment">
-							<tr>
-								<td>${comment.empName}</td>
-								<td>${comment.commentContent}</td>
-								<td>${comment.createdate}</td>
-								<td>
-									<!-- 자신이 작성한 댓글일 경우에만 수정, 삭제 버튼 노출 -->
-									<c:if test="${loginAccount.empNo eq comment.empNo}">
-										<a href="/JoinTree/comment/removeComment?commentNo=${comment.commentNo}&boardNo=${comment.boardNo}">삭제</a>
-									</c:if>
-								</td>
-								<td>
-									<!-- 클릭 시 jQuery 이벤트 바인딩 -->
-									<button type="button" class="reply-btn">답글</button>
-									${comment.commentNo}
-								</td>
-							</tr>
+							<c:choose>
+								 <c:when test="${comment.commentGroupNo eq 1}">
+								    <!-- 댓글인 경우 -->
+									<tr class="comment-row">
+										<td>${comment.empName}</td>
+										<td>${comment.commentContent}</td>
+										<td>${comment.createdate}</td>
+										<td>
+											<!-- 자신이 작성한 댓글일 경우에만 삭제 버튼 노출 -->
+											<c:if test="${loginAccount.empNo eq comment.empNo}">
+												<%-- <a href="/JoinTree/comment/removeComment?commentNo=${comment.commentNo}&boardNo=${comment.boardNo}">삭제</a> --%>
+												<button type="button" class="remove-comment-btn" data-comment-no="${comment.commentNo}">삭제</button>
+											</c:if>
+										</td>
+										<td>
+											<!-- 클릭 시 jQuery 이벤트 바인딩 -->
+											<button type="button" class="reply-btn">답글</button>
+											${comment.commentNo}
+										</td>
+									</tr>
+								</c:when>
+							</c:choose>
+							
+							
+							 <c:choose>
+				                <c:when test="${comment.commentGroupNo eq 2}">
+				                    <!-- 대댓글인 경우 -->
+				                    <tr class="reply-row">
+				                        <td>${comment.empName}</td> <!-- 작성자 정보 등을 채우세요 -->
+				                        <td style="padding-left: 20px;">${comment.commentContent}</td>
+				                        <td>${comment.createdate}</td>
+				                        <td>
+				                            <!-- 자신이 작성한 댓글일 경우에만 삭제 버튼 노출 -->
+				                            <c:if test="${loginAccount.empNo eq comment.empNo}">
+				                                <%-- <a href="/JoinTree/comment/removeComment?commentNo=${comment.commentNo}&boardNo=${comment.boardNo}">삭제</a> --%>
+				                            	<button type="button" class="remove-comment-btn" data-comment-no="${comment.commentNo}">삭제</button>
+				                            </c:if>
+				                        </td>
+				                        <td>
+				                            ${comment.commentNo}
+				                        </td>
+				                    </tr>
+				                </c:when>
+				            </c:choose>
+
 							<tr class="reply-form-row" style="display: none;">
 								<td colspan="5">
 					          		<form action="/JoinTree/comment/addReply" method="POST" class="reply-form">
@@ -182,8 +309,6 @@
 	           					 	</form>
 	           					 </td>
 							</tr>
-							
-							
 						</c:forEach>
 					</table>
 				</div>
@@ -192,10 +317,10 @@
 				<!-- 댓글 작성 폼 -->
 				<h2>댓글 작성</h2>
 				<form action="/JoinTree/comment/addComment" method="POST" id="addComment">
-					<input type="hidden" name="boardNo" value="${comm.boardNo}">
-					<input type="hidden" name="empNo" value="${loginAccount.empNo}">
-					<input type="hidden" name="category" value="${comm.boardCategory}">
-					<input type="hidden" name="commentGroupNo" value="1">
+					<input type="hidden" name="boardNo" id="boardNo" value="${comm.boardNo}">
+					<input type="hidden" name="empNo" id="empNo" value="${loginAccount.empNo}">
+					<input type="hidden" name="category" id="category" value="${comm.boardCategory}">
+					<input type="hidden" name="commentGroupNo" id="commentGroupNo" value="1">
 					<textarea name="commentContent" id="commentContent" rows="3" cols="50"></textarea><br>
 					<button type="button" id="addCommentBtn">댓글 입력</button>
 				</form>
