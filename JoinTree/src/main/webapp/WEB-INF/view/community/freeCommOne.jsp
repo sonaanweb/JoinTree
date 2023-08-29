@@ -64,6 +64,7 @@
 	                                 // 예: $("#commentSection").append(...);
 	                            	 $("#commentContent").val("");
 	                            	 
+	                            	 console.log("댓글 등록 완료");
 	                            	  $("#commentSection").load(location.href + " #commentSection>*", function() {
 	  		                        	// 이벤트 핸들러 다시 바인딩
 	  		                        	bindEventHandlers();
@@ -75,9 +76,7 @@
 	                         error: function() {
 	                             alert("서버 오류 발생");
 	                         }
-	                    	
 	                    });
-	                    
 	                }
 	            });
 	            
@@ -86,6 +85,7 @@
 	                $(this).closest("tr").next(".reply-form-row").toggle();
 	            });
 
+	            // 등록 버튼 클릭 시 답글 등록
 	            $(".add-reply-btn").click(function() {
 	                const replyForm = $(this).closest(".reply-form");
 	                const commentContent = replyForm.find(".reply-content").val();
@@ -95,6 +95,37 @@
 	                    replyForm.find(".reply-content").focus();
 	                } else {
 	                    replyForm.submit();
+	                    /*
+	                    $.ajax({
+	                    	type: "POST", 
+	                    	url: "/JoinTree/comment/addReply",
+	                    	data: {
+	                    		boardNo: $("#boardNo2").val(),
+	                    		empNo: $("#empNo2").val(),
+	                    		category: $("#category2").val(),
+	                    		commentGroupNo: 2,
+	                    		parentCommentNo: $("#parentCommentNo").val(),
+	                    		commentContent: commentContent
+	                    	}, 
+	                    	success: function(response) {
+	                    		if (response === "success") {
+	                    			alert("답글이 등록되었습니다.");
+	                    			
+	                    			console.log("답글 등록 완료");
+	                    			event.preventDefault();
+	                    			 $("#commentSection").load(location.href + " #commentSection>*", function() {
+	                                     // 이벤트 핸들러를 다시 바인딩합니다
+	                                     bindEventHandlers();
+	                                 });
+                    		} else {
+	                    			alert("답글 추가 실패");
+	                    		}
+	                    	}, 
+	                    	error: function() {
+	                    		alert("서버 오류 발생");
+	                    	}
+	                    });
+	                    */
 	                }
 	            });
 	            
@@ -174,13 +205,13 @@
 			}
 			
 			/* 들여쓰기 스타일 */
-   			.comment-row {
+   			/*.comment-row {
         		margin-left: 0;
    		 	 }
 					
 			.reply-row {
-		        margin-left: 20px; /* 들여쓰기 간격 조정 */
-		    }
+		        margin-left: 40px;} /* 들여쓰기 간격 조정 */
+		    
 		</style>
 		
 		
@@ -244,17 +275,20 @@
 				<div class="comment-section" id="commentSection">
 					<table border="1">
 						<tr>
+							<th>No</th> <!-- 나중에 수정 -->
 							<th>작성자</th>
 							<th>내용</th>
 							<th>작성일자</th>
-							<th></th>
-							<th></th>
+							<th>삭제</th>
+							<th>답글 달기 OR 원 댓글 번호</th>
 						</tr>
 						<c:forEach items="${comments}" var="comment">
 							<c:choose>
-								 <c:when test="${comment.commentGroupNo eq 1}">
+								 <c:when test="${comment.parentCommentNo eq 0}">
 								    <!-- 댓글인 경우 -->
 									<tr class="comment-row">
+										<td>${comment.commentNo}</td>
+										<%-- <td>${comment.empNo}</td> --%>
 										<td>${comment.empName}</td>
 										<td>${comment.commentContent}</td>
 										<td>${comment.createdate}</td>
@@ -268,19 +302,19 @@
 										<td>
 											<!-- 클릭 시 jQuery 이벤트 바인딩 -->
 											<button type="button" class="reply-btn">답글</button>
-											${comment.commentNo}
+											<%-- ${comment.commentNo} --%>
 										</td>
 									</tr>
 								</c:when>
 							</c:choose>
 							
-							
 							 <c:choose>
-				                <c:when test="${comment.commentGroupNo eq 2}">
+				                <c:when test="${not empty comment.parentCommentNo && comment.parentCommentNo ne 0}">
 				                    <!-- 대댓글인 경우 -->
 				                    <tr class="reply-row">
-				                        <td>${comment.empName}</td> <!-- 작성자 정보 등을 채우세요 -->
-				                        <td style="padding-left: 20px;">${comment.commentContent}</td>
+				                    	<td>${comment.commentNo}</td>
+				                        <td>${comment.empName}</td>
+				                        <td style="padding-left: 20px;">->${comment.commentContent}</td>
 				                        <td>${comment.createdate}</td>
 				                        <td>
 				                            <!-- 자신이 작성한 댓글일 경우에만 삭제 버튼 노출 -->
@@ -290,7 +324,7 @@
 				                            </c:if>
 				                        </td>
 				                        <td>
-				                            ${comment.commentNo}
+				                            ${comment.parentCommentNo}
 				                        </td>
 				                    </tr>
 				                </c:when>
@@ -299,11 +333,11 @@
 							<tr class="reply-form-row" style="display: none;">
 								<td colspan="5">
 					          		<form action="/JoinTree/comment/addReply" method="POST" class="reply-form">
-						                <input type="hidden" name="boardNo" value="${comm.boardNo}">
-						                <input type="hidden" name="empNo" value="${loginAccount.empNo}">
-						                <input type="hidden" name="category" value="${comm.boardCategory}">
-						                <input type="hidden" name="commentGroupNo" value="2">
-						                <input type="hidden" name="parentCommentNo" value="${comment.commentNo}">
+						                <input type="hidden" name="boardNo" id="boardNo2" value="${comm.boardNo}">
+						                <input type="hidden" name="empNo" id="empNo2" value="${loginAccount.empNo}">
+						                <input type="hidden" name="category" id="category2" value="${comm.boardCategory}">
+						                <input type="hidden" name="commentGroupNo" id="commentGroupNo" value="2">
+						                <input type="hidden" name="parentCommentNo" id="parentCommentNo" value="${comment.commentNo}">
 						                <textarea name="commentContent" class="reply-content" rows="3" cols="50"></textarea><br>
 						                <button type="button" class="add-reply-btn">등록</button>
 	           					 	</form>

@@ -52,6 +52,7 @@ public class CommentController {
 		int row = commentService.addComment(comment);
 		log.debug(CYAN + row + "<-- row(CommentController-addComment)" + RESET);
 		
+		
 		if (row == 1) { // 작성 완료 시
 			return "success";
 		} else {
@@ -114,7 +115,37 @@ public class CommentController {
 		
 	}
 	*/
-
+	
+	
+	/*
+	// 답글(대댓글) 작성 액션
+	@PostMapping("/comment/addReply")
+	@ResponseBody
+	public String addReply(@RequestParam("boardNo") int boardNo, @RequestParam("empNo") int empNo, 
+			@RequestParam("category") String category, @RequestParam("commentGroupNo") int commentGroupNo, 
+			@RequestParam("commentContent") String commentContent, @RequestParam("parentCommentNo") int parentCommentNo) throws UnsupportedEncodingException {
+		
+		Comment comment = new Comment();
+		comment.setBoardNo(boardNo);
+		comment.setEmpNo(empNo);
+		comment.setCategory(category);
+		comment.setCommentGroupNo(commentGroupNo);
+		comment.setCommentContent(commentContent);
+		comment.setParentCommentNo(parentCommentNo); // 부모(원 댓글)의 commentNo
+		
+		int row = commentService.addReply(comment);
+		log.debug(CYAN + row + "<-- row(CommentController-addReply)" + RESET);
+		
+		if (row == 1) { // 작성 완료 시
+			return "success";
+		} else {
+			return "error";
+		}
+	}
+	
+	*/
+	
+	
 	// 답글(대댓글) 작성 액션
 	@PostMapping("/comment/addReply")
 	public String addReply(@RequestParam("boardNo") int boardNo, @RequestParam("empNo") int empNo, 
@@ -167,6 +198,7 @@ public class CommentController {
 			 return "redirect:" + redirectUrl + "&msg=" + msg;
 		}		
 	}
+	
 	
 	// 댓글 삭제 액션
 	@PostMapping("/comment/removeComment")

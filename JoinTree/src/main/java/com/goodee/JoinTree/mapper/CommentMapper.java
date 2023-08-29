@@ -11,6 +11,9 @@ public interface CommentMapper {
 	// 게시글별 댓글 목록 조회
 	List<Comment> selectCommentsByBoardNo(int boardNo); 
 	
+	// 게시글별 댓글 목록 조회 new
+	List<Comment> selectComments(int boardNo);
+	
 	// 게시글별 댓글 개수
 	int selectCommentsCnt(int boardNo);
 	

@@ -36,6 +36,13 @@ public class CommentService {
 		return comments;
 	}
 	
+	// 게시글별 댓글 목록 조회 new
+	public List<Comment> getComments(int boardNo) {
+		List<Comment> comments = commentMapper.selectComments(boardNo);
+		
+        return comments;
+    }
+	
 	// 게시글별 댓글 개수
 	public int getCommentsCnt(int boardNo) {
 		int row = commentMapper.selectCommentsCnt(boardNo);

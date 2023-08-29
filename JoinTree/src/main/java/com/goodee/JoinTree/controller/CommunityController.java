@@ -194,7 +194,9 @@ public class CommunityController {
 		communityService.increaseCommCount(boardNo);
 		
 		// 댓글 목록 가져오기
-		List<Comment> comments = commentService.getCommentsByBoardNo(boardNo);
+		// List<Comment> comments = commentService.getCommentsByBoardNo(boardNo);
+		
+		List<Comment> comments = commentService.getComments(boardNo);
 		
 		// 댓글 작성자 empNo -> empName 변환
 		for (Comment comment : comments) {

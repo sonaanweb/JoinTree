@@ -79,4 +79,37 @@
 		WHERE emp_no = #{empNo}
 	</select>
 	
+	
+	
+	
+	
+	
+	<resultMap id="commentResultMap" type="com.goodee.JoinTree.vo.Comment">
+        <id property="commentNo" column="comment_no" />
+        <result property="empNo" column="emp_no" />
+        <result property="commentContent" column="comment_content" />
+        <result property="createdate" column="createdate" />
+        <association property="parentComment" resultMap="parentCommentResultMap" />
+    </resultMap>
+
+    <resultMap id="parentCommentResultMap" type="com.goodee.JoinTree.vo.Comment">
+        <id property="commentNo" column="parent_comment_no" />
+        <result property="empNo" column="parent_emp_no" />
+        <result property="commentContent" column="parent_comment_content" />
+    </resultMap>
+
+    <select id="selectComments" resultType="com.goodee.JoinTree.vo.Comment" parameterType="int">
+        SELECT
+            c1.comment_no commentNo, c1.emp_no empNo, c1.comment_content commentContent, c1.createdate createdate,
+            c2.comment_no parentCommentNo, c2.emp_no parentEmpNo, c2.comment_content parentCommentContent
+        FROM
+            `comment` c1
+        LEFT JOIN
+            `comment` c2 ON c1.parent_comment_no = c2.comment_no
+        WHERE
+            c1.board_no = #{boardNo}
+        ORDER BY
+            IFNULL(c1.parent_comment_no, c1.comment_no), c1.createdate;
+    </select>
+	
 </mapper>
