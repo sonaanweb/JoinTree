@@ -31,6 +31,19 @@
 						return false;
 					}
 			    });
+				
+				// 로그인 버튼 클릭 시 
+				$("#loginBtn").click(function() {
+					if ($("#empNo").val() == "") {
+						alert("사번을 입력해주세요.");
+						$("#empNo").focus();
+					} else if ($("#empPw").val() == "") {
+						alert("비밀번호를 입력해주세요.");
+						$("#empPw").focus();
+					} else {
+					 	$("#login").submit();
+					}
+				});
 			});
 	  	</script>
 	</head>
@@ -50,15 +63,15 @@
 	    
 	    <h6 class="font-weight-light">Sign in to continue.</h6>
 	
-	    <form class="pt-3" action="/JoinTree/login/login" method="post">
+	    <form class="pt-3" action="/JoinTree/login/login" method="post" id="login">
 	        <div class="form-group">
-            	<input type="number" class="form-control form-control-lg" id="empNo" name="empNo" value="${loginId}" placeholder="사번" required>
+            	<input type="number" class="form-control form-control-lg" id="empNo" name="empNo" value="${loginId}" placeholder="사번">
             </div>
            	 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="empPw" name="empPw" placeholder="Password" required>
+                  <input type="password" class="form-control form-control-lg" id="empPw" name="empPw" placeholder="Password">
              </div>
              <div class="mt-3">
-                  <button class="btn btn-block btn-success btn-lg font-weight-medium auth-form-btn" type="submit">Login</button >
+                  <button class="btn btn-block btn-success btn-lg font-weight-medium auth-form-btn" type="button" id="loginBtn">Login</button >
                 </div>
                 <div class="my-2 d-flex justify-content-between align-items-center">
                   <div class="form-check form-check-success">

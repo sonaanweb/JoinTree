@@ -91,6 +91,10 @@
 					if ($("#newPw").val() == "") {
 						alert("새 비밀번호를 입력해주세요.");
 						$("#newPw").focus();
+					} else if ($("#newPw").val() == "1234") {
+						alert("비밀번호로 사용할 수 없습니다.");
+						$("#newPw").val("");
+						$("#newPw").focus();
 					} else if ($("#newPw2").val() == "") {
 						alert("새 비밀번호를 다시 입력해주세요.");
 						$("#newPw2").focus();
