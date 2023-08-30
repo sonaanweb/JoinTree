@@ -119,6 +119,7 @@
 										'<div class="card" style="background-color: ' + project.projectColor + ';">'+
 											'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
 												'<div>' + project.projectName + '</div>'+
+												'<div>' + project.projectContent + '</div>'+
 												'<div>' + project.empCnt + '명 참여중</div>'+
 											'</div>'+
 										'</div>'+
@@ -161,8 +162,9 @@
 								const html = 
 									'<div class="col-md-3 stretch-card grid-margin">'+
 										'<div class="card" style="background-color: ' + project.projectColor + ';">'+
-											'<div class="card-body center">'+
+											'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
 												'<div data-pjNo=' + project.projectNo+'>' + project.projectName + '</div>'+
+												'<div>' + project.projectContent + '</div>'+
 												'<div>' + project.empCnt + '명 참여중</div>'+
 											'</div>'+
 										'</div>'+
@@ -205,8 +207,9 @@
 								const html = 
 									'<div class="col-md-3 stretch-card grid-margin">'+
 										'<div class="card" style="background-color: ' + project.projectColor + ';">'+
-											'<div class="card-body center">'+
+											'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
 												'<div data-pjNo=' + project.projectNo+'>' + project.projectName + '</div>'+
+												'<div>' + project.projectContent + '</div>'+
 												'<div>' + project.empCnt + '명 참여중</div>'+
 											'</div>'+
 										'</div>'+
@@ -296,6 +299,10 @@
 					},
 					success : function(response) {
 						console.log("response",response);
+						if (response === 0) {
+							alert("프로젝트 추가 실패");
+							return;
+						}
 						//alert("성공");
 						$("#addProject").modal("hide");
 						
@@ -317,15 +324,15 @@
 							success : function(response) {
 								console.log("response",response);
 								fetchProjectListAndUpdate(selectedTab);
-								alert("성공");
+								alert("프로젝트와 멤버 추가 성공");
 							},
 							error: function() {
-								alert("다시");
+								alert("프로젝트 멤버 추가 실패");
 							}
 						});
 					},
 					error: function() {
-						alert("다시");
+						alert("프로젝트 추가 실패");
 					}
 				});
 				
@@ -409,7 +416,7 @@
 					</div>
 					<div class="wrapper">
 						카드지정색 : 
-								<input type="radio" class="projectColor" name="projectColor" value="#B7B7B7"> <div class="color"></div>
+								<input type="radio" class="projectColor" name="projectColor" value="#F2E180"> <div class="color"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#EDC6B1"> <div class="color" style="background-color: #EDC6B1"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#EDE8AB"> <div class="color" style="background-color: #EDE8AB"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#8CA8BF"> <div class="color" style="background-color: #8CA8BF"></div>

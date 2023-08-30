@@ -203,7 +203,7 @@ input:checked + .slider:before {
 	width: 20px; 
 	height:20px; 
 	border:1px solid #999; 
-	background-color: #B7B7B7;
+	background-color: #F2E180;
 	margin: 0px 10px 0px 1px;
 }
 .projectOne h3 {
@@ -223,4 +223,21 @@ input:checked + .slider:before {
 	padding:4px; 
 	margin: 0px 4px 10px 4px;
 	color: white;
+}
+.projectOneBtn {
+	left:0;
+}
+.progress {
+	width: 70%;
+	height: 20px;
+	background-color: #DBDBDB;
+	border-radius: 5px;
+}
+
+.progress-bar {
+	height: 100%;
+	background-color: #25A8E0;
+	border-radius: 5px;
+	width: 0;
+	transition: width 0.3s ease;
 }

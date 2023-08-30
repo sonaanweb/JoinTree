@@ -59,7 +59,7 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> selectProjectListAll(@RequestParam(name="startRow") int startRow,
 											@RequestParam(name="rowPerPage") int rowPerPage,
-											@RequestParam(name="searchName") String searchName, // required = false 필수 X
+											@RequestParam(name="searchName") String searchName,
 											@RequestParam(name="startDate") String startDate,
 											@RequestParam(name="endDate") String endDate) {
 		// 서비스 레이어에서 가져온 프로젝트 리스트를 조회하여 리스트에 저장
@@ -84,7 +84,7 @@ public class ProjectController {
 	public Map<String, Object> selectProjectListByPersonal(HttpSession session,
 												@RequestParam(name="startRow")int startRow, 
 												@RequestParam(name="rowPerPage")int rowPerPage,
-												@RequestParam(name="searchName", required = false) String searchName, // required = false 필수 X
+												@RequestParam(name="searchName", required = false) String searchName,
 												@RequestParam(name="startDate", required = false) String startDate,
 												@RequestParam(name="endDate", required = false) String endDate){
 		// 로그인 유저
@@ -109,7 +109,7 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> selectEndProjectList(@RequestParam(name="startRow")int startRow, 
 												@RequestParam(name="rowPerPage")int rowPerPage,
-												@RequestParam(name="searchName", required = false) String searchName, // required = false 필수 X
+												@RequestParam(name="searchName", required = false) String searchName, 
 												@RequestParam(name="startDate", required = false) String startDate,
 												@RequestParam(name="endDate", required = false) String endDate) {
 		// 서비스 레이어에서 가져온 프로젝트 리스트를 조회하여 맵에 저장 및 cnt저장
@@ -138,7 +138,7 @@ public class ProjectController {
 	@GetMapping("project/projectOneInfo")
 	@ResponseBody
 	public Map<String, Object> projectOneInfo(@RequestParam(name="projectNo")int projectNo){
-		log.debug(yellow + "projectNo:" + projectNo + reset);
+			//log.debug(yellow + "projectNo:" + projectNo + reset);
 		// db에서 가져온 프로젝트 상세정보
 		Project project = new Project();
 		project.setProjectNo(projectNo);
@@ -146,7 +146,7 @@ public class ProjectController {
 		
 		// 팀원 리스트
 		List<ProjectMember> projectMemeber= projectService.selectProejectMember(projectNo);
-			log.debug(yellow + "projectMemeber:" + projectMemeber + reset);
+		
 		Map<String, Object> resultMap = new HashMap<>();
 		
 		resultMap.put("project", project);
@@ -166,17 +166,71 @@ public class ProjectController {
 		} 
 		return project.getProjectNo();
 	}
+	
+	// 프로젝트 수정
+	@PostMapping("project/modifyProject")
+	@ResponseBody
+	public String modifyProject(@RequestParam(name="projectNo") int projectNo,
+								@RequestParam(name="projectName") String projectName,
+								@RequestParam(name="projectContent") String projectContent,
+								@RequestParam(name="projectStartDate") String projectStartDate,
+								@RequestParam(name="projectEndDate") String projectEndDate,
+								@RequestParam(name="updateId") int updateId) {
+		log.debug(yellow + "projectNo:" + projectNo + reset);
+		Project project = new Project();
+		project.setProjectNo(projectNo);
+		project.setProjectName(projectName);
+		project.setProjectContent(projectContent);
+		project.setProjectStartDate(projectStartDate);
+		project.setProjectEndDate(projectEndDate);
+		project.setUpdateId(updateId);
+		
+		int row = projectService.modifyProject(project);
+		log.debug(yellow + "project:" + project + reset);
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	
+	// 프로젝트 완료 처리
+	@PostMapping("project/endProject")
+	@ResponseBody
+	public String endProject(@RequestParam(name="projectNo") int projectNo) {
+		
+		int row = projectService.endProject(projectNo);
+			log.debug(yellow + "projectNo:" + projectNo + reset);
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	
+	// 프로젝트 삭제
+	@PostMapping("project/removeProject")
+	@ResponseBody
+	public String removeProject(@RequestParam(name="projectNo") int projectNo) {
+		int row = projectService.removeProject(projectNo);
+		
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	
 	/* 프로젝트 끝 */
 	/* 프로젝트 하위작업 */
 	// 하위작업 리스트 출력
 	@GetMapping("project/projectTask")
 	@ResponseBody
-	public List<ProjectTask> selectProejectTaskList(@RequestParam(name="projectNo") int projectNo) {
-		List<ProjectTask> projectTaskList = projectService.selectProejectTaskList(projectNo);
-		log.debug(yellow + "projectTaskList:" + projectTaskList + reset);
+	public Map<String, Object>selectProejectTaskList(@RequestParam(name="projectNo") int projectNo) {
+		Map<String, Object> projectTaskMap = projectService.selectProejectTaskList(projectNo);
 		
-		return projectTaskList;
+		log.debug(yellow + "projectTaskMap:" + projectTaskMap + reset);
+		
+		return projectTaskMap;
 	}
+	
 	/* 프로젝트 하위작업 끝 */
 	/*프로젝트 멤버*/
 	// 프로젝트 멤버 추가
@@ -221,11 +275,11 @@ public class ProjectController {
 	// 프로젝트 멤버 삭제 
 	
 	/* 프로젝트 멤버 끝 */
-	@PostMapping("project/romoveProjectMemeber")
+	@PostMapping("project/removeProjectMemeber")
 	@ResponseBody
-	public String romoveProjectMemeber(@RequestParam(name="empNo") int empNo,
+	public String removeProjectMemeber(@RequestParam(name="empNo") int empNo,
 									@RequestParam(name="projectNo") int projectNo) {
-		int row = projectService. romoveProjectMemeber(empNo, projectNo);
+		int row = projectService.removeProjectMemeber(empNo, projectNo);
 		
 		if(row != 1) {
 			return "fail";

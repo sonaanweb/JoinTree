@@ -14,6 +14,9 @@ public class ProjectTask {
 	private String taskEndDate;
 	private String taskContent;
 	private String taskStatus;
+	private String totalTasks;
+	private String completedTasks;
+	private String progressRate;
 	private String createdate;
 	private String updatedate;
 	private int createId;

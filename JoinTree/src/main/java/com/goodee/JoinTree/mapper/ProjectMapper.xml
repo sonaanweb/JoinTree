@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.ProjectMapper">
-	
+<!-- 프로젝트 -->
 	<!-- 프로젝트 검색별 행의 수  -->
 	<select id="projectCountRows" 
 			resultType="int">
@@ -191,6 +191,7 @@
 			p.project_start_date projectStartDate, 
 			p.project_end_date projectEndDate,
 			p.project_content projectContent,
+			p.project_status projectStatus,
 			p.createdate,
 			p.updatedate,
 			p.create_id createId,
@@ -203,7 +204,8 @@
 	
 	<!-- 프로젝트 추가 -->
 	<insert id="addProject"
-			parameterType="com.goodee.JoinTree.vo.Project">
+			parameterType="com.goodee.JoinTree.vo.Project"
+			useGeneratedKeys="true" keyProperty="projectNo" keyColumn="project_no">
 		INSERT INTO project(
 			emp_no,
 			project_name,
@@ -231,12 +233,62 @@
 		);
 	</insert>
 	
+	<!-- 프로젝트 수정 -->
+	<update id="modifyProject"
+			parameterType="com.goodee.JoinTree.vo.Project">
+		UPDATE project
+		SET 
+			project_name = #{projectName},
+			project_content = #{projectContent},
+			project_start_date = #{projectStartDate},
+			project_end_date = #{projectEndDate},
+			updatedate = NOW(),
+			update_id = #{updateId}
+		WHERE 
+			project_no = #{projectNo}
+	</update>
+	
+	<!-- 프로젝트 완료처리 -->
+	<update id="endProject"
+			parameterType="com.goodee.JoinTree.vo.Project">
+		UPDATE project
+		SET 
+			project_status = 'A0503',
+			project_color = '#B7B7B7',
+			project_end_date = NOW(),
+			updatedate = NOW(),
+			update_id = #{updateId}
+		WHERE 
+			project_no = #{projectNo}
+	</update>
+	
+	<!-- 프로젝트 삭제 -->
+	<delete id="removeProject">
+		DELETE FROM project
+		WHERE 
+			project_no = #{projectNo}
+	</delete>
+<!-- 프로젝트 끝  -->
+<!-- 프로젝트 작업  -->
+	<!-- 프로젝트 하위작업 카운트 -->
+	<select id="projectProgress"
+			resultType="com.goodee.JoinTree.vo.ProjectTask">
+		SELECT
+			COUNT(task_no) totalTasks,
+			SUM(task_status = '1') completedTasks,
+			ROUND(SUM(task_status = '1') / COUNT(task_no) * 100, 1) progressRate
+		FROM project_task
+		WHERE 
+			project_no = #{projectNo}
+		GROUP BY
+			project_no;
+		
+	</select>
 	<!-- 프로젝트 하위작업 -->
 	<select id="selectProejectTaskList"
 			resultType="com.goodee.JoinTree.vo.ProjectTask">
 		SELECT
 			t.task_no taskNo,
-			t.project_no projectNo,
 			t.emp_no empNo,
 			e.emp_name empName,
 			t.task_title taskTitle,
@@ -249,12 +301,15 @@
 			t.create_id createId,
 			t.update_id updateId
 		FROM project_task t
-		INNER JOIN emp_info e
-		ON t.emp_no = e.emp_no
-		WHERE t.project_no = #{projectNo}
+		INNER JOIN 
+			emp_info e ON t.emp_no = e.emp_no
+		WHERE 
+			t.project_no = #{projectNo};
+
 	</select>
-	<!-- 프로젝트 멤버 -->
-	
+<!-- 프로젝트 작업 끝 -->
+
+<!-- 프로젝트 멤버 -->
 	<!-- 프로젝트 멤버 수 구하기 -->
 	<select id="selectProejectMemberCnt">
 		SELECT 
@@ -309,12 +364,12 @@
 	</insert>
 	
 	<!--  프로젝트 멤버 삭제 -->
-	<delete id="romoveProjectMemeber"
-			parameterType="com.goodee.JoinTree.vo.ProjectMember">
+	<delete id="removeProjectMemeber">
 		DELETE FROM project_member
 		WHERE 
 			emp_no = #{empNo}
 			AND 
 			project_no = #{projectNo};
 	</delete>
+<!-- 프로젝트 멤버 끝 -->
 </mapper>

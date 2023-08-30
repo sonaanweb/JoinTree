@@ -30,13 +30,22 @@ public interface ProjectMapper {
 	Project selectProjectOne(Project project);
 	
 	// 프로젝트 추가
-	int addProject(Project prooject);
+	int addProject(Project project);
 	
 	// 프로젝트 수정 
+	int modifyProject(Project project);
+	
+	// 프로젝트 완료 처리
+	int endProject(int projectNo);
 	
 	// 프로젝트 삭제
+	int removeProject(int projectNo);
+	
 	
 	/* 프로젝트 하위작업 */
+	// 프로젝트 작업 수 계산
+	List<ProjectTask> projectProgress(int projectNo);
+	
 	// 프로젝트 하위작업 리스트 출력 
 	List<ProjectTask> selectProejectTaskList(int projectNo);
 	
@@ -53,6 +62,6 @@ public interface ProjectMapper {
 	// 프로젝트 멤버 추가
 	int addProjectMemeber(ProjectMember projectMember);
 	
-	// 프로젝트 삭제 추가
-	int romoveProjectMemeber(int empNo, int projectNo);
+	// 프로젝트 멤버 삭제
+	int removeProjectMemeber(int empNo, int projectNo);
 }

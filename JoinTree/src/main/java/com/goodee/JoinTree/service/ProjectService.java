@@ -110,12 +110,46 @@ public class ProjectService {
 	public int addProject(Project project) {
 		return projectMapper.addProject(project);
 	}
+	
+	// 프로젝트 수정 
+	public int modifyProject(Project project) {
+		return projectMapper.modifyProject(project);
+	}
+	
+	// 프로젝트 상태 수정 
+	public int endProject(int projectNo) {
+		return projectMapper.endProject(projectNo);
+	}
+	
+	// 프로젝트 삭제 
+	public int removeProject(int projectNo) {
+		return projectMapper.removeProject(projectNo);
+	}
+//	// 프로젝트 진행률
+//	public Map<String,Object> projectProgress(int projectNo) {
+//		
+//		Map<String, Object> progressMap = new HashMap<>();
+//		ProjectTask projectTask = new ProjectTask();
+//		
+//		int progress = projectMapper.projectProgress(projectNo);
+//		double progressPercentage = progress * 10.0;
+//		
+//		progressMap.put("progressRate", progressPercentage);
+//		progressMap.put("projectTask", projectTask);
+//		
+//		return progressMap;
+//	}
 	/* 프로젝트 하위작업 */
-	public List<ProjectTask> selectProejectTaskList(int projectNo) {
+	public Map<String, Object> selectProejectTaskList(int projectNo) {
 		// db에서 가져온 ProjectTask 정보
 		List<ProjectTask> projectTaskList = projectMapper.selectProejectTaskList(projectNo);
+		List<ProjectTask> projectProgress = projectMapper.projectProgress(projectNo);
 		
-		return projectTaskList;
+		Map<String, Object> projectTaskMap = new HashMap<>();
+		projectTaskMap.put("projectTaskList", projectTaskList);
+		projectTaskMap.put("projectProgress", projectProgress);
+
+		return projectTaskMap;
 	}
 	/* 프로젝트 멤버 */
 	// 프로젝트 참여 명단 출력
@@ -129,7 +163,7 @@ public class ProjectService {
 	}
 	
 	// 프로젝트 멤버 삭제
-	public int romoveProjectMemeber(int empNo, int projectNo) {
-		return projectMapper.romoveProjectMemeber(empNo, projectNo);
+	public int removeProjectMemeber(int empNo, int projectNo) {
+		return projectMapper.removeProjectMemeber(empNo, projectNo);
 	}
 }
