@@ -11,7 +11,8 @@
 		FROM board b INNER JOIN emp_info ei
 		ON b.emp_no = ei.emp_no
 		WHERE b.board_category = #{category} AND b.board_pinned = "1"
-		ORDER BY b.createdate DESC
+		ORDER BY b.createdate DESC 
+		LIMIT 5
 	</select>
 	
 	<!-- 페이징, 검색조건 적용(조건 없을 경우 전체조회)  -->
