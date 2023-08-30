@@ -64,8 +64,7 @@
 	    SET room_name = #{roomName},
 	        room_capacity = #{roomCapacity},
 	        room_status = #{roomStatus},
-	        updatedate = NOW(),
-	        <!-- update_id = #{updateId} -->
+	        updatedate = NOW()
 	    WHERE room_no = #{roomNo}
 	</update>
 	
@@ -93,8 +92,8 @@
 	</delete>
 	
 	<!-- 회의실 이름 검색 -->
-	<select id="searchMeetRoom" parameterType="com.goodee.JoinTree.vo.MeetingRoom" resultType="com.goodee.JoinTree.vo.MeetingRoom">
-    SELECT * FROM meeting_room
-    WHERE room_name LIKE CONCAT('%', #{roomName}, '%')
+	<select id="searchMeetRoom" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
+	    SELECT * FROM meeting_room
+	    WHERE room_name LIKE CONCAT('%', #{roomName}, '%')
 	</select>
 </mapper>

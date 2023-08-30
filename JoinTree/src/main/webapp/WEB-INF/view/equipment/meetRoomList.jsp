@@ -8,6 +8,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+</style>
 </head>
 <body>
 	<!-- header -->
@@ -15,11 +17,11 @@
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-			<div>
-<!-- 		<label for="searchInput">회의실 검색:</label>
-		    <input type="text" id="searchInput" name="searchInput">
-		    <button id="searchButton">검색</button> -->
-			</div>
+<!-- 		<div>
+	 		<label for="searchInput">회의실 검색:</label>
+		    <input type="text" id="roomName" name="roomName">
+		    <button id="searchButton">검색</button>
+			</div> -->
 			<!-- 관리 회의실 리스트 -->
 			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
 			<table class="table">
@@ -34,7 +36,7 @@
 			            <td></td>
 			        </tr>
 			    </thead>
-			    <tbody>
+			    <tbody id="meetRoomList">
 			        <c:forEach var="m" items="${meetRoomList}">
 			            <tr>
 			                <td class="roomNo">${m.roomNo}</td>
@@ -132,40 +134,44 @@
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 <script>
-/* $(document).ready(function() {
-    // 검색 버튼 또는 입력 필드에 입력 시
-    $('#searchButton, #searchInput').on('input', function() {
-        const searchTerm = $('#searchInput').val(); // 입력한 검색어
-        
-        $.ajax({
-            url: '/JoinTree/search',
-            type: 'post',
-            data: { searchTerm: searchTerm },
-            success: function(meetingRooms) {
-                // 검색 결과를 화면에 표시하는 로직 구현
-                // 예: 검색 결과를 테이블의 tbody에 추가
-                const tbody = $('#meetRoomTable tbody');
-                tbody.empty(); // 기존 내용 제거
-                
-                meetingRooms.forEach(function(meetingRoom) {
-                    const row = $('<tr>');
-                    row.append($('<td>').text(meetingRoom.roomNo));
-                    row.append($('<td>').text(meetingRoom.equipCategory));
-                    row.append($('<td>').text(meetingRoom.roomName));
-                    row.append($('<td>').text(meetingRoom.roomCapacity));
-                    row.append($('<td>').text(meetingRoom.roomStatus === 1 ? '사용가능' : '사용불가'));
-                    
-                    tbody.append(row);
-                });
-            },
-            error: function() {
-                console.log('검색 실패');
-            }
-        });
+// 검색버튼 클릭시
+/* $('#searchButton').on('click', function () {
+    var roomName = $("#roomName").val();
+    searchMeetRoom(roomName);
+});
+
+function searchMeetRoom(roomName) {
+    $.ajax({
+        type: 'GET',
+        url: '/JoinTree/equipment/searchMeetRoom',
+        data: { "roomName": roomName },
+        contentType: "application/json",
+        success: function (meetRoomList) {
+            var tbody = $('#meetRoomList');
+            tbody.empty();
+
+            $.each(meetRoomList, function (index, meetingRoom) {
+                var row = '<tr>' +
+                    '<td>' + meetingRoom.roomNo + '</td>' +
+                    '<td>' + meetingRoom.equipCategory + '</td>' +
+                    '<td>' + meetingRoom.roomName + '</td>' +
+                    '<td>' + meetingRoom.roomCapacity + '명</td>' +
+                    '<td>' + (meetingRoom.roomStatus === 1 ? '사용가능' : '사용불가') + '</td>' +
+                    '<td>' + meetingRoom.createdate + '</td>' +
+                    '<td>' +
+                    '<button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="' + meetingRoom.roomNo + '">수정</button>' +
+                    '<button class="deleteButton" data-room-no="' + meetingRoom.roomNo + '">삭제</button>' +
+                    '</td>' +
+                    '</tr>';
+                tbody.append(row);
+            });
+        },
+        error: function () {
+            console.log('검색 실패');
+        }
     });
-}); */
-
-
+}
+ */
 
 // 추가 모달창 스크립트
 $('#addModal').on('show.bs.modal', function (event) {

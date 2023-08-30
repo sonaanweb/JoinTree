@@ -45,4 +45,9 @@ public class MeetRoomService {
 	public int removeMeetRoom(MeetingRoom meetingRoom) {
 		return meetRoomMapper.deleteMeetRoom(meetingRoom);
 	}
+	
+	// 회의실 이름 검색
+	public List<MeetingRoom> searchMeetRoom(Map<String, Object> map){
+		return meetRoomMapper.searchMeetRoom(map);
+	}
 }

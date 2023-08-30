@@ -31,5 +31,5 @@ public interface MeetRoomMapper {
 	MeetingRoom selectMeetRoomOne(MeetingRoom meetingRoom);
 	
 	// 회의실 이름 검색
-	List<MeetingRoom> searchMeetRoom(String roomName);
+	List<MeetingRoom> searchMeetRoom(Map<String,Object> map);
 }

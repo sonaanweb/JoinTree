@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -130,15 +132,16 @@ public class MeetRoomController {
         }
     } 
     
-	/*
-	 * // 회의실 검색
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @PostMapping("/search") public List<MeetingRoom>
-	 * searchMeetingRooms(@RequestParam String roomName) { List<MeetingRoom>
-	 * meetingRooms = meetRoomMapper.searchMeetRoom(roomName); return meetingRooms;
-	 * }
-	 */
- 	
+    // 회의실 이름 검색
+    @GetMapping("/equipment/searchMeetRoom")
+    @ResponseBody
+    public ResponseEntity<List<MeetingRoom>> searchMeetRoom(
+    		@RequestParam(name = "roomName", required = false) String roomName) {
+    	Map<String, Object> paramMap = new HashMap<>();
+    	paramMap.put("roomName", roomName);
+        List<MeetingRoom> searchResults = meetRoomService.searchMeetRoom(paramMap);
+        log.debug(AN+"searchResults: "+paramMap+RE);
+        return new ResponseEntity<>(searchResults, HttpStatus.OK);
+    }
+    	
 }

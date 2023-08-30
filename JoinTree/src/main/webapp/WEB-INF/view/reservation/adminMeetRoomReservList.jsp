@@ -16,16 +16,15 @@
     <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
     <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		<h4>경영지원팀 예약관리</h4>
-		
 		<div>
             <label>예약 상태:</label>
-            <input type="radio" name="revStatus" value=""> 전체목록
+            <input type="radio" name="revStatus" value=""> 전체
             <input type="radio" name="revStatus" value="A0302"> 예약완료
             <input type="radio" name="revStatus" value="A0303"> 예약취소
             <input type="radio" name="revStatus" value="A0304"> 사용완료
         </div>
         <div>
-            <label>날짜 검색:</label>
+            <label>예약일시:</label>
             <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
             <button id="searchButton">검색</button>
         </div>
@@ -192,7 +191,19 @@ $(document).ready(function () {
                     
                     tbody.append(row);
                 }
+                
+                if (revStatus === null && revStartTime === "" && revEndTime === "") {
+                    // 검색 결과 데이터를 활용하여 전체 목록을 업데이트하는 로직
+                    for (var i = 0; i < response.length; i++) {
+                        var reservation = response[i];
+                        var row = '<tr>' +
+                            '<td><button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    }
+                }
             },
+
             error: function (error) {
                 console.log(error);
                 alert("검색 실패");
