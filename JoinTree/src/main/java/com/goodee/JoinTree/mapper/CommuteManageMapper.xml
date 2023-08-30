@@ -5,8 +5,9 @@
 	<!-- 검색 조건별 행의 수 (연차 목록) -->
 	<select id="searchAnnualLeaveListCnt"
 			parameterType="java.util.Map" resultType="int">
-		SELECT COUNT(*) 
-			FROM emp_info
+		SELECT 
+			COUNT(*) 
+		FROM emp_info
  		WHERE 
  			1=1
  			<if test="empNo != null and empNo != 0">
@@ -41,12 +42,7 @@
 		    </if>
 		    <if test="dept != null and dept != ''">
 		     	AND dc.code = #{dept}
-		    </if>
-		    <if test="(empNo != null and empNo != 0)
-              		   and (empName != null and empName != '')
-			           and (dept != null and dept != '')">
-	        	AND 1=1
-	        </if> 
+		    </if> 
 		ORDER BY e.emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}     
 	</select>
@@ -121,15 +117,6 @@
 		    <if test="active != null and active != ''">
 		    	AND al.active = #{active}
 		    </if>
-		    <if test="(empNo != null and empNo != 0)
-              		   and (empName != null and empName != '')
-              		   and (leaveType != null and leaveType != '')
-              		   and (year != null and year != '')
-			           and (startDate != null and endDate != null 
-		    				and startDate != '' and endDate != '')
-			           and (active != null and active != '')">
-	        	AND 1=1
-	        </if>
 		ORDER BY ei.emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}  
 	</select>
@@ -193,15 +180,7 @@
 		    <if test="startDate != null and endDate != null 
 		    			and startDate != '' and endDate != ''">
 		    	AND c.emp_on_off_date BETWEEN #{startDate} AND #{endDate}
-		    </if>
-		    <if test="(empNo != null and empNo != 0)
-              		   and (empName != null and empName != '')
-              		   and (dept != null and dept != '')
-              		   and (year != null and year != '')
-			           and (startDate != null and endDate != null 
-		    				and startDate != '' and endDate != '')">
-	        	AND 1=1
-	        </if>
+		    </if> 
 		ORDER BY c.emp_on_off_date DESC, c.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage}  
 	</select>

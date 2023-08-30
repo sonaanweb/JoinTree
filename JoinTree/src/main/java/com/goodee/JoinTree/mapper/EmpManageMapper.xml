@@ -184,15 +184,7 @@
 		    </if>
 		    <if test="active !=null and active != ''">
 		    	AND ac.code = #{active}
-		    </if>
-		    <if test="(empNo != null and empNo != 0)
-              		   and (empName != null and empName != '')
-			           and (startEmpHireDate != null and endEmpHireDate != ''and startEmpHireDate != '' and endEmpHireDate != '')
-			           and (dept != null and dept != '')
-			           and (position != null and position != '')
-			           and (active != null and active != '')">
-	        	AND 1=1
-	        </if>   
+		    </if>  
 		ORDER BY e.dept DESC, e.emp_no ASC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
