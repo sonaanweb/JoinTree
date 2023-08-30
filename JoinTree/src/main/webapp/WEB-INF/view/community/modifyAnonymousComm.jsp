@@ -155,7 +155,7 @@
 				<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 	
 	
-					<a href="/JoinTree/community/freeCommList/freeCommOne?boardNo=${comm.boardNo}">이전</a>
+					<a href="/JoinTree/community/anonymousCommList/anonymousCommOne?boardNo=${comm.boardNo}">이전</a>
 				
 					<h1>게시글 수정</h1>
 					
