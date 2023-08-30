@@ -37,23 +37,23 @@ public class EmpTelController {
 	// 검색별 사원 리스트 조회
 	@GetMapping("/empTel/searchEmpTelList")
 	@ResponseBody
-	public Map<String, Object> searchEmpTelList(@RequestParam(name = "searchEmpTelList") String searchEmpTelList,
+	public Map<String, Object> searchEmpTelList(@RequestParam(name = "searchEmpList") String searchEmpList,
 			 								 @RequestParam(name = "currentPage") int currentPage,
 			 								 @RequestParam(name = "rowPerPage") int rowPerPage) {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> searchEmpTelListResult = null;
+		Map<String, Object> searchEmpListResult = null;
 		
 		try {
-	        Map<String, Object> searchEmpTelListMap = objectMapper.readValue(searchEmpTelList, new TypeReference<Map<String, Object>>(){});
+	        Map<String, Object> searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
 	        // 검색, 페이징 리스트
-	        searchEmpTelListResult = empManageService.searchEmpList(searchEmpTelListMap, currentPage, rowPerPage);
+	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, currentPage, rowPerPage);
 	        
 	    } catch (JsonProcessingException e) {
 	        e.printStackTrace();
 	        
 	    } 
 		
-		return searchEmpTelListResult;
+		return searchEmpListResult;
 	}
 }

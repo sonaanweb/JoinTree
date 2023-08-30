@@ -104,8 +104,8 @@ $(document).ready(function() {
 	function updateTableWithData(data) {
 	    // data는 서버에서 반환된 JSON 데이터
 	    // data 객체 속성에 접근하여 값 추출
-	    let empList = data.searchEmpTelListByPage;
-	    console.log(empList);
+	    let empList = data.searchEmpListByPage;
+	    
 	    // 테이블의 tbody를 선택하고 초기화
 	    let tbody = $('#empTelList');
 	    tbody.empty();
@@ -128,7 +128,7 @@ $(document).ready(function() {
 	function searchEmpTelListResults(page =1){
 		
 		// 검색 조건
-		let searchEmpTelList = {
+		let searchEmpList = {
 			empNo: $('#searchEmpNo').val(),
 			empName: $('#searchEmpName').val(),
 			dept: $('#searchDept').val(),
@@ -140,7 +140,7 @@ $(document).ready(function() {
 			type: 'GET',
 			data: {
 				// 검색조건 객체를 JSON으로 변환
-				searchEmpTelList: JSON.stringify(searchEmpTelList),
+				searchEmpList: JSON.stringify(searchEmpList),
 				currentPage: page, // 현재페이지
 				rowPerPage: 10 // 한 페이지당 행의 수
 			},
@@ -158,12 +158,12 @@ $(document).ready(function() {
 	// 페이지 이동 함수
 	function goToPage(page){
 		// 검색 및 페이지 데이터 수정 함수
-	  	searchEmpTelResults(page);
+	  	searchEmpTelListResults(page);
     } 
 	
 	// 검색 버튼 클릭 이벤트
 	$('#searchEmpListBtn').click(function(){
-		searchEmpTelResults();
+		searchEmpTelListResults();
 	});
 	
 
