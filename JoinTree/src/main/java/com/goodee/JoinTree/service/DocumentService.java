@@ -121,10 +121,22 @@ public class DocumentService {
 	
 	
 	// 문서결재 상세 조회
-	public Map<String, Object> getDocumentOne(int docNo) {
+	public Map<String, Object> getDocumentOne(int docNo, String docCode) {
 		
 		// 문서결재 상세 조회
-		Map<String, Object> getDocumentOne = documentMapper.getDocumentOne(docNo);
+		Map<String, Object> getDocumentOne = null; 
+				
+		if(docCode.equals("D0101")) { // 기본기안서
+			getDocumentOne = documentMapper.getDocumentDefaultOne(docNo);
+		} else if(docCode.equals("D0102")) { // 휴가신청서
+			getDocumentOne = documentMapper.getDocumentLeaveOne(docNo);
+		} else if(docCode.equals("D0103")) { // 인사이동신청서
+			getDocumentOne = documentMapper.getDocumentReshuffleOne(docNo);
+		} else if(docCode.equals("D0104")) { // 퇴직신청서
+			getDocumentOne = documentMapper.getDocumentResignOne(docNo);
+		}		
+		
+		log.debug(getDocumentOne + "<-- DocumentService getDocumentOne");
 		
 		return getDocumentOne;
 	}

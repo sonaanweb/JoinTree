@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html>	
 <div class="doc">
-	<h1 class="center">기안서</h1>
+	<h1 class="center">퇴직신청서</h1>
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -33,7 +34,7 @@
 				</td>
 				
 				<td class="blank"></td>
-				<td class="sign"><span class="writer"></span>&nbsp;<span class="position"></span></td>
+				<td class="sign"><span class="writer"></span>&nbsp;<span id="position"></span></td>
 				<td class="sign"><span id="signer1Name"></span>&nbsp;<span id="signer1Position"></span></td>
 				<td class="sign"><span id="signer2Name"></span>&nbsp;<span id="signer2Position"></span></td>
 			</tr>
@@ -53,6 +54,7 @@
 			<tr></tr>
 		</tbody>
 	</table>
+ 
 	<!-- 내용 -->
 	<table class="table doc-comment">
 		<tbody>
@@ -71,12 +73,17 @@
 				<td>제목</td>
 				<td id="docTitle"></td>
 			</tr>
-			<!-- 상세 내용입력 -->
+			<!-- 퇴직사유 -->
 			<tr>
-				<td>상세내용</td>
+				<td>퇴직사유</td>
 				<td>
-					<textarea id="docContent" readonly="readonly"></textarea>
+					<textarea id="docResignReason"></textarea> 
 				</td>
+			</tr>
+			<!-- 퇴직예정일 -->
+			<tr>
+				<td>퇴직예정일</td>
+				<td id="docResignDate"></td>
 			</tr>
 			<!-- 첨부파일 다운로드 -->
 			<tr>
@@ -85,7 +92,8 @@
 					<a id="docSaveFileName" href="#" download>다운로드</a>
 				</td>
 			</tr>
-		</tbody>
-	</table>
+	</tbody>
+</table>
+	
 </div>
 </html>

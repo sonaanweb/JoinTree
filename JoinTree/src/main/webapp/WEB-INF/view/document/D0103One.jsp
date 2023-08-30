@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html>	
 <div class="doc">
-	<h1 class="center">기안서</h1>
+	<h1 class="center">인사이동신청서</h1>
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -53,6 +54,8 @@
 			<tr></tr>
 		</tbody>
 	</table>
+ 
+	
 	<!-- 내용 -->
 	<table class="table doc-comment">
 		<tbody>
@@ -66,26 +69,88 @@
 				<td id="receiverTeam"></td>
 			</tr>
 			
-			<!-- 제목 입력 -->
+			<!-- 이동일자 -->
 			<tr>
-				<td>제목</td>
-				<td id="docTitle"></td>
-			</tr>
-			<!-- 상세 내용입력 -->
-			<tr>
-				<td>상세내용</td>
-				<td>
-					<textarea id="docContent" readonly="readonly"></textarea>
-				</td>
-			</tr>
-			<!-- 첨부파일 다운로드 -->
-			<tr>
-				<td>첨부파일</td>
-				<td>
-					<a id="docSaveFileName" href="#" download>다운로드</a>
-				</td>
+				<td>이동일자</td>
+				<td id="docReshuffleDate"></td>
 			</tr>
 		</tbody>
 	</table>
+	
+	<h4>[직급변경]</h4>
+	<table class="table doc-comment">
+		<tbody>
+			<!-- 사원명 -->
+			<tr>
+				<td>사원명</td>
+				<td class="writer"></td>
+			<tr>
+			<!-- 변경 전 직급 -->
+			<tr>	
+				<td>변경 전 직급</td>
+				<td class="position"></td>
+				
+			</tr>
+			<!-- 변경 후 직급 -->
+			<tr>
+				<td>변경 후 직급</td>
+				<td id="docReshufflePosition"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>[부서변경]</h4>
+	<table class="table doc-comment">
+		<tbody>
+			<!-- 사원명 -->
+			<tr>
+				<td>사원명</td>
+				<td class="writer"></td>
+			</tr>
+			<!-- 변경 전 부서 -->
+			<tr>
+				<td>변경 전 부서</td>
+				<td class="dept"></td>	
+			</tr>
+			<!-- 변경 후 부서 -->	
+			<tr>
+				<td>변경 후 부서</td>
+				<td id="docReshuffleDept"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="table doc-comment">
+		<!-- 주요 업무 -->
+		<tr>
+			<td>주요 업무</td>
+			<td>
+				<textarea id="docReshuffleTask"></textarea> 
+			</td>
+		</tr>
+
+		<!-- 업무 성과 -->
+		<tr>
+			<td>업무 성과</td>
+			<td>
+				<textarea id="docReshuffleResult"></textarea> 
+			</td>
+		</tr>
+
+		<!-- 발령사유 -->
+		<tr>
+			<td>발령 사유</td>
+			<td>
+				<textarea id="docReshuffleReason"></textarea> 
+			</td>
+		</tr>
+
+		<!-- 첨부파일 다운로드 -->
+		<tr>
+			<td>첨부파일</td>
+			<td>
+				<a id="docSaveFileName" href="#" download>다운로드</a>
+			</td>
+		</tr>
+	</table>
 </div>
-</html>

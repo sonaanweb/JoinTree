@@ -306,15 +306,15 @@
 	</select>
 	
 	<!-- 기본기안서 상세 조회 -->
-	<select id="getDocumentOne" 
+	<select id="getDocumentDefaultOne" 
 			parameterType="int" resultType="java.util.Map">
 		SELECT 
 			d.doc_no docNo, -- 문서번호
 			d.createdate, -- 기안일
 			d.writer, -- 기안자
 			d.doc_stamp1 docStamp1, -- 기안자 서명
-			d.doc_stamp2 docStamp2, -- 결제자 1 서명
-			d.doc_stamp3 docStamp3, -- 결제자 2 서명
+			d.doc_stamp2 docStamp2, -- 결재자 1 서명
+			d.doc_stamp3 docStamp3, -- 결재자 2 서명
 			reference_info.emp_name reference, -- 참조자
 			rec.code_name receiverTeam, -- 수신팀
 			d.doc_title docTitle, -- 문서 제목
@@ -322,23 +322,153 @@
 			dc.code_name dept, -- 기안 부서
 			pc.code_name position, -- 기안자 직급
 			f.doc_save_filename docSaveFileName, -- 첨부파일
-			signer1_info.emp_name signer1Name, -- 결제자 1 사원명
-			signer1_pc.code_name signer1Position, -- 결제자 1 직급
-			signer2_info.emp_name signer2Name, -- 결제자 2 사원명
-			signer2_pc.code_name signer2Position -- 결제자 2 직급
+			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_pc.code_name signer1Position, -- 결재자 1 직급
+			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_pc.code_name signer2Position -- 결재자 2 직급
 		FROM document_default d -- 기본 기안서
 		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
 		LEFT OUTER JOIN document_file f ON d.doc_no = f.doc_no -- 첨부파일 
-		LEFT OUTER JOIN document_signer ds1 ON d.doc_no = ds1.doc_no AND ds1.emp_signer_level = 1 -- 기안문서의 결제자 1
-		LEFT OUTER JOIN emp_info signer1_info ON ds1.emp_signer_no = signer1_info.emp_no -- 결제자 1의 사원정보 
-		LEFT OUTER JOIN document_signer ds2 ON d.doc_no = ds2.doc_no AND ds2.emp_signer_level = 2 -- 기안문서의 결제자 2
-		LEFT OUTER JOIN emp_info signer2_info ON ds2.emp_signer_no = signer2_info.emp_no -- 결제자 2의 사원정보
+		LEFT OUTER JOIN document_signer ds1 ON d.doc_no = ds1.doc_no AND ds1.emp_signer_level = 1 -- 기안문서의 결재자 1
+		LEFT OUTER JOIN emp_info signer1_info ON ds1.emp_signer_no = signer1_info.emp_no -- 결재자 1의 사원정보 
+		LEFT OUTER JOIN document_signer ds2 ON d.doc_no = ds2.doc_no AND ds2.emp_signer_level = 2 -- 기안문서의 결재자 2
+		LEFT OUTER JOIN emp_info signer2_info ON ds2.emp_signer_no = signer2_info.emp_no -- 결재자 2의 사원정보
 		LEFT OUTER JOIN emp_info reference_info ON d.reference = reference_info.emp_no -- 참조자 사원정보 
 		LEFT OUTER JOIN common_code dc ON e.dept = dc.code -- 기안부서 code_name
 		LEFT OUTER JOIN common_code pc ON e.position = pc.code -- 기안자 직급 code_name
 		LEFT OUTER JOIN common_code rec ON d.receiver_team = rec.code -- 수신팀 code_name
-		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결제자1 code_name
-		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결제자2 code_name
+		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결재자1 code_name
+		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결재자2 code_name
+		WHERE d.doc_no = #{docNo}
+	</select>
+	
+	<!-- 휴가신청서 상세 조회 -->
+	<select id="getDocumentLeaveOne"
+			parameterType="int" resultType="java.util.Map">
+		SELECT 
+			d.doc_no docNo, -- 문서번호
+			d.createdate, -- 기안일
+			d.writer, -- 기안자
+			d.doc_stamp1 docStamp1, -- 기안자 서명
+			d.doc_stamp2 docStamp2, -- 결재자 1 서명
+			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			reference_info.emp_name reference, -- 참조자
+			rec.code_name receiverTeam, -- 수신팀
+			d.doc_title docTitle, -- 문서 제목
+			d.doc_content docContent, -- 문서 내용
+			dc.code_name dept, -- 기안 부서
+			pc.code_name position, -- 기안자 직급
+			f.doc_save_filename docSaveFileName, -- 첨부파일
+			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_pc.code_name signer1Position, -- 결재자 1 직급
+			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_pc.code_name signer2Position, -- 결재자 2 직급
+			leave_type.code_name leaveType, -- 연차구분
+			dl.doc_leave_start_date docLeaveStartDate, -- 연차 시작일
+			dl.doc_leave_end_date docLeaveEndDate, -- 연차 종료일
+			dl.doc_leave_period_date docLeavePeriodDate, -- 연차 일수
+			dl.doc_leave_tel docLeaveTel -- 비상연락처
+		FROM document_default d -- 기본 기안서
+		INNER JOIN document_leave dl ON d.doc_no = dl.doc_no -- 휴가신청서
+		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
+		LEFT OUTER JOIN document_file f ON d.doc_no = f.doc_no -- 첨부파일 
+		LEFT OUTER JOIN document_signer ds1 ON d.doc_no = ds1.doc_no AND ds1.emp_signer_level = 1 -- 기안문서의 결재자 1
+		LEFT OUTER JOIN emp_info signer1_info ON ds1.emp_signer_no = signer1_info.emp_no -- 결재자 1의 사원정보 
+		LEFT OUTER JOIN document_signer ds2 ON d.doc_no = ds2.doc_no AND ds2.emp_signer_level = 2 -- 기안문서의 결재자 2
+		LEFT OUTER JOIN emp_info signer2_info ON ds2.emp_signer_no = signer2_info.emp_no -- 결재자 2의 사원정보
+		LEFT OUTER JOIN emp_info reference_info ON d.reference = reference_info.emp_no -- 참조자 사원정보 
+		LEFT OUTER JOIN common_code dc ON e.dept = dc.code -- 기안부서 code_name
+		LEFT OUTER JOIN common_code pc ON e.position = pc.code -- 기안자 직급 code_name
+		LEFT OUTER JOIN common_code rec ON d.receiver_team = rec.code -- 수신팀 code_name
+		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결재자1 code_name
+		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결재자2 code_name
+		LEFT OUTER JOIN common_code leave_type ON dl.leave_type = leave_type.code -- 연차구분 code_name
+		WHERE d.doc_no = #{docNo}
+	</select>
+	
+	<!-- 인사이동신청서 상세 조회 -->
+	<select id="getDocumentReshuffleOne"
+			parameterType="int" resultType="java.util.Map">
+		SELECT 
+			d.doc_no docNo, -- 문서번호
+			d.createdate, -- 기안일
+			d.writer, -- 기안자
+			d.doc_stamp1 docStamp1, -- 기안자 서명
+			d.doc_stamp2 docStamp2, -- 결재자 1 서명
+			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			reference_info.emp_name reference, -- 참조자
+			rec.code_name receiverTeam, -- 수신팀
+			d.doc_title docTitle, -- 문서 제목
+			d.doc_content docContent, -- 문서 내용
+			dc.code_name dept, -- 기안 부서
+			pc.code_name position, -- 기안자 직급
+			f.doc_save_filename docSaveFileName, -- 첨부파일
+			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_pc.code_name signer1Position, -- 결재자 1 직급
+			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_pc.code_name signer2Position, -- 결재자 2 직급
+			dr.doc_reshuffle_date docReshuffleDate, -- 인사이동 일자
+			repo.code_name docReshufflePosition, -- 변경 후 직급
+			rede.code_name docReshuffleDept, -- 변경 후 부서
+			dr.doc_reshuffle_task docReshuffleTask, -- 주요 업무
+			dr.doc_reshuffle_result docReshuffleResult, -- 업무성과
+			dr.doc_reshuffle_reason docReshuffleReason-- 발령사유
+		FROM document_default d -- 기본 기안서
+		INNER JOIN document_reshuffle dr ON d.doc_no = dr.doc_no -- 인사이동신청서
+		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
+		LEFT OUTER JOIN document_file f ON d.doc_no = f.doc_no -- 첨부파일 
+		LEFT OUTER JOIN document_signer ds1 ON d.doc_no = ds1.doc_no AND ds1.emp_signer_level = 1 -- 기안문서의 결재자 1
+		LEFT OUTER JOIN emp_info signer1_info ON ds1.emp_signer_no = signer1_info.emp_no -- 결재자 1의 사원정보 
+		LEFT OUTER JOIN document_signer ds2 ON d.doc_no = ds2.doc_no AND ds2.emp_signer_level = 2 -- 기안문서의 결재자 2
+		LEFT OUTER JOIN emp_info signer2_info ON ds2.emp_signer_no = signer2_info.emp_no -- 결재자 2의 사원정보
+		LEFT OUTER JOIN emp_info reference_info ON d.reference = reference_info.emp_no -- 참조자 사원정보 
+		LEFT OUTER JOIN common_code dc ON e.dept = dc.code -- 기안부서 code_name
+		LEFT OUTER JOIN common_code pc ON e.position = pc.code -- 기안자 직급 code_name
+		LEFT OUTER JOIN common_code rec ON d.receiver_team = rec.code -- 수신팀 code_name
+		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결재자1 code_name
+		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결재자2 code_name
+		LEFT OUTER JOIN common_code repo ON dr.doc_reshuffle_position = repo.code -- 변경 후 직급 code_name
+		LEFT OUTER JOIN common_code rede ON dr.doc_reshuffle_dept = repo.code -- 변경 후 부서 code_name
+		WHERE d.doc_no = #{docNo}
+	</select>
+	
+	<!-- 퇴직신청서 상세 조회 -->
+	<select id="getDocumentResignOne"
+			parameterType="int" resultType="java.util.Map">
+		SELECT 
+			d.doc_no docNo, -- 문서번호
+			d.createdate, -- 기안일
+			d.writer, -- 기안자
+			d.doc_stamp1 docStamp1, -- 기안자 서명
+			d.doc_stamp2 docStamp2, -- 결재자 1 서명
+			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			reference_info.emp_name reference, -- 참조자
+			rec.code_name receiverTeam, -- 수신팀
+			d.doc_title docTitle, -- 문서 제목
+			d.doc_content docContent, -- 문서 내용
+			dc.code_name dept, -- 기안 부서
+			pc.code_name position, -- 기안자 직급
+			f.doc_save_filename docSaveFileName, -- 첨부파일
+			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_pc.code_name signer1Position, -- 결재자 1 직급
+			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_pc.code_name signer2Position, -- 결재자 2 직급
+			dresign.doc_resign_reason docResignReason, -- 퇴직사유
+			dresign.doc_resign_date docResignDate-- 퇴직예정일	
+		FROM document_default d -- 기본 기안서
+		INNER JOIN document_resign dresign ON d.doc_no = dresign.doc_no -- 퇴직신청서
+		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
+		LEFT OUTER JOIN document_file f ON d.doc_no = f.doc_no -- 첨부파일 
+		LEFT OUTER JOIN document_signer ds1 ON d.doc_no = ds1.doc_no AND ds1.emp_signer_level = 1 -- 기안문서의 결재자 1
+		LEFT OUTER JOIN emp_info signer1_info ON ds1.emp_signer_no = signer1_info.emp_no -- 결재자 1의 사원정보 
+		LEFT OUTER JOIN document_signer ds2 ON d.doc_no = ds2.doc_no AND ds2.emp_signer_level = 2 -- 기안문서의 결재자 2
+		LEFT OUTER JOIN emp_info signer2_info ON ds2.emp_signer_no = signer2_info.emp_no -- 결재자 2의 사원정보
+		LEFT OUTER JOIN emp_info reference_info ON d.reference = reference_info.emp_no -- 참조자 사원정보 
+		LEFT OUTER JOIN common_code dc ON e.dept = dc.code -- 기안부서 code_name
+		LEFT OUTER JOIN common_code pc ON e.position = pc.code -- 기안자 직급 code_name
+		LEFT OUTER JOIN common_code rec ON d.receiver_team = rec.code -- 수신팀 code_name
+		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결재자1 code_name
+		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결재자2 code_name
 		WHERE d.doc_no = #{docNo}
 	</select>
 </mapper>

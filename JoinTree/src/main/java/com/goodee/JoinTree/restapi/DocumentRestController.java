@@ -56,12 +56,13 @@ public class DocumentRestController {
 	
 	// 결재문서 상세 조회
 	@GetMapping("/getDocumentOne")
-	public Map<String, Object> getDocumentOne(@RequestParam int docNo){
+	public Map<String, Object> getDocumentOne(@RequestParam int docNo, @RequestParam String docCode){
 		
 		log.debug(docNo + "<-- DocumentListRestController docNo");
+		log.debug(docCode+"<-- DocumentListRestController docCode");
 		
 		// 결제문서 상세 조회
-		Map<String, Object> getDocumentOne = documentService.getDocumentOne(docNo);
+		Map<String, Object> getDocumentOne = documentService.getDocumentOne(docNo, docCode);
 		log.debug(getDocumentOne + "<-- DocumentListRestController getDocumentOne");
 		
 		return getDocumentOne;

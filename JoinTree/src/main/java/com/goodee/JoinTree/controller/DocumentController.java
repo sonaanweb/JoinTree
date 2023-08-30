@@ -149,17 +149,32 @@ public class DocumentController {
 
 	}
 	
-	// documentList.jsp
-	@GetMapping("/document/documentList")
-	public String documentList(Model model,
-							   @RequestParam String listId) {
+	// draftDocList.jsp
+	@GetMapping("/document/draftDocList")
+	public String documentList() {
 		
-		log.debug(listId+"<-- DocumentListController listId");
+		return "/document/draftDocList";
+	}
+	
+	// approvalDocList.jsp
+	@GetMapping("/document/approvalDocList")
+	public String documentLeaveList() {
 		
-		// 문서함별 id
-		model.addAttribute("listId", listId);
+		return "/document/approvalDocList";
+	}
+	
+	// documentReshuffletList.jsp
+	@GetMapping("/document/individualDocList")
+	public String documentReshuffletList() {
 		
-		return "/document/documentList";
+		return "/document/individualDocList";
+	}
+	
+	// teamDocList.jsp
+	@GetMapping("/document/teamDocList")
+	public String documentResignList() {
+		
+		return "/document/teamDocList";
 	}
 	
 	// 결재문서 상세 조회 폼 업로드

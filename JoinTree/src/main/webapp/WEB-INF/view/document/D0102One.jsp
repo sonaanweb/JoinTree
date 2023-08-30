@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html>	
 <div class="doc">
-	<h1 class="center">기안서</h1>
+	<h1 class="center">휴가신청서</h1>
 	<table class="table doc-title">
 		<tbody>
 			<tr>
@@ -53,6 +54,7 @@
 			<tr></tr>
 		</tbody>
 	</table>
+ 
 	<!-- 내용 -->
 	<table class="table doc-comment">
 		<tbody>
@@ -71,11 +73,38 @@
 				<td>제목</td>
 				<td id="docTitle"></td>
 			</tr>
-			<!-- 상세 내용입력 -->
+			<!-- 연차종류 -->
 			<tr>
-				<td>상세내용</td>
+				<td>연차종류</td>
+				<td id="leaveType"></td>		
+			</tr>
+			<!-- 연차기간 -->
+			<tr>
+				<td>기간</td>
 				<td>
-					<textarea id="docContent" readonly="readonly"></textarea>
+					<span id="docLeaveStartDate"></span>&nbsp;&#126;&nbsp;<span id="docLeaveEndDate"></span>
+					&nbsp;&#40; <span id="docLeavePeriodDate"></span>&nbsp;일&#41; 
+				</td>
+			</tr>
+			<!-- 연차사유 -->
+			<tr>
+				<td>휴가사유</td>
+				<td>
+					<textarea id="docContent"></textarea> 
+				</td>
+			</tr>
+			<!-- 비상연락처 -->
+			<tr>
+				<td>비상연락처</td>
+				<td id="docLeaveTel"></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align: left;">
+					<br>
+					1. 연차의 사용은 근로기준법에 따라 전년도에 발생한 개인별 잔여 연차에 한하여 사용함을 원칙으로 한다. 단, 최초 입사시에는 근로 기준법에 따라 발생 예정된 연차를 차용하여 월 1회 사용 할 수 있다.
+					<br> 2. 경조사 휴가는 행사일을 증명할 수 있는 가족 관계 증명서 또는 등본, 청첩장 등 제출
+					<br> 3. 공가(예비군/민방위)는 사전에 통지서를, 사후에 참석증을 반드시 제출 
+					<br>4. 병가는 추후에 진단서를 반드시 제출
 				</td>
 			</tr>
 			<!-- 첨부파일 다운로드 -->
@@ -85,7 +114,8 @@
 					<a id="docSaveFileName" href="#" download>다운로드</a>
 				</td>
 			</tr>
-		</tbody>
-	</table>
+	</tbody>
+</table>
+	
 </div>
 </html>

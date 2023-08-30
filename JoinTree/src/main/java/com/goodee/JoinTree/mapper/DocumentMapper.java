@@ -73,6 +73,15 @@ public interface DocumentMapper {
 	// 문서결제양식 코드 조회
 	List<CommonCode> selectDocumentCodeList();
 	
-	// 문서결재 상세 조회
-	Map<String, Object> getDocumentOne(int docNo); 
+	// 문서결재 기본기안서 상세 조회
+	Map<String, Object> getDocumentDefaultOne(int docNo);
+	
+	// 문서결재 휴가신청서 상세 조회
+	Map<String, Object> getDocumentLeaveOne(int docNo);
+	
+	// 문서결재 인사이동신청서 상세 조회
+	Map<String, Object> getDocumentReshuffleOne(int docNo);
+	
+	// 문서결재 퇴직신청서 상세 조회
+	Map<String, Object> getDocumentResignOne(int docNo); 
 }
