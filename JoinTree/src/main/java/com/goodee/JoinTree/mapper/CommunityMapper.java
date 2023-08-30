@@ -12,7 +12,7 @@ public interface CommunityMapper {
 	// 게시판 상단고정 게시글 목록
 	List<Board> selectPinnedCommList(String category);
 	
-	 // 하나의 메서드로 게시글 목록 조회
+	// 하나의 메서드로 게시글 목록 조회
     List<Board> selectCommListByPageWithSearch(Map<String, Object> map);
 	
 	// 게시판 목록(기존)
@@ -30,13 +30,15 @@ public interface CommunityMapper {
 	
 	// 게시글 조회수 증가
 	int increaseCommCount(int boardNo);
-	
-	
-	
-	
-	
+
 	// 게시판 게시글 상세정보(통일)
 	Board selectCommOne(int boardNo);
+	
+	// 이전 글 조회
+	Board selectPreBoard(Map<String, Object> params); // boardNo, boardCategory
+	
+	// 다음 글 조회
+	Board selectNextBoard(Map<String, Object> params); // boardNo, boardCategory
 	
 	// 게시판 게시글 입력
 	int addComm(Board board);

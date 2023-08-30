@@ -144,21 +144,21 @@
 		    LIMIT #{beginRow}, #{rowPerPage}
 		</select>
 	
-	<!-- 검색 조견별 행의 수 -->
+	<!-- 검색 조건별 행의 수 -->
 	<select id="searchCommCnt" resultType="int" parameterType="java.util.Map">
-    SELECT COUNT(*)
-    FROM board
-    <where>
-        <if test="(boardCategory == 'B0103' or boardCategory == 'B0104' or boardCategory == 'B0105' or boardCategory == 'B0106') and
-            (searchOption == 'boardTitle' or searchOption == 'boardContent') and
-            (searchText != null and searchText != '')">
-            <!-- 동적으로 생성되는 조건 -->
-            <foreach item="category" collection="categories" separator="or">
-                (boardCategory = #{category} and ${searchOption} LIKE CONCAT('%', #{searchText}, '%'))
-            </foreach>
-        </if>
-    </where>
-</select>
+	    SELECT COUNT(*)
+	    FROM board
+	    <where>
+	        <if test="(boardCategory == 'B0103' or boardCategory == 'B0104' or boardCategory == 'B0105' or boardCategory == 'B0106') and
+	            (searchOption == 'boardTitle' or searchOption == 'boardContent') and
+	            (searchText != null and searchText != '')">
+	            <!-- 동적으로 생성되는 조건 -->
+	            <foreach item="category" collection="categories" separator="or">
+	                (boardCategory = #{category} and ${searchOption} LIKE CONCAT('%', #{searchText}, '%'))
+	            </foreach>
+	        </if>
+	    </where>
+	</select>
 
 	<!-- 게시판 게시글 상세정보  -->
 	<select id="selectCommOne" resultType="com.goodee.JoinTree.vo.Board">
@@ -171,6 +171,35 @@
         ON b.emp_no = ei.emp_no
 	    WHERE board_no = #{boardNo}
 	</select>
+
+	<!-- 이전 글 조회 -->
+	<select id="selectPreBoard" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
+		SELECT b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
+			   b.board_title boardTitle, b.board_content boardContent, 
+			   b.board_pinned boardPinned, b.board_count boardCount, 
+			   b.createdate, b.updatedate, b.create_id createId, b.update_id updateId, 
+               ei.emp_name empName
+        FROM board b INNER JOIN emp_info ei
+        ON b.emp_no = ei.emp_no
+	    WHERE board_category = #{category} AND board_no &lt; #{boardNo} <!-- &lt;: 오른쪽으로 벌어지는 부등호 -->
+	    ORDER BY board_no DESC LIMIT 1
+	</select>
+	
+	<!-- 다음 글 조회 -->
+	<select id="selectNextBoard" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
+		SELECT b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
+			   b.board_title boardTitle, b.board_content boardContent, 
+			   b.board_pinned boardPinned, b.board_count boardCount, 
+			   b.createdate, b.updatedate, b.create_id createId, b.update_id updateId, 
+               ei.emp_name empName
+        FROM board b INNER JOIN emp_info ei
+        ON b.emp_no = ei.emp_no
+	    WHERE board_category = #{category} AND board_no &gt; #{boardNo} <!-- &gt;: 왼쪽으로 벌어지는 부등호 -->
+	    ORDER BY board_no ASC LIMIT 1
+	</select>
+	
+	
+	
 	
 	<!-- 게시판 게시글 입력 -->
 	<insert id="addComm" parameterType="com.goodee.JoinTree.vo.Board">
@@ -201,7 +230,6 @@
 	</insert>
 	
 	<!-- 게시판 게시글 수정 -->
-	<!-- 상단 고정 여부 이슈 -->
 	<update id="modifyComm" parameterType="com.goodee.JoinTree.vo.Board">
 		UPDATE board
 		SET board_title = #{boardTitle}, 

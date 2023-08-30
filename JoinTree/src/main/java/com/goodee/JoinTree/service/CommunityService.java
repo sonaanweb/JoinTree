@@ -178,6 +178,32 @@ public Map<String, Object> getCommList(String category, int currentPage, int row
 	}
 	
 	
+	
+	// 이전 글 조회
+	public Board getPreBoard(String category, int boardNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("category", category);
+		params.put("boardNo", boardNo);
+		
+		Board preBoard = new Board();
+		preBoard = communityMapper.selectPreBoard(params);
+		
+		return preBoard;
+	}
+	
+	
+	// 다음 글 조회
+	public Board getNextBoard(String category, int boardNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("category", category);
+		params.put("boardNo", boardNo);
+		
+		Board nextBoard = new Board();
+		nextBoard = communityMapper.selectNextBoard(params);
+		
+		return nextBoard;
+	}
+	
 	// 게시글 입력 (+ 첨부파일 있을 경우)
 	public int addComm(Board board, String path) {
 		int row = communityMapper.addComm(board);

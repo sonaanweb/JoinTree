@@ -64,7 +64,6 @@ public class CommunityController {
 			comm.setCommentCnt(commentCnt);
 		}
 		
-		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-freeCommList)" + RESET);
 		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-freeCommList)" + RESET);
 		
@@ -95,8 +94,6 @@ public class CommunityController {
 		model.addAttribute("startPage", startPage); // 블럭(페이징) 버튼 시작 페이지 정보 추가
 		model.addAttribute("endPage", endPage); // 블럭(페이징) 버튼 끝 페이지 정보 추가
 		
-		
-		
 		return "/community/freeCommList";
 	}
 	
@@ -115,8 +112,6 @@ public class CommunityController {
 	    return resultMap;
 	}
 	*/
-	
-	
 	
 	// 익명 게시판 게시글 목록
 	@GetMapping("/community/anonymousCommList")
@@ -140,7 +135,6 @@ public class CommunityController {
 			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
 			comm.setCommentCnt(commentCnt);
 		}
-		
 		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-freeCommList)" + RESET);
 		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-freeCommList)" + RESET);
@@ -178,14 +172,48 @@ public class CommunityController {
 		return "/community/anonymousCommList";
 	}
 	
-	/*
+	
 	// 중고장터 게시판 게시글 목록
 	@GetMapping("/community/secondhandCommList")
 	public String secondhandCommList(Model model, @RequestParam(name = "currentPage", defaultValue = "1") int currentPage,
 			@RequestParam(name = "rowPerPage", defaultValue = "10") int rowPerPage, 
-			@RequestParam(name = "category", defaultValue = "B0105") String category) {
+			@RequestParam(name = "category", defaultValue = "B0105") String category, 
+			@RequestParam(name = "searchOption", required = false) String searchOption,
+		    @RequestParam(name = "searchText", required = false) String searchText) {
 		
-		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage);
+		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage, searchOption, searchText);
+		
+		// 댓글 개수 가져와서 모델에 추가
+		List<Board> pinnedCommList = (List<Board>) resultMap.get("pinnedCommList");
+		for (Board comm : pinnedCommList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		List<Board> commList = (List<Board>) resultMap.get("commList"); // 게시글 목록 가져오는 로직
+		for (Board comm : commList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-secondhandCommList)" + RESET);
+		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-secondhandCommList)" + RESET);
+		
+		// 페이지 블럭
+		int currentBlock = 0; // 현재 페이지 블럭 (currenetPage / pageLength)
+		int pageLength = 10; // 현재 페이지 블럭에 들어갈 페이지 수 (1~10/다음)
+		if (currentPage % pageLength == 0) {
+			currentBlock = currentPage / pageLength;
+		} else {
+			currentBlock = (currentPage / pageLength) + 1;
+		}
+		
+		int startPage = (currentBlock - 1) * pageLength + 1; // 블럭의 시작페이지 (1, 11, 21, ...)
+		int endPage = startPage + pageLength - 1; // 블럭의 마지막 페이지 (10, 20, 30, ...)
+		int lastPage = (int) resultMap.get("lastPage");
+		if (endPage > lastPage) {
+			endPage = lastPage;
+		}
 		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-secondhandCommList)" + RESET);
 		
@@ -197,6 +225,9 @@ public class CommunityController {
 		model.addAttribute("lastPage", resultMap.get("lastPage"));
 		model.addAttribute("currentPage", currentPage);
 		
+		model.addAttribute("startPage", startPage); // 블럭(페이징) 버튼 시작 페이지 정보 추가
+		model.addAttribute("endPage", endPage); // 블럭(페이징) 버튼 끝 페이지 정보 추가
+		
 		return "/community/secondhandCommList";
 	}
 	
@@ -204,9 +235,43 @@ public class CommunityController {
 	@GetMapping("/community/lifeEventCommList")
 	public String lifeEventCommList(Model model, @RequestParam(name = "currentPage", defaultValue = "1") int currentPage,
 			@RequestParam(name = "rowPerPage", defaultValue = "10") int rowPerPage, 
-			@RequestParam(name = "category", defaultValue = "B0106") String category) {
+			@RequestParam(name = "category", defaultValue = "B0106") String category, 
+			@RequestParam(name = "searchOption", required = false) String searchOption,
+		    @RequestParam(name = "searchText", required = false) String searchText) {
 		
-		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage);
+		Map<String, Object> resultMap = communityService.getCommList(category, currentPage, rowPerPage, searchOption, searchText);
+		
+		// 댓글 개수 가져와서 모델에 추가
+		List<Board> pinnedCommList = (List<Board>) resultMap.get("pinnedCommList");
+		for (Board comm : pinnedCommList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		List<Board> commList = (List<Board>) resultMap.get("commList"); // 게시글 목록 가져오는 로직
+		for (Board comm : commList) {
+			int commentCnt = commentService.getCommentsCnt(comm.getBoardNo());
+			comm.setCommentCnt(commentCnt);
+		}
+		
+		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-secondhandCommList)" + RESET);
+		log.debug(CYAN + resultMap.get("pinnedCommList") + " <-- pinnedCommList(CommunityController-secondhandCommList)" + RESET);
+		
+		// 페이지 블럭
+		int currentBlock = 0; // 현재 페이지 블럭 (currenetPage / pageLength)
+		int pageLength = 10; // 현재 페이지 블럭에 들어갈 페이지 수 (1~10/다음)
+		if (currentPage % pageLength == 0) {
+			currentBlock = currentPage / pageLength;
+		} else {
+			currentBlock = (currentPage / pageLength) + 1;
+		}
+		
+		int startPage = (currentBlock - 1) * pageLength + 1; // 블럭의 시작페이지 (1, 11, 21, ...)
+		int endPage = startPage + pageLength - 1; // 블럭의 마지막 페이지 (10, 20, 30, ...)
+		int lastPage = (int) resultMap.get("lastPage");
+		if (endPage > lastPage) {
+			endPage = lastPage;
+		}
 		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-lifeEventCommList)" + RESET);
 		
@@ -218,10 +283,12 @@ public class CommunityController {
 		model.addAttribute("lastPage", resultMap.get("lastPage"));
 		model.addAttribute("currentPage", currentPage);
 		
+		model.addAttribute("startPage", startPage); // 블럭(페이징) 버튼 시작 페이지 정보 추가
+		model.addAttribute("endPage", endPage); // 블럭(페이징) 버튼 끝 페이지 정보 추가
+		
 		return "/community/lifeEventCommList";
 	}
 	
-	*/
 	// 자유 게시판 게시글 상세보기
 	@GetMapping("/community/freeCommList/freeCommOne")
 	public String freeCommOne(Model model, @RequestParam(name="boardNo") int boardNo) {
@@ -247,9 +314,17 @@ public class CommunityController {
 			comment.setEmpName(empName);
 		}
 		
+		// 이전 글 정보
+		Board preBoard = communityService.getPreBoard(comm.getBoardCategory(), boardNo);
+		
+		// 다음 글 정보
+		Board nextBoard = communityService.getNextBoard(comm.getBoardCategory(), boardNo);
+		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
 		model.addAttribute("comments", comments);
+		model.addAttribute("preBoard", preBoard);
+		model.addAttribute("nextBoard", nextBoard);
 		
 		log.debug(CYAN + comm + " <-- comm(CommunityController-freeCommOne)" + RESET);
 		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-freeCommOne)" + RESET);
@@ -271,13 +346,19 @@ public class CommunityController {
 		communityService.increaseCommCount(boardNo);
 		
 		// 댓글 목록 가져오기
-		// List<Comment> comments = commentService.getCommentsByBoardNo(boardNo);
-		
 		List<Comment> comments = commentService.getComments(boardNo);
+		
+		// 이전 글 정보
+		Board preBoard = communityService.getPreBoard(comm.getBoardCategory(), boardNo);
+		
+		// 다음 글 정보
+		Board nextBoard = communityService.getNextBoard(comm.getBoardCategory(), boardNo);
 		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
 		model.addAttribute("comments", comments);
+		model.addAttribute("preBoard", preBoard);
+		model.addAttribute("nextBoard", nextBoard);
 		
 		log.debug(CYAN + comm + " <-- comm(CommunityController-anonymousCommOne)" + RESET);
 		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-anonymousCommOne)" + RESET);
@@ -298,8 +379,27 @@ public class CommunityController {
 		// 조회수 증가 처리
 		communityService.increaseCommCount(boardNo);
 		
+		// 댓글 목록 가져오기
+		List<Comment> comments = commentService.getComments(boardNo);
+		
+		// 댓글 작성자 empNo -> empName 변환
+		for (Comment comment : comments) {
+			int empNo = comment.getEmpNo();
+			String empName = commentService.getEmpName(empNo);
+			comment.setEmpName(empName);
+		}
+		
+		// 이전 글 정보
+		Board preBoard = communityService.getPreBoard(comm.getBoardCategory(), boardNo);
+		
+		// 다음 글 정보
+		Board nextBoard = communityService.getNextBoard(comm.getBoardCategory(), boardNo);
+		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
+		model.addAttribute("comments", comments);
+		model.addAttribute("preBoard", preBoard);
+		model.addAttribute("nextBoard", nextBoard);
 		
 		log.debug(CYAN + comm + " <-- comm(CommunityController-secondhandCommOne)" + RESET);
 		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-secondhandCommOne)" + RESET);
@@ -320,8 +420,27 @@ public class CommunityController {
 		// 조회수 증가 처리
 		communityService.increaseCommCount(boardNo);
 		
+		// 댓글 목록 가져오기
+		List<Comment> comments = commentService.getComments(boardNo);
+		
+		// 댓글 작성자 empNo -> empName 변환
+		for (Comment comment : comments) {
+			int empNo = comment.getEmpNo();
+			String empName = commentService.getEmpName(empNo);
+			comment.setEmpName(empName);
+		}
+		
+		// 이전 글 정보
+		Board preBoard = communityService.getPreBoard(comm.getBoardCategory(), boardNo);
+		
+		// 다음 글 정보
+		Board nextBoard = communityService.getNextBoard(comm.getBoardCategory(), boardNo);
+		
 		model.addAttribute("comm", comm);
 		model.addAttribute("boardFile", boardFile);
+		model.addAttribute("comments", comments);
+		model.addAttribute("preBoard", preBoard);
+		model.addAttribute("nextBoard", nextBoard);
 		
 		log.debug(CYAN + comm + " <-- comm(CommunityController-lifeEventCommOne)" + RESET);
 		log.debug(CYAN + boardFile + " <-- boardFile(CommunityController-lifeEventCommOne)" + RESET);
@@ -356,39 +475,6 @@ public class CommunityController {
 		
 		return "/community/addLifeEventComm";
 	}
-	
-	/*
-	// 자유게시판 게시글 작성 액션
-	@PostMapping("/community/freeCommList/addFreeComm")
-	public String addFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
-		String path = request.getServletContext().getRealPath("/commImg/");
-		
-		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
-		HttpSession session = request.getSession();
-		String dept = (String) session.getAttribute("dept");
-		log.debug(CYAN + dept + " <-- row(CommunityController-addFreeComm)" + RESET);
-		
-		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
-		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
-			board.setBoardPinned("1");
-		} else {
-			board.setBoardPinned("0");
-		}
-		
-		int row = communityService.addComm(board, path);
-		
-		log.debug(CYAN + row + " <-- row(CommunityController-addFreeComm)" + RESET);
-		
-		if (row == 1) {
-			msg = URLEncoder.encode("게시글이 등록되었습니다.", "UTF-8");
-			
-			return "redirect:/community/freeCommList?msg=" + msg;
-		} else {
-			msg = URLEncoder.encode("게시글 등록에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
-			return "redirect:/community/freeCommList/addFreeComm?msg=" + msg;
-		}
-	}
-	*/
 	
 	// 게시판 게시글 작성 액션
 	@PostMapping("/community/addComm")
@@ -426,7 +512,6 @@ public class CommunityController {
 			
 			log.debug(CYAN + " <-- 게시글 등록 후 오류 발생(CommunityController-addComm)" + RESET);
 			return "";
-			
 			
 		} else {
 			msg = URLEncoder.encode("게시글 등록에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
@@ -521,39 +606,7 @@ public class CommunityController {
 		
 		return "/community/modifyLifeEventComm";
 	}
-	
-	
-	/*
-	// (자유)게시판 게시글 수정 액션
-	@PostMapping("/community/freeCommList/modifyFreeComm") 
-	public String modifyFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
-		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
-		HttpSession session = request.getSession();
-		String dept = (String) session.getAttribute("dept");
-		log.debug(CYAN + dept + " <-- row(CommunityController-addFreeComm)" + RESET);
 		
-		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
-		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
-			board.setBoardPinned("1");
-		} else {
-			board.setBoardPinned("0");
-		}
-		
-		int row = communityService.modifyComm(board);
-		log.debug(CYAN + row + " <-- row(CommunityController-modifyFreeComm)" + RESET);
-		
-		if (row == 1) {
-			msg = URLEncoder.encode("게시글이 수정되었습니다.", "UTF-8");
-			
-			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-		} else {
-			msg = URLEncoder.encode("게시글 수정에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
-			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-		}
-	}
-	*/
-	
-	
 	// 게시판 게시글 수정 액션
 	@PostMapping("/community/modifyComm") 
 	public String modifyFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
@@ -648,26 +701,7 @@ public class CommunityController {
 			return "error";
 		}
 	}
-	
-	// (자유) 게시판 게시글 삭제
-	/*
-	@GetMapping("/community/freeCommList/removeFreeComm")
-	public String removeFreeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {
-		String path = request.getServletContext().getRealPath("/commImg/");
-		int row = communityService.removeComm(boardNo, path);
-		log.debug(CYAN  + row + " <-- row(CommunityController-removeFreeComm)" + RESET);
 		
-		if (row == 1) {
-			msg = URLEncoder.encode("게시글이 삭제되었습니다.", "UTF-8");
-			
-			return "redirect:/community/freeCommList?msg=" + msg;
-		} else {
-			msg = URLEncoder.encode("게시글 삭제에 실패했습니다. 관리자에게 문의해주세요.", "UTF-8");
-			return "redirect:/community/freeCommList/freeCommOne?boardNo=" + boardNo + "&msg=" + msg;
-		}	
-	}
-	*/
-	
 	// 게시글 삭제 액션
 	@GetMapping("/community/removeComm")
 	public String removeComm(HttpServletRequest request, int boardNo) throws UnsupportedEncodingException {

@@ -28,6 +28,7 @@
 		     	// 초기에 미리보기 삭제 버튼 숨기기
 		     	removeBtn.hide();
 		     	
+		     	
 		        // 파일 선택 및 미리보기 핸들러
 		        $(document).on('change', '#fileInput', function() {
 		        	console.log("파일 선택 버튼 클릭");
@@ -145,8 +146,7 @@
 		                        	// removeBtn.hide();
 		                        	// 리로드된 셀 내에서 removeBtn을 찾아 숨김 처리
 		                            $(this).find('#removeBtn').hide();
-		                        	
-		                            
+		                        	         
 			                        // 이미지 삭제 후에 미리보기 이미지 업데이트
 			                        previewImage.attr('src', '');
 			                        removeBtn.hide();
@@ -162,12 +162,12 @@
 		        });
 			});	
 		</script>
-	
+		
 		<div class="container-fluid page-body-wrapper">
 			<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 				<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 	
-					<a href="/JoinTree/community/freeCommList/freeCommOne?boardNo=${comm.boardNo}">이전</a>
+					<a href="/JoinTree/community/secondhandCommList/secondhandCommOne?boardNo=${comm.boardNo}">이전</a>
 				
 					<h1>게시글 수정</h1>
 					
@@ -177,13 +177,13 @@
 					</div>		
 					
 					<div>
-						카테고리: 자유게시판
+						카테고리: 중고장터 게시판
 					</div>
 					
 					<form action="/JoinTree/community/modifyComm" method="post">
 						<input type="hidden" name="boardNo" value="${comm.boardNo}">
 						<input type="hidden" name="empNo" value="${loginAccount.empNo}">
-						<input type="hidden" name="boardCategory" value="B0103">
+						<input type="hidden" name="boardCategory" value="B0105">
 						<div>
 							<c:if test="${dept eq 'D0202'}">	
 								게시판 상단고정 <input type="checkbox" name="boardPinned" <c:if test="${comm.boardPinned eq '1'}">checked</c:if>> <!-- 기존 상단고정 상태일 경우 체크박스 선택하여 출력 -->
@@ -207,26 +207,25 @@
 								        <c:when test="${boardFile.boardSaveFilename eq null or boardFile.boardSaveFilename == '이미지 없음'}">
 								        	<input type="file" id="fileInput" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp"><br>
 								        	<img id="previewImage" src="" style="max-width: 300px; max-height: 300px;"><br>
-											<button type="button" id="removeBtn">미리보기 삭제</button>
+											<button type="button" id="removeBtn">이미지 삭제</button>
 								        	<button type="button" id="uploadImgBtn">이미지 등록</button>
 								        	<div>
 												* 이미지 선택 후 이미지 등록 버튼을 클릭해야 새 이미지가 저장됩니다. 
 											</div>
-										
 								        </c:when>
 								        <c:otherwise>
 								            <img src="${pageContext.request.contextPath}/commImg/${boardFile.boardSaveFilename}" style="width: 300px; height: auto;"><br>
 								       	    <button type="button" id="removeImgBtn">이미지 삭제</button>
 							       	    	<div>
 												* 이미지 삭제 버튼 클릭 시 등록된 이미지가 완전히 삭제됩니다. 
-											</div> 
+											</div>
 								        </c:otherwise>
 								    </c:choose>
 								</td>
 							</tr>
 						</table>
 						<div>
-							<button type="submit" id="modifyFreeCommBtn">수정</button>
+							<button type="submit" id="modifySecondhandCommBtn">수정</button>
 						</div>
 					</form>
 			</div>

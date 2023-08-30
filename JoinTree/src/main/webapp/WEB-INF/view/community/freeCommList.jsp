@@ -97,9 +97,6 @@
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-	
-				<a href="/JoinTree/home">홈</a>
-			
 				<h1>자유 게시판</h1>
 				<%-- ${commList} --%>
 				
@@ -209,7 +206,7 @@
 			<!-- 페이지 내비게이션 -->
 			<div id="pagination">
 				<c:if test="${startPage > 1}">
-        			<a href="/JoinTree/community/freeCommList?currentPage=${startPage - 1}&category=${category}&searchOption=${param.searchOption}&searchText=${param.searchText}">[이전]</a>
+        			<a href="/JoinTree/community/freeCommList?currentPage=${startPage - 10}&category=${category}&searchOption=${param.searchOption}&searchText=${param.searchText}">[이전]</a>
     			</c:if>
 			
 			    <c:forEach var="pageNumber" begin="${startPage}" end="${endPage}">

@@ -125,7 +125,7 @@
 			<!-- 페이지 내비게이션 -->
 			<div id="pagination">
 				<c:if test="${startPage > 1}">
-        			<a href="/JoinTree/community/anonymousCommList?currentPage=${startPage - 1}&category=${category}&searchOption=${param.searchOption}&searchText=${param.searchText}">[이전]</a>
+        			<a href="/JoinTree/community/anonymousCommList?currentPage=${startPage - 10}&category=${category}&searchOption=${param.searchOption}&searchText=${param.searchText}">[이전]</a>
     			</c:if>
 			
 			    <c:forEach var="pageNumber" begin="${startPage}" end="${endPage}">

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 	<!-- header -->
@@ -12,30 +11,9 @@
 				const msg = urlParams.get("msg");
 					if (msg != null) {
 						alert(msg);
-					}					
-				/*	
-				// textarea에 placeholder과 비슷한 기능 적용
-	            function setPlaceholder(element, placeholder) {
-	                element.val(placeholder).css('color', 'gray');
-	                
-	                element.focus(function() {
-	                    if (element.val() === placeholder) {
-	                        element.val('').css('color', 'black');
-	                    }
-	                });
-	                
-	                element.blur(function() {
-	                    if (element.val() === '') {
-	                        element.val(placeholder).css('color', 'gray');
-	                    }
-	                });
-	            }
-	            
-	            setPlaceholder($('#commentContent'), '댓글을 입력해주세요.');
-	            
-	            */
-	           
-	            // 입력 버튼 클릭 시 
+					}
+					
+				// 입력 버튼 클릭 시 
 	            $("#addCommentBtn").click(function() {
 	            	const boardNo = $("#boardNo").val();
 	                const empNo = $("#empNo").val();
@@ -80,7 +58,7 @@
 	                    });
 	                }
 	            });
-	            
+		            
 	            // 답글 버튼
 	            $(".reply-btn").click(function() {
 	                $(this).closest("tr").next(".reply-form-row").toggle();
@@ -96,40 +74,9 @@
 	                    replyForm.find(".reply-content").focus();
 	                } else {
 	                    replyForm.submit();
-	                    /*
-	                    $.ajax({
-	                    	type: "POST", 
-	                    	url: "/JoinTree/comment/addReply",
-	                    	data: {
-	                    		boardNo: $("#boardNo2").val(),
-	                    		empNo: $("#empNo2").val(),
-	                    		category: $("#category2").val(),
-	                    		commentGroupNo: 2,
-	                    		parentCommentNo: $("#parentCommentNo").val(),
-	                    		commentContent: commentContent
-	                    	}, 
-	                    	success: function(response) {
-	                    		if (response === "success") {
-	                    			alert("답글이 등록되었습니다.");
-	                    			
-	                    			console.log("답글 등록 완료");
-	                    			event.preventDefault();
-	                    			 $("#commentSection").load(location.href + " #commentSection>*", function() {
-	                                     // 이벤트 핸들러를 다시 바인딩합니다
-	                                     bindEventHandlers();
-	                                 });
-                    		} else {
-	                    			alert("답글 추가 실패");
-	                    		}
-	                    	}, 
-	                    	error: function() {
-	                    		alert("서버 오류 발생");
-	                    	}
-	                    });
-	                    */
 	                }
 	            });
-	            
+		            
 	            // 댓글 목록 부분 업데이트 시 이벤트 핸들러 다시 바인딩
 	            function bindEventHandlers() {
 	                $(".remove-comment-btn").off("click");
@@ -191,41 +138,20 @@
 	                const commentNo = $(this).data("comment-no");
 	                removeComment(commentNo);
 	                
-	             	// 해당 댓글 행을 비워서 제거
-	                // $(this).closest("tr").empty();
 	                
 	            });
 			});
 		</script>
-		<style>
-			.comment-section {
-			    max-height: 400px; /* 원하는 높이로 설정 */
-			    overflow-y: auto;
-			    border: 1px solid #ccc;
-			    padding: 10px;
-			}
-			
-			/* 들여쓰기 스타일 */
-   			/*.comment-row {
-        		margin-left: 0;
-   		 	 }
-					
-			.reply-row {
-		        margin-left: 40px;} /* 들여쓰기 간격 조정 */
-		    
-		</style>
-		
 		
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		
 	
-				<a href="/JoinTree/community/freeCommList">이전</a>
+				<a href="/JoinTree/community/secondhandCommList">이전</a>
 				
 				<h1>상세정보</h1>
 				<%-- ${loginAccount.empNo} --%>
-				<%-- ${comm.boardCategory} --%>
 				
 				<table border="1">
 					<tr>
@@ -264,7 +190,7 @@
 				</table>
 				<!-- 자신이 작성한 게시글일 경우에만 수정, 삭제 버튼 노출 -->
 				<c:if test="${loginAccount.empNo eq comm.empNo}">
-					<a href="/JoinTree/community/freeCommList/modifyFreeComm?boardNo=${comm.boardNo}">수정</a>
+					<a href="/JoinTree/community/secondhandCommList/modifySecondhandComm?boardNo=${comm.boardNo}">수정</a>
 					<a href="/JoinTree/community/removeComm?boardNo=${comm.boardNo}">삭제</a>
 				</c:if>
 				
@@ -289,7 +215,6 @@
 								    <!-- 댓글인 경우 -->
 									<tr class="comment-row">
 										<td>${comment.commentNo}</td>
-										<%-- <td>${comment.empNo}</td> --%>
 										<td>${comment.empName}</td>
 										<td>${comment.commentContent}</td>
 										<td>${comment.createdate}</td>
@@ -314,7 +239,8 @@
 				                    <!-- 대댓글인 경우 -->
 				                    <tr class="reply-row">
 				                    	<td>${comment.commentNo}</td>
-				                        <td>${comment.empName}</td>
+				                        <td>${comment.empName}
+			                        	</td>
 				                        <td style="padding-left: 20px;">->${comment.commentContent}</td>
 				                        <td>${comment.createdate}</td>
 				                        <td>
@@ -365,11 +291,14 @@
 				${nextBoard.boardCategory} ${nextBoard.boardNo}<br>
 				
 				<c:if test="${preBoard.boardNo ne null}">
-					<a href="freeCommOne?boardNo=${preBoard.boardNo}">이전 글</a><br>
+					<a href="secondhandCommOne?boardNo=${preBoard.boardNo}">이전 글</a>
 				</c:if>
+				&nbsp;
 				<c:if test="${nextBoard.boardNo ne null}">
-					<a href="freeCommOne?boardNo=${nextBoard.boardNo}">다음 글</a>
+					<a href="secondhandCommOne?boardNo=${nextBoard.boardNo}">다음 글</a>
 				</c:if>	
+				
+				
 		</div>
 	</div>
 </html>
