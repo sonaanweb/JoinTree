@@ -150,7 +150,9 @@
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			e.emp_no empNo, 
-			e.emp_name empName, 
+			e.emp_name empName,
+			emp_phone empPhone ,
+			emp_extension_no empExtensionNo,
 			e.emp_hire_date empHireDate,
 			dc.code_name dept,
 			pc.code_name position,

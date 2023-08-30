@@ -185,7 +185,7 @@
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
 				<c:if test="${child.code == 'M0107' && child.status == 'Y'}">
-					<a class="nav-link" href="">
+					<a class="nav-link" href="/JoinTree/empTel/empTelList">
 						<span class="menu-title">주소록</span>
 						<i class="mdi mdi-account-search menu-icon"></i>
 					</a>
