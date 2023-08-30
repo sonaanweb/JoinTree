@@ -140,7 +140,6 @@ public class EmpInfoService {
 		return row; // 컨트롤러에서 최종 2 출력 시 DB, 로컬에 이미지 저장 완료 
 	}
 	
-
 	// 나의 서명(이미지) 추가
 	public String uploadSignImg(int empNo, String newSignImg, String path) {
 		String type = newSignImg.split(";")[0].split(":")[1]; // split: 구분자를 기준으로 문자열 배열 반환

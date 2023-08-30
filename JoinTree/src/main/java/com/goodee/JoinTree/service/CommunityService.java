@@ -175,8 +175,6 @@ public Map<String, Object> getCommList(String category, int currentPage, int row
 		log.debug(CYAN + map + " <-- map(CommunityService-getCommOne) "+ RESET);
 		
 		return map;
-		
-		
 	}
 	
 	
