@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,10 @@ public class MeetReservController {
 	
 	@Autowired MeetRoomReservService meetRoomReservService;	
 	@Autowired MeetRoomService meetRoomService;
+	
+	
+	// crud 로그인 세션 다 추가 작업 필요
+	
 	
 	// 예약 가능한 회의실 List(클릭시 캘린더)
 	@GetMapping("/reservation/empMeetRoomList")
@@ -103,7 +108,7 @@ public class MeetReservController {
     }
     
     // (emp) 예약한 회의실 조회(예약 취소 가능)
-    @GetMapping("reservation/empMeetRoomReservedList")
+    @GetMapping("/reservation/empMeetRoomReservedList")
 	public String empMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
     	
@@ -126,7 +131,7 @@ public class MeetReservController {
     @ResponseBody
     public String cancelReserved(HttpSession session, @RequestBody Reservation reservation) {
         try {
-            int empNo = 20233003; // 임시 --> 회의실 조회 그대로
+            int empNo = 11111111; // 임시 --> 회의실 조회 그대로
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("equipCategory", "E0101");
             paramMap.put("empNo", empNo);
@@ -172,6 +177,25 @@ public class MeetReservController {
 		
 		return "/reservation/adminMeetRoomReservList";
 	}
+    
+    // 사원 회의실 예약 관리 검색 메서드
+    @GetMapping("/reservation/search") //ajax url
+    @ResponseBody
+    public ResponseEntity<List<Reservation>> searchReservation(
+            @RequestParam(name = "revStatus", required = false) String revStatus,
+            @RequestParam(name = "revStartTime", required = false) String revStartTime,
+            @RequestParam(name = "revEndTime", required = false) String revEndTime) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("revStatus", revStatus);
+        paramMap.put("revStartTime", revStartTime);
+        paramMap.put("revEndTime", revEndTime);
+        log.debug(AN+"reservController 경영지원팀 예약 : "+paramMap.toString()+RE);
+        List<Reservation> searchResult = meetRoomReservService.searchReservation(paramMap);
+
+        // JSON 형식으로 데이터 반환
+        return new ResponseEntity<>(searchResult, HttpStatus.OK);
+    }
+    
      
     // 현재시간 기준 예약 종료시간 이후면 사용완료로 변경하기 위한 메서드
     /*@Scheduled(cron = "10 * * * * *") // 임시 - 10초마다 실행
@@ -193,7 +217,8 @@ public class MeetReservController {
                 if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면(현재 시간의 이전이면)
                     if (reservation.getRevStatus().equals("A0302")) { // 예약 완료 상태인 건은
                         reservation.setRevStatus("A0304"); // 사용완료 상태로 변경
-                        meetRoomReservService.modifyMeetRoomCal(reservation);
+                        meetRoomReservServi
+                        ce.modifyMeetRoomCal(reservation);
                     }
                 }
             }

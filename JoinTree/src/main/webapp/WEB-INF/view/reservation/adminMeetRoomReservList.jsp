@@ -16,7 +16,20 @@
     <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
     <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		<h4>경영지원팀 예약관리</h4>
-<!--<div>검색 필터 들어갈 곳</div> -->
+		
+		<div>
+            <label>예약 상태:</label>
+            <input type="radio" name="revStatus" value=""> 전체목록
+            <input type="radio" name="revStatus" value="A0302"> 예약완료
+            <input type="radio" name="revStatus" value="A0303"> 예약취소
+            <input type="radio" name="revStatus" value="A0304"> 사용완료
+        </div>
+        <div>
+            <label>날짜 검색:</label>
+            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
+            <button id="searchButton">검색</button>
+        </div>
+		
         <table class="table">
             <thead>
                 <tr>
@@ -108,7 +121,28 @@
 <!-- 스크립트 부분 -->
 <script>
 $(document).ready(function () {
-    // 예약 취소 버튼 클릭 시 모달 표시
+	
+	// 검색
+	$('#searchButton').on('click', function () {
+        var revStatus = $("input[name='revStatus']:checked").val();
+        var revStartTime = $("input[name='revStartTime']").val();
+        var revEndTime = $("input[name='revEndTime']").val();
+
+        searchReservation(revStatus, revStartTime, revEndTime);
+    });
+	
+	
+	// 검색했을 시 버튼 다시 활성화
+    $('#reservationbody').on('click', '.cancel-btn', function () {
+        var revNo = $(this).data('revno');
+        $('#cancelModal').modal('show');
+
+        $('#confirmButton').off('click').on('click', function () {
+            cancelReserv(revNo);
+        });
+    });
+	
+/*// 예약 취소 버튼 클릭 시 모달 표시
     $('.cancel-btn').on('click', function () {
         var revNo = $(this).data('revno');
         $('#cancelModal').modal('show');
@@ -117,7 +151,62 @@ $(document).ready(function () {
         $('#confirmButton').off('click').on('click', function () {
             cancelReserv(revNo);
         });
-    });
+    }); */
+    
+    function searchReservation(revStatus, revStartTime, revEndTime) {
+        $.ajax({
+            type: "GET",
+            url: "/JoinTree/reservation/search",
+            data: {
+                "revStatus": revStatus,
+                "revStartTime": revStartTime,
+                "revEndTime": revEndTime
+            },
+            contentType: "application/json",
+            success: function (response) {
+                // 검색 결과를 화면에 업데이트하는 부분
+                var tbody = $('#reservationbody');
+                tbody.empty(); // 기존 내용 지우기
+
+                // 검색 결과 데이터를 순회하며 행을 추가
+                for (var i = 0; i < response.length; i++) {
+                    var reservation = response[i];
+                    var row = '<tr>' +
+                        '<td>' + reservation.revNo + '</td>' +
+                        '<td>' + reservation.empName + '(' + reservation.empNo + ')</td>' +
+                        '<td>' + reservation.roomName + '</td>' +
+                        '<td>' + reservation.revStartTime.substring(0, 16) + ' ~ ' + reservation.revEndTime.substring(10, 16) + '</td>' +
+                        '<td>' + reservation.revReason + '</td>' +
+                        '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
+                        '<td>' + getStatusText(reservation.revStatus) + '</td>' +
+                        '<td>' + reservation.empName + '(' + reservation.empNo + ')</td>';
+                    
+                    // 취소 버튼 또는 상태 텍스트 추가
+                    if (reservation.revStatus === 'A0302') {
+                        row += '<td><button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>';
+                    } else {
+                        row += '<td></td>';
+                    }
+                    
+                    row += '</tr>';
+                    
+                    tbody.append(row);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                alert("검색 실패");
+            }
+        });
+    }
+    
+    // 상태코드 텍스트 변환
+    function getStatusText(statusCode) {
+        if (statusCode === 'A0302') return '예약완료';
+        if (statusCode === 'A0303') return '예약취소';
+        if (statusCode === 'A0304') return '사용완료';
+        return '';
+    }
 
     // 예약 취소
     function cancelReserv(revNo) {

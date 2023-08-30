@@ -29,4 +29,6 @@ public interface MeetRoomReservMapper {
 	// 경영지원팀 예약 관리 리스트 조회(dept -- 구분을 위한 메서드)
 	List<Reservation> selectAllMeetReserved(Map<String, Object> map);
 	
+	// 예약 목록 검색 메서드
+	List<Reservation> getSearchReservation(Map<String, Object> SearchReservations);
 }
