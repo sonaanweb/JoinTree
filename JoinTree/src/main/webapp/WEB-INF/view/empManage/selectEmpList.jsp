@@ -456,24 +456,18 @@
 	// 검색 조건별 결과 값 함수
 	function searchEmpListResults(page =1){
 		
-		// 검색 조건
-		let searchEmpList = {
-			empNo: $('#searchEmpNo').val(),
-			empName: $('#searchEmpName').val(),
-			active: $('#searchActive').val(),
-			startEmpHireDate: $('#searchStartEmpHireDate').val(),
-			endEmpHireDate: $('#searchEndEmpHireDate').val(),
-			dept: $('#searchDept').val(),
-			position: $('#searchPosition').val()
-		};
-		
 		// 데이터 조회
 		$.ajax({
 			url: '/JoinTree/empManage/searchEmpList',
 			type: 'GET',
 			data: {
-				// 검색조건 객체를 JSON으로 변환
-				searchEmpList: JSON.stringify(searchEmpList),
+				empNo: $('#searchEmpNo').val(),
+				empName: $('#searchEmpName').val(),
+				active: $('#searchActive').val(),
+				startEmpHireDate: $('#searchStartEmpHireDate').val(),
+				endEmpHireDate: $('#searchEndEmpHireDate').val(),
+				dept: $('#searchDept').val(),
+				position: $('#searchPosition').val(),
 				currentPage: page, // 현재페이지
 				rowPerPage: 10 // 한 페이지당 행의 수
 			},

@@ -55,29 +55,6 @@ public class EmpManageController {
 		return "/empManage/selectEmpList";
 	}
 	
-	// 검색별 사원 리스트 조회
-	@GetMapping("/empManage/searchEmpList")
-	@ResponseBody
-	public Map<String, Object> searchEmpList(@RequestParam(name = "searchEmpList") String searchEmpList,
-			 								 @RequestParam(name = "currentPage") int currentPage,
-			 								 @RequestParam(name = "rowPerPage") int rowPerPage) {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> searchEmpListResult = null;
-		
-		try {
-	        Map<String, Object> searchEmpListMap = objectMapper.readValue(searchEmpList, new TypeReference<Map<String, Object>>(){});
-	        // 검색, 페이징 리스트
-	        searchEmpListResult = empManageService.searchEmpList(searchEmpListMap, currentPage, rowPerPage);
-	        
-	    } catch (JsonProcessingException e) {
-	        e.printStackTrace();
-	        
-	    } 
-		
-		return searchEmpListResult;
-	}
-	
 	// 사원 상세정보 조회
 	@GetMapping("/empManage/selectEmpOne")
 	@ResponseBody
