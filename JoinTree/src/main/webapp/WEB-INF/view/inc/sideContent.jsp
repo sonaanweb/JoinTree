@@ -173,10 +173,10 @@
 		 	<div class="collapse" id="document">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/document">결재하기</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/documentList?listId=draftDocList">기안문서목록</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/documentList?listId=approvalDocList">결재함</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/documentList?listId=individualDocList">개인문서함</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/documentList?listId=teamDocList">팀별문서함</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/draftDocList">기안문서목록</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/approvalDocList">결재함</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/individualDocList">개인문서함</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/teamDocList">팀별문서함</a></li>
 				</ul>
 			</div>
 		</li>
