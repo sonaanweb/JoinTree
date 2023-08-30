@@ -33,9 +33,9 @@
                     <tr>
                         <td>${r.revNo}</td>
                         <td>${r.roomName}</td>
-                        <td>${r.revStartTime} ~ ${r.revEndTime}</td>
+                        <td>${r.revStartTime.substring(0,16)} ~ ${r.revEndTime.substring(10,16)}</td>
                         <td>${r.revReason}</td>
-                        <td>${r.createdate}</td>
+                        <td>${r.createdate.substring(0,10)}</td>
                         <td>
                             <c:choose>
                                 <c:when test="${r.revStatus == 'A0302'}">예약완료</c:when>
@@ -43,7 +43,7 @@
                                 <c:when test="${r.revStatus == 'A0304'}">사용완료</c:when>
                             </c:choose>
                         </td>
-                        <!-- 예약 완료인 상태에만 취소 버튼 활성화 -->
+                        <!-- 예약 완료인 상태에만 취소 버튼 활성화 / 사용완료 상태는 취소 버튼 X-->
                         <c:choose>
                             <c:when test="${r.revStatus == 'A0302'}">
                                 <td><button class="btn btn-sm btn-primary cancel-btn" data-revno="${r.revNo}">예약취소</button></td>

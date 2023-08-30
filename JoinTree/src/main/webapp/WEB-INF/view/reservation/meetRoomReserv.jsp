@@ -55,7 +55,9 @@ html, body {
 <div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-			<div><span class="badge badge-success">notice</span></div>
+			<div style="font-weight: bold; font-family: 'Pretendard-Regular';">
+			<span class="badge badge-success">notice</span> 예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
+			<div><a href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a></div>
 			<!-- fullCal -->
 			<div id='calendar'></div>
 			<!------------->

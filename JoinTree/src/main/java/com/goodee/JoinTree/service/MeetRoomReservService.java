@@ -27,7 +27,7 @@ public class MeetRoomReservService {
    public List<Reservation> getMeetRoomReservCal(int roomNo) {
 	   return meetRoomReservMapper.selectMeetCalList(roomNo);
    }
-  
+    
 	// 회의실 예약 추가 메서드
 	public int addMeetRoomCal(Reservation reservation) {
        return meetRoomReservMapper.insertMeetCal(reservation);
@@ -41,6 +41,11 @@ public class MeetRoomReservService {
 	// 회의실 예약 목록 (사원)
 	public List<Reservation> getReservations(Map<String, Object> map){
 		return meetRoomReservMapper.selectMeetReserved(map);
+	}
+	
+	// 회의실 예약 목록 조회 (경영지원팀)
+	public List<Reservation> getAllReservations(Map<String, Object> map){
+		return meetRoomReservMapper.selectAllMeetReserved(map);
 	}
 	
 }

@@ -15,17 +15,22 @@
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-
+			<div>
+<!-- 		<label for="searchInput">회의실 검색:</label>
+		    <input type="text" id="searchInput" name="searchInput">
+		    <button id="searchButton">검색</button> -->
+			</div>
 			<!-- 관리 회의실 리스트 -->
 			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
 			<table class="table">
 			    <thead>
 			        <tr>
 			            <td>회의실 번호</td>
-			            <td>기자재카테고리</td>
+			            <td>카테고리</td>
 			            <td>회의실이름</td>
 			            <td>수용인원</td>
-			            <td rowspan="1">사용여부</td>
+			            <td>사용여부</td>
+			            <td rowspan="1">추가일</td>
 			            <td></td>
 			        </tr>
 			    </thead>
@@ -42,6 +47,7 @@
 			                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
 			                    </c:choose>
 			                </td>
+			                <td class="createdate">${m.createdate}</td>
 			                <td>
 			                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
 			                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
@@ -60,7 +66,7 @@
 			            <div class="modal-body">
 			                <form id="addForm">
 			                <input type="hidden" id="modalAddCate" name="equipCategory">
-			                <input type="hidden" name="empNo" value="11111111"> <!-- testId -->
+			                <input type="hidden" name="empNo" value="${empNo}"> <!-- testId -->
 			                    <div class="mb-3">
 			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
 			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName" placeholder="회의실 이름을 입력하세요">
@@ -93,7 +99,7 @@
 			            </div>
 			            <div class="modal-body">
 			                <form id="updateForm">
-			                    <!-- hidden : roomNo, Category -->
+			                    <!-- hidden : roomNo, Category -->		                    
 			                    <input type="hidden" id="modalRoomNo" name="roomNo">
 			                    <input type="hidden" id="modalCate" name="equipCategory">
 			                    <div class="mb-3">
@@ -126,6 +132,41 @@
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 <script>
+/* $(document).ready(function() {
+    // 검색 버튼 또는 입력 필드에 입력 시
+    $('#searchButton, #searchInput').on('input', function() {
+        const searchTerm = $('#searchInput').val(); // 입력한 검색어
+        
+        $.ajax({
+            url: '/JoinTree/search',
+            type: 'post',
+            data: { searchTerm: searchTerm },
+            success: function(meetingRooms) {
+                // 검색 결과를 화면에 표시하는 로직 구현
+                // 예: 검색 결과를 테이블의 tbody에 추가
+                const tbody = $('#meetRoomTable tbody');
+                tbody.empty(); // 기존 내용 제거
+                
+                meetingRooms.forEach(function(meetingRoom) {
+                    const row = $('<tr>');
+                    row.append($('<td>').text(meetingRoom.roomNo));
+                    row.append($('<td>').text(meetingRoom.equipCategory));
+                    row.append($('<td>').text(meetingRoom.roomName));
+                    row.append($('<td>').text(meetingRoom.roomCapacity));
+                    row.append($('<td>').text(meetingRoom.roomStatus === 1 ? '사용가능' : '사용불가'));
+                    
+                    tbody.append(row);
+                });
+            },
+            error: function() {
+                console.log('검색 실패');
+            }
+        });
+    });
+}); */
+
+
+
 // 추가 모달창 스크립트
 $('#addModal').on('show.bs.modal', function (event) {
     //열리기 전 값 초기화 show.bs.modal (모달창이 보여지기 직전에 발생하는 event)

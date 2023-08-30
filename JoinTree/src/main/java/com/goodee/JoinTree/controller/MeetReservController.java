@@ -1,7 +1,5 @@
 package com.goodee.JoinTree.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -124,12 +121,12 @@ public class MeetReservController {
 		return "/reservation/empMeetRoomReservedList";
 	}
     
-    // (emp) 예약 취소 메서드
+    // (emp&admin) 예약 취소 메서드
     @PostMapping("/cancelReserved") // ajax url
     @ResponseBody
     public String cancelReserved(HttpSession session, @RequestBody Reservation reservation) {
         try {
-            int empNo = 11111111; // 임시 --> 회의실 조회 그대로
+            int empNo = 20233003; // 임시 --> 회의실 조회 그대로
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("equipCategory", "E0101");
             paramMap.put("empNo", empNo);
@@ -159,6 +156,23 @@ public class MeetReservController {
         }
     }
     
+    
+    // 사원 회의실 예약 관리(경영지원팀) view
+    @GetMapping("reservation/adminMeetRoomReservList")
+	public String empAllMeetReserved(HttpSession session, Model model, 
+			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
+ 
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("equipCategory", equipCategory);
+			
+		List<Reservation> empAllMeetReserved = meetRoomReservService.getAllReservations(paramMap);
+		model.addAttribute("empAllMeetReserved", empAllMeetReserved);
+		
+		log.debug(AN+"reservController 경영지원팀 list : "+empAllMeetReserved.toString()+RE);
+		
+		return "/reservation/adminMeetRoomReservList";
+	}
+     
     // 현재시간 기준 예약 종료시간 이후면 사용완료로 변경하기 위한 메서드
     /*@Scheduled(cron = "10 * * * * *") // 임시 - 10초마다 실행
     public void updateReservStatus() {
@@ -176,8 +190,8 @@ public class MeetReservController {
                 LocalDateTime endTime = LocalDateTime.parse(reservation.getRevEndTime(), formatter);
                 LocalDateTime currentDateTime = currentTime;
 
-                if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면
-                    if (reservation.getRevStatus().equals("A0302")) {
+                if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면(현재 시간의 이전이면)
+                    if (reservation.getRevStatus().equals("A0302")) { // 예약 완료 상태인 건은
                         reservation.setRevStatus("A0304"); // 사용완료 상태로 변경
                         meetRoomReservService.modifyMeetRoomCal(reservation);
                     }

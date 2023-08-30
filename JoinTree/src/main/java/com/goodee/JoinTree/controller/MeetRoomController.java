@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.goodee.JoinTree.mapper.MeetRoomMapper;
 import com.goodee.JoinTree.service.MeetRoomService;
-import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +30,8 @@ public class MeetRoomController {
 	
 	@Autowired
 	private MeetRoomService meetRoomService;
+	@Autowired
+	private MeetRoomMapper meetRoomMapper;
 	
 	// 아이디 세션 검사 추후 추가 예정
 	// 회의실 목록 조회
@@ -89,7 +91,7 @@ public class MeetRoomController {
     // 회의실 수정 액션(post)
     @PostMapping("/equipment/modifyMeetRoom")
     public String updateMeetRoom(HttpSession session,MeetingRoom meetingRoom) {
-        meetRoomService.modifyMeetRoom(meetingRoom);
+        meetRoomService.modifyMeetRoom(meetingRoom); 
         log.debug(AN+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RE);
         return "redirect:/equipment/meetRoomList";
     }
@@ -127,5 +129,16 @@ public class MeetRoomController {
             return "fail";
         }
     } 
-	
+    
+	/*
+	 * // 회의실 검색
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("/search") public List<MeetingRoom>
+	 * searchMeetingRooms(@RequestParam String roomName) { List<MeetingRoom>
+	 * meetingRooms = meetRoomMapper.searchMeetRoom(roomName); return meetingRooms;
+	 * }
+	 */
+ 	
 }

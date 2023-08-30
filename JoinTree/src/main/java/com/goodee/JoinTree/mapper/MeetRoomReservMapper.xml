@@ -82,7 +82,7 @@
 		)	
 	</insert>
 	
-	<!-- 사원별 예약 조회 -->
+	<!-- 사원별 예약 조회 empNo-->
 	<select id="selectMeetReserved" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Reservation">
 		SELECT
 			r.rev_no revNo,
@@ -101,6 +101,30 @@
 		FROM reservation r
 		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
 		WHERE r.emp_no = #{empNo} AND r.equip_category = #{equipCategory}
+		ORDER BY createdate DESC;
+	</select>
+	
+	<!-- 경영지원팀의 모든 예약 조회 / 관리자가 예약 취소 시켰을 시 update id >> 관리자 id로 보이게-->
+	<select id="selectAllMeetReserved" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Reservation">
+		SELECT
+		    r.rev_no revNo,
+		    r.emp_no empNo,
+		    e.emp_name empName,
+		    r.equip_no equipNo,
+		    r.equip_category equipCategory,
+		    r.rev_start_time revStartTime,
+		    r.rev_end_time revEndTime,
+		    r.rev_status revStatus,
+		    r.rev_reason revReason,
+		    r.createdate,
+		    r.updatedate,
+		    r.create_id createId,
+		    r.update_id updateId,
+		    m.room_name roomName
+		FROM reservation r
+		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
+		INNER JOIN emp_info e ON r.emp_no = e.emp_no <!-- 사원 이름 -->
+		WHERE r.equip_category = #{equipCategory}
 		ORDER BY createdate DESC;
 	</select>
 	
