@@ -126,11 +126,18 @@ public class LoginController {
 
 	@GetMapping("/logout")
 	public String logout (HttpSession session) throws UnsupportedEncodingException {
+		String msg = URLEncoder.encode("로그아웃 되었습니다.", "UTF-8");
+		
+		String msgParam = (String) session.getAttribute("msgParam");
+		
+		
+		if (msgParam != null && !msgParam.isEmpty()) {
+			msg = msgParam;
+		}
+		
 		session.invalidate();
 		
-		String msg = URLEncoder.encode("로그아웃 되었습니다.", "UTF-8");
 		return "redirect:/login/login?msg=" + msg; // login.jsp로 이동
-		// return "redirect:/login";
 	}
 	
 	// 비밀번호 분실 - 재설정 페이지로 이동

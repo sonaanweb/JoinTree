@@ -57,11 +57,11 @@ public class EmpInfoController {
 		int row = empInfoService.modifyPw(account);
 		log.debug(CYAN + row + " <-- row(EmpInfoController-modifyPw)" + RESET);
 		
+		String msgParam = "";
 		if (row == 1) {
-			msg = URLEncoder.encode("비밀번호가 변경되었습니다. 다시 로그인 후 이용 가능합니다.", "UTF-8");
-			session.setAttribute("pwChangeMessage", msg); // 메시지를 세션에 저장
-			
-			return "redirect:/logout?msg=" + msg;
+			msgParam = URLEncoder.encode("비밀번호가 변경되었습니다. 다시 로그인 후 이용 가능합니다.", "UTF-8");
+			session.setAttribute("msgParam", msgParam); // 메시지를 세션에 저장
+			return "redirect:/logout";
 		} else {
 			msg = URLEncoder.encode("비밀번호 변경 실패. 현재 비밀번호를 확인해주세요.", "UTF-8");
 			return "redirect:/empInfo/modifyPw?msg=" + msg;
@@ -171,7 +171,7 @@ public class EmpInfoController {
 		
 		int empNo = loginAccount.getEmpNo();
 		
-		// 파일 저장 경로 설정
+		// 저장된 파일 경로
 		String path = request.getServletContext().getRealPath("/empImg/"); // 실제 파일 시스템 경로
 		
 		int row = empInfoService.removeEmpImg(empNo, path);
@@ -219,15 +219,5 @@ public class EmpInfoController {
 	    }
 	}
 	
-	@PostMapping("/empInfo/modifyEmp/modifyEmpImg")
-	@ResponseBody
-	public String modifyEmpImg(HttpServletRequest request, HttpSession session, Model model) {
-		int row = 1;
-		
-		if (row == 1) {
-			return "success";
-		} else {
-			return "false";
-		} 
-	}
+
 }
