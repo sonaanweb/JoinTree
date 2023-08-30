@@ -81,13 +81,13 @@
 	    create_id createId,
 	    update_id updateId
 	FROM schedule
-	WHERE ((schedule_category = 'S0101' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()) OR
+	WHERE ((schedule_category = 'S0101' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()) OR
 		       (emp_no IN (
 		           SELECT emp_no
 		           FROM emp_info
 		           WHERE dept = #{dept}
-	      ) AND schedule_category = 'S0102' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()) OR
-	       (emp_no = #{empNo} AND schedule_category = 'S0103' AND DATE(schedule_start) &lt;= CURDATE() AND DATE(schedule_end) >= CURDATE()));
+	      ) AND schedule_category = 'S0102' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()) OR
+	       (emp_no = #{empNo} AND schedule_category = 'S0103' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()));
     </select>
     
     <!-- 일정 추가 -->
