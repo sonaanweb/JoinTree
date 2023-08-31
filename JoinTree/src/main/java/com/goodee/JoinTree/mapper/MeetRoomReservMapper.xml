@@ -150,6 +150,9 @@
 	    INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
 	    INNER JOIN emp_info e ON r.emp_no = e.emp_no <!-- 사원 이름 -->
 	    <where>
+	    	<if test="empName != null and empName != ''">
+	    		AND e.emp_name = #{empName}
+	    	</if>
 	        <if test="revStatus != null and revStatus != ''">
 	            AND r.rev_status = #{revStatus}
 	        </if>
@@ -159,7 +162,7 @@
 	        <if test="revStartTime != null and revStartTime != ''">
 	            AND DATE(r.rev_start_time) &gt;= #{revStartTime}
 	        </if>
-	        <if test="(revStatus == null and revStatus == '') and (revStartTime == null and revStartTime == '') and (revEndTime == null and revEndTime == '')">
+	        <if test="(revStatus == null and revStatus == '') and (revStartTime == null and revStartTime == '') and (revEndTime == null and revEndTime == '') and (empName == null and empName == '')">
 	            AND 1 = 1
 	        </if>
 	    </where>

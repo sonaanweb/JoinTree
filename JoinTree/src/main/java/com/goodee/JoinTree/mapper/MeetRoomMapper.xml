@@ -91,9 +91,17 @@
 		WHERE room_no = #{roomNo}
 	</delete>
 	
-	<!-- 회의실 이름 검색 -->
+	<!-- 회의실 관리 검색 기능 (회의실이름) -->
 	<select id="searchMeetRoom" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
 	    SELECT * FROM meeting_room
-	    WHERE room_name LIKE CONCAT('%', #{roomName}, '%')
+      	<where>
+	    	<if test="roomName != null and roomName != ''">
+	    		AND room_name LIKE CONCAT('%', #{roomName}, '%')
+	    	</if>
+	    	<if test="roomName == null and roomName == ''">
+	            AND 1 = 1
+	        </if>
+	    </where>
+		ORDER BY createdate DESC;
 	</select>
 </mapper>

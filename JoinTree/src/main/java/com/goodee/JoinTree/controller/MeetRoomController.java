@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.goodee.JoinTree.mapper.MeetRoomMapper;
 import com.goodee.JoinTree.service.MeetRoomService;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
@@ -32,8 +31,8 @@ public class MeetRoomController {
 	
 	@Autowired
 	private MeetRoomService meetRoomService;
-	@Autowired
-	private MeetRoomMapper meetRoomMapper;
+//	@Autowired
+//	private MeetRoomMapper meetRoomMapper;
 	
 	// 아이디 세션 검사 추후 추가 예정
 	// 회의실 목록 조회

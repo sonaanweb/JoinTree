@@ -182,10 +182,12 @@ public class MeetReservController {
     @GetMapping("/reservation/search") //ajax url
     @ResponseBody
     public ResponseEntity<List<Reservation>> searchReservation(
+    		@RequestParam(name = "empName", required = false) String empName,
             @RequestParam(name = "revStatus", required = false) String revStatus,
             @RequestParam(name = "revStartTime", required = false) String revStartTime,
             @RequestParam(name = "revEndTime", required = false) String revEndTime) {
         Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("empName", empName);
         paramMap.put("revStatus", revStatus);
         paramMap.put("revStartTime", revStartTime);
         paramMap.put("revEndTime", revEndTime);

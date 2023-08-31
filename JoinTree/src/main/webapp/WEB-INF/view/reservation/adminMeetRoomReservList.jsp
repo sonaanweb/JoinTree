@@ -17,6 +17,10 @@
     <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		<h4>경영지원팀 예약관리</h4>
 		<div>
+            <label>예약일시:</label>
+            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
+        </div>
+		<div>
             <label>예약 상태:</label>
             <input type="radio" name="revStatus" value=""> 전체
             <input type="radio" name="revStatus" value="A0302"> 예약완료
@@ -24,9 +28,9 @@
             <input type="radio" name="revStatus" value="A0304"> 사용완료
         </div>
         <div>
-            <label>예약일시:</label>
-            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
-            <button id="searchButton">검색</button>
+        	<label>예약자:</label>
+        	<input type="text" name="empName">
+        	<button id="searchButton">검색</button>
         </div>
 		
         <table class="table">
@@ -123,12 +127,14 @@ $(document).ready(function () {
 	
 	// 검색
 	$('#searchButton').on('click', function () {
-        var revStatus = $("input[name='revStatus']:checked").val();
-        var revStartTime = $("input[name='revStartTime']").val();
-        var revEndTime = $("input[name='revEndTime']").val();
-
-        searchReservation(revStatus, revStartTime, revEndTime);
-    });
+	    var revStatus = $("input[name='revStatus']:checked").val();
+	    var revStartTime = $("input[name='revStartTime']").val();
+	    var revEndTime = $("input[name='revEndTime']").val();
+	    var empName = $("input[name='empName']").val();
+	
+	    searchReservation(revStatus, revStartTime, revEndTime, empName);
+	    console.log(empName);
+	});
 	
 	
 	// 검색했을 시 버튼 다시 활성화
@@ -152,14 +158,15 @@ $(document).ready(function () {
         });
     }); */
     
-    function searchReservation(revStatus, revStartTime, revEndTime) {
+    function searchReservation(revStatus, revStartTime, revEndTime, empName) {
         $.ajax({
             type: "GET",
             url: "/JoinTree/reservation/search",
             data: {
                 "revStatus": revStatus,
                 "revStartTime": revStartTime,
-                "revEndTime": revEndTime
+                "revEndTime": revEndTime,
+                "empName": empName
             },
             contentType: "application/json",
             success: function (response) {
@@ -192,7 +199,7 @@ $(document).ready(function () {
                     tbody.append(row);
                 }
                 
-                if (revStatus === null && revStartTime === "" && revEndTime === "") {
+                if (revStatus === null && revStartTime === "" && revEndTime === "" && empName == "") {
                     // 검색 결과 데이터를 활용하여 전체 목록을 업데이트하는 로직
                     for (var i = 0; i < response.length; i++) {
                         var reservation = response[i];

@@ -18,6 +18,11 @@
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
+			<div>
+            <label>회의실명:</label>
+            <input type="text" name="roomName">
+            <button id="searchButton">검색</button>
+        	</div>
 			<table class="table">
 			    <thead>
 			        <tr>
@@ -62,7 +67,7 @@
 			            <div class="modal-body">
 			                <form id="addForm">
 			                <input type="hidden" id="modalAddCate" name="equipCategory">
-			                <input type="hidden" name="empNo" value="${empNo}"> <!-- testId -->
+			                <input type="hidden" name="empNo" value="11111111"> <!-- testId -->
 			                    <div class="mb-3">
 			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
 			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName" placeholder="회의실 이름을 입력하세요">
@@ -128,6 +133,13 @@
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 <script>
+//검색
+/* $('#searchButton').on('click', function () {
+    var revStatus = $("input[name='roomName']").val();
+    searchmeetRoom(roomName);
+    console.log(roomName);
+});
+ */
 
 // 추가 모달창 스크립트
 $('#addModal').on('show.bs.modal', function (event) {
