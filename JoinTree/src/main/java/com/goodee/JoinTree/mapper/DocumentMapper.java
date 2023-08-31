@@ -45,6 +45,12 @@ public interface DocumentMapper {
 	// 인사이동 기안서 삭제
 	int removeDocReshuffle(DocumentReshuffle documentReshuffle);
 			
+	// 기안서 결재상태 변경 (결재)
+	int approveDocDefault1(DocumentDefault documentDefault);
+	int approveDocDefault2(DocumentDefault documentDefault);
+	
+	// 기안서 결재상태 변경 (반려)
+	int rejectDocDefault(DocumentDefault documentDefault);
 	
 	// 기안서 상세보기 
 	// 기본 기안서 상세보기

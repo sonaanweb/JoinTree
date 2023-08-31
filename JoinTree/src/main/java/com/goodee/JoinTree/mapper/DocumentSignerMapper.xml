@@ -22,4 +22,16 @@
 			#{updateId}
 		)
 	</insert>
+	
+	<select id="signerCnt">
+		SELECT COUNT(*) 
+		FROM document_signer
+		WHERE doc_no = #{docNo}
+	</select>
+	
+	<select id="signerLevel" parameterType="com.goodee.JoinTree.vo.DocumentSigner">
+		SELECT emp_signer_level empSignerLevel
+		FROM document_signer
+		WHERE doc_no = #{docNo} AND emp_signer_no = #{empSignerNo} 
+	</select>
 </mapper>

@@ -7,4 +7,10 @@ import com.goodee.JoinTree.vo.DocumentSigner;
 public interface DocumentSignerMapper {
 	// 결재자 추가
 	int addDocSigner(DocumentSigner documentSigner);
+	
+	// 결재자 수 체크
+	int signerCnt(int docNo); 
+	
+	// 결제자 레벨 체크
+	int signerLevel(DocumentSigner documentSigner);
 }

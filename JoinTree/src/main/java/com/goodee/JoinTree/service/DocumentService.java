@@ -159,5 +159,41 @@ public class DocumentService {
 		
 		return getDocumentOne;
 	}
+	
+	// 첫 번째 결재자가 결재
+	public int approveDocDefault1(DocumentDefault documentDefault) {
+		int row = documentMapper.approveDocDefault1(documentDefault);
+		
+		return  row;
+		
+	}
+	
+	// 두 번째 결재자가 결재
+	public int approveDocDefault2(DocumentDefault documentDefault) {
+		int row = documentMapper.approveDocDefault2(documentDefault);
+		
+		return  row;
+	}
+	
+	// 결재자가 반려 처리
+	public int rejectDocDefault(DocumentDefault documentDefault) {
+		int row = documentMapper.rejectDocDefault(documentDefault);
+		
+		return row;
+	}
+	
+	// 결재자 수 확인
+	public int getSignerCnt(int docNo) {
+		int row = documentSignerMapper.signerCnt(docNo);
+		
+		return row;
+	}
+	
+	// 결재자 레벨 확인
+	public int getSignerLevel(DocumentSigner documentSigner) {
+		int row = documentSignerMapper.signerLevel(documentSigner);
+		
+		return row;
+	}
 
 }

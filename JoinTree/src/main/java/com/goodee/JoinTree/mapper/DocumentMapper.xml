@@ -143,6 +143,35 @@
 		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
 	</update>
 	
+	<!-- 첫 번째 결재자 결재 -->
+	<update id="approveDocDefault1" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		UPDATE document_default
+		SET doc_status = #{docStatus}, 
+			doc_stamp2 = #{docStamp2}, 
+			updatedate = NOW(), 
+			update_id = #{updateId}
+		WHERE doc_no = #{docNo}
+	</update>
+	
+	<!-- 두 번째 결재자 결재 -->
+	<update id="approveDocDefault2" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		UPDATE document_default
+		SET doc_status = #{docStatus}, 
+			doc_stamp3 = #{docStamp3}, 
+			updatedate = NOW(), 
+			update_id = #{updateId}
+		WHERE doc_no = #{docNo}
+	</update>
+	
+	<!-- 반려 -->
+	<update id="rejectDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
+		UPDATE document_default
+		SET doc_status = #{docStatus}, 
+			updatedate = NOW(), 
+			update_id = #{updateId}
+		WHERE doc_no = #{docNo}
+	</update>
+	
 	
 	<!-- 삭제 -->
 	<!-- 기본 기안서 삭제 -->
