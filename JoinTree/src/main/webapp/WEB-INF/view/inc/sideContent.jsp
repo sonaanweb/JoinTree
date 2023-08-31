@@ -49,10 +49,10 @@
 						<c:if test="${child.upCode == 'B01' && child.status == 'Y'}">
 							<c:choose>
 								<c:when test="${child.codeName == '공지사항'}">
-									<li class="nav-item"><a class="nav-link" href="">공지사항</a></li>
+									<li class="nav-item"><a class="nav-link" href="/JoinTree/board/noticeList">공지사항</a></li>
 								</c:when>
 								<c:when test="${child.codeName == '자료실'}">
-									<li class="nav-item"><a class="nav-link" href="">자료실</a></li>
+									<li class="nav-item"><a class="nav-link" href="/JoinTree/board/libraryList">자료실</a></li>
 								</c:when>
 							</c:choose>
 						</c:if>
@@ -246,7 +246,7 @@
 					<ul class="nav flex-column sub-menu">
 						<li class="nav-item"> <a class="nav-link" href="/JoinTree/empManage/selectEmpList">사원관리</a></li>
 						<li class="nav-item"> <a class="nav-link" href="/JoinTree/commuteManage/commuteFullList">출퇴근관리</a></li>
-						<li class="nav-item"> <a class="nav-link" href="/JoinTree/commuteManage/leaveList">연차관리</a></li>
+						<li class="nav-item"> <a class="nav-link" href="/JoinTree/commuteManage/leaveList">연가관리</a></li>
 						<li class="nav-item"> <a class="nav-link" href="/JoinTree/commuteManage/annualLeaveList">연차관리</a></li>
 					</ul>
 				</div>
