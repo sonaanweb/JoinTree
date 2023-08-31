@@ -298,9 +298,7 @@
 			// 변경 후 직급
 			const docReshufflePosition = $("#docReshufflePosition").val();
 			console.log("docReshufflePosition:",docReshufflePosition);
-			// 발령 사유
-			const docReshuffleReason = $("#docReshuffleReason").val();
-			console.log("docReshuffleReason:",docReshuffleReason);
+			
 			
 			// 공통
 			// 파일
@@ -350,7 +348,7 @@
 				return;
 			}
 			
-			// 기본 기안서 값 넘기기
+			// 기본 기안서, 퇴직기안서 값 넘기기
 			$.ajax({
 				type: 'POST',
 				url: '/JoinTree/document/docDefault',
@@ -387,8 +385,14 @@
 					
 					// 카테고리가 휴가 일때 
 					if(category === 'D0102') {
-						submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel);
+						submitLeaveDocument(docNo, leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel, createId, updateId);
 					}
+					
+					// 카테고리가 인사이동 일때 
+					if(category === 'D0103') {
+						submitReshuffleDocument(docNo, docReshuffleDate, docReshuffleTask, docReshuffleResult, docReshuffleDept, docReshufflePosition, createId, updateId);
+					}
+					
 
 					window.location.href = '/JoinTree/home'; // 홈 페이지 URL로 변경
 					
@@ -469,27 +473,57 @@
 			}
 			
 			// 휴가 기안서 비동기
-			function submitLeaveDocument(leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel) {
+			function submitLeaveDocument(docNo, leaveCate, docLeaveStartDate, docLeaveEndDate, docLeavePeriodDate, docLeaveTel, createId, updateId) {
 				$.ajax({
 					type: 'POST',
-					url: '/JoinTree/document/',
+					url: '/JoinTree/document/docLeave',
 					data: {
-						leave: leaveCate,
+						docNo: docNo,
+						leaveCategory: leaveCate,
 						docLeaveStartDate: docLeaveStartDate,
 						docLeaveEndDate: docLeaveEndDate,
 						docLeavePeriodDate: docLeavePeriodDate,
-						docLeaveTel: docLeaveTel
+						docLeaveTel: docLeaveTel,
+						createId: createId,
+						updateId: updateId
 					},
 					success: function(response) {
-						console.log("response:", response);
-						
-						// 결재자가 한 명만 있을 경우
-						submitDocumentSigner(docNo, empSignerNo, empSignerLevel, createId, updateId);
-						
-						// 두 번째 결재자가 있을 경우
-						if (signer2) {
-						submitDocumentSigner(docNo, signer2, empSignerLevel2, createId, updateId);
+						if(response === 'success'){
+							alert("휴가기안 등록성공");
+						} else {
+							alert("휴가기안 등록실패");
 						}
+						
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("Error:", textStatus, errorThrown);
+					}
+				});
+			}
+			
+			// 인사이동 기안서 비동기
+			function submitReshuffleDocument(docNo, docReshuffleDate, docReshuffleTask, docReshuffleResult, docReshuffleDept, docReshufflePosition, createId, updateId) {
+				$.ajax({
+					type: 'POST',
+					url: '/JoinTree/document/docReshuffle',
+					data: {
+						docNo: docNo,
+						docReshuffleDate: docReshuffleDate,
+						docReshuffleTask: docReshuffleTask,
+						docReshuffleResult: docReshuffleResult,
+						docReshuffleDept: docReshuffleDept,
+						docReshufflePosition: docReshufflePosition,
+						createId: createId,
+						updateId: updateId
+						
+					},
+					success: function(response) {
+						if(response === 'success'){
+							alert("인사이동기안 등록성공");
+						} else {
+							alert("인사이동기안 등록실패");
+						}
+						
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 						console.log("Error:", textStatus, errorThrown);

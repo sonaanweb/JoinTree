@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodee.JoinTree.mapper.DocumentMapper">
 	<!-- 입력 -->
-	<!-- 기본 기안서 입력 -->
+	<!-- 기본 기안서, 퇴직 기안서 입력 -->
  	<insert id="addDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
  		<selectKey order="AFTER" keyProperty="docNo" resultType="int">
 	        SELECT last_insert_id()
@@ -47,11 +47,10 @@
  	<insert id="addDocLeave" parameterType="com.goodee.JoinTree.vo.DocumentLeave">
 		INSERT INTO document_leave(
 			doc_no,
-			leave,
+			leave_category,
 			doc_leave_start_date,
 			doc_leave_end_date,
 			doc_leave_period_date,
-			doc_leave_reason,
 			doc_leave_tel,
 			createdate,
 			updatedate,
@@ -60,16 +59,15 @@
 		)
 		VALUES(
 			#{docNo},
-			#{leave},
+			#{leaveCategory},
 			#{docLeaveStartDate},
 			#{docLeaveEndDate},
 			#{docLeavePeriodDate},
-			#{docLeaveReason},
 			#{docLeaveTel},
 			now(),
 			now(),
-			#{empNo},
-			#{empNo}
+			#{createId},
+			#{updateId}
 		)
 	</insert>
 	
@@ -82,7 +80,6 @@
 			doc_reshuffle_result,
 			doc_reshuffle_dept,
 			doc_reshuffle_position,
-			doc_reshuffle_reason,
 			createdate,
 			updatedate,
 			create_id,
@@ -95,36 +92,12 @@
 			#{docReshuffleResult},
 			#{docReshuffleDept},
 			#{docReshufflePosition},
-			#{docReshuffleReason},
 			now(),
 			now(),
-			#{empNo},
-			#{empNo}
+			#{createId},
+			#{updateId}
 		)
 	</insert>
-	
-	<!-- 퇴직 기안서 입력 -->
- 	<insert id="addDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
-		INSERT INTO document_resign(
-			doc_no,
-			doc_resign_date,
-			doc_resign_reason,
-			createdate,
-			updatedate,
-			create_id,
-			update_id
-		)
-		VALUES(
-			#{docNo},
-			#{docResignDate},
-			#{docResignReason},
-			now(),
-			now(),
-			#{empNo},
-			#{empNo}
-		)
-	</insert>
-	
 	
 	<!-- 수정 -->
 	<!-- 기본 기안서 수정 -->
@@ -170,17 +143,6 @@
 		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
 	</update>
 	
-	<!-- 퇴직 기안서 수정 -->
- 	<update id="modifyDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
-		UPDATE document_resign
-		SET
-			doc_resign_date = #{docResignDate},
-			doc_resign_reason = #{docResignReason},
-			updatedate = now(),
-			update_id = #{empNo}
-		WHERE doc_no = #{docNo} AND emp_no = #{empNo}
-	</update>
-	
 	
 	<!-- 삭제 -->
 	<!-- 기본 기안서 삭제 -->
@@ -203,14 +165,7 @@
 		FROM document_reshuffle
 		WHERE doc_no = #{docNo}
 	</delete>
-	
-	<!-- 퇴직 기안서 삭제 -->
- 	<delete id="removeDocResign" parameterType="com.goodee.JoinTree.vo.DocumentResign">
-		DELETE
-		FROM document_resign
-		WHERE doc_no = #{docNo}
-	</delete>
-	
+		
 	
 	<!-- 조회 -->
 	<!-- 기본 기안서 조회 -->
@@ -275,23 +230,6 @@
 			update_id updateId
 		FROM
 			document_reshuffle
-		WHERE doc_no = #{docNo}
-	</select>
-	
-	<!-- 퇴직 기안서 조회 -->
-	<select id="selectDocResignOne"
-		parameterType="com.goodee.JoinTree.vo.DocumentResign"
-		resultType="com.goodee.JoinTree.vo.DocumentResign">
-		SELECT 
-			doc_no docNo,
-			doc_resign_date docResignDate,
-			doc_resign_reason docResignReason,
-			createdate,
-			updatedate,
-			create_id createId,
-			update_id updateId
-		FROM
-			document_resign
 		WHERE doc_no = #{docNo}
 	</select>
 	

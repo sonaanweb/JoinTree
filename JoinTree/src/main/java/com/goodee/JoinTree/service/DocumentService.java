@@ -19,6 +19,8 @@ import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.DocumentDefault;
 import com.goodee.JoinTree.vo.DocumentFile;
+import com.goodee.JoinTree.vo.DocumentLeave;
+import com.goodee.JoinTree.vo.DocumentReshuffle;
 import com.goodee.JoinTree.vo.DocumentSigner;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +47,7 @@ public class DocumentService {
 		return documentCodeList;
 	}
 	
-	// 기본 기안서에 정보추가
+	// 기본(퇴직) 기안서에 정보추가
 	public int addDocDefault(DocumentDefault documentDefault) {
 		
 		int row = documentMapper.addDocDefault(documentDefault);
@@ -53,6 +55,25 @@ public class DocumentService {
 		log.debug(row +"<-- DocumentService documentDefault row");
 	    return row;
 	}
+	
+	// 휴가 기안서에 정보추가
+	public int addDocLeave(DocumentLeave documentLeave) {
+		
+		int row = documentMapper.addDocLeave(documentLeave);
+			
+		log.debug(row +"<-- DocumentService documentLeave row");
+	    return row;
+	}
+	
+	// 인사이동 기안서에 정보추가
+	public int addDocReshuffle(DocumentReshuffle documentReshuffle) {
+		
+		int row = documentMapper.addDocReshuffle(documentReshuffle);
+			
+		log.debug(row +"<-- DocumentService documentReshuffle row");
+	    return row;
+	}
+	
 	
 	public String fileUpload(HttpSession session, HttpServletRequest request, MultipartFile file, int docNo, String category) {
 	    // 세션에서 로그인 유저 정보 가져오기

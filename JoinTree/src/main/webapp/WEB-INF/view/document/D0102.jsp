@@ -59,7 +59,7 @@
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.empName}"></td>
+								<td><input type="text" id="writer" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -71,7 +71,7 @@
 					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
 					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
 					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="writer" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>

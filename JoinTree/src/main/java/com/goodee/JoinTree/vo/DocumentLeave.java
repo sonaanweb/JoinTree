@@ -6,11 +6,10 @@ import lombok.Data;
 public class DocumentLeave {
 
 	private int docNo;
-	private String leave;
+	private String leaveCategory;
 	private String docLeaveStartDate;
 	private String docLeaveEndDate;
 	private double docLeavePeriodDate;
-	private String docLeaveReason;
 	private String docLeaveTel;
 	private String createdate;
 	private String updatedate;

@@ -44,22 +44,22 @@
 						<tbody>
 							<tr>
 								<td>문서번호</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text"readonly="readonly"></td>
 							</tr>
 							
 							<tr>
-								<td>기안부서</td> <!-- receiverTeam? -->
-								<td><input type="text" readonly="readonly" value="${empInfo.dept}"></td>
+								<td>기안부서</td>
+								<td><input type="text" name="receiverTeam" readonly="readonly" value="${empInfo.dept}"></td>
 							</tr>
 							
 							<tr>
 								<td>기안일</td>
-								<td><input type="text" readonly="readonly" id="draftDate"></td>
+								<td><input type="text" name="createdate" readonly="readonly" id="draftDate"></td>
 							</tr>
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly" name="writer" value="${empInfo.empName}"></td>
+								<td><input type="text" id="writer" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -70,8 +70,8 @@
 				<td class="sign">
 					<input type="hidden" id="createId" name="createId" readonly="readonly" value="${empInfo.empNo}">
 					<input type="hidden" id="updateId" name="updateId" readonly="readonly" value="${empInfo.empNo}">
-					<input type="hidden" id="empNo" readonly="readonly" value="${empInfo.empNo}">
-					<input type="text" id="empName" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
+					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
+					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
 				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
 				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
@@ -128,19 +128,10 @@
 			<!-- 퇴직사유 -->
 			<tr>
 				<td>
-					퇴직사유
+					퇴직사유 및 퇴직예정일
 				</td>
 				<td>
-					<textarea id="doc"></textarea> 
-				</td>
-			</tr>
-			<!-- 퇴직예정일 -->
-			<tr>
-				<td>
-					퇴직예정일
-				</td>
-				<td>
-					<input type="date" id="docResignDate">
+					<textarea id="docContent"></textarea> 
 				</td>
 			</tr>
 			<!-- 첨부파일 추가 -->

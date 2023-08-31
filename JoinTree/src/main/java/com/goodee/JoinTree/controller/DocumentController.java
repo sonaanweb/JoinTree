@@ -25,6 +25,8 @@ import com.goodee.JoinTree.service.OrgChartService;
 import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.CommonCode;
 import com.goodee.JoinTree.vo.DocumentDefault;
+import com.goodee.JoinTree.vo.DocumentLeave;
+import com.goodee.JoinTree.vo.DocumentReshuffle;
 import com.goodee.JoinTree.vo.DocumentSigner;
 
 import lombok.extern.slf4j.Slf4j;
@@ -104,7 +106,7 @@ public class DocumentController {
 		return new ModelAndView(path);
 	}
 	
-	// 기본 기안서
+	// 기본 기안서, 퇴직기안서
 	@PostMapping("/document/docDefault")
 	@ResponseBody
 	public int docDefault(DocumentDefault documentDefault) {
@@ -118,6 +120,38 @@ public class DocumentController {
 		}
 		
 		return documentDefault.getDocNo();
+	}
+	
+	// 휴가 기안서
+	@PostMapping("/document/docLeave")
+	@ResponseBody
+	public String docLeave(DocumentLeave documentLeave) {
+		
+		int row = documentService.addDocLeave(documentLeave);
+			
+		log.debug(row+"<--docDefault row ");
+		
+		if(row != 1) { // 실패
+			return "fail";
+		}
+		
+		return "success";
+	}
+	
+	// 인사이동 기안서
+	@PostMapping("/document/docReshuffle")
+	@ResponseBody
+	public String docReshuffle(DocumentReshuffle documentReshuffle) {
+		
+		int row = documentService.addDocReshuffle(documentReshuffle);
+			
+		log.debug(row+"<--docDefault row ");
+		
+		if(row != 1) { // 실패
+			return "fail";
+		}
+		
+		return "success";
 	}
 	
 	// 사인

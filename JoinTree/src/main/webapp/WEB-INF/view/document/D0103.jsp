@@ -44,22 +44,22 @@
 						<tbody>
 							<tr>
 								<td>문서번호</td>
-								<td><input type="text" readonly="readonly"></td>
+								<td><input type="text"readonly="readonly"></td>
 							</tr>
 							
 							<tr>
 								<td>기안부서</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.dept}"></td>
+								<td><input type="text" name="receiverTeam" readonly="readonly" value="${empInfo.dept}"></td>
 							</tr>
 							
 							<tr>
 								<td>기안일</td>
-								<td><input type="text" readonly="readonly" id="draftDate"></td>
+								<td><input type="text" name="createdate" readonly="readonly" id="draftDate"></td>
 							</tr>
 							
 							<tr>
 								<td>기안자</td>
-								<td><input type="text" readonly="readonly" value="${empInfo.empName}"></td>
+								<td><input type="text" id="writer" name="writer" readonly="readonly" value="${empInfo.empName}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -201,6 +201,15 @@
 	</table>
 
 	<table class="table doc-comment">
+	<!-- 제목 입력 -->
+			<tr>
+				<td>
+					제목
+				</td>
+				<td>
+					<input type="text" id="docTitle">
+				</td>
+			</tr>
 	<!-- 주요 업무 -->
 		<tr>
 			<td>
@@ -227,7 +236,7 @@
 				발령 사유
 			</td>
 			<td>
-				<textarea id="docReshuffleReason"></textarea> 
+				<textarea id="docContent"></textarea> 
 			</td>
 		</tr>
 
