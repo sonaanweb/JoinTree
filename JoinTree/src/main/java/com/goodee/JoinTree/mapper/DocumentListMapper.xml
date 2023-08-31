@@ -12,6 +12,13 @@
 			(doc_status IN('A0201', 'A0202') 
 			OR (doc_stamp2 IS NULL AND doc_stamp3 IS NULL AND doc_status = 'A0204'))
 			AND emp_no = #{empNo}
+		    <if test="docTitle != null and docTitle != ''">
+		        AND doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
 	</select>
 	
 	<!-- 검색별 결제함 행의 수 -->
@@ -26,6 +33,16 @@
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
 			AND ds.doc_status IN('A0201', 'A0204')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
+			<if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
 	</select>
 	
 	<!-- 검색별 개인문서함 행의 수 -->
@@ -47,6 +64,16 @@
 	                AND ds.emp_signer_no = #{empNo}
 		        )
 		    )
+		    <if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
 	</select>
 	
 	<!-- 검색별 팀별문서함 행의 수 -->
@@ -58,6 +85,16 @@
 		WHERE 
 			doc_status = 'A0203' 
 			AND receiver_team = #{dept}
+			<if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
 	</select>
 	
 	<!-- 기안문서목록 조회-->
@@ -81,6 +118,15 @@
 			AND d.doc_stamp3 IS NULL 
 			AND d.doc_status = 'A0204'))
 			AND d.emp_no = #{empNo}
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
+	    ORDER BY d.createdate DESC
+		LIMIT #{beginRow}, #{rowPerPage} 
 	</select>
 	
 	<!-- 결재함 조회 -->
@@ -104,6 +150,18 @@
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
 			AND ds.doc_status IN('A0201', 'A0204')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
+			<if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
+	    ORDER BY d.createdate DESC
+		LIMIT #{beginRow}, #{rowPerPage} 
 	</select>
 	
 	<!-- 개인문서함 조회 -->
@@ -134,6 +192,18 @@
 	                AND ds.emp_signer_no = #{empNo}
 		        )
 		    )
+		    <if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
+	    ORDER BY d.createdate DESC
+		LIMIT #{beginRow}, #{rowPerPage} 
 	</select>
 	
 	<!-- 팀별문서함 조회 -->
@@ -154,6 +224,18 @@
 		WHERE 
 			d.doc_status = 'A0203' 
 			AND d.receiver_team = #{dept}
+			<if test="writer != null and writer != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		    </if>
+		    <if test="docTitle != null and docTitle != ''">
+		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		    </if>
+		    <if test="startDate != null and endDate != null 
+		    			and startDate != '' and endDate != ''">
+		    	AND d.createdate BETWEEN #{startDate} AND #{endDate}
+		    </if>
+	    ORDER BY d.createdate DESC
+		LIMIT #{beginRow}, #{rowPerPage} 
 	</select>
 	
 </mapper>

@@ -97,8 +97,8 @@
 		// 검색 및 페이지 데이터 수정 함수
 	  	docListResults(page);
     }
-	
-	// 검색 버튼 클릭 이벤트
+    
+    // 검색 버튼 클릭 이벤트
 	$('#searchDocListBtn').click(function(){
 		docListResults();
 	});
@@ -183,10 +183,6 @@
 					let docReshuffleResult = data.docReshuffleResult // 업무성과
 					let docReshuffleReason = data.docReshuffleReason // 발령사유
 					
-					// 퇴직신청서
-					let docResignReason = data.docResignReason; // 퇴직사유
-					let docResignDate = data.docResignDate; // 퇴직예정일
-					
 					// 사원 상세정보 값 설정
 					// 기본기안서(공통)
 					$('#docNo').text(docNo); // 문서번호
@@ -209,10 +205,12 @@
 					setDocStamp('#docStamp3', docStamp3); // 결재자3 서명 경로 설정
 					
 					// 첨부파일 경로 설정
-					let docSaveFileNameHref = $('#docSaveFileName');
-					docSaveFileNameHref.text(docOriginFileName+" 다운로드");
-					docSaveFileNameHref.attr('href', docSaveFileNameHref.attr('href') + docSaveFileName); // 파일 경로설정
-					docSaveFileNameHref.attr('download', docOriginFileName); // 다운로드할 파일 이름
+					if(docSaveFileName != null){ // 첨부파일이 있을 경우
+						let docSaveFileNameHref = $('#docSaveFileName');
+						docSaveFileNameHref.text(docOriginFileName+" 다운로드");
+						docSaveFileNameHref.attr('href', docSaveFileNameHref.attr('href') + docSaveFileName); // 파일 경로설정
+						docSaveFileNameHref.attr('download', docOriginFileName); // 다운로드할 파일 이름
+					}
 					
 					// 휴가신청서
 					$('#leaveType').text(leaveType); // 연차구분
@@ -228,10 +226,6 @@
 					$('#docReshuffleTask').text(docReshuffleTask); // 주요업무
 					$('#docReshuffleResult').text(docReshuffleResult); // 업무성과
 					$('#docReshuffleReason').text(docReshuffleReason); // 발령사유
-					
-					// 퇴직신청서
-	            	$('#docResignReason').text(docResignReason); // 퇴직사유
-	            	$('#docResignDate').text(docResignDate); // 퇴직예정일
 					
 	                resolve(); // 호출 완료 후 프로미스 resolve 호출
 	            },

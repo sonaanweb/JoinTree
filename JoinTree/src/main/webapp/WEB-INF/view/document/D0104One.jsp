@@ -75,7 +75,7 @@
 			</tr>
 			<!-- 퇴직사유 -->
 			<tr>
-				<td>퇴직사유</td>
+				<td>퇴직사유 및 퇴직예정일</td>
 				<td>
 					<textarea id="docContent"></textarea> 
 				</td>

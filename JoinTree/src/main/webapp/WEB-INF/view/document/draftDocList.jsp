@@ -14,10 +14,6 @@
 						<input type="hidden" id="listId" name="listId" value="draftDocList">
 						<div>
 							<div>
-								<label>기안자</label>
-								<input type="text" id="searchWriter" name="writer">
-							</div>
-							<div>
 								<label>제목</label>
 								<input type="text" id="searchDocTitle" name="docTitle">
 							</div>
