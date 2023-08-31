@@ -343,10 +343,26 @@
 			}
 				console.log("signer2:",signer2);
 				
-			if (!empNo || !writer || !category || !docTitle || !reference || !receiverTeam || !docStamp1 || !createId || !updateId || !signer1) {
-				alert("모든 필수 정보를 입력해주세요.");
-				return;
+			// 필수 입력값 유효성 검사
+			if(category == "D0101" || category == "D0104"){
+				if (!docTitle || !reference || !receiverTeam ||!signer1) {
+					alert("모든 필수 정보를 입력해주세요.");
+					return;
+				}
 			}
+			if(category == "D0102"){
+				if(!docTitle || !reference || !receiverTeam ||!signer1 || !leaveCate || !docLeaveStartDate || !docLeaveEndDate || !docLeavePeriodDate || !docLeaveTel){
+					alert("모든 필수 정보를 입력해주세요.");
+					return;
+				}
+			}
+			if(category == "D0103"){
+				if(!docTitle || !reference || !receiverTeam ||!signer1 || !docReshuffleDate || !docReshuffleTask || !docReshuffleResult || !docReshuffleDept || !docReshufflePosition){
+					alert("모든 필수 정보를 입력해주세요.");
+					return;
+				}
+			}
+			
 			
 			// 기본 기안서, 퇴직기안서 값 넘기기
 			$.ajax({
