@@ -163,7 +163,7 @@ public class MeetReservController {
     
     
     // 사원 회의실 예약 관리(경영지원팀) view
-    @GetMapping("reservation/adminMeetRoomReservList")
+    @GetMapping("/reservation/adminMeetRoomReservList")
 	public String empAllMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
  
