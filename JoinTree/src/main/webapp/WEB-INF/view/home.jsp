@@ -174,11 +174,11 @@
 	                	const todoList = $('#todoList'); // Todo 리스트가 표시될 HTML 엘리먼트 선택
 	    	            todoList.empty(); // 기존 내용 삭제
 	                    data.forEach(function(todo) { 
-	                    	const isChecked = todo.todoStatus === 'Y';
+	                    	const isChecked = todo.todoStatus === '1';
 	                    	const textDecoration = isChecked ? 'text-decoration: line-through;' : '';
 	                    	// id = "todoList" 영역에 리스트 출력
 	                    	const todoItem = '<div class="todo-item">' +
-	                    	   '<input type="checkbox" class="todo-checkbox " data-todono="' + todo.todoNo + '" ' + (todo.todoStatus === 'Y' ? 'checked' : '') + '>&nbsp;' +
+	                    	   '<input type="checkbox" class="todo-checkbox " data-todono="' + todo.todoNo + '" ' + (todo.todoStatus === '1' ? 'checked' : '') + '>&nbsp;' +
 	                    	   '<span class="todo-content" style="' + textDecoration + '">' + todo.todoContent + '</span>&nbsp;' +
 	                    	   '<i class="mdi mdi-delete delete-todo" data-todono="' + todo.todoNo + '"></i>' +
 	                    	   '</>';

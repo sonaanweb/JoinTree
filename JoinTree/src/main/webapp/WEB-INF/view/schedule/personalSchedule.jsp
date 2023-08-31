@@ -11,8 +11,6 @@
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 	<!-- FullCalendar 언어 CDN -->
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	<!-- 부트스트랩 CSS CDN -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 	
 
 
@@ -232,8 +230,8 @@
 	                $('#viewTitle').text(response.scheduleTitle);
 	                $('#viewContent').text(response.scheduleContent);
 	                $('#viewLocation').text(response.scheduleLocation);
-	                $('#viewStart').text(response.scheduleStart);
-	                $('#viewEnd').text(response.scheduleEnd);
+	                $('#viewStart').text(new Date(response.scheduleStart).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+	                $('#viewEnd').text(new Date(response.scheduleEnd).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
 	                
 	             	// response 객체에서 일정 정보를 읽어와서 selectedEvent 객체 생성
 	                var selectedEvent = {

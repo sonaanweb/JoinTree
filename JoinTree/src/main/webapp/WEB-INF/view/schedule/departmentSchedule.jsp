@@ -11,8 +11,6 @@
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 	<!-- FullCalendar 언어 CDN -->
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	<!-- 부트스트랩 CSS CDN -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 
 
 
@@ -129,6 +127,13 @@
 	                textColor: 'red' // 글자색을 빨간색으로 설정
 	            }
 	    	],
+	    	initialView: "dayGridMonth",
+	        titleFormat: function (date) {
+	          year = date.date.year;
+	          month = date.date.month + 1;
+
+	          return year + "년 " + month + "월";
+	        },
 	        timeZone: 'Asia/Seoul',
 	        selectable: true,
 	        events: '/JoinTree/schedule/getDepartmentSchedules',
@@ -225,8 +230,8 @@
 	                $('#viewTitle').text(response.scheduleTitle);
 	                $('#viewContent').text(response.scheduleContent);
 	                $('#viewLocation').text(response.scheduleLocation);
-	                $('#viewStart').text(response.scheduleStart);
-	                $('#viewEnd').text(response.scheduleEnd);
+	                $('#viewStart').text(new Date(response.scheduleStart).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+	                $('#viewEnd').text(new Date(response.scheduleEnd).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
 	                
 	             	// 작성자(empNo)와 로그인한 사용자의 empNo 비교
 	                var loginEmpNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;

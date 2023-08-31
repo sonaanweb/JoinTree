@@ -68,7 +68,7 @@ public class TodoController {
     public String updateTodoStatus(@RequestBody Map<String, Object> paramMap) {
         int todoNo = (int) paramMap.get("todoNo");
         boolean isChecked = (boolean) paramMap.get("isChecked");
-        String todoStatus = isChecked ? "Y" : "N";
+        String todoStatus = isChecked ? "1" : "0";
         int update = todoService.updateTodoStatus(todoNo, todoStatus);
         
         if (update > 0) {
