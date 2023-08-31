@@ -103,8 +103,18 @@
 	// docList tr click 이벤트 : docOneModal 열기
 	$('#docList').on('click', 'tr', async function () {
 	    let documentNo = $(this).find('td:eq(0)').text();
-	    let documentCode = $('#docCode').val();
-	    showDocOneModal(documentNo, documentCode);
+	    let documentCode = $(this).data('docCode');
+	    console.log(documentCode+"<-- documentCode");
+	
+	    try {
+	        await updateDocumentOneForm(documentCode); // 상세 문서양식 폼 업데이트 비동기 처리
+	        await getDocOne(documentNo, documentCode); // 문서 상세내용 조회 비동기 처리
+	
+	        // 모든 비동기 작업이 완료된 후에 모달창을 열어줌
+	        $('#docOneModal').modal('show');
+	    } catch (error) {
+	        console.error(error);
+	    }
 	});
 </script>
 </html>

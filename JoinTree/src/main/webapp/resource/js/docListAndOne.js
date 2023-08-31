@@ -48,7 +48,7 @@
 	    // data의 길이만큼 테이블 행 추가
 	    for (let i = 0; i < data.length; i++) {
 	        let doc = data[i];
-	        let row = $('<tr>');
+	        let row = $('<tr>').data('docCode', doc.docCode);
 	        row.append($('<td>').text(doc.docNo)); // 문서번호
 	        
 	        let dateOnly = doc.createdate.split("T")[0]; // 기안일 날짜 값만 저장
@@ -58,10 +58,6 @@
 	        row.append($('<td>').text(doc.docTitle)); // 부서명
 	        row.append($('<td>').text(doc.empNo + " " + doc.writer)); // 기안자(사번 + 이름)
 	        row.append($('<td>').text(doc.docStatus)); // 상태
-	        
-	        // 문서 카테고리 숨김 요소로 추가
-	        let docCode = $('<input id="docCode">').attr('type', 'hidden').val(doc.docCode);
-	        row.append(docCode);
 	        tbody.append(row);
 	    }
 	}
@@ -86,7 +82,6 @@
 				console.log(data);
 				
 				let docList = data.searchDocListbyPage; // 문서 목록
-				let docCode = docList.docCode; // 문서 카테고리
 				
 				updateDocListTableData(docList); // 테이블 데이터 수정 함수
 				updatePagination(data); // 페이지 네비게이션 데이터 수정 함수
@@ -110,9 +105,9 @@
 	
 	// 결재자 서명 경로 설정 함수
 	function setDocStamp(docStampId, docStampValue){
-		let docStampSrc = $(docStampId);
+		let docStampSrc = $(docStampId); 
 		if(docStampValue){
-			docStampSrc.attr('src', '${pageContext.request.contextPath}/empImg/' + docStampValue);	
+			docStampSrc.attr('src', docStampSrc.attr('src') + docStampValue);
 		} else{
 			docStampSrc.hide();
 		}
@@ -130,6 +125,10 @@
 	            success: function (data) {
 	                $('#documentOneForm').html(data);
 	                resolve(); // 업데이트 완료 후 프로미스 resolve 호출
+	            },
+	            error: function () {
+	                console.log('error');
+	                reject(); // 에러 발생 시 프로미스 reject 호출
 	            }
 	        });
 	    });
@@ -162,7 +161,8 @@
 					let docContent = data.docContent; // 문서 내용
 					let dept = data.dept; // 기안부서
 					let position = data.position; // 기안자 직급
-					let docSaveFileName = data.docSaveFileName; // 첨부파일
+					let docSaveFileName = data.docSaveFileName; // 첨부파일 저장명
+					let docOriginFileName = data.docOriginFileName; // 첨부파일 원본명
 					let signer1Name = data.signer1Name; // 결재자1 사원명
 					let signer1Position = data.signer1Position; // 결재자1 직급
 					let signer2Name = data.signer2Name; // 결재자2 사원명
@@ -210,8 +210,9 @@
 					
 					// 첨부파일 경로 설정
 					let docSaveFileNameHref = $('#docSaveFileName');
-					docSaveFileNameHref.attr('href', '${pageContext.request.contextPath}/docFile/' + docSaveFileName); // 파일 경로설정
-					docSaveFileNameHref.download = docSaveFileName; // 다운로드할 파일 이름
+					docSaveFileNameHref.text(docOriginFileName+" 다운로드");
+					docSaveFileNameHref.attr('href', docSaveFileNameHref.attr('href') + docSaveFileName); // 파일 경로설정
+					docSaveFileNameHref.attr('download', docOriginFileName); // 다운로드할 파일 이름
 					
 					// 휴가신청서
 					$('#leaveType').text(leaveType); // 연차구분
@@ -242,14 +243,4 @@
 	    });
 	}
 	
-	function showDocOneModal(documentNo, documentCode) {
-	    try {
-	        updateDocumentOneForm(documentCode); // 상세 문서양식 폼
-	        getDocOne(documentNo, documentCode); // 문서 상세내용 조회
 	
-	        // 모든 비동기 작업이 완료된 후에 모달창을 열어줌
-	        $('#docOneModal').modal('show');
-	    } catch (error) {
-	        console.error(error);
-	    }
-	}

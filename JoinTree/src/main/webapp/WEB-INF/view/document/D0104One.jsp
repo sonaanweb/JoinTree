@@ -41,13 +41,13 @@
 			<tr>
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp1" style="width: 100px; height: 70px;">
+					<img id="docStamp1" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp2" style="width: 100px; height: 70px;">
+					<img id="docStamp2" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp3" style="width: 100px; height: 70px;">
+					<img id="docStamp3" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
 				</td>
 			</tr>
 			<tr></tr>
@@ -77,19 +77,14 @@
 			<tr>
 				<td>퇴직사유</td>
 				<td>
-					<textarea id="docResignReason"></textarea> 
+					<textarea id="docContent"></textarea> 
 				</td>
-			</tr>
-			<!-- 퇴직예정일 -->
-			<tr>
-				<td>퇴직예정일</td>
-				<td id="docResignDate"></td>
 			</tr>
 			<!-- 첨부파일 다운로드 -->
 			<tr>
 				<td>첨부파일</td>
 				<td>
-					<a id="docSaveFileName" href="#" download>다운로드</a>
+					<a id="docSaveFileName" href="${pageContext.request.contextPath}/docFile/" download></a>
 				</td>
 			</tr>
 	</tbody>

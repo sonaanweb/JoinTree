@@ -147,15 +147,13 @@ public class DocumentService {
 		// 문서결재 상세 조회
 		Map<String, Object> getDocumentOne = null; 
 				
-		if(docCode.equals("D0101")) { // 기본기안서
+		if(docCode.equals("D0101") || docCode.equals("D0104")) { // 기본기안서, 퇴직신청서
 			getDocumentOne = documentMapper.getDocumentDefaultOne(docNo);
 		} else if(docCode.equals("D0102")) { // 휴가신청서
 			getDocumentOne = documentMapper.getDocumentLeaveOne(docNo);
 		} else if(docCode.equals("D0103")) { // 인사이동신청서
 			getDocumentOne = documentMapper.getDocumentReshuffleOne(docNo);
-		} else if(docCode.equals("D0104")) { // 퇴직신청서
-			getDocumentOne = documentMapper.getDocumentResignOne(docNo);
-		}		
+		} 	
 		
 		log.debug(getDocumentOne + "<-- DocumentService getDocumentOne");
 		
