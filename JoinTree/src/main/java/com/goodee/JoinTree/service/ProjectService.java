@@ -60,7 +60,7 @@ public class ProjectService {
 		return projectWithCnt;
 	}
 	
-	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)
+	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0402)
 	public Map<String, Object> selectProjectListByPersonal(int empNo, int startRow, int rowPerPage, String searchName, String startDate, String endDate){
 		Map<String, Object> personalProjectWithCnt = new HashMap<>();
 		
@@ -81,7 +81,7 @@ public class ProjectService {
 		return personalProjectWithCnt;
 	}
 	
-	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0503)
+	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0403)
 	public Map<String, Object> selectEndProjectList(int startRow, int rowPerPage, String searchName, String startDate, String endDate) {
 		Map<String, Object> endProjectWithCnt = new HashMap<>();
 		
@@ -219,8 +219,24 @@ public class ProjectService {
 	}
 		
 	// 프로젝트 하위작업 삭제
-	public int removeProjectTask(int taskNo, int projectNo) {
-		return projectMapper.removeProjectTask(taskNo, projectNo);
+	public int removeProjectTask(int taskNo, int projectNo, String taskSaveFilename) {
+		int row = 0;
+		
+		if (taskSaveFilename != null && !taskSaveFilename.isEmpty()) {
+			String filePath = "/taskFile/" + taskSaveFilename;
+			log.debug(yellow + "삭제할 파일 경로 : " + filePath+ reset);
+			File file = new File(filePath);
+			
+			if (file.exists()) {
+				if (file.delete()) {
+					row = projectMapper.removeProjectTask(taskNo, projectNo);
+				} 
+			}
+		} else {
+			row = projectMapper.removeProjectTask(taskNo, projectNo);
+		}
+		log.debug(yellow + "row : " + row+ reset);
+		return row;
 	}
 	
 	/* 프로젝트 멤버 */

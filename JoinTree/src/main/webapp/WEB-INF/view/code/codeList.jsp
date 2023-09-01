@@ -19,7 +19,7 @@
 							const row = $("<tr>").addClass("upCodeLink").attr("data-code", upCode.code);
 							const codeCell = $("<td>").text(upCode.code); // 코드
 							const codeNameCell = $("<td>").text(upCode.codeName); // 코드이름
-							const toggleCell = $("<td>").text(upCode.status); // 코드이름
+							const toggleCell = $("<td>").text((upCode.status === '1' ? 'Y' : 'N' )); // 코드이름
 							
 							row.append(codeCell, codeNameCell, toggleCell); // 행에 셀들 추가
 							
@@ -55,7 +55,7 @@
 							const row = $("<tr>").addClass("codeOneLink").data("code", childCode.code); // 코드 추가
 							const codeCell = $("<td>").text(childCode.code); // 코드
 							const codeNameCell = $("<td>").text(childCode.codeName); // 코드이름
-							const toggleCell = $("<td>").text(childCode.status); // 코드이름
+							const toggleCell = $("<td>").text((childCode.status === '1' ? 'Y' : 'N')); // 코드이름
 							
 							// 같은 열에 추가
 							row.append(codeCell, codeNameCell, toggleCell); 
@@ -100,13 +100,13 @@
 							
 							const toggleCell = $("<td>").html(
 									'<label class="switch">' +
-									'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? 'checked' : '') + '>' +
+									'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "1" ? 'checked' : '') + '>' +
 									'<span class="slider round"></span>' +
 									'</label>'
 							);
 							$("#upCodeOneList4").append(toggleCell);
 							
-							currentUpChecked = toggleValue === "Y" ? true : false;
+							currentUpChecked = toggleValue === "1" ? true : false;
 							
 							$("#upCodeOneList5").append("<td>" + upCodeOne.createdate.slice(0,10) + "</td>");
 							$("#upCodeOneList6").append("<td>" + upCodeOne.updatedate.slice(0,10) + "</td>");
@@ -149,13 +149,13 @@
 							
 							const toggleCell = $("<td>").html(
 									'<label class="switch">' +
-									'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "Y" ? 'checked' : '') + '>' +
+									'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "1" ? 'checked' : '') + '>' +
 									'<span class="slider round"></span>' +
 									'</label>'
 							);
 							$("#chileCodeOneList4").append(toggleCell);
 							
-							currentChecked = toggleValue === "Y" ? true : false;
+							currentChecked = toggleValue === "1" ? true : false;
 							
 							$("#chileCodeOneList5").append("<td>" + codeOne.createdate.slice(0,10) + "</td>");
 							$("#chileCodeOneList6").append("<td>" + codeOne.updatedate.slice(0,10) + "</td>");

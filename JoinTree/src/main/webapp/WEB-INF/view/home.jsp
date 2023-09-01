@@ -314,23 +314,8 @@
 							<div class="card-body"> 
 								공지사항
 								<hr>
-								<ul>
-										
-										<c:forEach var="p" items="${homeProejctList}" varStatus="status">
-											<li>
-												${p.projectName}(${p.empName})
-											</li>
-										</c:forEach>
-										<li>
-											테스트
-											</li>
-											<li>
-											테스트
-											</li>
-											<li>
-											테스트
-											</li>
-											
+									<ul>
+									
 									</ul>
 								<div>
 									<div>프로젝트</div>

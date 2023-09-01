@@ -61,7 +61,7 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
-	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)  -->
+	<!-- 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0402)  -->
 	<select id="selectProjectListByPersonal"
 			resultType="com.goodee.JoinTree.vo.Project">
 		SELECT 
@@ -84,7 +84,9 @@
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND
-			p.project_status= 'A0502'
+			p.project_status= 'A0401'
+			OR
+			p.project_status= 'A0402'
 			<!-- 타이틀이 있을때 -->
 			<if test="searchName != null and searchName != ''">
 				AND (
@@ -105,7 +107,7 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
-	<!-- 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0503) -->
+	<!-- 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0403) -->
 	<select id="selectEndProjectList"
 			resultType="com.goodee.JoinTree.vo.Project">
 		SELECT 
@@ -123,7 +125,7 @@
 			update_id updateId
 		FROM project
 		WHERE 
-			project_status= 'A0503'
+			project_status= 'A0403'
 			<!-- 타이틀이 있을때 -->
 			<if test="searchName != null and searchName != ''">
 				AND (
@@ -172,7 +174,9 @@
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND
-			p.project_status= 'A0502'
+			p.project_status= 'A0401'
+			OR
+			p.project_status= 'A0402'
 		ORDER BY 
 				p.createdate DESC, 
 				p.project_no ASC
@@ -225,7 +229,7 @@
 			#{projectStartDate},
 			#{projectEndDate},
 			#{projectContent},
-			'A0501',
+			'A0401',
 			NOW(),
 			NOW(),
 			#{createId},
@@ -253,7 +257,7 @@
 			parameterType="com.goodee.JoinTree.vo.Project">
 		UPDATE project
 		SET 
-			project_status = 'A0503',
+			project_status = 'A0403',
 			project_color = '#B7B7B7',
 			project_end_date = NOW(),
 			updatedate = NOW(),

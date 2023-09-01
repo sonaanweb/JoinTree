@@ -16,7 +16,6 @@
 .wrapper {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
 }
 .margin10 {
 	margin: 10px;
@@ -261,19 +260,33 @@ input:checked + .slider:before {
 	width: 0;
 	transition: width 0.3s ease;
 }
-.projectTaskList {
-	overflow-x: auto;
+.projectTaskList1, .projectTaskList2 {
+	height: 100px;
+	overflow-y: auto;
 }
-.projectTaskOne {
+.projectTaskList1 .projectTaskOne, .projectTaskList2 .projectTaskOne  {
+	height: 35px;
 	border: 1px solid #999;
-	padding: 10px;
+	padding: 8px;
 	border-radius: 10px;
 }
+.projectTaskList1 .projectTaskOne:hover, .projectTaskList2 .projectTaskOne:hover {
+	background-color: #efefef;
+}
+
+.projectTaskListAll .card-body {
+	padding : 0px;
+	padding-top: 20px;
+}
+
 /* 프로젝트 작업 */
 .projectTask{
-	height: 500px;
+	height: 450px;
 	overflow-y: auto;
 }
 .row {
 	margin-left:0px;
+}
+.projectTaskList1 .wrapper {
+	align-items: center;
 }

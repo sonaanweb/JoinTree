@@ -1,5 +1,6 @@
 package com.goodee.JoinTree.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class ProjectController {
 		return resultMap;
 	}
 	
-	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0502)
+	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0402)
 	// json
 	@GetMapping("project/personalProjectList")
 	@ResponseBody
@@ -105,7 +106,7 @@ public class ProjectController {
 		return resultMap;
 	}
 	
-	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0503)
+	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0403)
 	// json
 	@GetMapping("project/endProjectList")
 	@ResponseBody
@@ -275,21 +276,25 @@ public class ProjectController {
 	@PostMapping("project/removeProjectTask")
 	@ResponseBody
 	public String removeProjectTask(@RequestParam(name="taskNo") int taskNo,
-									@RequestParam(name="projectNo") int projectNo) {
-		int row = projectService.removeProjectTask(taskNo,projectNo);
+									@RequestParam(name="projectNo") int projectNo,
+									@RequestParam(required = false) String taskSaveFilename) {
+		int row = projectService.removeProjectTask(taskNo, projectNo, taskSaveFilename);
 		
 		if(row != 1) {
 			return "fail";
 		}
 		return "success";
 	}
+	
 	/* 프로젝트 하위작업 끝 */
 	/*프로젝트 멤버*/
 	// 프로젝트 멤버 추가
 	@PostMapping("project/addProjectMember")
 	@ResponseBody
 	public String addProjectMembers(@RequestParam(value = "empNo[]") List<Integer> memberNo,
-									@RequestParam(name="projectNo") int projectNo) {
+									@RequestParam(name="projectNo") int projectNo,
+									@RequestParam(name="createId") int createId,
+									@RequestParam(name="updateId") int updateId) {
 			//log.debug(yellow + "memberNo:" + memberNo + reset);
 			//log.debug(yellow + "projectNo:" + projectNo + reset);
 		int successCount = 0; // 성공 횟수
@@ -305,6 +310,8 @@ public class ProjectController {
 				ProjectMember projectMember = new ProjectMember();
 				projectMember.setProjectNo(projectNo);
 				projectMember.setEmpNo(empNo);
+				projectMember.setCreateId(createId);
+				projectMember.setUpdateId(updateId);
 					//log.debug(yellow + "projectMember:" + projectMember + reset);
 				// 프로젝트 멤버 추가
 				int row = projectService.addProjectMember(projectMember);

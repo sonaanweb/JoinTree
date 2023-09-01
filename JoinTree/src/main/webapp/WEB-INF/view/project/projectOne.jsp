@@ -18,6 +18,7 @@
 		const projectNo = urlParams.get("projectNo"); // 주소창 값 중에서 프로젝트 번호
 			console.log("projectNo",projectNo);		
 		const loginEmpNo = ${loginAccount.empNo};
+		console.log("loginEmpNo",loginEmpNo);		
 		let taskNo;
 		let currentProjectName; // 현재 프로젝트 이름
 		let currentProjectContent;// 현재 프로젝트 내용
@@ -76,7 +77,7 @@
 						'<div><h3>작업리스트</h3></div>'
 					);
 					
-					if(project.projectStatus === 'A0503') {
+					if(project.projectStatus === 'A0403') {
 						$("#modifyProjectBtn").hide();
 						$("#modifyProjectEndBtn").hide();
 						$("#endProjectBtn").hide();
@@ -540,7 +541,19 @@
 			const taskEndDate = $("#taskEndDate").val();
 			const taskContent = $("#taskContent").val();
 			const taskOriginFilename = $("#taskOriginFilename").val();
+				//console.log("taskOriginFilename",taskOriginFilename);
 			
+			// 시작일자와 종료일자 비교 검사
+			if (taskStartDate > taskEndDate) {
+				$("#taskStartDate").val('');
+				$("#taskEndDate").val('');
+				Swal.fire(
+						'Error',
+						'종료일자는 시작일자보다 커야합니다.',
+						'error'
+					)
+				return; // 추가 작업 중단
+			}
 			if(!empNo || !taskTitle || !taskStartDate || !taskEndDate || !taskContent){
 				alert("값 넣어줘 ");
 				return;
@@ -577,6 +590,13 @@
 					if(taskOriginFilename) {
 						uploadProjectTaskFile(response);
 					}
+					$(".projectTaskCard").empty();
+					$(".projectTaskList1").empty();
+					$(".projectTaskList2").empty();
+					$(".progress").empty();
+					$(".progress-bar").empty();
+					fetchProjectTaskData();
+					
 				},error: function(error) {
 					alert("프로젝트 작업 추가 실패");
 				}
@@ -615,6 +635,13 @@
 					if(data === 'success'){
 						alert("업로드 성공");
 						$("#taskFile").append(files[0].name);
+						$(".projectTaskCard").empty();
+						$(".projectTaskList1").empty();
+						$(".projectTaskList2").empty();
+						$(".progress").empty();
+						$(".progress-bar").empty();
+						fetchProjectTaskData();
+						
 					} else {
 						alert("업로드 실패");
 					}
@@ -655,7 +682,7 @@
 									})
 									$(".projectTaskList1").empty();
 									$(".projectTaskList2").empty();
-									fetchProjectData();
+									fetchProjectTaskData();
 								}
 							}
 						});
@@ -663,6 +690,47 @@
 				});
 		});
 	/* 프로젝트 작업 완료로 변경 끝 */
+	/* 프로젝트 작업 삭제 */
+	$(".projectTask").on("click", "#taskDelBtn", function() {
+		Swal.fire({
+			title: '작업을 삭제하시겠습니까?',
+			text: "완료된 작업은 수정할 수 없습니다.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#8BC541',
+			cancelButtonColor: '#888',
+			confirmButtonText: '완료',
+			cancelButtonText: '취소'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					console.log("taskNo",taskNo);
+					$.ajax({
+						type : "POST",
+						url : "/JoinTree/project/removeProjectTask",
+						data : {
+							taskNo : taskNo,
+							projectNo : projectNo
+						},
+						success : function(response) {
+							console.log("respose",response);
+							if(response === "success") {
+								Swal.fire({
+									icon: 'success',
+									title: '작업이 삭제되었습니다',
+									showConfirmButton: false,
+									timer: 1500
+								})
+								$(".projectTaskList1").empty();
+								$(".projectTaskList2").empty();
+								fetchProjectData();
+								fetchProjectTaskData();
+							}
+						}
+					});
+				}
+			});
+	})
+	
 /* 프로젝트 작업 끝 */
 
 	}); // 마지막
@@ -743,7 +811,7 @@
 					<div>작업 시작일 : <input type="date" id="taskStartDate"></div>
 					<div>작업 종료일 : <input type="date" id="taskEndDate"></div>
 					<div>작업 설명 : <textarea id="taskContent"></textarea></div>
-					<div>첨부파일 :<input type="file" id="taskFilename"></div>
+					<div>첨부파일 :<input type="file" id="taskOriginFilename"></div>
 					<div>
 						<button type="button" id="addTaskSubmitBtn" class="btn btn-success">작업 추가</button>
 					</div>
