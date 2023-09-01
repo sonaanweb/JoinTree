@@ -36,71 +36,64 @@
 					<a href="/JoinTree/community/lifeEventCommList/addLifeEventComm">게시글 작성</a>
 				</div>
 				
-				<!-- 상단고정 게시글  -->
-				<table border="1">
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-					<c:forEach var="p" items="${pinnedCommList}">
-						<tr>
-							<td width="10%">${p.boardNo}</td>
-							<td width="40%">
-								<a href="/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=${p.boardNo}">
-									<c:choose>
-					                    <c:when test="${p.commentCnt != 0}">
-					                        <span style="color:red;">[공지] ${p.boardTitle} [${p.commentCnt}]</span>
-					                    </c:when>
-					                    <c:otherwise>
-					                        <span style="color:red;">[공지] ${p.boardTitle}</span>
-					                    </c:otherwise>
-		                			</c:choose>
-								</a>
-							</td>
-							<td width="20%">
-								${p.empName}
-							</td>
-							<td width="15%">${p.createdate}</td>
-							<td width="15%">${p.boardCount}</td>
-						</tr>
-					</c:forEach>
-				</table>
-				
 				<!-- 전체 게시글  -->
 				<table border="1">
-				<!-- 	<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr> -->
-					<c:forEach var="c" items="${commList}">
+					<thead> <!-- 상단고정 게시글 -->
 						<tr>
-							<td width="10%">${c.boardNo}</td>
-							<td width="40%">
-								<a href="/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=${c.boardNo}">
-									<c:choose>
-					                    <c:when test="${c.commentCnt != 0}">
-					                        ${c.boardTitle} [${c.commentCnt}]
-					                    </c:when>
-					                    <c:otherwise>
-					                        ${c.boardTitle}
-					                    </c:otherwise>
-				                	</c:choose>
-								</a>
-							</td>
-							<td width="20%">
-								${c.empName}
-								<%-- <a href="/board/boardOne?boardNo=${b.boardNo}">${b.boardTitle}</a> --%>
-							</td>
-							<td width="15%">${c.createdate}</td>
-							<td width="15%">${c.boardCount}</td>
+							<th>No</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>조회수</th>
 						</tr>
-					</c:forEach>
+						<c:forEach var="p" items="${pinnedCommList}">
+							<tr>
+								<td width="10%">${p.boardNo}</td>
+								<td width="40%">
+									<a href="/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=${p.boardNo}">
+										<c:choose>
+						                    <c:when test="${p.commentCnt != 0}">
+						                        <span style="color:red;">[공지] ${p.boardTitle} [${p.commentCnt}]</span>
+						                    </c:when>
+						                    <c:otherwise>
+						                        <span style="color:red;">[공지] ${p.boardTitle}</span>
+						                    </c:otherwise>
+			                			</c:choose>
+									</a>
+								</td>
+								<td width="20%">
+									${p.empName}
+								</td>
+								<td width="15%">${p.createdate}</td>
+								<td width="15%">${p.boardCount}</td>
+							</tr>
+						</c:forEach>
+					</thead> 
+					<tbody>
+						<c:forEach var="c" items="${commList}">
+							<tr>
+								<td width="10%">${c.boardNo}</td>
+								<td width="40%">
+									<a href="/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=${c.boardNo}">
+										<c:choose>
+						                    <c:when test="${c.commentCnt != 0}">
+						                        ${c.boardTitle} [${c.commentCnt}]
+						                    </c:when>
+						                    <c:otherwise>
+						                        ${c.boardTitle}
+						                    </c:otherwise>
+					                	</c:choose>
+									</a>
+								</td>
+								<td width="20%">
+									${c.empName}
+									<%-- <a href="/board/boardOne?boardNo=${b.boardNo}">${b.boardTitle}</a> --%>
+								</td>
+								<td width="15%">${c.createdate}</td>
+								<td width="15%">${c.boardCount}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 				
 				<!-- 페이지 내비게이션 -->

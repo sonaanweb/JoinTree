@@ -481,10 +481,28 @@ public class CommunityController {
 	public String addComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
 		String path = request.getServletContext().getRealPath("/commImg/");
 		
+	    // 게시글 내용이 비어있을 경우 처리
+	    if (board.getBoardContent() == null || board.getBoardContent().trim().isEmpty()) {
+	        msg = URLEncoder.encode("제목, 내용을 모두 입력해주세요.", "UTF-8");
+
+	        if (board.getBoardCategory().equals("B0103")) {
+	            return "redirect:/community/freeCommList/addFreeComm?msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0104")) {
+	            return "redirect:/community/anonymousCommList/addAnonymousComm?msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0105")) {
+	            return "redirect:/community/secondhandCommList/addSecondhandComm?msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0106")) {
+	            return "redirect:/community/lifeEventCommList/addLifeEventComm?msg=" + msg;
+	        }
+
+	        log.debug(CYAN + " <-- 게시글 등록 실패. 오류 발생(CommunityController-addComm)" + RESET);
+	        return "";
+	    }
+		
 		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
 		HttpSession session = request.getSession();
 		String dept = (String) session.getAttribute("dept");
-		log.debug(CYAN + dept + " <-- row(CommunityController-addComm)" + RESET);
+		log.debug(CYAN + dept + " <-- row(CommunityController-addComm)" + RESET);		
 		
 		// 로그인 세션 부서값이 경영팀이고 상단고정 체크박스 선택했을 경우
 		if (dept.equals("D0202") && request.getParameter("boardPinned") != null) {
@@ -610,6 +628,24 @@ public class CommunityController {
 	// 게시판 게시글 수정 액션
 	@PostMapping("/community/modifyComm") 
 	public String modifyFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
+	    // 게시글 내용이 비어있을 경우 처리
+	    if (board.getBoardContent() == null || board.getBoardContent().trim().isEmpty()) {
+	        msg = URLEncoder.encode("제목, 내용을 모두 입력해주세요.", "UTF-8");
+
+	        if (board.getBoardCategory().equals("B0103")) {
+	            return "redirect:/community/freeCommList/modifyFreeComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0104")) {
+	            return "redirect:/community/anonymousCommList/modifyAnonymousComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0105")) {
+	            return "redirect:/community/secondhandCommList/modifySecondhandComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+	        } else if (board.getBoardCategory().equals("B0106")) {
+	            return "redirect:/community/lifeEventCommList/modifyLifeEventComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
+	        }
+
+	        log.debug(CYAN + " <-- 게시글 수정 실패. 오류 발생(CommunityController-modifyComm)" + RESET);
+	        return "";
+	    }
+		
 		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
 		HttpSession session = request.getSession();
 		String dept = (String) session.getAttribute("dept");

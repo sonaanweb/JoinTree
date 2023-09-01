@@ -41,46 +41,81 @@
 				
 			    <!-- 상단고정 게시글  -->
 				<table border="1">
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-					</tr>
-					<c:forEach var="p" items="${pinnedCommList}">
+					<thead> <!-- 상단고정 게시글 -->
 						<tr>
-							<td width="10%">${p.boardNo}</td>
-							<td width="40%">
-								<a href="/JoinTree/community/anonymousCommList/anonymousCommOne?boardNo=${p.boardNo}">
+							<th>No</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>조회수</th>
+						</tr>
+						<c:forEach var="p" items="${pinnedCommList}">
+							<tr>
+								<td width="10%">${p.boardNo}</td>
+								<td width="40%">
+									<a href="/JoinTree/community/anonymousCommList/anonymousCommOne?boardNo=${p.boardNo}">
+										<c:choose>
+											<c:when test="${p.commentCnt != 0}">
+												<span style="color:red;">[공지] ${p.boardTitle} [${p.commentCnt}]</span>
+											</c:when>
+											<c:otherwise>
+												<span style="color:red;">[공지] ${p.boardTitle}</span>
+											</c:otherwise>
+										</c:choose>
+									</a>
+								</td>
+								<td width="20%">
+									<!-- 자신이 작성한 게시글일 경우에만 작성자 확인 가능 -->
 									<c:choose>
-										<c:when test="${p.commentCnt != 0}">
-											<span style="color:red;">[공지] ${p.boardTitle} [${p.commentCnt}]</span>
+										<c:when test="${loginAccount.empNo eq p.empNo}">
+											익명(본인)
 										</c:when>
 										<c:otherwise>
-											<span style="color:red;">[공지] ${p.boardTitle}</span>
+											익명
 										</c:otherwise>
 									</c:choose>
-								</a>
-							</td>
-							<td width="20%">
-								<!-- 자신이 작성한 게시글일 경우에만 작성자 확인 가능 -->
-								<c:choose>
-									<c:when test="${loginAccount.empNo eq p.empNo}">
-										익명(본인)
-									</c:when>
-									<c:otherwise>
-										익명
-									</c:otherwise>
-								</c:choose>
-							</td>
-							<td width="15%">${p.createdate}</td>
-							<td width="15%">${p.boardCount}</td>
-						</tr>
-					</c:forEach>
+								</td>
+								<td width="15%">${p.createdate}</td>
+								<td width="15%">${p.boardCount}</td>
+							</tr>
+						</c:forEach>
+					</thead>
+					<tbody>
+						<c:forEach var="c" items="${commList}">
+							<tr>
+								<td width="10%">${c.boardNo}</td>
+								<td width="40%">
+									<a href="/JoinTree/community/anonymousCommList/anonymousCommOne?boardNo=${c.boardNo}">
+										<c:choose>
+						                    <c:when test="${c.commentCnt != 0}">
+						                        ${c.boardTitle} [${c.commentCnt}]
+						                    </c:when>
+						                    <c:otherwise>
+						                        ${c.boardTitle}
+						                    </c:otherwise>
+			                			</c:choose>
+									</a>
+								</td>
+								<td width="20%">
+									<!-- 자신이 작성한 게시글일 경우에만 작성자 확인 가능 -->
+									<c:choose>
+										<c:when test="${loginAccount.empNo eq c.empNo}">
+											익명(본인)
+										</c:when>
+										<c:otherwise>
+											익명
+										</c:otherwise>
+									</c:choose>
+									<%-- <a href="/board/boardOne?boardNo=${b.boardNo}">${b.boardTitle}</a> --%>
+								</td>
+								<td width="15%">${c.createdate}</td>
+								<td width="15%">${c.boardCount}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 				
-				<!-- 전체 게시글  -->
+				<%-- <!-- 전체 게시글  -->
 				<table border="1">
 				<!-- 	<tr>
 						<th>No</th>
@@ -114,13 +149,13 @@
 										익명
 									</c:otherwise>
 								</c:choose>
-								<%-- <a href="/board/boardOne?boardNo=${b.boardNo}">${b.boardTitle}</a> --%>
+								<a href="/board/boardOne?boardNo=${b.boardNo}">${b.boardTitle}</a>
 							</td>
 							<td width="15%">${c.createdate}</td>
 							<td width="15%">${c.boardCount}</td>
 						</tr>
 					</c:forEach>
-				</table>
+				</table> --%>
 				
 			<!-- 페이지 내비게이션 -->
 			<div id="pagination">
