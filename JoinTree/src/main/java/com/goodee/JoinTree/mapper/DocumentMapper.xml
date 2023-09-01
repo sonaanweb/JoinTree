@@ -277,7 +277,7 @@
 			parameterType="int" resultType="java.util.Map">
 		SELECT 
 			d.doc_no docNo, -- 문서번호
-			d.doc_status, -- 문서상태
+			d.doc_status docStatus, -- 문서상태
 			d.createdate, -- 기안일
 			d.writer, -- 기안자
 			d.doc_stamp1 docStamp1, -- 기안자 서명
@@ -316,7 +316,7 @@
 			parameterType="int" resultType="java.util.Map">
 		SELECT 
 			d.doc_no docNo, -- 문서번호
-			d.doc_status, -- 문서상태
+			d.doc_status docStatus, -- 문서상태
 			d.createdate, -- 기안일
 			d.writer, -- 기안자
 			d.doc_stamp1 docStamp1, -- 기안자 서명
@@ -362,7 +362,7 @@
 			parameterType="int" resultType="java.util.Map">
 		SELECT 
 			d.doc_no docNo, -- 문서번호
-			d.doc_status, -- 문서상태
+			d.doc_status docStatus, -- 문서상태
 			d.createdate, -- 기안일
 			d.writer, -- 기안자
 			d.doc_stamp1 docStamp1, -- 기안자 서명
