@@ -56,13 +56,27 @@ public class DocumentRestController {
 	
 	// 결재문서 상세 조회
 	@GetMapping("/getDocumentOne")
-	public Map<String, Object> getDocumentOne(@RequestParam int docNo, @RequestParam String docCode){
+	public Map<String, Object> getDocumentOne(HttpSession session,
+											  @RequestParam int docNo, @RequestParam String docCode){
 		
 		log.debug(docNo + "<-- DocumentListRestController docNo");
 		log.debug(docCode+"<-- DocumentListRestController docCode");
 		
 		// 결제문서 상세 조회
 		Map<String, Object> getDocumentOne = documentService.getDocumentOne(docNo, docCode);
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int empNo = 0; // 사번
+		
+		if(loginAccount != null) {
+			
+			empNo = loginAccount.getEmpNo();
+		}
+		getDocumentOne.put("empNo", empNo); // 반환 값 Map에 현재 로그인 사번 값 저장
+		
 		log.debug(getDocumentOne + "<-- DocumentListRestController getDocumentOne");
 		
 		return getDocumentOne;

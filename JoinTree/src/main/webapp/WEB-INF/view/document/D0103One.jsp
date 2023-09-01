@@ -41,13 +41,13 @@
 			<tr>
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp1" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
+					<img id="docStamp1" src="" style="width: 100px; height: 70px;">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp2" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
+					<img id="docStamp2" src="" style="width: 100px; height: 70px;">
 				</td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
-					<img id="docStamp3" src="${pageContext.request.contextPath}/signImg/" style="width: 100px; height: 70px;">
+					<img id="docStamp3" src="" style="width: 100px; height: 70px;">
 				</td>
 			</tr>
 			<tr></tr>

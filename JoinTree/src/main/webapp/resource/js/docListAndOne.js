@@ -103,11 +103,14 @@
 		docListResults();
 	});
 	
+	// signImg 경로
+	let path = "/JoinTree/signImg/";
+	
 	// 결재자 서명 경로 설정 함수
 	function setDocStamp(docStampId, docStampValue){
 		let docStampSrc = $(docStampId); 
 		if(docStampValue){
-			docStampSrc.attr('src', docStampSrc.attr('src') + docStampValue);
+			docStampSrc.attr('src', path + docStampValue);
 		} else{
 			docStampSrc.hide();
 		}
@@ -147,16 +150,19 @@
 	            },
 	            success: function (data) {
 	                
+	                // 현재 로그인한 사번
+	                let empNo = data.empNo;
+	                
 	            	// 결재문서 상세정보 값 변수에 저장
 	            	// 기본기안서(공통)
 					let docNo = data.docNo; // 문서번호
-					let docStatus = data.docStatus; // 문서상태
 					let createdate = data.createdate.split("T")[0]; // 기안일
 					let writer = data.writer; // 기안자
 					let docStamp1 = data.docStamp1; // 기안자 서명
 					let docStamp2= data.docStamp2; // 결재자1 서명
 					let docStamp3 = data.docStamp3; // 결재자2 서명
 					let reference = data.reference; // 참조자
+					let referenceNo = data.referenceNo // 참조자 사번
 					let receiverTeam = data.receiverTeam; // 수신팀
 					let docTitle = data.docTitle; // 문서 제목
 					let docContent = data.docContent; // 문서 내용
@@ -187,7 +193,6 @@
 					// 사원 상세정보 값 설정
 					// 기본기안서(공통)
 					$('#docNo').text(docNo); // 문서번호
-					$('#docStatus').val(docStatus); // 문서상태
 					$('#createdate').text(createdate); // 기안일
 					$('.writer').text(writer); // 기안자
 					$('#reference').text(reference); // 참조자
@@ -229,6 +234,13 @@
 					$('#docReshuffleResult').text(docReshuffleResult); // 업무성과
 					$('#docReshuffleReason').text(docReshuffleReason); // 발령사유
 					
+					// 문서결재 결제, 반려 버튼 분기
+					if(empNo == referenceNo){ // 로그인 사번과 참조자 사번이 같은 경우 버튼 숨기기
+						$('#approvalAndRejectBtn').hide();
+					} else{
+						$('#approvalAndRejectBtn').show();
+					}
+					
 	                resolve(); // 호출 완료 후 프로미스 resolve 호출
 	            },
 	            error: function () {
@@ -238,5 +250,8 @@
 	        });
 	    });
 	}
+	
+	
+	
 	
 	
