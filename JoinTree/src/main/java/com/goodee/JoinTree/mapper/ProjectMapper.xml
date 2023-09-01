@@ -174,13 +174,13 @@
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND
-			p.project_status= 'A0401'
+			(p.project_status= 'A0401'
 			OR
-			p.project_status= 'A0402'
+			p.project_status= 'A0402')
 		ORDER BY 
 				p.createdate DESC, 
 				p.project_no ASC
-		LIMIT 0, 5
+		LIMIT 0, 5;
 	</select>
 
 	<!-- 프로젝트 상세보기 -->

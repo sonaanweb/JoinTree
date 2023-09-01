@@ -324,7 +324,7 @@
 										
 										<c:forEach var="p" items="${homeProejctList}" varStatus="status">
 											<li>
-												${p.projectName}(${p.empName})
+												<a href="project/projectOne?projectNo=${p.projectNo}">${p.projectName}(${p.empName})</a>
 											</li>
 										</c:forEach>
 									</ul>
