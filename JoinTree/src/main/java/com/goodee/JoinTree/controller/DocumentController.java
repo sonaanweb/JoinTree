@@ -224,44 +224,55 @@ public class DocumentController {
 	// 결재자 결재 & 결재자 수에 따른 문서 결재 상태 변경 메서드(cnt 체크 추가)
 	@PostMapping("/document/approveDocument")
 	@ResponseBody
-	public String approve(Model model, HttpSession session, int docNo, String docStatus) {
-	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+	public String approve(Model model, HttpServletRequest request, @RequestParam int docNo) {
+		HttpSession session = request.getSession();
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 
 	    int empNo = loginAccount.getEmpNo();
-        log.debug("empNo:",empNo);
+        log.debug("empNo:" + empNo);
 
 	    String signImg = (String) session.getAttribute("signImg");
-        log.debug("signImg:",signImg);
+        log.debug("signImg:" + signImg);
 
+        // String docStatus = "A0201";
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
-	    docDefault.setDocStatus(docStatus);
+	    // docDefault.setDocStatus(docStatus);
 	    docDefault.setUpdateId(empNo);
+	    
+	    log.debug("docNo:" + docNo);
+	    
+	    // log.debug("docStatus:" + docStatus);
 
 		DocumentSigner docSigner = new DocumentSigner();
 		docSigner.setDocNo(docNo);
 		docSigner.setEmpSignerNo(empNo);
 		int signerLevel = documentService.getSignerLevel(docSigner);
 		model.addAttribute("signerLevel", signerLevel);
+		
+		log.debug("signerLevel:" + signerLevel);
 	      
 	    int signerCnt = documentService.getSignerCnt(docNo);
 	    model.addAttribute("signerCnt", signerCnt);
+	    
+	    log.debug("signerCnt:" + signerCnt);
 
 	    int row = 0;
 	    
 	    // 문서 결재 상태 A0201 대기(default) A0202 결재중 A0203 결재완료 A0204 반려
-	    if (signerCnt == 1 && docStatus.equals("A0201")) {
+	    if (signerCnt == 1) {
 	        // 한 명의 결재자가 있을 때, 첫 번째 결재자의 승인 시 결재완료 상태로 변경
 	        docDefault.setDocStatus("A0203");
 	        docDefault.setDocStamp2(signImg); // 결재자의 서명 이미지 저장
 	        row = documentService.approveDocDefault1(docDefault);
+	        log.debug("row:" + row);
 	    } else if (signerCnt == 2) {
-	        if (signerLevel == 1 && docStatus.equals("A0201")) {
+	        if (signerLevel == 1) {
 	            // 두 명의 결재자가 있을 때, 첫 번째 결재자의 승인 시 결재중 상태로 변경
 	            docDefault.setDocStatus("A0202");
 	            docDefault.setDocStamp2(signImg); // 첫 번째 결재자의 서명 이미지 저장
 	            row = documentService.approveDocDefault1(docDefault);
-	        } else if (signerLevel == 2 && docStatus.equals("A0202")) {
+	        } else if (signerLevel == 2) {
 	            // 두 명의 결재자가 있을 때, 두 번째 결재자의 승인 시 결재완료 상태로 변경
 	            docDefault.setDocStatus("A0203");
 	            docDefault.setDocStamp3(signImg); // 두 번째 결재자의 서명 이미지 저장
