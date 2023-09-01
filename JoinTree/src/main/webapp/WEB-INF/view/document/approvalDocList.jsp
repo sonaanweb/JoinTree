@@ -116,5 +116,35 @@
 	        console.error(error);
 	    }
 	});
+		
+	   // 'ApprovalBtn' 버튼 클릭 이벤트 핸들러 내부에서
+	   $('#ApprovalBtn').click(async function() {
+	       let documentStatus = $('#docStatus').text(); // 모달에서 상태 정보 가져오기
+	    // 현재 선택된 문서 번호 가져오기
+	       let documentNo = $('#docNo').text();
+	       // 상태 정보를 서버로 전송하는 코드
+	       
+	       $.ajax({
+	           url: '/JoinTree/document/approveDocument',
+	           type: 'POST',
+	           data: {
+	               docNo: documentNo,
+	               // action: 'approval', // 행동을 식별하기 위한 식별자 (다른 값으로 변경 가능)
+	               docStatus: documentStatus // 문서 상태 정보 전달
+	           },
+	           success: function(response) {
+	               if (response === 'success') {
+	                   // 성공한 경우 처리
+	                   alert("결재 성공");
+	               } else {
+	                   // 실패한 경우 처리
+	                   alert("결재 실패");
+	               }
+	           },
+	           error: function(error) {
+	              alert("서버 오류 발생. 관리자에게 문의해주세요.");
+	           }
+	       });
+	   });
 </script>
 </html>
