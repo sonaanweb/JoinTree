@@ -284,7 +284,8 @@
 			project_no;
 		
 	</select>
-	<!-- 프로젝트 하위작업 -->
+	
+	<!-- 프로젝트 하위작업 리스트 -->
 	<select id="selectProejectTaskList"
 			resultType="com.goodee.JoinTree.vo.ProjectTask">
 		SELECT
@@ -296,6 +297,8 @@
 			t.task_start_date taskStartDate,
 			t.task_end_date taskEndDate,
 			t.task_status taskStatus,
+			tf.task_origin_filename taskOriginFilename, 
+			tf.task_save_filename taskSaveFilename,
 			t.createdate createdate,
 			t.updatedate updatedate,
 			t.create_id createId,
@@ -303,10 +306,92 @@
 		FROM project_task t
 		INNER JOIN 
 			emp_info e ON t.emp_no = e.emp_no
+		LEFT JOIN 
+			task_file tf ON tf.task_no = t.task_no
 		WHERE 
-			t.project_no = #{projectNo};
-
+			t.project_no = #{projectNo}
+		ORDER BY
+			t.task_status, 
+			t.createdate ASC
 	</select>
+	
+	<!-- 프로젝트 하위작업 추가  -->
+	<insert id="addProjectTask"
+			parameterType="com.goodee.JoinTree.vo.ProjectTask"
+			useGeneratedKeys="true" keyProperty="taskNo" keyColumn="task_no">
+		INSERT INTO project_task(
+			project_no,
+			emp_no,
+			task_title,
+			task_start_date,
+			task_end_date,
+			task_content,
+			task_status,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{projectNo},
+			#{empNo},
+			#{taskTitle},
+			#{taskStartDate},
+			#{taskEndDate},
+			#{taskContent},
+			'0',
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
+		);
+	</insert>
+	
+	<!-- 프로젝트 하위작업 파일 업로드 -->
+	<insert id="addTaskFileUpload">
+		INSERT INTO task_file (
+			task_no,
+			task_origin_filename,
+			task_save_filename,
+			task_filetype,
+			task_filesize,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{taskNo},
+			#{taskOriginFilename},
+			#{taskSaveFilename},
+			#{taskFiletype},
+			#{taskFilesize},
+			now(),
+			now(),
+			#{createId},
+			#{createId}
+		)
+	</insert>
+	
+	<!-- 프로젝트 하위작업 완료처리 -->
+	<update id="endProjectTask"
+			parameterType="com.goodee.JoinTree.vo.ProjectTask">
+		UPDATE project_task
+		SET 
+			task_status = '1',
+			task_end_date = NOW(),
+			updatedate = NOW(),
+			update_id = #{updateId}
+		WHERE 
+			task_no = #{taskNo};
+	</update>
+	
+	<!-- 프로젝트 하위작업 삭제  -->
+	<delete id="removeProjectTask">
+		DELETE FROM project_task
+		WHERE 
+			project_no = #{projectNo}
+			AND 
+			task_no = #{taskNo};
+	</delete>
 <!-- 프로젝트 작업 끝 -->
 
 <!-- 프로젝트 멤버 -->

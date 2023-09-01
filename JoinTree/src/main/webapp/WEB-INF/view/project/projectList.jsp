@@ -279,6 +279,18 @@
 				console.log("projectEndDate:", projectEndDate);
 				console.log("projectContent:", projectContent);
 				
+				// 시작일자와 종료일자 비교 검사
+				if (projectStartDate > projectEndDate) {
+					$("#projectStartDate").val('');
+					$("#projectEndDate").val('');
+					Swal.fire(
+							'Error',
+							'종료일자는 시작일자보다 커야합니다.',
+							'error'
+						)
+					return; // 수정 작업 중단
+				}
+				
 				if(!empNo || !projectName || !projectColor || !projectStartDate || !projectEndDate || !projectContent) {
 					alert("값 넣어줘 ");
 					return;

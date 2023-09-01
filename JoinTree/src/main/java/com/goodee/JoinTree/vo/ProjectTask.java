@@ -14,9 +14,11 @@ public class ProjectTask {
 	private String taskEndDate;
 	private String taskContent;
 	private String taskStatus;
-	private String totalTasks;
-	private String completedTasks;
-	private String progressRate;
+	private String totalTasks; // 전체 작업수
+	private String completedTasks; // 완료된 작업수
+	private String progressRate; // 작업률
+	private String taskOriginFilename; // 작업 파일 이름 join용
+	private String taskSaveFilename;
 	private String createdate;
 	private String updatedate;
 	private int createId;

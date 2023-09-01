@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.mapper.ProjectMapper;
 import com.goodee.JoinTree.service.OrgChartService;
@@ -231,6 +233,56 @@ public class ProjectController {
 		return projectTaskMap;
 	}
 	
+	// 하위작업 추가 
+	@PostMapping("project/addProjectTask")
+	@ResponseBody
+	public int addProjectTask(ProjectTask projectTask) {
+		int row = projectService.addProjectTask(projectTask);
+		
+		if(row != 1) {
+			return 0;
+		} 
+		return projectTask.getTaskNo();
+	}
+	
+	// 하위작업 파일 업로드
+	@PostMapping("project/fileUpload")
+	@ResponseBody
+	public String addTaskFileUpload(HttpSession session, HttpServletRequest request,
+								@RequestParam("file") MultipartFile file, 
+								@RequestParam("taskNo") int taskNo) {
+		
+		// 서비스 메서드 호출
+		String fileUpload = projectService.addTaskFileUpload(session, request, file, taskNo);
+		
+		return fileUpload;
+
+	}
+	// 프로젝트 작업 완료 처리
+	@PostMapping("project/endProjectTask")
+	@ResponseBody
+	public String endProjectTask(@RequestParam(name="taskNo") int taskNo) {
+		log.debug(yellow + "taskNo:" + taskNo + reset);
+		int row = projectService.endProjectTask(taskNo);
+
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	
+	// 프로젝트 작업 삭제 처리
+	@PostMapping("project/removeProjectTask")
+	@ResponseBody
+	public String removeProjectTask(@RequestParam(name="taskNo") int taskNo,
+									@RequestParam(name="projectNo") int projectNo) {
+		int row = projectService.removeProjectTask(taskNo,projectNo);
+		
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
 	/* 프로젝트 하위작업 끝 */
 	/*프로젝트 멤버*/
 	// 프로젝트 멤버 추가

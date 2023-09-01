@@ -7,10 +7,12 @@ import org.apache.ibatis.annotations.Mapper;
 import com.goodee.JoinTree.vo.Project;
 import com.goodee.JoinTree.vo.ProjectMember;
 import com.goodee.JoinTree.vo.ProjectTask;
+import com.goodee.JoinTree.vo.TaskFile;
 
 @Mapper
 public interface ProjectMapper {
 	
+	/* 프로젝트 */
 	// 프로젝트 검색 별 행 카운트
 	int projectCountRows(String searchName, String startDate, String endDate);
 	
@@ -40,7 +42,7 @@ public interface ProjectMapper {
 	
 	// 프로젝트 삭제
 	int removeProject(int projectNo);
-	
+	/* 프로젝트 끝 */
 	
 	/* 프로젝트 하위작업 */
 	// 프로젝트 작업 수 계산
@@ -48,6 +50,19 @@ public interface ProjectMapper {
 	
 	// 프로젝트 하위작업 리스트 출력 
 	List<ProjectTask> selectProejectTaskList(int projectNo);
+	
+	// 프로젝트 하위작업 추가 
+	int addProjectTask(ProjectTask projectTask);
+	
+	// 프로젝트 하위작업 파일 업로드
+	int addTaskFileUpload(TaskFile taskFile);
+	
+	// 프로젝트 완료 처리
+	int endProjectTask(int taskNo);
+	
+	// 프로젝트 하위작업 삭제
+	int removeProjectTask(int taskNo, int projectNo);
+	/* 프로젝트 하위작업 끝 */
 	
 	/* 프로젝트 멤버 */
 	// 프로젝트 멤버 카운트 출력 
@@ -64,4 +79,5 @@ public interface ProjectMapper {
 	
 	// 프로젝트 멤버 삭제
 	int removeProjectMemeber(int empNo, int projectNo);
+	/* 프로젝트 멤버 끝*/
 }

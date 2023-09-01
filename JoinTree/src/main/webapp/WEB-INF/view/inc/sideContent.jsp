@@ -14,7 +14,7 @@
 				<div class="nav-profile-text d-flex flex-column">
 					<span class="font-weight-bold mb-2">${empName}</span>
 					<c:forEach var="child" items="${sessionScope.childCodeList}">
-						<c:if test="${child.code == dept && child.status == 'Y'}">
+						<c:if test="${child.code == dept && child.status == '1'}">
 					
 							<span class="text-secondary text-small">${child.codeName}</span>
 						</c:if>
@@ -35,7 +35,7 @@
 		<!-- 왼쪽 - 공지 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0101' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0101' && child.status == '1'}">
 					<a class="nav-link" data-toggle="collapse" href="#notice" aria-expanded="false" aria-controls="general-pages">
 						<span class="menu-title">공지</span>
 						<i class="menu-arrow"></i>
@@ -46,7 +46,7 @@
 			<div class="collapse" id="notice">
 				<ul class="nav flex-column sub-menu">
 					<c:forEach var="child" items="${sessionScope.childCodeList}">
-						<c:if test="${child.upCode == 'B01' && child.status == 'Y'}">
+						<c:if test="${child.upCode == 'B01' && child.status == '1'}">
 							<c:choose>
 								<c:when test="${child.codeName == '공지사항'}">
 									<li class="nav-item"><a class="nav-link" href="/JoinTree/board/noticeList">공지사항</a></li>
@@ -65,7 +65,7 @@
 		<li class="nav-item">
 			<a class="nav-link" data-toggle="collapse" href="#board" aria-expanded="false" aria-controls="ui-basic">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0102' && child.status == 'Y'}">
+					<c:if test="${child.code == 'M0102' && child.status == '1'}">
 						<span class="menu-title">게시판</span>
 						<i class="menu-arrow"></i>
 						<i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -75,7 +75,7 @@
 			<div class="collapse" id="board">
 				<ul class="nav flex-column sub-menu">
 					<c:forEach var="child" items="${sessionScope.childCodeList}">
-						<c:if test="${child.upCode == 'B01' && child.status == 'Y'}">
+						<c:if test="${child.upCode == 'B01' && child.status == '1'}">
 							<c:choose>
 								<c:when test="${child.codeName == '자유게시판'}">
 									<li class="nav-item"><a class="nav-link" href="/JoinTree/community/freeCommList">자유게시판</a></li>
@@ -99,7 +99,7 @@
 		<!-- 왼쪽 - 프로젝트 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0103' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0103' && child.status == '1'}">
 					<a class="nav-link" href="/JoinTree/project/projectList">
 						<span class="menu-title">프로젝트</span>
 						<i class="mdi mdi-newspaper menu-icon"></i>
@@ -111,7 +111,7 @@
 		<!-- 왼쪽 - 일정 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0104' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0104' && child.status == '1'}">
 					<a class="nav-link" data-toggle="collapse" href="#calendarBar" aria-expanded="false" aria-controls="ui-basic">
 						<span class="menu-title">일정</span>
 						<i class="menu-arrow"></i>
@@ -122,7 +122,7 @@
 			<div class="collapse" id="calendarBar">
 				<ul class="nav flex-column sub-menu">
 					<c:forEach var="child" items="${sessionScope.childCodeList}">
-						<c:if test="${child.upCode == 'S01' && child.status == 'Y'}">
+						<c:if test="${child.upCode == 'S01' && child.status == '1'}">
 							<c:choose>
 								<c:when test="${child.codeName == '전사일정'}">
 									<li class="nav-item"> <a class="nav-link" href="/JoinTree/schedule/companySchedule">전사일정</a></li>									
@@ -143,7 +143,7 @@
 		<!-- 왼쪽 - 예약 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0112' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0112' && child.status == '1'}">
 				<a class="nav-link" data-toggle="collapse" href="#reservation" aria-expanded="false" aria-controls="ui-basic">
 					<span class="menu-title">예약하기</span>
 					<i class="menu-arrow"></i>
@@ -164,7 +164,7 @@
 		<!-- 왼쪽 - 근태 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0105' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0105' && child.status == '1'}">
 				<a class="nav-link" data-toggle="collapse" href="#commute" aria-expanded="false" aria-controls="ui-basic">
 					<span class="menu-title">근태</span>
 					<i class="menu-arrow"></i>
@@ -183,7 +183,7 @@
 		<!-- 왼쪽 - 전자결재 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0106' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0106' && child.status == '1'}">
 					<a class="nav-link" data-toggle="collapse" href="#document" aria-expanded="false" aria-controls="ui-basic">
 						<span class="menu-title">전자결재</span>
 						<i class="menu-arrow"></i>
@@ -205,7 +205,7 @@
 		<!-- 왼쪽 - 주소록 -->
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
-				<c:if test="${child.code == 'M0107' && child.status == 'Y'}">
+				<c:if test="${child.code == 'M0107' && child.status == '1'}">
 					<a class="nav-link" href="/JoinTree/empTel/empTelList">
 						<span class="menu-title">주소록</span>
 						<i class="mdi mdi-account-search menu-icon"></i>
@@ -219,7 +219,7 @@
 			<div class="line"></div>
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0108' && child.status == 'Y'}">
+					<c:if test="${child.code == 'M0108' && child.status == '1'}">
 						<a class="nav-link" href="/JoinTree/code/codeList">
 							<span class="menu-title">공통코드관리</span>
 							<i class="mdi mdi mdi-server menu-icon"></i>
@@ -234,7 +234,7 @@
 			<div class="line"></div>
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0109' && child.status == 'Y'}">
+					<c:if test="${child.code == 'M0109' && child.status == '1'}">
 						<a class="nav-link" data-toggle="collapse" href="#emp" aria-expanded="false" aria-controls="ui-basic">
 							<span class="menu-title">인사관리</span>
 							<i class="menu-arrow"></i>
@@ -259,7 +259,7 @@
 			<!-- 왼쪽 - 예약관리 -->
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0110' && child.status == 'Y'}">
+					<c:if test="${child.code == 'M0110' && child.status == '1'}">
 						<a class="nav-link" data-toggle="collapse" href="#reservation" aria-expanded="false" aria-controls="ui-basic">
 							<span class="menu-title">예약관리</span>
 							<i class="menu-arrow"></i>
@@ -278,7 +278,7 @@
 			<!-- 왼쪽 - 기자재관리 -->
 			<li class="nav-item">
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0111' && child.status == 'Y'}">
+					<c:if test="${child.code == 'M0111' && child.status == '1'}">
 						<a class="nav-link" data-toggle="collapse" href="#equipment" aria-expanded="false" aria-controls="ui-basic">
 							<span class="menu-title">기자재관리</span>
 							<i class="menu-arrow"></i>
