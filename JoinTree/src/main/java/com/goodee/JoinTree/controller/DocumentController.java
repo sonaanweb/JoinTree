@@ -264,8 +264,12 @@ public class DocumentController {
 	        // 한 명의 결재자가 있을 때, 첫 번째 결재자의 승인 시 결재완료 상태로 변경
 	        docDefault.setDocStatus("A0203");
 	        docDefault.setDocStamp2(signImg); // 결재자의 서명 이미지 저장
-	        row = documentService.approveDocDefault1(docDefault);
+	        docSigner.setEmpSignerLevel(signerCnt);
+	        docSigner.setDocStatus("A0203"); // 승인 시 signer 테이블 상태도 변경
+	        row = documentService.approveDocDefault1(docDefault); // 결재 처리
+	        row += documentService.modifySignerStatus(docSigner); // signer 테이블 변경
 	        log.debug("row:" + row);
+	        
 	    } else if (signerCnt == 2) {
 	        if (signerLevel == 1) {
 	            // 두 명의 결재자가 있을 때, 첫 번째 결재자의 승인 시 결재중 상태로 변경
@@ -280,7 +284,7 @@ public class DocumentController {
 	        }
 	    }
 
-	    if (row == 1) {
+	    if (row == 2) {
 	        return "success";
 	    } else {
 	        return "fail";
@@ -351,7 +355,7 @@ public class DocumentController {
 	// 반려 처리 
 	@PostMapping("/document/reject")
 	@ResponseBody
-	public String reject(HttpSession session, int docNo, String docStatus) {
+	public String reject(HttpSession session, int docNo) {
 		// 로그인 유저
 		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 		
@@ -359,7 +363,6 @@ public class DocumentController {
 		
 		DocumentDefault docDefault = new DocumentDefault();
 		docDefault.setDocNo(docNo);
-		docDefault.setDocStatus(docStatus);
 		docDefault.setUpdateId(empNo);
 	
 		int row = documentService.rejectDocDefault(docDefault);

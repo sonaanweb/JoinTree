@@ -34,4 +34,12 @@
 		FROM document_signer
 		WHERE doc_no = #{docNo} AND emp_signer_no = #{empSignerNo} 
 	</select>
+
+	<update id="modifySignerStatus" parameterType="com.goodee.JoinTree.vo.DocumentSigner">
+		UPDATE document_signer
+		SET doc_status = #{docStatus}, 
+			updatedate = NOW(), 
+			update_id = #{empSignerNo}
+		WHERE doc_no = #{docNo} AND emp_signer_level = #{empSignerLevel}
+	</update>
 </mapper>

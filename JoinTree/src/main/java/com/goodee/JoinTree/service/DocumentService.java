@@ -195,5 +195,13 @@ public class DocumentService {
 		
 		return row;
 	}
+	
+	// 결재, 반려 시 signer 테이블 변경
+	public int modifySignerStatus(DocumentSigner documentSigner) {
+		int row = documentSignerMapper.modifySignerStatus(documentSigner);
+	
+		return row;	
+	}
+		
 
 }

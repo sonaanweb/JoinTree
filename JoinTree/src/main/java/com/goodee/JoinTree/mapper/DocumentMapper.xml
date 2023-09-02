@@ -172,7 +172,6 @@
 		WHERE doc_no = #{docNo}
 	</update>
 	
-	
 	<!-- 삭제 -->
 	<!-- 기본 기안서 삭제 -->
  	<delete id="removeDocDefault" parameterType="com.goodee.JoinTree.vo.DocumentDefault">
@@ -194,7 +193,6 @@
 		FROM document_reshuffle
 		WHERE doc_no = #{docNo}
 	</delete>
-		
 	
 	<!-- 조회 -->
 	<!-- 기본 기안서 조회 -->
