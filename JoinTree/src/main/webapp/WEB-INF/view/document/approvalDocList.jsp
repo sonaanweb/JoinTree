@@ -89,7 +89,7 @@
 					
 					<!-- 결재, 반려 버튼 -->
 					<div id="approvalAndRejectBtn">
-						<button type="button" id="ApprovalBtn">결재</button>
+						<button type="button" id="approvalBtn">결재</button>
 						<button type="button" id="rejectBtn">반려</button>
 					</div>
 		
@@ -119,11 +119,10 @@
 	});
 		
  
-   // 'ApprovalBtn' 버튼 클릭 이벤트 핸들러 내부에서
-	 $('#ApprovalBtn').click(async function() {
+  	 // 'approvalBtn' 버튼 클릭 이벤트 핸들러 내부에서
+	 $('#approvalBtn').click(function() {
 	   
 	    if (confirm("결재를 진행하시겠습니까?")) {
-	        let documentStatus = $('#docStatus').val(); // 모달에서 상태 정보 가져오기
 	
 	        // 현재 선택된 문서 번호 가져오기
 	        let documentNo = $('#docNo').text();
@@ -139,6 +138,7 @@
 	                if (response === 'success') {
 	                    // 성공한 경우 처리
 	                    alert("결재 성공");
+	                    location.reload(); // 현재 메인 페이지 새로고침
 	                } else {
 	                    // 실패한 경우 처리
 	                    alert("결재 실패");
@@ -152,9 +152,8 @@
 	});
    
     // 반려 버튼
-	$('#rejectBtn').click(async function() {
+	$('#rejectBtn').click(function() {
     if (confirm("문서를 반려하시겠습니까?")) {
-        let documentStatus = $('#docStatus').val();
         let documentNo = $('#docNo').text();
 
         $.ajax({
@@ -166,6 +165,7 @@
             success: function(response) {
                 if (response === 'success') {
                     alert("문서 반려 완료");
+                    location.reload(); // 현재 메인 페이지 새로고침
                 } else {
                     alert("문서 반려 실패");
                 }
