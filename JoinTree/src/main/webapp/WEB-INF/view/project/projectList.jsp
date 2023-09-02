@@ -428,7 +428,7 @@
 					</div>
 					<div class="wrapper">
 						카드지정색 : 
-								<input type="radio" class="projectColor" name="projectColor" value="#F2E180"> <div class="color"></div>
+								<input type="radio" class="projectColor" name="projectColor" value="#8AE6C5"> <div class="color"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#EDC6B1"> <div class="color" style="background-color: #EDC6B1"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#EDE8AB"> <div class="color" style="background-color: #EDE8AB"></div>
 								<input type="radio" class="projectColor" name="projectColor" value="#8CA8BF"> <div class="color" style="background-color: #8CA8BF"></div>

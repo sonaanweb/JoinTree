@@ -74,10 +74,12 @@
 						'<h3>기간 :<input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  '<input type="date" id="projectEndDate" value="' + project.projectEndDate.substring(0, 10) + '" readonly="readonly"></input>' + '</h3>' +
 						'<div class="wrapper"><h3>팀원 :</h3><div id="memberList" class="memberList">' + teamMembers.join(" ") + '<button id="addPjMemeberBtn" class="btn btn-success btn-sm"><i class="mdi mdi-plus"></i></button></div></div>' + 
 						'<h3>진행률</h3><div class="wrapper"><div class="progress"></div><div class="progressNo"></div></div>'+
-						'<div><h3>작업리스트</h3></div>'
+						'<div class="wrapper"><h3>작업리스트</h3>'+
+						'<button id="addPjTaskBtn" class="btn btn-success btn-sm margin10">작업추가</button></div>'
 					);
 					
-					if(project.projectStatus === 'A0403') {
+					// 상태가 완료일때는 수정 불가로 버튼 숨기기
+					if(project.projectStatus === '0') {
 						$("#modifyProjectBtn").hide();
 						$("#modifyProjectEndBtn").hide();
 						$("#endProjectBtn").hide();
@@ -88,6 +90,10 @@
 						$(".deleteMember").show();
 					};
 					
+					if(!empNoToDel) {
+						$("#removeProjectBtn").hide();
+					};
+				
 					// 팀원 명단 모달창 -> 내용이 로드되지 않았을수도 잇기에 해당 버튼은 이 함수 내에서 선언
 					$("#addPjMemeberBtn").on("click", function() {
 						$("#projectMemberModal").modal("show");
@@ -370,7 +376,7 @@
 					url: "/JoinTree/project/removeProjectMemeber",
 					data: {
 						projectNo: projectNo,
-						empNo: selectedMemeberNo,
+						empNo: Array.isArray(memberNos) ? memberNos : [memberNos],
 						createId: loginEmpNo,
 						updateId: loginEmpNo
 					},
@@ -383,6 +389,7 @@
 							alert("데이터 전송 중 오류가 발생했습니다.");
 						} else if (response === "duplicate") {
 							alert("이미 선택한 사원을 제외하고 추가합니다.");
+							fetchProjectTaskData();
 							fetchProjectData();
 						}
 					},
@@ -404,6 +411,7 @@
 		});
 	/* 프로젝트 팀원 삭제 끝 */
 /* 프로젝트 팀원 끝 */		
+
 /*프로젝트 작업*/
 	/* 프로젝트 하위작업 리스트 */
 	function fetchProjectTaskData() {
@@ -419,13 +427,18 @@
 				console.log("projectProgress",projectProgress);
 				
 				$(".projectTask").empty();
+				$(".projectTaskList1").empty();
+				$(".projectTaskList2").empty();
+				$(".progress").empty();
+				$(".progressNo").empty();
 				
 				projectTaskList.forEach(function (task) {
 					if(task.taskStatus === '0') {
 						$(".projectTaskList1").append(
 							'<div class="projectTaskOne margin10"' +
 								'data-taskno="' + task.taskNo + '" ' +
-								'data-taskempinfo=' + task.empName + "(" + task.empNo + ') ' +
+								'data-taskempno="' + task.empNo + '" ' +
+								'data-taskempname="' + task.empName + '" ' +
 								'data-tasktitle="' + task.taskTitle + '" ' +
 								'data-taskcontent="' + task.taskContent + '" ' +
 								'data-taskstartdate="' + task.taskStartDate.substring(0,10) + '" '+ 
@@ -439,20 +452,21 @@
 						);
 					} else {
 						$(".projectTaskList2").append(
-								'<div class="projectTaskOne margin10"' +
-									'data-taskno="' + task.taskNo + '" ' +
-									'data-taskempinfo=' + task.empName + "(" + task.empNo + ') ' +
-									'data-tasktitle="' + task.taskTitle + '" ' +
-									'data-taskcontent="' + task.taskContent + '" ' +
-									'data-taskstartdate="' + task.taskStartDate.substring(0,10) + '" '+ 
-									'data-taskenddate="' + task.taskEndDate.substring(0,10) + '" '+ 
-									'data-taskstatus="' + (task.taskStatus === '1' ? '완료' : '미완료') + '" ' +
-									'data-taskoriginfilename="' + task.taskOriginFilename + '" ' +
-									'data-tasksavefilename="' + task.taskSaveFilename + '" ' +
-									'data-createdate="' + task.createdate.substring(0,10) + '">' +
-									'<div>' + task.taskTitle + '</div>'+
-								'</div>'
-							);
+							'<div class="projectTaskOne margin10"' +
+								'data-taskno="' + task.taskNo + '" ' +
+								'data-taskempno="' + task.empNo + '" ' +
+								'data-taskempname="' + task.empName + '" ' +
+								'data-tasktitle="' + task.taskTitle + '" ' +
+								'data-taskcontent="' + task.taskContent + '" ' +
+								'data-taskstartdate="' + task.taskStartDate.substring(0,10) + '" '+ 
+								'data-taskenddate="' + task.taskEndDate.substring(0,10) + '" '+ 
+								'data-taskstatus="' + (task.taskStatus === '1' ? '완료' : '미완료') + '" ' +
+								'data-taskoriginfilename="' + task.taskOriginFilename + '" ' +
+								'data-tasksavefilename="' + task.taskSaveFilename + '" ' +
+								'data-createdate="' + task.createdate.substring(0,10) + '">' +
+								'<div>' + task.taskTitle + '</div>'+
+							'</div>'
+						);
 					}
 				});
 				
@@ -460,7 +474,8 @@
 				$(".projectTaskListAll").on("click", ".projectTaskOne", function() {
 					taskNo = $(this).data("taskno");
 					const taskTitle = $(this).data("tasktitle");
-					const taskEmpInfo = $(this).data("taskempinfo");
+					const taskEmpNo = $(this).data("taskempno");
+					const taskEmpName = $(this).data("taskempname");
 					const taskContent = $(this).data("taskcontent");
 					const taskStartDate = $(this).data("taskstartdate");
 					const taskEndDate = $(this).data("taskenddate");
@@ -468,29 +483,38 @@
 					const taskOriginFilename = $(this).data("taskoriginfilename");
 					const taskSaveFilename = $(this).data("tasksavefilename");
 					const createdate = $(this).data("createdate");
-					console.log("taskSaveFilename:",taskSaveFilename);
+					//console.log("taskEmpName:",taskEmpName);
+					// 댓글
+					fetchProjectTaskComment(taskNo);
 					
 					$(".projectTask").empty();
 					$(".projectTask").append(
-						'<div class="stretch-card grid-margin">'+
-							'<div class="card">'+
+						'<div class="stretch-card grid-margin">' +
+							'<div class="card">' +
 								'<div class="card-body projectTaskCard"> ' +
-									'<div><h3>' + taskTitle + '</h3></div>'+
-									'<div><h4>담당자 : ' + taskEmpInfo + '</h4></div>'+
-									'<div><h4>기간 : ' + taskStartDate + " ~ " + taskEndDate + '</h4></div>'+
-									'<div><h4>작업상태 : ' + taskStatus+ '</h4></div>'+
-									'<div><h4>작업내용 : ' + taskContent+ '</h4></div>'+
+									'<div><h3>' + taskTitle + '</h3></div>' +
+									'<div><h4>담당자 : ' + taskEmpName + '('+ taskEmpNo + ')' + '</h4></div>' +
+									'<div><h4>기간 : ' + taskStartDate + " ~ " + taskEndDate + '</h4></div>' +
+									'<div><h4>작업상태 : ' + taskStatus + '</h4></div>' +
+									'<div><h4>작업내용 : ' + taskContent + '</h4></div>' +
 									'<div id="taskFile"><h4>' + 
 										(taskSaveFilename ? 
-										'첨부파일 : <a href="/JoinTree/taskFile/' + taskSaveFilename + '" id="downloadLink" download="'+ taskOriginFilename +'">'+ taskOriginFilename + '</a>' :
+										'첨부파일 : <a href="/JoinTree/taskFile/' + taskSaveFilename + '" id="downloadLink" download="' + taskOriginFilename + '">' + taskOriginFilename + '</a>' :
 										'첨부파일이 없습니다.') + 
 									'</h4></div>' +
-									'<div class="right">' +
-										(taskStatus === '미완료' ? '<button type="button" id="taskEndBtn">작업완료</button>' : '' ) +
-										'<button type="button" id="taskDelBtn" class="margin10">작업삭제</button>' +
-									'</div>' +
-								'</div>'+
-							'</div>'+
+									(taskEmpNo === loginEmpNo ? 
+										(taskStatus === '미완료' ? 
+										'<div class="right">' +
+										'<button type="button" class="btn btn-success btn-sm" id="taskEndBtn">작업완료</button>' +
+										'<button type="button" class="btn btn-success btn-sm" id="taskDelBtn" class="margin10">작업삭제</button>'+
+										'</div>' 
+										: 
+										'<div class="right">' +
+										'<button type="button" class="btn btn-success btn-sm" id="taskDelBtn" class="margin10">작업삭제</button>'+
+										'</div>'
+									) : '' ) +
+								'</div>' + 
+							'</div>' +
 						'</div>'
 					);
 				});
@@ -519,7 +543,7 @@
 
 	/* 프로젝트 작업 추가 */
 		// 모달
-		$("#addPjTaskBtn").on("click", function() {
+		$(".projectOne").on("click", "#addPjTaskBtn",function() {
 			$("#addProjectTaskModal").modal("show");
 		});
 	
@@ -591,10 +615,6 @@
 						uploadProjectTaskFile(response);
 					}
 					$(".projectTaskCard").empty();
-					$(".projectTaskList1").empty();
-					$(".projectTaskList2").empty();
-					$(".progress").empty();
-					$(".progress-bar").empty();
 					fetchProjectTaskData();
 					
 				},error: function(error) {
@@ -633,15 +653,10 @@
 				success: function(data) {
 					//console.log("data",data);
 					if(data === 'success'){
-						alert("업로드 성공");
 						$("#taskFile").append(files[0].name);
 						$(".projectTaskCard").empty();
-						$(".projectTaskList1").empty();
-						$(".projectTaskList2").empty();
-						$(".progress").empty();
-						$(".progress-bar").empty();
+						$("#taskOriginFilename").val('');
 						fetchProjectTaskData();
-						
 					} else {
 						alert("업로드 실패");
 					}
@@ -680,8 +695,6 @@
 										showConfirmButton: false,
 										timer: 1500
 									})
-									$(".projectTaskList1").empty();
-									$(".projectTaskList2").empty();
 									fetchProjectTaskData();
 								}
 							}
@@ -690,49 +703,97 @@
 				});
 		});
 	/* 프로젝트 작업 완료로 변경 끝 */
-	/* 프로젝트 작업 삭제 */
-	$(".projectTask").on("click", "#taskDelBtn", function() {
-		Swal.fire({
-			title: '작업을 삭제하시겠습니까?',
-			text: "완료된 작업은 수정할 수 없습니다.",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#8BC541',
-			cancelButtonColor: '#888',
-			confirmButtonText: '완료',
-			cancelButtonText: '취소'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					console.log("taskNo",taskNo);
-					$.ajax({
-						type : "POST",
-						url : "/JoinTree/project/removeProjectTask",
-						data : {
-							taskNo : taskNo,
-							projectNo : projectNo
-						},
-						success : function(response) {
-							console.log("respose",response);
-							if(response === "success") {
-								Swal.fire({
-									icon: 'success',
-									title: '작업이 삭제되었습니다',
-									showConfirmButton: false,
-									timer: 1500
-								})
-								$(".projectTaskList1").empty();
-								$(".projectTaskList2").empty();
-								fetchProjectData();
-								fetchProjectTaskData();
-							}
-						}
-					});
-				}
-			});
-	})
 	
+	/* 프로젝트 작업 삭제 */
+		$(".projectTask").on("click", "#taskDelBtn", function() {
+			Swal.fire({
+				title: '작업을 삭제하시겠습니까?',
+				text: "완료된 작업은 수정할 수 없습니다.",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#8BC541',
+				cancelButtonColor: '#888',
+				confirmButtonText: '완료',
+				cancelButtonText: '취소'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						console.log("taskNo",taskNo);
+						$.ajax({
+							type : "POST",
+							url : "/JoinTree/project/removeProjectTask",
+							data : {
+								taskNo : taskNo,
+								projectNo : projectNo
+							},
+							success : function(response) {
+								console.log("respose",response);
+								if(response === "success") {
+									Swal.fire({
+										icon: 'success',
+										title: '작업이 삭제되었습니다',
+										showConfirmButton: false,
+										timer: 1500
+									})								
+									fetchProjectData();
+									fetchProjectTaskData();
+								}
+							}
+						});
+					}
+				});
+		})
+	/* 프로젝트 작업 삭제 끝 */
 /* 프로젝트 작업 끝 */
-
+/* 프로젝트 작업 댓글 */
+	/* 프로젝트 작업 댓글 리스트 */
+	function fetchProjectTaskComment(taskNo) {
+		console.log("taskNo",taskNo);
+		$.ajax({
+			type : "GET",
+			url : "/JoinTree/project/selectTaskComment",
+			data : {taskNo: taskNo},
+			success: function(taskCommentList) {
+				console.log("taskCommentList",taskCommentList);
+				//alert("댓글리스트 성공");
+				taskCommentList.forEach(function (comment) {
+					if(comment.commentParentNo === 0){
+						$(".taskComment").append(
+							'<div class="stretch-card grid-margin">' +
+								'<div class="floatL">  </div>' + 
+								'<div class="card">' +
+									'<div class="card-body">' +
+										'<div>' + comment.parentEmpName + "(" + comment.parentEmpNo + ")" +
+										'<div class="floatR">' + comment.parentCreatedate.substring(0,10) +'</div></div>'+
+										'<div>' + comment.parentContent +'</div>'+
+									'</div>' +
+								'</div>'+
+							'</div>'
+						)
+					}
+					if(comment.childContent !== null) {
+						$(".taskComment").append(
+							'<div class="stretch-card grid-margin childComment">' +
+							'<div class="floatL"> -> </div>' + 
+								'<div class="card">' +
+									'<div class="card-body">' +
+										'<div>' + comment.childEmpName + "(" + comment.childEmpNo + ")" +
+										'<div class="floatR">' + comment.childCreatedate.substring(0,10) +'</div></div>' +
+										'<div>' + comment.childContent +'</div>' +
+									'</div>' +
+								'</div>'+
+							'</div>'
+						)
+					}
+				});
+			},
+			error: function(error){
+				console.log("error",error);
+				alert("댓글리스트 실패");
+			}
+		});
+	}
+	/* 프로젝트 작업 댓글 리스트 끝 */
+/* 프로젝트 작업 댓글 끝 */
 	}); // 마지막
 </script>
 	<!-- 필수 요소-->
@@ -743,25 +804,36 @@
 				<div class="projectOne">
 					<!-- 프로젝트 상세정보 출력 -->
 				</div>
-				<button id="addPjTaskBtn" class="btn btn-success btn-sm margin10">작업추가</button>
-				<div class="row">
-					<div class="projectTaskListAll card col-md-4">
-					<div>미완료</div>
-						<div class="projectTaskList1 wrapper card-body">
+					<div class="projectTaskListAll col-md-4">
+						<div class="card">
+							<div>미완료</div>
+							<div class="projectTaskList1 wrapper card-body">
+								<!-- 프로젝트 미완료된 작업 리스트 출력 -->
+							</div>
+							<div class="line"></div>
+							<div>완료</div>
+							<div class="projectTaskList2 wrapper card-body">
+								<!-- 프로젝트 완료된 작업 리스트 출력 -->
+							</div>
+						</div>
+						<div>
+							<button id="removeProjectBtn" class="btn btn-success btn-sm margin10">프로젝트 삭제</button>
+						</div>
+					</div>
+					<div class="col-md-8 project-task-comment">
+						<div class="projectTask">
+							<!-- 프로젝트 작업 정보 출력 -->
+						</div>
+						<div class="taskComment">
+							<!-- 프로젝트 작업 댓글 정보 출력 -->
 							
-							<!-- 프로젝트 미완료된 작업 리스트 출력 -->
 						</div>
-						<div class="line"></div>
-						<div>완료</div>
-						<div class="projectTaskList2 wrapper card-body">
-							<!-- 프로젝트 완료된 작업 리스트 출력 -->
+						<div class="taskCommentChild">
+							<!-- 프로젝트 작업 대댓글 정보 출력 -->
+							
 						</div>
 					</div>
-					<div class="col-md-8 projectTask">
-						<!-- 프로젝트 작업 정보 출력 -->
-					</div>
-				</div>
-				<button id="removeProjectBtn" class="btn btn-success btn-sm margin10">프로젝트 삭제</button>
+				
 			</div>
 	</div>
 	
