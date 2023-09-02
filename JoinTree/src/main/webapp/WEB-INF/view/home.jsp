@@ -321,8 +321,7 @@
 									<div>프로젝트</div>
 									<hr>
 									<ul>
-										
-										<c:forEach var="p" items="${homeProejctList}" varStatus="status">
+										<c:forEach var="p" items="${homeProejctList}">
 											<li>
 												<a href="project/projectOne?projectNo=${p.projectNo}">${p.projectName}(${p.empName})</a>
 											</li>
@@ -375,19 +374,6 @@
 						</div>
 					</div>					
 				</div>
-				
-				<!--  로그인 임시 -->
-				<div class="row">
-					<div class="col-md-3 stretch-card grid-margin">
-						<div class="card card-img-holder">
-							<div class="card-body"> 
-								<a href="/login/login">로그인</a>
-								<a href="/logout">로그아웃</a>
-							</div>
-						</div>
-					</div>					
-				</div>
-				
 		</div><!-- 컨텐츠 끝 -->
 	</div><!-- 컨텐츠전체 끝 -->
 

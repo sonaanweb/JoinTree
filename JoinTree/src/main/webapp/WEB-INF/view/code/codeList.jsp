@@ -98,6 +98,7 @@
 							$("#upCodeOneList3").append("<td><input type=text id=upCodeNameInput value=" + upCodeOne.codeName + "></input></td>");
 							const toggleValue = upCodeOne.status;
 							
+							console.log("upCodetoggleValue",toggleValue);
 							const toggleCell = $("<td>").html(
 									'<label class="switch">' +
 									'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "1" ? 'checked' : '') + '>' +
@@ -426,7 +427,7 @@
 						data: { 
 							code: currentUpCode,
 							codeName: currentUpCodeName,
-							status: updateUpChecked ? "Y" : "N",
+							status: updateUpChecked ? "1" : "0",
 							updateId : ${loginAccount.empNo}
 						},
 						success: function(response) {
@@ -469,7 +470,7 @@
 						data: { 
 							code: currentCode,
 							codeName: currentCodeName,
-							status: updateChecked ? "Y" : "N",
+							status: updateChecked ? "1" : "0",
 							updateId : ${loginAccount.empNo}
 						},
 						success: function(response) {
