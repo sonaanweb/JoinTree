@@ -234,15 +234,11 @@ public class DocumentController {
 	    String signImg = (String) session.getAttribute("signImg");
         log.debug("signImg:" + signImg);
 
-        // String docStatus = "A0201";
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
-	    // docDefault.setDocStatus(docStatus);
 	    docDefault.setUpdateId(empNo);
 	    
 	    log.debug("docNo:" + docNo);
-	    
-	    // log.debug("docStatus:" + docStatus);
 
 		DocumentSigner docSigner = new DocumentSigner();
 		docSigner.setDocNo(docNo);
@@ -275,13 +271,24 @@ public class DocumentController {
 	            // 두 명의 결재자가 있을 때, 첫 번째 결재자의 승인 시 결재중 상태로 변경
 	            docDefault.setDocStatus("A0202");
 	            docDefault.setDocStamp2(signImg); // 첫 번째 결재자의 서명 이미지 저장
+	            
+	            docSigner.setEmpSignerLevel(signerLevel);
+	            docSigner.setDocStatus("A0202"); // 승인 시 signer 테이블 상태도 변경
+	            
 	            row = documentService.approveDocDefault1(docDefault);
+	            row += documentService.modifySignerStatus(docSigner); // 상태 변경
+	            log.debug("row:" + row);
 	        } else if (signerLevel == 2) {
 	            // 두 명의 결재자가 있을 때, 두 번째 결재자의 승인 시 결재완료 상태로 변경
 	            docDefault.setDocStatus("A0203");
 	            docDefault.setDocStamp3(signImg); // 두 번째 결재자의 서명 이미지 저장
+	            
+	            docSigner.setEmpSignerLevel(signerLevel);
+	            docSigner.setDocStatus("A0203"); // 승인 시 signer 테이블 상태도 변경
+	            
 	            row = documentService.approveDocDefault2(docDefault);
 	            row += documentService.modifySignerStatus(docSigner); // 상태 변경
+	            log.debug("row:" + row);
 	        }
 	    }
 
