@@ -358,29 +358,35 @@ public class DocumentController {
 	public String reject(HttpSession session, int docNo) {
 	    // 로그인 유저
 	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-	    
+
 	    int empNo = loginAccount.getEmpNo();
-	    
+
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
 	    docDefault.setUpdateId(empNo);
 	    docDefault.setDocStatus("A0204"); // 반려 코드
-	    
-	    int row = 0; // 변수 초기화
-	    row += documentService.rejectDocDefault(docDefault);
-	    
-	    // 결재자 테이블 상태
+
+	    // 문서 상태 변경
+	    int docDefaultRow = documentService.rejectDocDefault(docDefault);
+
+	    // 결재자 테이블 상태 변경
 	    DocumentSigner docSigner = new DocumentSigner();
 	    docSigner.setDocNo(docNo);
 	    docSigner.setEmpSignerNo(empNo);
+
+	    // empSignerLevel 값을 가져와서 설정
+	    int empSignerLevel = documentService.getSignerLevel(docSigner);
+	    docSigner.setEmpSignerLevel(empSignerLevel);
 	    docSigner.setDocStatus("A0204");
-	    
-	    row += documentService.modifySignerStatus(docSigner);
-	    
-	    if (row == 2) { // 이 부분 오류
+
+	    int docSignerRow = documentService.modifySignerStatus(docSigner);
+
+	    if (docDefaultRow == 1 && docSignerRow == 1) {
 	        return "success";
 	    } else {
 	        return "fail";
 	    }
 	}
+
+
 }
