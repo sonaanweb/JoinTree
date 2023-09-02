@@ -31,7 +31,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status IN('A0201', 'A0204')
+			AND ds.doc_status  NOT IN('A0203')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
@@ -148,7 +148,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status IN('A0201', 'A0204')
+			AND ds.doc_status NOT IN('A0203')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')

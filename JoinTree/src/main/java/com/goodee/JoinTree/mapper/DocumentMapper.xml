@@ -290,8 +290,10 @@
 			f.doc_save_filename docSaveFileName, -- 첨부파일 저장명
 			f.doc_origin_filename docOriginFileName, -- 첨부파일 원본명
 			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_info.emp_no signer1No, -- 결재자 1 사번
 			signer1_pc.code_name signer1Position, -- 결재자 1 직급
 			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_info.emp_no signer2No, -- 결재자 2 사번
 			signer2_pc.code_name signer2Position -- 결재자 2 직급
 		FROM document_default d -- 기본 기안서
 		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
@@ -329,8 +331,10 @@
 			f.doc_save_filename docSaveFileName, -- 첨부파일 저장명
 			f.doc_origin_filename docOriginFileName, -- 첨부파일 원본명
 			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_info.emp_no signer1No, -- 결재자 1 사번
 			signer1_pc.code_name signer1Position, -- 결재자 1 직급
 			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_info.emp_no signer2No, -- 결재자 2 사번
 			signer2_pc.code_name signer2Position, -- 결재자 2 직급
 			leave_type.code_name leaveType, -- 연차구분
 			dl.doc_leave_start_date docLeaveStartDate, -- 연차 시작일
@@ -375,8 +379,10 @@
 			f.doc_save_filename docSaveFileName, -- 첨부파일 저장며
 			f.doc_origin_filename docOriginFileName, -- 첨부파일 원본명
 			signer1_info.emp_name signer1Name, -- 결재자 1 사원명
+			signer1_info.emp_no signer1No, -- 결재자 1 사번
 			signer1_pc.code_name signer1Position, -- 결재자 1 직급
 			signer2_info.emp_name signer2Name, -- 결재자 2 사원명
+			signer2_info.emp_no signer2No, -- 결재자 2 사번
 			signer2_pc.code_name signer2Position, -- 결재자 2 직급
 			dr.doc_reshuffle_date docReshuffleDate, -- 인사이동 일자
 			repo.code_name docReshufflePosition, -- 변경 후 직급

@@ -104,13 +104,13 @@
 	});
 	
 	// signImg 경로
-	let path = "/JoinTree/signImg/";
+	let pathUrl = '/JoinTree/signImg/';
 	
 	// 결재자 서명 경로 설정 함수
 	function setDocStamp(docStampId, docStampValue){
 		let docStampSrc = $(docStampId); 
 		if(docStampValue){
-			docStampSrc.attr('src', path + docStampValue);
+			docStampSrc.attr('src', pathUrl + docStampValue);
 		} else{
 			docStampSrc.hide();
 		}
@@ -156,6 +156,7 @@
 	            	// 결재문서 상세정보 값 변수에 저장
 	            	// 기본기안서(공통)
 					let docNo = data.docNo; // 문서번호
+					let docStatus = data.docStatus // 문서상태
 					let createdate = data.createdate.split("T")[0]; // 기안일
 					let writer = data.writer; // 기안자
 					let docStamp1 = data.docStamp1; // 기안자 서명
@@ -171,8 +172,10 @@
 					let docSaveFileName = data.docSaveFileName; // 첨부파일 저장명
 					let docOriginFileName = data.docOriginFileName; // 첨부파일 원본명
 					let signer1Name = data.signer1Name; // 결재자1 사원명
+					let signer1No = data.signer1No; // 결재자1 사번
 					let signer1Position = data.signer1Position; // 결재자1 직급
 					let signer2Name = data.signer2Name; // 결재자2 사원명
+					let signer2No = data.signer2No; // 결재자2 사번
 					let signer2Position = data.signer2Position; // 결재자2 직급
 					
 					// 휴가신청서
@@ -235,10 +238,17 @@
 					$('#docReshuffleReason').text(docReshuffleReason); // 발령사유
 					
 					// 문서결재 결제, 반려 버튼 분기
-					if(empNo == referenceNo){ // 로그인 사번과 참조자 사번이 같은 경우 버튼 숨기기
+					if(empNo == referenceNo ){ 
+						// 로그인 사번이 참조자일 경우 버튼 비활성화
 						$('#approvalAndRejectBtn').hide();
-					} else{
-						$('#approvalAndRejectBtn').show();
+					} else if(signer1No == empNo && docStamp2 == null) { 
+					    // 로그인 사번이 결재자1 이면서 결재자 서명이 없을 경우 버튼 활성화
+					    $('#approvalAndRejectBtn').show(); 
+					} else if(signer2No == empNo && docStamp3 == null){
+						// 로그인 사번이 결재자2 이면서 결재자 서명이 없을 경우 버튼 활성화
+						$('#approvalAndRejectBtn').show(); 
+					}else{
+						$('#approvalAndRejectBtn').hide();
 					}
 					
 	                resolve(); // 호출 완료 후 프로미스 resolve 호출
