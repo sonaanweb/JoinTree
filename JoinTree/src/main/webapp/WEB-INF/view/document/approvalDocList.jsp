@@ -120,32 +120,61 @@
 		
  
    // 'ApprovalBtn' 버튼 클릭 이벤트 핸들러 내부에서
-   $('#ApprovalBtn').click(async function() {
-       let documentStatus = $('#docStatus').val(); // 모달에서 상태 정보 가져오기
-       
-	   // 현재 선택된 문서 번호 가져오기
-	   let documentNo = $('#docNo').text();
-       
-       // 상태 정보를 서버로 전송하는 코드
-       $.ajax({
-           url: '/JoinTree/document/approveDocument',
-           type: 'POST',
-           data: {
-               docNo: documentNo 
-           },
-           success: function(response) {
-               if (response === 'success') {
-                   // 성공한 경우 처리
-                   alert("결재 성공");
-               } else {
-                   // 실패한 경우 처리
-                   alert("결재 실패");
-               }
-           },
-           error: function(error) {
-              alert("서버 오류 발생. 관리자에게 문의해주세요.");
-           }
-       });
-   });
+	 $('#ApprovalBtn').click(async function() {
+	   
+	    if (confirm("결재를 진행하시겠습니까?")) {
+	        let documentStatus = $('#docStatus').val(); // 모달에서 상태 정보 가져오기
+	
+	        // 현재 선택된 문서 번호 가져오기
+	        let documentNo = $('#docNo').text();
+	
+	        // 상태 정보를 서버로 전송하는 코드
+	        $.ajax({
+	            url: '/JoinTree/document/approveDocument',
+	            type: 'POST',
+	            data: {
+	                docNo: documentNo 
+	            },
+	            success: function(response) {
+	                if (response === 'success') {
+	                    // 성공한 경우 처리
+	                    alert("결재 성공");
+	                } else {
+	                    // 실패한 경우 처리
+	                    alert("결재 실패");
+	                }
+	            },
+	            error: function(error) {
+	                alert("서버 오류 발생. 관리자에게 문의해주세요.");
+	            }
+	        });
+	    }
+	});
+   
+    // 반려 버튼
+	$('#rejectBtn').click(async function() {
+    if (confirm("문서를 반려하시겠습니까?")) {
+        let documentStatus = $('#docStatus').val();
+        let documentNo = $('#docNo').text();
+
+        $.ajax({
+            url: '/JoinTree/document/reject',
+            type: 'POST',
+            data: {
+                docNo: documentNo 
+            },
+            success: function(response) {
+                if (response === 'success') {
+                    alert("문서 반려 완료");
+                } else {
+                    alert("문서 반려 실패");
+                }
+            },
+            error: function(error) {
+                alert("서버 오류 발생. 관리자에게 문의해주세요.");
+            }
+        });
+    }
+});
 </script>
 </html>

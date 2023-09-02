@@ -39,6 +39,9 @@ public class MeetReservController {
 	
 	// crud 로그인 세션 다 추가 작업 필요
 	
+	// 추가사항 : 회의실 사진추가 (캘린더 넘어가기 이전 캘린더에서 사진 칸을 넣어서 모달로 띄우기(이미지 아이콘+모달))
+	// 그럼 회의실 관리창에서도 파일 업로드 기능이 추가 되어야 함
+	
 	
 	// 예약 가능한 회의실 List(클릭시 캘린더)
 	@GetMapping("/reservation/empMeetRoomList")
@@ -80,7 +83,7 @@ public class MeetReservController {
         return new ResponseEntity<>(eventList, HttpStatus.OK);//ResponseEntity를 통한 반환
     }
     
-    // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시...?)
+    // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시...? 데이터 검사) --- 컨트롤단에서 중복검사 한 번 더
 
     // 회의실 예약 추가
     @PostMapping("/addReservation")

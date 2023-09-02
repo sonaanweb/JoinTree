@@ -281,6 +281,7 @@ public class DocumentController {
 	            docDefault.setDocStatus("A0203");
 	            docDefault.setDocStamp3(signImg); // 두 번째 결재자의 서명 이미지 저장
 	            row = documentService.approveDocDefault2(docDefault);
+	            row += documentService.modifySignerStatus(docSigner); // 상태 변경
 	        }
 	    }
 
@@ -352,25 +353,34 @@ public class DocumentController {
 		}
 	}*/
 	
-	// 반려 처리 
 	@PostMapping("/document/reject")
 	@ResponseBody
 	public String reject(HttpSession session, int docNo) {
-		// 로그인 유저
-		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-		
-		int empNo = loginAccount.getEmpNo();
-		
-		DocumentDefault docDefault = new DocumentDefault();
-		docDefault.setDocNo(docNo);
-		docDefault.setUpdateId(empNo);
-	
-		int row = documentService.rejectDocDefault(docDefault);
-		
-		if (row == 1) {
-			return "success";
-		} else {
-			return "fail";
-		}
+	    // 로그인 유저
+	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+	    
+	    int empNo = loginAccount.getEmpNo();
+	    
+	    DocumentDefault docDefault = new DocumentDefault();
+	    docDefault.setDocNo(docNo);
+	    docDefault.setUpdateId(empNo);
+	    docDefault.setDocStatus("A0204"); // 반려 코드
+	    
+	    int row = 0; // 변수 초기화
+	    row += documentService.rejectDocDefault(docDefault);
+	    
+	    // 결재자 테이블 상태
+	    DocumentSigner docSigner = new DocumentSigner();
+	    docSigner.setDocNo(docNo);
+	    docSigner.setEmpSignerNo(empNo);
+	    docSigner.setDocStatus("A0204");
+	    
+	    row += documentService.modifySignerStatus(docSigner);
+	    
+	    if (row == 2) { // 이 부분 오류
+	        return "success";
+	    } else {
+	        return "fail";
+	    }
 	}
 }
