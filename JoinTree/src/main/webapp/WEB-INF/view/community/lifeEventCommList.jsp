@@ -6,13 +6,13 @@
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 		<script>
-			$(document).ready(function() {
+	/* 		$(document).ready(function() {
 				const urlParams = new URL(location.href).searchParams;
 				const msg = urlParams.get("msg");
 					if (msg != null) {
 						alert(msg);
 					}
-			});
+			}); */
 		</script>
 
 		<div class="container-fluid page-body-wrapper">

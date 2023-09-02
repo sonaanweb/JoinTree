@@ -2,16 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
- 	<!-- head, body 사용 안함 // 다른 부분도 템플릿 바꾸기 -->
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 		<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 	    <style>
-        .ck-editor__editable {
-            min-height: 300px;
-            overflow: auto;
-        }
-   		 </style>
+	        .ck-editor__editable {
+	            min-height: 300px;
+	            overflow: auto;
+	        }
+   		</style>
 	    <script>
 	        $(document).ready(function() {
 	        	const urlParams = new URL(location.href).searchParams;
@@ -70,82 +69,37 @@
 	                previewImage.attr('src', ''); // 미리보기 초기화
 	                removeBtn.hide(); // 파일 삭제 버튼 숨기기
 	            });
-	        	
-				// textarea에 placeholder과 비슷한 기능 적용
-	            function setPlaceholder(element, placeholder) {
-	                element.val(placeholder).css('color', 'gray');
-	                
-	                element.focus(function() {
-	                    if (element.val() === placeholder) {
-	                        element.val('').css('color', 'black');
-	                    }
-	                });
-	                
-	                element.blur(function() {
-	                    if (element.val() === '') {
-	                        element.val(placeholder).css('color', 'gray');
-	                    }
-	                });
-	            }
-	            
-	            setPlaceholder($('#boardContent'), '내용을 입력해주세요.');
+	               
+	        
+	    		
+	            /*
+				// 게시글 등록 버튼 클릭 시 
+				$("#addFreeCommBtn").click(function() {
+					if ($("#boardTitle").val() == "") {
+						alert("제목을 입력해주세요.");
+						$("#boardTitle").focus();
+					} else {
+						console.log($("#boardContent").val() + " 넘어간 경우");
+						$("#addFreeComm").submit();
+					}
+				});    
+	            */
 	        });
 	    </script>
 
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-
-<%-- 				<h1>게시글 입력</h1>
-				<!-- 추후 삭제 -->
-				<div>
-					부서코드: ${dept}
-				</div>		
-				
-				<div>
-					카테고리: 자유게시판
-				</div>
-				<form action="/JoinTree/community/addComm" method="post" enctype="multipart/form-data" id="addFreeComm">
-					<input type="hidden" name="empNo" value="${loginAccount.empNo}">
-					<input type="hidden" name="boardCategory" value="B0103">
-					<div>
-						<c:if test="${dept eq 'D0202'}">	
-							게시판 상단고정 <input type="checkbox" name="boardPinned"> <!-- value 지정하지 않았을 경우 체크박스 선택 시 boardPinned="on" 과 같이 넘어감 -->
-		 				</c:if>
-					</div>
-					<table border="1">
-						<tr>
-							<td><input type="text" name="boardTitle" placeholder="제목을 입력해주세요."></td>
-						</tr>
-						<tr>
-							<td>
-								<textarea id="boardContent" name="boardContent" rows="4" cols="50">
-								</textarea>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="file" name="multipartFile" id="fileInput" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
-								<button type="button" id="removeBtn">파일 삭제</button>
-								(3MB 이하의 이미지 파일만 첨부 가능합니다.)<br>
-								<img id="previewImage" src="" style="max-width: 300px; max-height: 300px;">
 							
-							</td>
-						</tr>
-					</table>
-					<button type="submit">게시글 등록</button>
-				</form>
-				<br> --%>
-				
 			 <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">게시글 작성</h4>
                   	<div>
-						부서코드: ${dept}
+						로그인 부서코드: ${dept}
 					</div>	
                   <p class="card-description">
-                    Add class <code>.table-bordered</code><br>
+                    <%-- Add class <code>.table-bordered</code><br> --%>
                   	카테고리: 자유게시판
                   </p>
                   <form action="/JoinTree/community/addComm" method="post" enctype="multipart/form-data" id="addFreeComm">
@@ -160,13 +114,13 @@
 	                 <table class="table table-bordered">
 	                   <thead>
 	                     <tr>
-	                     	<td><input class="form-control form-control-lg" type="text" name="boardTitle" placeholder="제목을 입력해주세요."></td>
+	                     	<td><input class="form-control form-control-lg" type="text" name="boardTitle" placeholder="제목을 입력해주세요." id="boardTitle"></td>
 	                     </tr>
 	                   </thead>
 	                   <tbody>
 	                     <tr>
 	                       <td>
-	                         	<textarea id="boardContent" name="boardContent" style="height:300px;" rows="5" cols="50"></textarea>
+	                         	<textarea name="boardContent" style="height:300px;" rows="5" cols="50" id="boardContent"></textarea>
 	                       </td>
 	                     </tr>
 	                     <tr>
@@ -179,7 +133,7 @@
 	                     </tr>
 	                   </tbody>
 	                 </table><br>
-          			<button type="submit" class="btn btn-success btn-fw">게시글 등록</button>
+          			<button type="button" class="btn btn-success btn-fw" id="addFreeCommBtn">게시글 등록</button>
 				</form>
                   
                 </div>
@@ -190,21 +144,71 @@
 	<%-- <script src="${pageContext.request.contextPath}/resource/js/ckeditor.js"></script> --%>
 	<!-- CKEditor 초기화 및 설정 -->
     <script>
-        ClassicEditor
-            .create(document.querySelector('#boardContent'), {
-            	// 에디터 구성 옵션 설정
-                toolbar: ['heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'], // 필요한 툴바 옵션 추가
-                placeholder: '내용을 입력해주세요.', // 에디터 창에 보이는 미리보기 문구
-            })
-            .then(editor => {
-                // 에디터 스타일 및 설정
-                // editor.ui.view.editable.element.style.minHeight = '300px';
-                // editor.ui.view.editable.element.style.height = '300px';
-                editor.ui.view.editable.element.style.overflow = 'auto';
-            })
-            
-            .catch(error => {
-                console.error(error);
-            });
+		let editor;    
+    
+	    ClassicEditor
+	    .create(document.querySelector('#boardContent'), {
+	    	// 에디터 구성 옵션 설정
+	        toolbar: ['heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'undo', 'redo', ], // 필요한 툴바 옵션 추가
+	        placeholder: '내용을 입력해주세요.', // 에디터 창에 보이는 미리보기 문구
+	    })
+	    .then(editor => {
+	        // 에디터 스타일 및 설정
+	        // editor.ui.view.editable.element.style.minHeight = '300px';
+	        // editor.ui.view.editable.element.style.height = '300px';
+	        editor.ui.view.editable.element.style.overflow = 'auto';
+	        
+	        // editor 변수에 에디터 인스턴스 할당
+	        // editorInstance = editor;
+	        editorInstance = editor;
+	    })
+	    
+	    .catch(error => {
+	        console.error(error);
+	    });
+	    
+		// Assuming there is a <button id="submit">Submit</button> in your application.
+	    document.querySelector( '#addFreeCommBtn' ).addEventListener( 'click', () => {
+	    	const editorData = editorInstance.getData();
+	    	if (document.querySelector("#boardTitle").value == "") {
+				alert("제목을 입력해주세요.");
+				$("#boardTitle").focus();
+			} else if (editorData == "") {
+				alert("내용을 입력해주세요.");
+			} else {
+				alert("게시글이 작성되었습니다.");
+				$("#addFreeComm").submit();
+			}
+	    	
+	    	//editor.setData('#boardContent');
+	    	// 
+			// alert(!editorData)
+	        // ...
+	        
+	        // confirm
+	    });
+		
+		
+		
+	    // var contents = editor.getData();
+        
+
+		
+		
+	  /*   const editor = ClassicEditor
+	    .create(document.querySelector('#editor'))
+	    .then(editor => {
+	        // CKEditor의 인스턴스를 얻었습니다.
+
+	        // 값을 가져오려면 editor.getData() 메서드를 사용합니다.
+	        const editorData = editor.getData();
+	        console.log(editorData); // CKEditor에서 입력한 내용을 출력합니다.
+	    })
+	    .catch(error => {
+	        console.error(error);
+	    }); */
+		
+		
+	 
     </script>
 </html>

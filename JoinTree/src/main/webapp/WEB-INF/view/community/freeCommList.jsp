@@ -6,13 +6,18 @@
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 		<script>
+		
+		
+		
+		    
+			/*  
 			$(document).ready(function() {
 				const urlParams = new URL(location.href).searchParams;
 				const msg = urlParams.get("msg");
 					if (msg != null) {
 						alert(msg);
 					}
-				
+				// window.onload
 				/*
 				const searchOptionInput = $("#searchOption");
 			    const searchTextInput = $("#searchText");
@@ -89,9 +94,11 @@
 			            table.append(row);
 			        });
 			    }
-			    */
+			    
 			
 			});
+			
+			*/
 		</script>
 
 		<div class="container-fluid page-body-wrapper">
