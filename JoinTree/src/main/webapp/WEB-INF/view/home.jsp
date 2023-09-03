@@ -167,13 +167,29 @@
 			        type: 'GET',
 			        url: '/JoinTree/schedule/todayScheduleList',
 			        success: function(data) {
+			        	
 			            const todayScheduleList = $('#todayScheduleList'); // 오늘의 일정이 표시될 영역 선택
 			            todayScheduleList.empty(); // 기존 내용 삭제
 
 			            data.forEach(function(schedule) {
-			            	const scheduleItem = '<li class="schedule-item" data-schedule-id="' + schedule.scheduleNo + '">' + // 일정 ID를 data 속성으로 추가
-			                    '<div class="schedule-title">' + schedule.scheduleTitle + '</div>' +
-			                    '</li>';
+			            	// 카테고리에 따라 아이콘 선택
+			                let iconClass = '';
+			                switch (schedule.scheduleCategory) {
+			                    case 'S0101': // 전사
+			                        iconClass = 'mdi mdi-domain';
+			                        break;
+			                    case 'S0102': // 부서
+			                        iconClass = 'mdi mdi-account-multiple-outline';
+			                        break;
+			                    case 'S0103': // 개인
+			                        iconClass = 'mdi mdi-account-outline';
+			                        break;
+			                   
+			                }
+			                
+			                const scheduleItem = '<div class="schedule-item" data-schedule-id="' + schedule.scheduleNo + '">' +
+		                    '<div class="schedule-title"><i class="' + iconClass + '"></i>&nbsp;' + schedule.scheduleTitle + '</div>' +
+		                    '</div>';
 
 			                todayScheduleList.append(scheduleItem);
 			            });
@@ -439,11 +455,11 @@
 					<div class="col-md-3 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								오늘일정
+								오늘의 일정
 								<hr>
-								<ul id="todayScheduleList" class="schedule-list"> <!-- id 추가 -->
+								<div id="todayScheduleList" class="schedule-list"> <!-- id 추가 -->
 					                <!-- 여기에 오늘의 일정이 동적으로 추가 -->
-					            </ul>
+					            </div>
 							</div>
 							
 						</div>
