@@ -182,7 +182,7 @@
 						카테고리: 경조사 게시판
 					</div>
 					
-					<form action="/JoinTree/community/modifyComm" method="post">
+					<form action="/JoinTree/community/modifyComm" method="post" id="modifyLifeEventComm">
 						<input type="hidden" name="boardNo" value="${comm.boardNo}">
 						<input type="hidden" name="empNo" value="${loginAccount.empNo}">
 						<input type="hidden" name="boardCategory" value="B0106">
@@ -194,7 +194,7 @@
 						<table border="1">
 							<tr>
 								<!-- <th>제목</th> -->
-								<td><input type="text" name="boardTitle" value="${comm.boardTitle}"></td>
+								<td><input type="text" name="boardTitle" value="${comm.boardTitle}" id="boardTitle"></td>
 							</tr>
 							<tr>
 								<!-- <th>내용</th> -->
@@ -227,7 +227,7 @@
 							</tr>
 						</table>
 						<div>
-							<button type="submit" id="modifyLifeEventCommBtn">수정</button>
+							<button type="button" id="modifyLifeEventCommBtn">수정</button>
 						</div>
 					</form>
 			</div>
@@ -237,7 +237,7 @@
 	        ClassicEditor
 	            .create(document.querySelector('#boardContent'), {
 	            	// 에디터 구성 옵션 설정
-	                toolbar: ['heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'], // 필요한 툴바 옵션 추가
+	                toolbar: ['heading', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'undo', 'redo'], // 필요한 툴바 옵션 추가
 	                placeholder: '내용을 입력해주세요.', // 에디터 창에 보이는 미리보기 문구
 	            })
 	            .then(editor => {
@@ -250,5 +250,19 @@
 	            .catch(error => {
 	                console.error(error);
 	            });
+	        
+				// Assuming there is a <button id="submit">Submit</button> in your application.
+			    document.querySelector('#modifyLifeEventCommBtn').addEventListener( 'click', () => {
+			    	const editorData = editorInstance.getData();
+			    	if (document.querySelector("#boardTitle").value == "") {
+						alert("제목을 입력해주세요.");
+						$("#boardTitle").focus();
+					} else if (editorData == "") {
+						alert("내용을 입력해주세요.");
+					} else {
+						alert("게시글이 수정되었습니다.");
+						$("#modifyLifeEventComm").submit();
+					}
+			    });
 	    </script>
 </html>

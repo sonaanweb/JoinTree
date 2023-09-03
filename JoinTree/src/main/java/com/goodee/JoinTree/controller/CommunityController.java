@@ -155,7 +155,6 @@ public class CommunityController {
 			endPage = lastPage;
 		}
 		
-		
 		log.debug(CYAN + resultMap.get("commList") + " <-- commList(CommunityController-anonymousCommList)" + RESET);
 		
 		// view로 값 넘길 때는 분리
@@ -628,24 +627,6 @@ public class CommunityController {
 	// 게시판 게시글 수정 액션
 	@PostMapping("/community/modifyComm") 
 	public String modifyFreeComm(HttpServletRequest request, Board board) throws UnsupportedEncodingException {
-	    // 게시글 내용이 비어있을 경우 처리
-	    if (board.getBoardContent() == null || board.getBoardContent().trim().isEmpty()) {
-	        msg = URLEncoder.encode("제목, 내용을 모두 입력해주세요.", "UTF-8");
-
-	        if (board.getBoardCategory().equals("B0103")) {
-	            return "redirect:/community/freeCommList/modifyFreeComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-	        } else if (board.getBoardCategory().equals("B0104")) {
-	            return "redirect:/community/anonymousCommList/modifyAnonymousComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-	        } else if (board.getBoardCategory().equals("B0105")) {
-	            return "redirect:/community/secondhandCommList/modifySecondhandComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-	        } else if (board.getBoardCategory().equals("B0106")) {
-	            return "redirect:/community/lifeEventCommList/modifyLifeEventComm?boardNo=" + board.getBoardNo() + "&msg=" + msg;
-	        }
-
-	        log.debug(CYAN + " <-- 게시글 수정 실패. 오류 발생(CommunityController-modifyComm)" + RESET);
-	        return "";
-	    }
-		
 		// 세션에서 dept 값을 가져오기 위해 HttpSession 객체 사용
 		HttpSession session = request.getSession();
 		String dept = (String) session.getAttribute("dept");

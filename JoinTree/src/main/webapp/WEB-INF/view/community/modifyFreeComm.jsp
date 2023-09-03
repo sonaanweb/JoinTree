@@ -161,7 +161,7 @@
 		            });
 		        });
 		        
-				// 수정 버튼 클릭 시 
+/* 				// 수정 버튼 클릭 시 
 				$("#modifyFreeCommBtn").click(function() {
 					if ($("#boardTitle").val() == "") {
 						alert("제목을 입력해주세요.");
@@ -170,7 +170,7 @@
 						console.log($("#boardContent").val() + " 넘어간 경우");
 						$("#modifyFreeComm").submit();
 					}
-				});    
+				});    */ 
 			});	
 		</script>
 	
@@ -255,10 +255,27 @@
 	                // editor.ui.view.editable.element.style.minHeight = '300px';
 	                // editor.ui.view.editable.element.style.height = '300px';
 	                editor.ui.view.editable.element.style.overflow = 'auto';
+	                
+	                // editorInstance 변수에 에디터 할당
+	                editorInstance = editor;
 	            })
 	            
 	            .catch(error => {
 	                console.error(error);
 	            });
+	        
+				// Assuming there is a <button id="submit">Submit</button> in your application.
+			    document.querySelector( '#modifyFreeCommBtn' ).addEventListener( 'click', () => {
+			    	const editorData = editorInstance.getData();
+			    	if (document.querySelector("#boardTitle").value == "") {
+						alert("제목을 입력해주세요.");
+						$("#boardTitle").focus();
+					} else if (editorData == "") {
+						alert("내용을 입력해주세요.");
+					} else {
+						alert("게시글이 수정되었습니다.");
+						$("#modifyFreeComm").submit();
+					}
+			    });
 	    </script>
 </html>
