@@ -269,7 +269,7 @@ public class ScheduleController {
 	// 일정 상세보기
 	@GetMapping("/schedule/selectScheduleOne")
     @ResponseBody
-    public ResponseEntity<Schedule> selectScheduleOne(@RequestParam(name="scheduleNo") int scheduleNo, HttpSession session) {
+    public ResponseEntity<Schedule> selectScheduleOne(@RequestParam(name="scheduleNo") int scheduleNo) {
 		
 		Schedule scheduleOne = scheduleService.selectScheduleOne(scheduleNo);
         return new ResponseEntity<>(scheduleOne, HttpStatus.OK);

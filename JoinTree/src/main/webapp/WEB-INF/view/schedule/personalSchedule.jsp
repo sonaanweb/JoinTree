@@ -38,11 +38,11 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="scheduleTitle" class="form-control" name="scheduleTitle" placeholder="제목을 입력하세요">
+					<input type="text" id="scheduleTitle" class="form-control" name="scheduleTitle" placeholder="제목을 입력하세요(필수)">
 					<br>
-					<input type="text" id="scheduleContent" class="form-control" name="scheduleContent" placeholder="내용을 입력하세요">
+					<input type="text" id="scheduleContent" class="form-control" name="scheduleContent" placeholder="내용을 입력하세요(필수)">
 					<br>
-					<input type="text" id="scheduleLocation" class="form-control" name="scheduleLocation"placeholder="장소를 입력하세요">
+					<input type="text" id="scheduleLocation" class="form-control" name="scheduleLocation"placeholder="장소를 입력하세요(선택)">
 					<br>
 					시작일
 					<input type="datetime-local" id="scheduleStart" class="form-control" name="scheduleStart">
@@ -73,6 +73,7 @@
 	                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
 	                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
 	                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
+	                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -92,11 +93,11 @@
 	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	            </div>
 	            <div class="modal-body">
-                    <input type="text" id="editScheduleTitle" class="form-control">
+                    <input type="text" id="editScheduleTitle" class="form-control" placeholder="제목을 입력하세요(필수)">
                     <br>
-                    <input type="text" id="editScheduleContent" class="form-control">
+                    <input type="text" id="editScheduleContent" class="form-control" placeholder="내용을 입력하세요(필수)">
                     <br>
-                    <input type="text" id="editScheduleLocation" class="form-control">
+                    <input type="text" id="editScheduleLocation" class="form-control" placeholder="장소를 입력하세요(선택)">
                     <br>
                     시작일
                     <input type="datetime-local" id="editScheduleStart" class="form-control">
@@ -286,6 +287,7 @@
 	                $('#viewLocation').text(response.scheduleLocation);
 	                $('#viewStart').text(new Date(response.scheduleStart).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
 	                $('#viewEnd').text(new Date(response.scheduleEnd).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+	                $('#viewWriter').text(response.empName + " (" + response.empNo + ")");
 	                
 	             	// response 객체에서 일정 정보를 읽어와서 selectedEvent 객체 생성
 	                var selectedEvent = {

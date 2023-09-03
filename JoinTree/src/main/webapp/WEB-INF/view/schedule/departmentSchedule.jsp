@@ -38,11 +38,11 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="scheduleTitle" class="form-control" name="scheduleTitle" placeholder="제목을 입력하세요">
+					<input type="text" id="scheduleTitle" class="form-control" name="scheduleTitle" placeholder="제목을 입력하세요(필수)">
 					<br>
-					<input type="text" id="scheduleContent" class="form-control" name="scheduleContent" placeholder="내용을 입력하세요">
+					<input type="text" id="scheduleContent" class="form-control" name="scheduleContent" placeholder="내용을 입력하세요(필수)">
 					<br>
-					<input type="text" id="scheduleLocation" class="form-control" name="scheduleLocation"placeholder="장소를 입력하세요">
+					<input type="text" id="scheduleLocation" class="form-control" name="scheduleLocation"placeholder="장소를 입력하세요(선택)">
 					<br>
 					시작일
 					<input type="datetime-local" id="scheduleStart" class="form-control" name="scheduleStart">
@@ -93,11 +93,11 @@
 	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	            </div>
 	            <div class="modal-body">
-                    <input type="text" id="editScheduleTitle" class="form-control">
+                    <input type="text" id="editScheduleTitle" class="form-control" placeholder="제목을 입력하세요(필수)">
                     <br>
-                    <input type="text" id="editScheduleContent" class="form-control">
+                    <input type="text" id="editScheduleContent" class="form-control" placeholder="내용을 입력하세요(필수)">
                     <br>
-                    <input type="text" id="editScheduleLocation" class="form-control">
+                    <input type="text" id="editScheduleLocation" class="form-control" placeholder="장소를 입력하세요(선택)">
                     <br>
                     시작일
                     <input type="datetime-local" id="editScheduleStart" class="form-control">

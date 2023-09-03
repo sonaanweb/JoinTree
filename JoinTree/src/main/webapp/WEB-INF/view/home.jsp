@@ -5,6 +5,30 @@
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	
+		<!-- 오늘의 일정 상세보기 모달창 -->
+		<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
+		                <p><strong>내용:</strong> <span id="viewContent"></span></p>
+		                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
+		                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
+		                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
+		                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		
 		<!-- todo 추가 모달창 -->
 		<div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
 		    <div class="modal-dialog" role="document">
@@ -30,6 +54,7 @@
 		        </div>
 		    </div>
 		</div>
+		
 		
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 	<script>
@@ -146,7 +171,7 @@
 			            todayScheduleList.empty(); // 기존 내용 삭제
 
 			            data.forEach(function(schedule) {
-			            	const scheduleItem = '<li class="schedule-item">' +
+			            	const scheduleItem = '<li class="schedule-item" data-schedule-id="' + schedule.scheduleNo + '">' + // 일정 ID를 data 속성으로 추가
 			                    '<div class="schedule-title">' + schedule.scheduleTitle + '</div>' +
 			                    '</li>';
 
@@ -158,6 +183,33 @@
 			        }
 			    });
 			}
+			
+			// 오늘의 일정 클릭 이벤트 처리
+		    $('#todayScheduleList').on('click', '.schedule-item', function() {
+		        // 클릭한 일정 항목의 일정 ID를 가져옴
+		        const scheduleId = $(this).data('schedule-id');
+
+		        // 서버에서 해당 일정의 상세 정보 가져오는 AJAX 요청
+		        $.ajax({
+		            type: 'GET',
+		            url: '/JoinTree/schedule/selectScheduleOne',
+		            data: { scheduleNo: scheduleId },
+		            success: function(response) {
+		                // 상세 정보를 모달에 표시
+		                $('#scheduleOneModal').modal('show');
+		                $('#viewTitle').text(response.scheduleTitle);
+		                $('#viewContent').text(response.scheduleContent);
+		                $('#viewLocation').text(response.scheduleLocation);
+		                $('#viewStart').text(new Date(response.scheduleStart).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+		                $('#viewEnd').text(new Date(response.scheduleEnd).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+		                $('#viewWriter').text(response.empName + " (" + response.empNo + ")");
+
+		            },
+		            error: function() {
+		                console.error('Failed to fetch schedule details.');
+		            }
+		        });
+		    });
 		 	
 		 	
 		 	// TOdO
@@ -235,11 +287,16 @@
 	                    todoContent: todoContent
 	                }),
 	                success: function(data) {
-	                	// TODO 추가 성공 시
-	                	console.log("todo추가성공");
+	                	// 모달창 숨기기
+	                	$('#addTodoModal').modal('hide');
 	                	
-	                    alert("todo추가성공");
-	                    $('#addTodoModal').modal('hide');
+	                	// 추가확인 알림창
+	                	Swal.fire({
+							icon: 'success',
+							title: '할일이 추가되었습니다',
+							showConfirmButton: false,
+							timer: 1000
+						});
             
 	        	        getTodoList();
 	        	     
@@ -260,10 +317,20 @@
 	            const todoNo = $(this).data('todono');
 	           	console.log(todoNo);
 	         	// 확인 알림창 띄우기
-	            if (confirm('정말로 이 할 일을 삭제하시겠습니까?')) {
-	                // "예"를 누르면 삭제 작업 실행
-	                removeTodoItem(todoNo);
-	            }
+	         	Swal.fire({
+       				title: '정말 삭제하시겠습니까?',
+       				text: "삭제한 할일은 되돌릴 수 없습니다.",
+       				icon: 'warning',
+       				showCancelButton: true,
+       				confirmButtonColor: '#8BC541',
+       				cancelButtonColor: '#888',
+       				confirmButtonText: '삭제',
+       				cancelButtonText: '취소'
+				}).then((result) => {
+	   					if (result.isConfirmed) {
+	   						removeTodoItem(todoNo);
+	   					}
+   				});
 	        });
 	        
 	     	// 할 일 항목 삭제 함수
@@ -271,12 +338,20 @@
 	        	
 	            $.ajax({
 	                type: 'POST',
-	                url: '/JoinTree/todo/removeTodo', // 컨트롤러의 삭제 URL로 변경
+	                url: '/JoinTree/todo/removeTodo',
 	                contentType: "application/json",
 	                data: JSON.stringify({
 	                    todoNo: todoNo
 	                }),
 	                success: function(data) {
+	                	// 삭제확인 알림창
+                        Swal.fire({
+							icon: 'success',
+							title: '할일이 삭제되었습니다',
+							showConfirmButton: false,
+							timer: 1000
+						});
+	                	
 						getTodoList(); 
 	                },
 	                error: function(error) {
