@@ -22,10 +22,14 @@
 				<h1>${targetYear}년 ${targetMonth+1}월</h1>
 			</div>
 			
-			<!-- 월 이동 버튼 -->
+			<!-- 연월 이동 버튼. 입사 연월에 따른 이전달, 다음달 버튼 분기-->
 			<div>
-				<a href="${pageContext.request.contextPath}/commute/commuteList?targetYear=${targetYear}&targetMonth=${targetMonth-1}">이전달</a>
-				<a href="${pageContext.request.contextPath}/commute/commuteList?targetYear=${targetYear}&targetMonth=${targetMonth+1}">다음달</a>
+				<c:if test="${hireYear < targetYear || (hireYear == targetYear && targetMonth+1 > hireMonth)}">
+					<a href="${pageContext.request.contextPath}/commute/commuteList?targetYear=${targetYear}&targetMonth=${targetMonth-1}">이전달</a>
+				</c:if>
+				<c:if test="${targetYear < currentYear || (targetYear == currentYear && targetMonth+1 < currentMonth)}">
+					<a href="${pageContext.request.contextPath}/commute/commuteList?targetYear=${targetYear}&targetMonth=${targetMonth+1}">다음달</a>
+				</c:if>
 			</div>
 			
 			<!-- 월별 출퇴근 리스트 출력 -->

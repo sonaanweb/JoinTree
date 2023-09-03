@@ -64,15 +64,14 @@
 	
 	<!-- 사원별 월 출퇴근 시간 조회 -->
 	<select id="getCommuteTimeList" 
-			parameterType="java.util.Map" resultType="java.util.Map">
+			parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Commute">
 	
 		SELECT 
 	        emp_no empNo, 
 	        emp_on_off_date empOnOffDate, 
 	        emp_on_time empOnTime, 
 	        emp_off_time empOffTime
-	    FROM 
-	    	commute 
+	    FROM commute 
 	    WHERE 
 	        emp_no = #{empNo} 
 	    AND YEAR(emp_on_off_date) = #{targetYear}
