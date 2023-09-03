@@ -18,32 +18,22 @@
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
+						<h3>&#91;${boardCategoryName}&#93;&nbsp;&nbsp;글 작성</h3>
 						<br>
-						<form id="modifyBoardForm" enctype="multipart/form-data" method="post">
-							<input type="hidden" name="boardNo" value="${board.boardNo}">
+						<form id="addBoardForm" enctype="multipart/form-data" method="post">
+							<input type="hidden" name="boardCategory" value="${boardCategory}">
 							<div>
-								<!-- 상단공지 체크박스 체크된 상태로 수정폼 호출 -->
-								<input type="checkbox" name="boardPinned" ${board.boardPinned == 1 ? 'checked' : ''}> 게시판 상단고정
+								<input type="checkbox" name="boardPinned"> 게시판 상단고정
 							</div>
 							<br>
 							<div>
-								<input type="text" id="boardTitle" name="boardTitle" value="${board.boardTitle}"class="form-control form-control-lg">
+								<input type="text" id="boardTitle" name="boardTitle" placeholder="제목을 입력해주세요" class="form-control form-control-lg">
 							</div>
 							<br>
 							<div>
-								<textarea id="boardContent" name="boardContent">${board.boardContent}</textarea>
+								<textarea id="boardContent" name="boardContent"></textarea>
 							</div>
-							<br>
-							<!-- 첨부파일 유무의 따른 분기
-								 첨부파일이 있을 경우 파일명, 파일삭제 버튼 활성화 -->			
-							<c:if test="${board.boardSaveFilename != null}">
-								<div id="existingFile">
-									<span>첨부파일&nbsp;&nbsp;&nbsp;&nbsp;${board.boardOriginFilename}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-									<i class="mdi mdi-close-circle" id="removeExistingFileBtn">파일삭제</i>
-								</div>
-								<br>
-							</c:if>
+							<br>			
 							<div>
 								<input type="file" id="boardFile" name="multipartFile">
 								<i class="mdi mdi-close-circle" id="removeFileBtn">파일삭제</i>
@@ -52,7 +42,7 @@
 							</div>				
 							<br>
 							<div>
-								<button type="button" id="modifyBoardBtn" class="btn btn-success btn-fw">수정</button>
+								<button type="button" id="addBoardBtn" class="btn btn-success btn-fw">등록</button>
 							</div>
 						</form>
 					</div>
@@ -105,37 +95,7 @@
 	        console.error(error);
 	    });
 		
-		
-		// 게시글 기존 첨부파일 삭제
-		$('#removeExistingFileBtn').click(function(){
-			
-			let boardNo = '${board.boardNo}'; // 문서번호 저장
-			let existingFileDiv = $('#existingFile'); // 기존 첨부파일 Div
-			
-			$.ajax({
-				url: '/JoinTree/board/removeBoardFile',
-				type: 'POST',
-				data:{
-					boardNo: boardNo
-				},
-				success: function(data){
-					console.log(data);
-					if(data == 1){
-						alert('첨부파일 삭제 완료');
-					} else{
-						alert('첨부파일 삭제 실패')
-					}
-					
-					// existingFileDiv 업데이트
-					existingFileDiv.load('/JoinTree/board/modifyBoardForm?boardNo=' + boardNo + ' #existingFile');
-				},
-				error: function(){
-					console.log('modifyBoard removeExistingFileBtn click : '+error);
-				}
-			});
-		});
-		
-		
+
 		// 파일 확장자 검사
 		let boardFile = $('#boardFile'); // 파일
 		let removeFileBtn = $('#removeFileBtn'); // 파일 삭제버튼
@@ -179,8 +139,8 @@
 		    return false;
 		}
 		
-		// 수정(modifyBoardBtn) 버튼 클릭
-		$('#modifyBoardBtn').on('click', function(){
+		// 등록(addBoard) 버튼 클릭
+		$('#addBoardBtn').on('click', function(){
 			
 			const editorData = editorInstance.getData(); // 에디터 값 변수에 저장
 			
@@ -189,9 +149,9 @@
 			if (checkEmptyAndAlert(editorData, '내용을 입력해주세요', '#boardContent')) return; // 내용
 			
 			// 유효성 검사 후 등록
-			let modifyBoardUrl = '/JoinTree/board/modifyBoard';
-			$('#modifyBoardForm').attr('action', modifyBoardUrl);
-			$('#modifyBoardForm').submit();
+			let addBoardUrl = '/JoinTree/board/addBoard';
+			$('#addBoardForm').attr('action', addBoardUrl);
+			$('#addBoardForm').submit();
 		});	
 	</script>
 </html>

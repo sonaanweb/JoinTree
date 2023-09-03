@@ -156,7 +156,6 @@
 	            	// 결재문서 상세정보 값 변수에 저장
 	            	// 기본기안서(공통)
 					let docNo = data.docNo; // 문서번호
-					let docStatus = data.docStatus // 문서상태
 					let createdate = data.createdate.split("T")[0]; // 기안일
 					let writer = data.writer; // 기안자
 					let docStamp1 = data.docStamp1; // 기안자 서명
