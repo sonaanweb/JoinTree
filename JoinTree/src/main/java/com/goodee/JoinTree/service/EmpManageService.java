@@ -174,20 +174,16 @@ public class EmpManageService {
 	}
 	
 	// 사원 목록 조회
-	public Map<String, Object> searchEmpList(Map<String, Object> searchEmpListMap, int currentPage, int rowPerPage) {
-		
-		// 사번(empNo) 형 변환
-		String empNoStr = String.valueOf(searchEmpListMap.get("empNo"));
-		int empNo = 0;
-		if(empNoStr != null && !empNoStr.isEmpty()) {
-			empNo = Integer.parseInt(empNoStr);
-		}
+	public Map<String, Object> searchEmpList(Map<String, Object> searchEmpListMap) {
 		
 		// 반환값1 (검색 조건 별 행의 수)
 		int searchEmpListCnt = empManageMapper.searchEmpListCnt(searchEmpListMap);
 		log.debug(searchEmpListCnt+"<-- EmpManageService searchEmpListCnt");
 		
 		// 페이징
+		int currentPage = Integer.parseInt((String) searchEmpListMap.get("currentPage")); // 현재 페이지
+		int rowPerPage = Integer.parseInt((String) searchEmpListMap.get("rowPerPage")); // 페이지당 행의 수
+		
 		// 시작 행번호
 		int beginRow = (currentPage-1)*rowPerPage;
 		
@@ -213,7 +209,6 @@ public class EmpManageService {
 		}
 		
 		// searchEmpList Map에 값 저장
-		searchEmpListMap.put("empNo", empNo);
 		searchEmpListMap.put("beginRow", beginRow);
 		searchEmpListMap.put("rowPerPage", rowPerPage);
 		

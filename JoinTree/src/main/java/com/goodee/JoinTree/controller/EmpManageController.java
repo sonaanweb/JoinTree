@@ -55,17 +55,6 @@ public class EmpManageController {
 		return "/empManage/selectEmpList";
 	}
 	
-	// 사원 상세정보 조회
-	@GetMapping("/empManage/selectEmpOne")
-	@ResponseBody
-	public Map<String, Object> selectEmpOne(@RequestParam(name="empNo") int empNo) {
-		
-		Map<String, Object> selectEmpOne = empManageService.selectEmpOne(empNo);
-		log.debug(selectEmpOne+"<-- EmpManageController selectEmpOne");
-		
-		return selectEmpOne;
-	}
-	
 	// 사원 계정, 정보, 인사이동 이력 등록
 	@PostMapping("/empManage/addEmp")
 	public String addEmpInfo(Model model,
@@ -111,35 +100,6 @@ public class EmpManageController {
 		
 		return "redirect:/empManage/selectEmpList?msg="+ msg;
 		
-	}
-	
-	// 사원 계정, 정보, 인사이동 이력 수정
-	@PostMapping("/empManage/modifyEmp")
-	@ResponseBody
-	public Map<String, Object> modifyEmpInfo(HttpSession session,
-											 @RequestBody Map<String, Object> modifyEmpOneMap) {
-		log.debug(modifyEmpOneMap+"<-- EmpManageController modifyEmpOneMap");
-		
-		// 세션에서 사번 가져오기
-		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
-		
-		// 기본값 설정
-		int createId = 0;
-		int updateId = 0;
-		
-		if(loginAccount != null) {
-			createId = loginAccount.getEmpNo();
-			updateId = loginAccount.getEmpNo();
-		}
-		
-        // updateId를 modifyEmpOneMap에 추가
-        modifyEmpOneMap.put("createId", createId);
-		modifyEmpOneMap.put("updateId", updateId);
-        
-        // 사원정보 수정
-        Map<String, Object> modifyEmpRow = empManageService.modifyEmpInfo(modifyEmpOneMap);
-		
-        return modifyEmpRow;
 	}
 	
 }

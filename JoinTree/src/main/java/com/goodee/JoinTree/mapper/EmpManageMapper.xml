@@ -8,7 +8,34 @@
 			code,
 			code_name codeName
 		FROM common_code 
-		WHERE up_code = 'D02'
+		WHERE up_code = 'D02' AND status = '1'
+	</select>
+	
+	<!-- 직급 코드 조회 -->
+	<select id="selectPositionCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'P01' AND status = '1'
+	</select>
+	
+	<!-- 사원 상태 코드 조회 -->
+	<select id="selectActiveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'A01' AND status = '1'
+	</select>
+	
+	<!-- 연가 코드 조회 -->
+	<select id="selectLeaveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
+		SELECT 
+			code,
+			code_name codeName
+		FROM common_code 
+		WHERE up_code = 'L01' AND status = '1'
 	</select>
 	
 	<!-- 부서별 사원 수 조회 -->
@@ -18,33 +45,6 @@
 			COUNT(dept) 
 		FROM emp_info 
 		WHERE dept = #{dept} AND YEAR(emp_hire_date) = #{currentYear}
-	</select>
-	
-	<!-- 직급 코드 조회 -->
-	<select id="selectPositionCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
-		SELECT 
-			code,
-			code_name codeName
-		FROM common_code 
-		WHERE up_code = 'P01'
-	</select>
-	
-	<!-- 사원 상태 코드 조회 -->
-	<select id="selectActiveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
-		SELECT 
-			code,
-			code_name codeName
-		FROM common_code 
-		WHERE up_code = 'A01'
-	</select>
-	
-	<!-- 연가 코드 조회 -->
-	<select id="selectLeaveCodeList" resultType="com.goodee.JoinTree.vo.CommonCode">
-		SELECT 
-			code,
-			code_name codeName
-		FROM common_code 
-		WHERE up_code = 'L01'
 	</select>
 	
 	<!-- 사원 등록 -->
