@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.goodee.JoinTree.vo.Project;
 import com.goodee.JoinTree.vo.ProjectMember;
 import com.goodee.JoinTree.vo.ProjectTask;
+import com.goodee.JoinTree.vo.TaskComment;
 import com.goodee.JoinTree.vo.TaskFile;
 
 @Mapper
@@ -61,8 +62,22 @@ public interface ProjectMapper {
 	int endProjectTask(int taskNo);
 	
 	// 프로젝트 하위작업 삭제
-	int removeProjectTask(int taskNo, int projectNo);
+	int removeProjectTask(int taskNo, int projectNo); 
 	/* 프로젝트 하위작업 끝 */
+	
+	/* 프로젝트 댓글&대댓글 */
+	// 댓글 리스트
+	List<TaskComment> selectTaskComment(int taskNo);
+	
+	// 댓글 추가
+	int addTaskComment(TaskComment taskComment);
+	
+	// 대댓글 추가
+	int addTaskCommentChild(TaskComment taskComment);
+	
+	// 댓글&대댓글 삭제
+	int removeTaskComment(int taskCommentNo);
+	/* 프로젝트 댓글&대댓글 끝 */
 	
 	/* 프로젝트 멤버 */
 	// 프로젝트 멤버 카운트 출력 

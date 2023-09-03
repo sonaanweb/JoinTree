@@ -26,6 +26,7 @@ import com.goodee.JoinTree.vo.EmpInfo;
 import com.goodee.JoinTree.vo.Project;
 import com.goodee.JoinTree.vo.ProjectMember;
 import com.goodee.JoinTree.vo.ProjectTask;
+import com.goodee.JoinTree.vo.TaskComment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +57,7 @@ public class ProjectController {
 		
 		return projectService.projectCountRows(searchName, startDate, endDate);
 	}
+	
 	/* 프로젝트 */
 	// 프로젝트 전체 리스트 출력 컨트롤러
 	@GetMapping("project/projectListAll")
@@ -80,7 +82,7 @@ public class ProjectController {
 		return resultMap;
 	}
 	
-	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(A0402)
+	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(1)
 	// json
 	@GetMapping("project/personalProjectList")
 	@ResponseBody
@@ -106,7 +108,7 @@ public class ProjectController {
 		return resultMap;
 	}
 	
-	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0403)
+	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(0)
 	// json
 	@GetMapping("project/endProjectList")
 	@ResponseBody
@@ -287,7 +289,52 @@ public class ProjectController {
 	}
 	
 	/* 프로젝트 하위작업 끝 */
-	/*프로젝트 멤버*/
+	/* 프로젝트 하위작업 댓글 */
+	// 댓글 리스트
+	@GetMapping("project/selectTaskComment")
+	@ResponseBody
+	public List<TaskComment> selectTaskComment(@RequestParam(name="taskNo") int taskNo) {
+		List<TaskComment> taskCommentList = projectService.selectTaskComment(taskNo);
+		
+		return taskCommentList;
+	}
+	// 댓글 추가
+	@PostMapping("project/addTaskCommentParent")
+	@ResponseBody
+	public String addTaskComment(TaskComment taskComment) {
+		int row = projectService.addTaskComment(taskComment);
+		
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+		
+	// 대댓글 추가
+	@PostMapping("project/addTaskComment")
+	@ResponseBody
+	public String addTaskCommentChild(TaskComment taskComment) {
+		int row = projectService.addTaskCommentChild(taskComment);
+		
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	
+	// 댓글 삭제
+	@PostMapping("project/removeTaskComment")
+	@ResponseBody
+	public String removeTaskComment(int taskCommentNo) {
+		int row = projectService.removeTaskComment(taskCommentNo);
+		
+		if(row != 1) {
+			return "fail";
+		}
+		return "success";
+	}
+	/* 프로젝트 하위작업 댓글 끝 */
+	/* 프로젝트 멤버 */
 	// 프로젝트 멤버 추가
 	@PostMapping("project/addProjectMember")
 	@ResponseBody
@@ -336,13 +383,23 @@ public class ProjectController {
 	/* 프로젝트 멤버 끝 */
 	@PostMapping("project/removeProjectMemeber")
 	@ResponseBody
-	public String removeProjectMemeber(@RequestParam(name="empNo") int empNo,
+	public String removeProjectMemeber(@RequestParam(value = "empNo[]") List<Integer> memberNo,
 									@RequestParam(name="projectNo") int projectNo) {
-		int row = projectService.removeProjectMemeber(empNo, projectNo);
+		int row = 0;
+		int totalDeleted = 0; // 삭제된 인원의 수를 저장할 변수
+		// memberNo 리스트에 있는 각각의 사원 번호를 empNo에 저장하며 반복
+		for (int empNo : memberNo) { 
+			// 프로젝트 멤버 삭제
+			row = projectService.removeProjectMemeber(empNo, projectNo);
+			totalDeleted += row; // 삭제 성공한 경우에만 totalDeleted 증가
+		}
 		
-		if(row != 1) {
+		if (totalDeleted > 1) {
+			return "successAll";
+		} else if(totalDeleted == 1){
+			return "success";
+		} else {
 			return "fail";
-		} 
-		return "success";
+		}
 	}
 }

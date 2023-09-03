@@ -19,6 +19,7 @@ import com.goodee.JoinTree.vo.DocumentFile;
 import com.goodee.JoinTree.vo.Project;
 import com.goodee.JoinTree.vo.ProjectMember;
 import com.goodee.JoinTree.vo.ProjectTask;
+import com.goodee.JoinTree.vo.TaskComment;
 import com.goodee.JoinTree.vo.TaskFile;
 
 import lombok.extern.slf4j.Slf4j;
@@ -238,7 +239,32 @@ public class ProjectService {
 		log.debug(yellow + "row : " + row+ reset);
 		return row;
 	}
+	/* 프로젝트 하위작업 끝 */
+	/* 프로젝트 하위작업 댓글 */
+	// 댓글 출력
+	public List<TaskComment> selectTaskComment(int taskNo) {
+		
+		List<TaskComment> selectTaskComment = projectMapper.selectTaskComment(taskNo);
+		
+		return selectTaskComment;
+	}
+
+	// 댓글 추가
+	public int addTaskComment(TaskComment taskComment) {
+		return projectMapper.addTaskComment(taskComment);
+	}
 	
+	// 대댓글 추가
+	public int addTaskCommentChild(TaskComment taskComment) {
+		return projectMapper.addTaskCommentChild(taskComment);
+	}
+		
+	// 댓글 및 대댓글 삭제
+	public int removeTaskComment(int taskCommentNo) {
+		return projectMapper.removeTaskComment(taskCommentNo);
+	}
+	
+	/* 프로젝트 하위작업 댓글 끝 */
 	/* 프로젝트 멤버 */
 	// 프로젝트 참여 명단 출력
 	public List<ProjectMember> selectProejectMember(int projectNo) {

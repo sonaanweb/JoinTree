@@ -8,7 +8,8 @@ public class TaskComment {
 	private int taskCommentNo;
 	private int taskNo;
 	private int empNo;
-	private int commentGroupNo;
+	private String empName; // 하위 empName조인용
+	private int commentParentNo;
 	private String taskCommentContent;
 	private String createdate;
 	private String updatedate;

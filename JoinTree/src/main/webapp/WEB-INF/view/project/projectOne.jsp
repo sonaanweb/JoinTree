@@ -72,7 +72,7 @@
 						'<h3><input type="text" id="projectContent" value="' + project.projectContent +'"readonly="readonly""></input></h3>' +
 						'<h3>담당자 : ' + project.empName +'</h3>' +
 						'<h3>기간 :<input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  '<input type="date" id="projectEndDate" value="' + project.projectEndDate.substring(0, 10) + '" readonly="readonly"></input>' + '</h3>' +
-						'<div class="wrapper"><h3>팀원 :</h3><div id="memberList" class="memberList">' + teamMembers.join(" ") + '<button id="addPjMemeberBtn" class="btn btn-success btn-sm"><i class="mdi mdi-plus"></i></button></div></div>' + 
+						'<div class="wrapper"><h3>팀원 :</h3><div id="memberList" class="memberList">' + teamMembers.join(" ") + '<button id="addPjMemeberBtn" class="btn btn-success btn-sm"><i class="mdi mdi-plus"></i></button></div><button type="button" id="deleteMemberAll">전체삭제</button></div>' + 
 						'<h3>진행률</h3><div class="wrapper"><div class="progress"></div><div class="progressNo"></div></div>'+
 						'<div class="wrapper"><h3>작업리스트</h3>'+
 						'<button id="addPjTaskBtn" class="btn btn-success btn-sm margin10">작업추가</button></div>'
@@ -237,7 +237,7 @@
 		$("#removeProjectBtn").on("click", function() {
 			Swal.fire({
 				title: '정말 삭제하시겠습니까?',
-				text: "삭제한 프로젝트는 되돌릴 수 없습니다.",
+				text: "삭제된 프로젝트는 되돌릴 수 없습니다.",
 				icon: 'warning',
 				showCancelButton: true,
 				confirmButtonColor: '#8BC541',
@@ -367,31 +367,63 @@
 		/* 프로젝트 팀원 추가 끝 */
 		
 		/* 프로젝트 팀원 삭제 */
+		// 한명씩 삭제
 		$(".projectOne").on("click", ".deleteMember", function() {
 			const selectedMemeberNo = $(this).data("empno");
-			console.log("selectedMemeberNo",selectedMemeberNo);
-			if(selectedMemeberNo !== loginEmpNo) {
+				//console.log("selectedMemeberNo",selectedMemeberNo);
+			sendDelMemberDataToServer(selectedMemeberNo);
+		});
+		// 전체삭제
+		$(".projectOne").on("click", "#deleteMemberAll", function(){
+			
+			const deleteMembers = new Array();
+			
+			$(".memberName").each(function() {			
+				const selectedMemeberNo = $(this).data("empno");
+				deleteMembers.push(selectedMemeberNo);	
+				console.log("deleteMembers",deleteMembers);
+			}); 
+			sendDelMemberDataToServer(deleteMembers);
+		});
+		
+		function sendDelMemberDataToServer(memberNos) {
+			// 필터함수를 사용하여 loginEmpNo 즉, 삭제버튼이 활성화 된 담당자를 제외하고 삭제
+			// empNo를 돌리면서 그 중에 loginEmpNo와 다른 사람만 filteredMemberNos배열에 저장
+			let filteredMemberNos = [];
+			if (Array.isArray(memberNos)) {
+				filteredMemberNos = memberNos.filter(empNo => empNo !== loginEmpNo);
+			}
+			if(filteredMemberNos.length > 0) {
 				$.ajax({
 					type: "POST",
 					url: "/JoinTree/project/removeProjectMemeber",
 					data: {
 						projectNo: projectNo,
-						empNo: Array.isArray(memberNos) ? memberNos : [memberNos],
+						empNo: Array.isArray(memberNos) ? filteredMemberNos : [memberNos], // 배열인지 아닌지 확인
 						createId: loginEmpNo,
 						updateId: loginEmpNo
 					},
 					success: function(response) {
 						console.log("데이터가 성공적으로 전송되었습니다.", response);
-						if (response === "success") {
-							console.log("데이터가 성공적으로 전송되었습니다.");
+						if (response === "successAll") {
+							//console.log("데이터가 성공적으로 전송되었습니다.");
+							
+							Swal.fire({
+								icon: 'success',
+								title: '담당자를 제외한 팀원을 삭제합니다.',
+								showConfirmButton: false,
+								timer: 1000
+							})
 							fetchProjectData();
-						} else if (response === "fail") {
-							alert("데이터 전송 중 오류가 발생했습니다.");
-						} else if (response === "duplicate") {
-							alert("이미 선택한 사원을 제외하고 추가합니다.");
-							fetchProjectTaskData();
+						} else if(response === "success") {
+							Swal.fire({
+								icon: 'success',
+								title: '삭제되었습니다',
+								showConfirmButton: false,
+								timer: 1000
+							})
 							fetchProjectData();
-						}
+						} 
 					},
 					error: function(xhr, status, error) {
 						console.error("데이터 전송 중 오류가 발생했습니다.");
@@ -400,15 +432,20 @@
 						console.error("오류 내용:", error);
 					}
 				});
+			} else if(!filteredMemberNos || memberNos === loginEmpNo){
+				Swal.fire(
+						'Error',
+						'담당자는 삭제할 수 없습니다.',
+						'error'
+					)
 			} else {
 				Swal.fire(
-					'Error',
-					'담당자는 지울 수 없습니다.',
-					'error'
-				)
+						'Error',
+						'삭제할 팀원이 없습니다.',
+						'error'
+					)
 			}
-
-		});
+		}
 	/* 프로젝트 팀원 삭제 끝 */
 /* 프로젝트 팀원 끝 */		
 
@@ -483,13 +520,14 @@
 					const taskOriginFilename = $(this).data("taskoriginfilename");
 					const taskSaveFilename = $(this).data("tasksavefilename");
 					const createdate = $(this).data("createdate");
+					const empName = '${empName}';
 					//console.log("taskEmpName:",taskEmpName);
 					// 댓글
 					fetchProjectTaskComment(taskNo);
 					
 					$(".projectTask").empty();
 					$(".projectTask").append(
-						'<div class="stretch-card grid-margin">' +
+						'<div class="stretch-card">' +
 							'<div class="card">' +
 								'<div class="card-body projectTaskCard"> ' +
 									'<div><h3>' + taskTitle + '</h3></div>' +
@@ -506,18 +544,28 @@
 										(taskStatus === '미완료' ? 
 										'<div class="right">' +
 										'<button type="button" class="btn btn-success btn-sm" id="taskEndBtn">작업완료</button>' +
-										'<button type="button" class="btn btn-success btn-sm" id="taskDelBtn" class="margin10">작업삭제</button>'+
+										'<button type="button" class="btn btn-success btn-sm margin-left10" id="taskDelBtn" class="margin10">작업삭제</button>'+
 										'</div>' 
 										: 
 										'<div class="right">' +
-										'<button type="button" class="btn btn-success btn-sm" id="taskDelBtn" class="margin10">작업삭제</button>'+
+										'<button type="button" class="btn btn-success btn-sm margin-left10" id="taskDelBtn" class="margin10">작업삭제</button>'+
 										'</div>'
 									) : '' ) +
 								'</div>' + 
 							'</div>' +
-						'</div>'
+						'</div>'+
+						// 댓글추가
+						'<div class="stretch-card margin-left30 add-comment">' +
+							'<div class="card">' +
+								'<div class="card-body">' +
+									'<div><b>' + empName + "(" + loginEmpNo + ')</b></div>'+
+									'<div><input type="text" id="taskCommentInput"></input></div>' +
+									'<div class="right"><button type="button" class="taskCommentInputBtn btn btn-success btn-sm">댓글등록</button></div>' +
+								'</div>' +
+							'</div>'
 					);
 				});
+				
 				projectProgress.forEach(function (progress) {
 					$(".progress").append(
 						'<div class="progress-bar" role="progressbar" ' +
@@ -559,7 +607,6 @@
 		});
 		// 추가했을때
 		$("#addTaskSubmitBtn").on("click", function() {
-			const empNo = ${loginAccount.empNo};
 			const taskTitle = $("#taskTitle").val();
 			const taskStartDate = $("#taskStartDate").val();
 			const taskEndDate = $("#taskEndDate").val();
@@ -578,7 +625,7 @@
 					)
 				return; // 추가 작업 중단
 			}
-			if(!empNo || !taskTitle || !taskStartDate || !taskEndDate || !taskContent){
+			if(!taskTitle || !taskStartDate || !taskEndDate || !taskContent){
 				alert("값 넣어줘 ");
 				return;
 			} 
@@ -588,13 +635,13 @@
 				type: "POST",
 				data: {
 					projectNo : projectNo,
-					empNo : empNo,
+					empNo : loginEmpNo,
 					taskTitle : taskTitle,
 					taskStartDate : taskStartDate,
 					taskEndDate : taskEndDate,
 					taskContent : taskContent,
-					createId : empNo,
-					updateId : empNo
+					createId : loginEmpNo,
+					updateId : loginEmpNo
 				},
 				success : function(response) {
 					console.log("response",response);
@@ -746,53 +793,223 @@
 /* 프로젝트 작업 끝 */
 /* 프로젝트 작업 댓글 */
 	/* 프로젝트 작업 댓글 리스트 */
-	function fetchProjectTaskComment(taskNo) {
-		console.log("taskNo",taskNo);
+		function fetchProjectTaskComment(taskNo) {
+			console.log("taskNo",taskNo);
+			$.ajax({
+				type : "GET",
+				url : "/JoinTree/project/selectTaskComment",
+				data : {taskNo: taskNo},
+				success: function(taskCommentList) {
+					console.log("taskCommentList",taskCommentList);
+					$(".taskComment").empty();
+					//alert("댓글리스트 성공");
+					taskCommentList.forEach(function (comment) {
+						// 댓글
+						if(comment.commentParentNo === 0){
+							$(".taskComment").append(
+								'<div class="stretch-card grid-margin">' +
+									'<div class="floatL">  </div>' + 
+									'<div class="card">' +
+										'<div class="card-body">' +
+											'<div data-commentno=' + comment.taskCommentNo+ '><b>' + comment.empName + "(" + comment.empNo + ")</b>" +
+											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div></div>'+
+											'<div>' + comment.taskCommentContent +'</div>'+
+											'<div class="wrapper right"><button id="addTaskComment" class="btn btn-success btn-sm">댓글작성</button>'+
+											'<button data-commentno=' + comment.taskCommentNo + ' id="delTaskComment" class="btn btn-success btn-sm margin-left10">삭제</button>'+
+											'<button data-commentno=' + comment.taskCommentNo + ' class="tcShowandhideBtn btn btn-success btn-sm margin-left10">대댓글 보기</button></div>' +
+										'</div>' +
+									'</div>'+
+								'</div>'
+							)
+						// 대댓글
+						} else if(comment.commentParentNo !== 0){
+							$(".taskComment").append(
+								'<div class="child">'+
+								'<div class="stretch-card grid-margin childComment hidden" data-commentno=' + comment.commentParentNo + '>' +
+									'<div class="floatL"> -> </div>' + 
+									'<div class="card"' +
+										'<div class="card-body">' +
+											'<div>'+ comment.empName + "(" + comment.empNo + ")" +
+											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div></div>' +
+											'<div>' + comment.taskCommentContent +'</div>' +
+											'<div><button data-commentno=' + comment.taskCommentNo + ' id="delTaskCommentChild">삭제</button></div>'+
+										'</div>' +
+									'</div>'+
+								'</div></div>'
+							)
+						}
+					});
+				},
+				error: function(error){
+					console.log("error",error);
+					alert("댓글리스트 실패");
+				}
+			});
+		}
+		/* 프로젝트 작업 댓글 리스트 끝 */
+		/* 프로젝트 작업 댓글 추가 */
+		$(".projectTask").on("click", ".taskCommentInputBtn", function() {
+			const taskCommentContent =  $("#taskCommentInput").val();
+			
+			if(!taskCommentContent) {
+				alert("댓글을 작성해주세요");
+				$("#taskCommentInput").focus();
+				return;
+			}
+				//console.log("taskNo",taskNo);
+				//console.log("loginEmpNo",loginEmpNo);
+				//console.log("taskCommentContent",taskCommentContent);
+			$.ajax({
+				type: "POST",
+				url: "/JoinTree/project/addTaskComment",
+				data: {
+					taskNo : taskNo,
+					empNo : loginEmpNo,
+					taskCommentContent : taskCommentContent,
+					createId : loginEmpNo,
+					updateId : loginEmpNo
+				},
+				success:function(response){
+					console.log("response",response);
+					alert("성공");
+					fetchProjectTaskComment(taskNo);
+				},
+				error:function(error) {
+					console.log("댓글추가 오류 발생");
+				}
+			});
+		});
+		/* 프로젝트 작업 댓글 끝 */
+		/* 프로젝트 작업 대댓글 추가 */
+		// 추가하기 눌렀을때
+		$(".taskComment").on("click", "#addTaskCommentChild", function() {
+			const currentCard = $(this).closest('.stretch-card');
+			const empName = '${empName}';
+			const commentNo = currentCard.find('[data-commentno]').data('commentno');
+				//console.log("commentNo" ,commentNo);
+				 // 이미 존재하는 인풋 필드를 찾습니다.
+			
+			const addCard = $('<div class="stretch-card grid-margin childComment">' +
+				'<div class="card">' +
+					'<div class="card-body">' +
+						'<div>' + empName + "(" + loginEmpNo + ') </div>'+
+						'<div><input type="text" id="taskCommentChildInput"></input></div>' +
+						'<div><button type="button" class="taskCommentChildInputBtn" data-commentno=' + commentNo + '>등록</button></div>' +
+						'<div><button type="button" class="taskCommentChildEndBtn">취소</button></div>' +
+					'</div>' +
+				'</div>'
+			);
+			currentCard.after(addCard);
+			
+			$("#taskCommentChildInput").focus();
+		});
+		
+		// 댓글 추가 취소 버튼
+		$(".taskComment").on("click", ".taskCommentChildEndBtn", function() {
+			$("#taskCommentChildInput").val('');
+			
+			fetchProjectTaskComment(taskNo);
+		})
+		
+		// 등록을 눌렀을때
+		$(".taskComment").on("click", ".taskCommentChildInputBtn", function() {
+			const taskCommentContent =  $("#taskCommentChildInput").val();
+			const commentNo = $(this).data('commentno'); 
+				//console.log("taskNo",taskNo);
+				//console.log("loginEmpNo",loginEmpNo);
+				//console.log("commentNo",commentNo);
+				//console.log("taskCommentContent",taskCommentContent);
+			if(!taskCommentContent) {
+				alert("댓글을 작성해주세요");
+				$("#taskCommentChildInput").focus();
+				return;
+			}
+			$.ajax({
+				type: "POST",
+				url: "/JoinTree/project/addTaskCommentChild",
+				data: {
+					taskNo : taskNo,
+					empNo : loginEmpNo,
+					commentParentNo : commentNo,
+					taskCommentContent : taskCommentContent,
+					createId : loginEmpNo,
+					updateId : loginEmpNo
+				},
+				success:function(response){
+					console.log("response",response);
+					alert("성공");
+					fetchProjectTaskComment(taskNo);
+				},
+				error:function(error) {
+					console.log("댓글추가 오류 발생");
+				}
+			});
+		});
+		
+		// 대댓글 보기&숨기기
+		function toggleChildComments(commentNo) {
+			// 대댓글을 포함하는 상위 요소를 찾기
+			const child = $('.child');
+	
+			// 대댓글을 찾기 commentNo와 같은
+			const childComments = child.find('[data-commentno="' + commentNo + '"]');
+	
+			// 대댓글을 숨기거나 표시합니다.
+			childComments.toggleClass('hidden');
+		}
+		
+		// 댓글 보기 클릭 시 
+		$(".taskComment").on("click", ".tcShowandhideBtn", function() {
+			//console.log("버튼이 클릭");
+			const commentNo = $(this).data('commentno');
+			
+			toggleChildComments(commentNo);
+		});
+	/* 프로젝트 작업 대댓글 추가 끝 */
+	/* 프로젝트 작업 댓글 삭제 */
+	// 댓글
+	$(".taskComment").on("click", "#delTaskComment", function() {
+		const taskCommentNo = $(this).data('commentno');
+		console.log("댓글 번호", taskCommentNo);
+		Swal.fire({
+			title: '댓글을 삭제하시겠습니까?',
+			text: "삭제된 댓글은 되돌릴 수 없으며 대댓글도 함께 삭제됩니다.",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#8BC541',
+			cancelButtonColor: '#888',
+			confirmButtonText: '완료',
+			cancelButtonText: '취소'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					delComments(taskCommentNo);
+				}
+			});
+		
+	});
+	// 대댓글
+	$(".taskComment").on("click", "#delTaskCommentChild", function() {
+		const taskCommentNo = $(this).data('commentno');
+		console.log("댓글 번호", taskCommentNo);
+		
+		delComments(taskCommentNo)
+	});
+	function delComments(taskCommentNo) {
 		$.ajax({
-			type : "GET",
-			url : "/JoinTree/project/selectTaskComment",
-			data : {taskNo: taskNo},
-			success: function(taskCommentList) {
-				console.log("taskCommentList",taskCommentList);
-				//alert("댓글리스트 성공");
-				taskCommentList.forEach(function (comment) {
-					if(comment.commentParentNo === 0){
-						$(".taskComment").append(
-							'<div class="stretch-card grid-margin">' +
-								'<div class="floatL">  </div>' + 
-								'<div class="card">' +
-									'<div class="card-body">' +
-										'<div>' + comment.parentEmpName + "(" + comment.parentEmpNo + ")" +
-										'<div class="floatR">' + comment.parentCreatedate.substring(0,10) +'</div></div>'+
-										'<div>' + comment.parentContent +'</div>'+
-									'</div>' +
-								'</div>'+
-							'</div>'
-						)
-					}
-					if(comment.childContent !== null) {
-						$(".taskComment").append(
-							'<div class="stretch-card grid-margin childComment">' +
-							'<div class="floatL"> -> </div>' + 
-								'<div class="card">' +
-									'<div class="card-body">' +
-										'<div>' + comment.childEmpName + "(" + comment.childEmpNo + ")" +
-										'<div class="floatR">' + comment.childCreatedate.substring(0,10) +'</div></div>' +
-										'<div>' + comment.childContent +'</div>' +
-									'</div>' +
-								'</div>'+
-							'</div>'
-						)
-					}
-				});
+			type: "POST",
+			url: "/JoinTree/project/removeTaskComment",
+			data: {taskCommentNo : taskCommentNo},
+			success:function(response){
+				console.log("response",response);
+				alert("성공");
+				fetchProjectTaskComment(taskNo);
 			},
-			error: function(error){
-				console.log("error",error);
-				alert("댓글리스트 실패");
+			error:function(error) {
+				console.log("댓글삭제 오류 발생");
 			}
 		});
 	}
-	/* 프로젝트 작업 댓글 리스트 끝 */
+	/* 프로젝트 작업 댓글 삭제 끝 */
 /* 프로젝트 작업 댓글 끝 */
 	}); // 마지막
 </script>
@@ -826,10 +1043,6 @@
 						</div>
 						<div class="taskComment">
 							<!-- 프로젝트 작업 댓글 정보 출력 -->
-							
-						</div>
-						<div class="taskCommentChild">
-							<!-- 프로젝트 작업 대댓글 정보 출력 -->
 							
 						</div>
 					</div>

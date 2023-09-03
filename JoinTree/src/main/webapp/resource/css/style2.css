@@ -20,6 +20,21 @@
 .margin10 {
 	margin: 10px;
 }
+.margin-left10 {
+	margin-left: 10px;
+}
+.margin-left30 {
+	margin-left: 30px;
+}
+.floatR{
+	float: right;
+}
+.floatL{
+	float: left;
+}
+.hidden {
+    display: none;
+}
 /* 스위치 스타일 */
 .switch {
 	position: relative;
@@ -212,7 +227,7 @@ input:checked + .slider:before {
 	width: 20px; 
 	height:20px; 
 	border:1px solid #999; 
-	background-color: #F2E180;
+	background-color: #8AE6C5;
 	margin: 0px 10px 0px 1px;
 }
 .projectOne h3 {
@@ -260,6 +275,9 @@ input:checked + .slider:before {
 	width: 0;
 	transition: width 0.3s ease;
 }
+.project-task-comment {
+	float:right;
+}
 .projectTaskList1, .projectTaskList2 {
 	height: 100px;
 	overflow-y: auto;
@@ -273,20 +291,43 @@ input:checked + .slider:before {
 .projectTaskList1 .projectTaskOne:hover, .projectTaskList2 .projectTaskOne:hover {
 	background-color: #efefef;
 }
-
+.projectTaskListAll{
+	float:left;
+}
 .projectTaskListAll .card-body {
 	padding : 0px;
 	padding-top: 20px;
+	height : 200px;
+	max-height : 200px;
 }
 
 /* 프로젝트 작업 */
-.projectTask{
-	height: 450px;
-	overflow-y: auto;
+.projectTask .card{
+	margin-bottom:10px;
 }
-.row {
-	margin-left:0px;
+.projectTask .add-comment .card-body{
+	padding:20px;
 }
 .projectTaskList1 .wrapper {
 	align-items: center;
+}
+.taskComment {
+	height : 300px;
+	overflow-y: auto;
+}
+.taskComment .card-body{
+	padding:20px;
+}
+.taskComment .card{
+	min-width: 140px;
+	margin-left: 30px;
+}
+.taskComment .childComment {
+	min-width: 140px;
+	margin-left: 60px;
+}
+.add-comment input {
+	width: 500px;
+	text-decoration: underline;
+	
 }

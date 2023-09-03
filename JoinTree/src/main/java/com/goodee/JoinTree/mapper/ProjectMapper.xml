@@ -84,9 +84,7 @@
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND
-			p.project_status= 'A0401'
-			OR
-			p.project_status= 'A0402'
+			p.project_status= '1'
 			<!-- 타이틀이 있을때 -->
 			<if test="searchName != null and searchName != ''">
 				AND (
@@ -107,7 +105,7 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
-	<!-- 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(A0403) -->
+	<!-- 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(0) -->
 	<select id="selectEndProjectList"
 			resultType="com.goodee.JoinTree.vo.Project">
 		SELECT 
@@ -125,7 +123,7 @@
 			update_id updateId
 		FROM project
 		WHERE 
-			project_status= 'A0403'
+			project_status= '0'
 			<!-- 타이틀이 있을때 -->
 			<if test="searchName != null and searchName != ''">
 				AND (
@@ -156,27 +154,21 @@
 			p.project_start_date projectStartDate, 
 			p.project_end_date projectEndDate,
 			p.project_content projectContent,
-			c.code_name projectStatusName,
 			p.createdate,
 			p.updatedate,
 			p.create_id createId,
 			p.update_id updateId
 		FROM project p
 		INNER JOIN project_member pm
-		INNER JOIN common_code c
 		INNER JOIN emp_info e
 		ON 
 			p.project_no=pm.project_no 
-			AND 
-			p.project_status=c.code
 			AND 
 			p.emp_no=e.emp_no
 		WHERE 
 			pm.emp_no = #{empNo}
 			AND
-			(p.project_status= 'A0401'
-			OR
-			p.project_status= 'A0402')
+			p.project_status= '1'
 		ORDER BY 
 				p.createdate DESC, 
 				p.project_no ASC
@@ -229,7 +221,7 @@
 			#{projectStartDate},
 			#{projectEndDate},
 			#{projectContent},
-			'A0401',
+			'1',
 			NOW(),
 			NOW(),
 			#{createId},
@@ -257,7 +249,7 @@
 			parameterType="com.goodee.JoinTree.vo.Project">
 		UPDATE project
 		SET 
-			project_status = 'A0403',
+			project_status = '0',
 			project_color = '#B7B7B7',
 			project_end_date = NOW(),
 			updatedate = NOW(),
@@ -397,14 +389,99 @@
 			task_no = #{taskNo};
 	</delete>
 <!-- 프로젝트 작업 끝 -->
-
+<!-- 프로젝트 작업 댓글&대댓글 -->
+	<!-- 1) tc1.comment_parent_no가 null이면 댓글로 정렬, 
+		2) 그렇지 않으면 대댓글로 정렬 
+		3) 댓글은 생성일로 정렬-->
+	<select id="selectTaskComment"
+			resultType="com.goodee.JoinTree.vo.TaskComment">
+		SELECT
+			tc1.task_comment_no taskCommentNo,
+			tc1.task_no taskNo,
+			tc1.emp_no empNo,
+			e1.emp_name empName,
+			tc1.task_comment_content taskCommentContent,
+			tc1.comment_parent_no commentParentNo,
+			tc1.createdate createdate,
+			
+			tc2.emp_no parentEmpNo,
+			e2.emp_name parentEmpName,
+			tc2.task_comment_content parentContent
+		FROM
+			task_comment tc1 <!-- 대댓글(자식) -> 자식의 내용을 원함 -->
+		LEFT JOIN <!-- 자식의 부모번호는 부모의 자식번호와 같음 -->
+			task_comment tc2 ON tc1.comment_parent_no = tc2.task_comment_no  <!-- 댓글(부모) -->
+		LEFT JOIN
+			emp_info e1 ON tc1.emp_no = e1.emp_no
+		LEFT JOIN
+			emp_info e2 ON tc2.emp_no = e2.emp_no
+		WHERE
+			tc1.task_no = #{taskNo}
+		ORDER BY<!-- 자식에게 부모번호가 없으면 댓글로 간주할 것 -->
+			IFNULL(tc1.comment_parent_no, tc1.task_comment_no), tc1.createdate
+	</select>
+	
+	<!-- 댓글추가 -->
+	<insert id="addTaskComment"
+			parameterType="com.goodee.JoinTree.vo.TaskComment">
+		INSERT INTO task_comment(
+			task_no,
+			emp_no,
+			task_comment_content,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{taskNo},
+			#{empNo},
+			#{taskCommentContent},
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 대댓글추가 -->
+	<insert id="addTaskCommentChild"
+			parameterType="com.goodee.JoinTree.vo.TaskComment">
+		INSERT INTO task_comment(
+			task_no,
+			emp_no,
+			comment_parent_no,
+			task_comment_content,
+			createdate,
+			updatedate,
+			create_id,
+			update_id
+		) VALUES (
+			#{taskNo},
+			#{empNo},
+			#{commentParentNo},
+			#{taskCommentContent},
+			NOW(),
+			NOW(),
+			#{createId},
+			#{updateId}
+		)
+	</insert>
+	
+	<!-- 댓글 및 대댓글 삭제 -->
+	<delete id="removeTaskComment">
+		DELETE FROM task_comment
+		WHERE 
+			task_comment_no= #{taskCommentNo};
+	</delete>
+<!-- 프로젝트 작업 댓글&대댓글 끝 -->
 <!-- 프로젝트 멤버 -->
 	<!-- 프로젝트 멤버 수 구하기 -->
 	<select id="selectProejectMemberCnt">
 		SELECT 
 			COUNT(emp_no) empCnt
 		FROM project_member
-		WHERE project_no = #{projectNo};
+		WHERE 
+			project_no = #{projectNo};
 	</select>
 	
 	<!-- 프로젝트 멤버 명단보기-->
