@@ -33,9 +33,6 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	
-	@Autowired
-	private CommunityService communityService;
-	
 	// 댓글 작성 액션
 	@PostMapping("/comment/addComment")
 	@ResponseBody
@@ -46,7 +43,6 @@ public class CommentController {
 		comment.setBoardNo(boardNo);
 		comment.setEmpNo(empNo);
 		comment.setCategory(category);
-		// comment.setCommentGroupNo(commentGroupNo);
 		comment.setCommentContent(commentContent);
 		
 		int row = commentService.addComment(comment);
@@ -110,26 +106,20 @@ public class CommentController {
 			}
 			
 			 return "redirect:" + redirectUrl + "&msg=" + msg;
-			
 		}		
-		
 	}
 	*/
 	
-	
-	/*
 	// 답글(대댓글) 작성 액션
 	@PostMapping("/comment/addReply")
 	@ResponseBody
 	public String addReply(@RequestParam("boardNo") int boardNo, @RequestParam("empNo") int empNo, 
-			@RequestParam("category") String category, @RequestParam("commentGroupNo") int commentGroupNo, 
-			@RequestParam("commentContent") String commentContent, @RequestParam("parentCommentNo") int parentCommentNo) throws UnsupportedEncodingException {
+			@RequestParam("category") String category, @RequestParam("commentContent") String commentContent, @RequestParam("parentCommentNo") int parentCommentNo) throws UnsupportedEncodingException {
 		
 		Comment comment = new Comment();
 		comment.setBoardNo(boardNo);
 		comment.setEmpNo(empNo);
 		comment.setCategory(category);
-		comment.setCommentGroupNo(commentGroupNo);
 		comment.setCommentContent(commentContent);
 		comment.setParentCommentNo(parentCommentNo); // 부모(원 댓글)의 commentNo
 		
@@ -143,9 +133,7 @@ public class CommentController {
 		}
 	}
 	
-	*/
-	
-	
+	/*
 	// 답글(대댓글) 작성 액션
 	@PostMapping("/comment/addReply")
 	public String addReply(@RequestParam("boardNo") int boardNo, @RequestParam("empNo") int empNo, 
@@ -198,6 +186,7 @@ public class CommentController {
 			 return "redirect:" + redirectUrl + "&msg=" + msg;
 		}		
 	}
+	*/
 	
 	
 	// 댓글 삭제 액션

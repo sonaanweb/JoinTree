@@ -7,11 +7,13 @@
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 		<script>
 			$(document).ready(function() {
+				/*
 				const urlParams = new URL(location.href).searchParams;
 				const msg = urlParams.get("msg");
 					if (msg != null) {
 						alert(msg);
 					}
+				*/
 					 // 입력 버튼 클릭 시 
 		            $("#addCommentBtn").click(function() {
 		            	const boardNo = $("#boardNo").val();
@@ -32,7 +34,6 @@
 		                    		boardNo: boardNo, 
 		                    		empNo: empNo, 
 		                    		category: category, 
-		                    		commentGroupNo: 1, 
 		                    		commentContent: commentContent
 		                    	}, 
 		                    	 success: function(response) {
@@ -66,13 +67,47 @@
 		            // 등록 버튼 클릭 시 답글 등록
 		            $(".add-reply-btn").click(function() {
 		                const replyForm = $(this).closest(".reply-form");
+		                const boardNo = replyForm.find(".boardNo2").val();
+		                const empNo = replyForm.find(".empNo2").val();
+		                const category = replyForm.find(".category2").val();
+		                const parentCommentNo = replyForm.find(".parentCommentNo").val();
 		                const commentContent = replyForm.find(".reply-content").val();
 		                
 		                if (commentContent.trim() === "") {
 		                    alert("답글을 입력해주세요.");
 		                    replyForm.find(".reply-content").focus();
 		                } else {
-		                    replyForm.submit();
+		                    // replyForm.submit();
+		                  
+		                    $.ajax({
+		                    	type: "POST", 
+		                    	url: "/JoinTree/comment/addReply",
+		                    	data: {
+		                    		boardNo: boardNo,
+		                    		empNo: empNo,
+		                    		category: category,
+		                    		parentCommentNo: parentCommentNo,
+		                    		commentContent: commentContent
+		                    	}, 
+		                    	success: function(response) {
+		                    		if (response === "success") {
+		                    			alert("답글이 등록되었습니다.");
+		                    			
+		                    			console.log("답글 등록 완료");
+		                    			event.preventDefault();
+		                    			 $("#commentSection").load(location.href + " #commentSection>*", function() {
+		                                     // 이벤트 핸들러를 다시 바인딩합니다
+		                                     bindEventHandlers();
+		                                 });
+	                    		} else {
+		                    			alert("답글 추가 실패");
+		                    		}
+		                    	}, 
+		                    	error: function() {
+		                    		alert("서버 오류 발생");
+		                    	}
+		                    });
+		                  
 		                }
 		            });
 		            
@@ -91,18 +126,50 @@
 			            $(".reply-btn").click(function() {
 			                $(this).closest("tr").next(".reply-form-row").toggle();
 			            });
-		                
-			  
-
+		               
+			            // 등록 버튼 클릭 시 답글 등록
 			            $(".add-reply-btn").click(function() {
 			                const replyForm = $(this).closest(".reply-form");
+			                const boardNo = replyForm.find(".boardNo2").val();
+			                const empNo = replyForm.find(".empNo2").val();
+			                const category = replyForm.find(".category2").val();
+			                const parentCommentNo = replyForm.find(".parentCommentNo").val();
 			                const commentContent = replyForm.find(".reply-content").val();
 			                
 			                if (commentContent.trim() === "") {
 			                    alert("답글을 입력해주세요.");
 			                    replyForm.find(".reply-content").focus();
 			                } else {
-			                    replyForm.submit();
+			                    // replyForm.submit();
+			                  
+			                    $.ajax({
+			                    	type: "POST", 
+			                    	url: "/JoinTree/comment/addReply",
+			                    	data: {
+			                    		boardNo: boardNo,
+			                    		empNo: empNo,
+			                    		category: category,
+			                    		parentCommentNo: parentCommentNo,
+			                    		commentContent: commentContent
+			                    	}, 
+			                    	success: function(response) {
+			                    		if (response === "success") {
+			                    			alert("답글이 등록되었습니다.");
+			                    			
+			                    			console.log("답글 등록 완료");
+			                    			event.preventDefault();
+			                    			 $("#commentSection").load(location.href + " #commentSection>*", function() {
+			                                     // 이벤트 핸들러를 다시 바인딩합니다
+			                                     bindEventHandlers();
+			                                 });
+		                    		} else {
+			                    			alert("답글 추가 실패");
+			                    		}
+			                    	}, 
+			                    	error: function() {
+			                    		alert("서버 오류 발생");
+			                    	}
+			                    });
 			                }
 			            });
 		            }
@@ -187,7 +254,7 @@
 				<!-- 자신이 작성한 게시글일 경우에만 수정, 삭제 버튼 노출 -->
 				<c:if test="${loginAccount.empNo eq comm.empNo}">
 					<a href="/JoinTree/community/lifeEventCommList/modifyLifeEventComm?boardNo=${comm.boardNo}">수정</a>
-					<a href="/JoinTree/community/removeComm?boardNo=${comm.boardNo}">삭제</a>
+					<a href="/JoinTree/community/removeComm?boardNo=${comm.boardNo}" onclick="return confirm('게시글을 삭제하시겠습니까?')">삭제</a>
 				</c:if>
 				
 				<hr>
@@ -234,7 +301,7 @@
 				                    <tr class="reply-row">
 				                    	<td>${comment.commentNo}</td>
 				                        <td>${comment.empName}</td>
-				                        <td style="padding-left: 20px;">->${comment.commentContent}</td>
+				                        <td style="padding-left: 20px;">-> ${comment.commentContent}</td>
 				                        <td>${comment.createdate}</td>
 				                        <td>
 				                            <!-- 자신이 작성한 댓글일 경우에만 삭제 버튼 노출 -->
@@ -253,11 +320,11 @@
 							<tr class="reply-form-row" style="display: none;">
 								<td colspan="5">
 					          		<form action="/JoinTree/comment/addReply" method="POST" class="reply-form">
-						                <input type="hidden" name="boardNo" id="boardNo2" value="${comm.boardNo}">
-						                <input type="hidden" name="empNo" id="empNo2" value="${loginAccount.empNo}">
-						                <input type="hidden" name="category" id="category2" value="${comm.boardCategory}">
+						                <input type="hidden" name="boardNo" class="boardNo2" value="${comm.boardNo}">
+						                <input type="hidden" name="empNo" class="empNo2" value="${loginAccount.empNo}">
+						                <input type="hidden" name="category" class="category2" value="${comm.boardCategory}">
 						                <!-- <input type="hidden" name="commentGroupNo" id="commentGroupNo" value="2"> -->
-						                <input type="hidden" name="parentCommentNo" id="parentCommentNo" value="${comment.commentNo}">
+						                <input type="hidden" name="parentCommentNo" class="parentCommentNo" value="${comment.commentNo}">
 						                <textarea name="commentContent" class="reply-content" rows="3" cols="50"></textarea><br>
 						                <button type="button" class="add-reply-btn">등록</button>
 	           					 	</form>
