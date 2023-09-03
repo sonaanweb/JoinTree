@@ -487,8 +487,7 @@
 	                 	$('.empImgOne').attr('src', pathUrl + empSaveImgName);
 		             } else {
 		                 // 이미지가 없는 경우 처리
-		                 //$('#empImgOne').attr('src', '#');
-		                 $('.empImgOne').text('사진 정보 없음');
+		                 $('.empImgOne').attr('src', pathUrl + 'JoinTree.png');
 		             }
 			            
 		            // 퇴사일 분기
@@ -584,11 +583,6 @@
 	   		let departBeforeNo = $('#departBeforeNo').val();
 	   		let positionBeforeLevel = $('#positionBeforeLevel').val();
 	   		
-	   		// 카테고리별 이름 값 저장 변수
-	   		let deptCategory = $('#modifyDept option:selected').text();
-	   		let positionCategory = $('#modifyPosition option:selected').text();
-	   		let activeCategory = $('#modifyEmpAtive option:selected').text();
-	   		
 	   		// 내선번호 공백, 유효성 검사
 	   		if (checkEmptyAndAlert($('#modifyEmpExtensionNo').val(), '내선번호를 입력해주세요', '#modifyEmpExtensionNo')) return; // 내선번호
 	
@@ -621,18 +615,13 @@
 	   				if(activeResult == 1 || empInfoResult == 1){
 	   					alert('사원 정보 수정 성공');
 	   					
-	   					// 모달창 회원상세정보 수정된 내용 업데이트
-	   					$('#deptOne').text(deptCategory);
-		 	            $('#positionOne').text(positionCategory);
-		 	            $('#empActiveOne').text(activeCategory);
-		 	            $('#empExtensionNoOne').text(empExtensionNo);
-		 	            $('#empHireDateOne').text(empHireDate);
-		 	            $('#empLastDateOne').text(empLastDate);
+	 					// 사원정보 수정 후 업데이트
+		 	            selectEmpInfoOne(empNo); // 사원 상세정보 호출 함수
+		 	            searchEmpListResults(); // empList 초기화
 		 	            
 	   					// 모달 창 내용 변경 후, 수정 폼을 숨기고 상세 정보를 보이게 설정
 	   		            $('#modifyEmpFormModalContent').hide();
 	   		            $('#empOneInfoModalContent').show();
-	   		         	
 	   				} 
 	   			},
 	   			error: function(){
