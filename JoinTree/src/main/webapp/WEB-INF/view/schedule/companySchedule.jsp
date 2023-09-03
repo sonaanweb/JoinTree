@@ -73,6 +73,7 @@
 	                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
 	                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
 	                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
+	                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -158,6 +159,29 @@
 	        }
 	       
 	    });
+	    
+	 	// 유효성 검사 함수
+	    function validateSchedule(title, content, startTime, endTime) {
+	        if (title.trim() === '' || content.trim() === '') {
+	            Swal.fire(
+	                'Error',
+	                '제목과 내용은 필수 입력 사항입니다.',
+	                'error'
+	            );
+	            return false;
+	        }
+
+	        if (new Date(endTime) < new Date(startTime)) {
+	            Swal.fire(
+	                'Error',
+	                '종료일은 시작일보다 늦어야 합니다.',
+	                'error'
+	            );
+	            return false;
+	        }
+
+	        return true;
+	    }
 	
 	
 	    // 일정추가 모달창
@@ -166,28 +190,47 @@
 	        $('#scheduleTitle').val('');
 	        $('#scheduleContent').val('');
 	        $('#scheduleLocation').val('');
-	        $('#scheduleStart').val(startDate.toISOString().slice(0, 16));
-	        $('#scheduleEnd').val(endDate.toISOString().slice(0, 16));
+	        
+	     	// 시작일 설정
+	        var startHour = 9; // 시작 시간을 9 (오전 9시)으로 설정
+	        var startMinute = 0; // 분을 0으로 설정
+	        
+	        // 시작일의 날짜와 시간 설정
+	        $('#scheduleStart').val(startDate.toISOString().slice(0, 11) + formatTime(startHour, startMinute));
+	        
+	     	// 종료일 설정 (날짜를 시작일과 동일하게 설정)
+	        $('#scheduleEnd').val($('#scheduleStart').val());
+	        
+	        // 종료 시간 설정 (오후 11시 59분)
+	        var endHour = 23; // 시간을 23 (오후 11시)으로 설정
+	        var endMinute = 59; // 분을 59로 설정
+	        
+	        // 종료 시간을 시간과 분 입력 필드에 설정
+	        $('#scheduleEnd').val($('#scheduleEnd').val().slice(0, 11) + formatTime(endHour, endMinute));
 	
+	    }
+	    
+	 	// 시간을 hh:mm 형식으로 포맷하는 함수
+	    function formatTime(hours, minutes) {
+	        var formattedHours = hours < 10 ? '0' + hours : hours;
+	        var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+	        return formattedHours + ':' + formattedMinutes;
 	    }
 	    
 		// 일정추가
 	    var submitScheduleBtn = document.getElementById('submitScheduleBtn');
 	    submitScheduleBtn.addEventListener('click', function() {
+	    	var title = $('#scheduleTitle').val();
+	        var content = $('#scheduleContent').val();
 	    	var startTime = $('#scheduleStart').val();
 	        var endTime = $('#scheduleEnd').val();
-	        var title = $('#scheduleTitle').val();
-	        var content = $('#scheduleContent').val();
 	        
-	        if (title.trim() === '' || content.trim() === '') {
-	            alert('제목과 내용은 필수 입력 사항입니다.');
-	            return;
+	        if (!validateSchedule(title, content, startTime, endTime)) {
+	            return; // 유효성 검사 실패 시 함수 종료
 	        }
-	
-	        if (new Date(endTime) < new Date(startTime)) {
-	            alert('종료일은 시작일보다 늦어야 합니다.');
-	            return;
-	        }
+	        
+	     	// 작성자 정보 가져오기
+	        var writerName = '<%= session.getAttribute("empName") %>';
 	
 	        var eventData = {
 	        	    scheduleTitle: title,
@@ -195,6 +238,7 @@
 	        	    scheduleLocation: $('#scheduleLocation').val(),
 	        	    scheduleStart: startTime,
 	        	    scheduleEnd: endTime,
+	        	    empName: writerName // 작성자 이름 추가
 	        };
 			
 	        // 일정 추가 비동기 처리
@@ -205,12 +249,23 @@
 	            data: JSON.stringify(eventData),
 	            success: function(response) {
 	                if (response.success) {
-	                  	//alert("성공");
-	                    calendar.addEvent(eventData);
-	                    $('#addScheduleModal').modal('hide');
+	                	// calendar에 추가
+	            		calendar.addEvent(eventData);
+	            		
+	            		// 모달창 숨기기
+	            		$('#addScheduleModal').modal('hide');
+	            		
+	            		// 추가확인 알림창
+	                  	Swal.fire({
+							icon: 'success',
+							title: '사내일정이 추가되었습니다',
+							showConfirmButton: false,
+							timer: 1000
+						});
 	                    
 	                	// 캘린더를 새로 고치기 위해 함수 호출
 	                    fetchAndRenderCalendarEvents();
+	                	
 	                } else {
 	                    console.error('Failed to add schedule.');
 	                }
@@ -238,6 +293,7 @@
 	                $('#viewLocation').text(response.scheduleLocation);
 	                $('#viewStart').text(new Date(response.scheduleStart).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
 	                $('#viewEnd').text(new Date(response.scheduleEnd).toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }));
+	                $('#viewWriter').text(response.empName + " (" + response.empNo + ")");
 	                
 	             	// 작성자(empNo)와 로그인한 사용자의 empNo 비교
 	                var loginEmpNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;
@@ -264,10 +320,22 @@
 	             	
 	             	// 일정상세에서 '삭제' 버튼 클릭 -> '확인' 클릭시 삭제 
 	                $('#deleteScheduleBtn').on('click', function() {
-	                    if (confirm('진짜 삭제하시겠습니까?')) {
-	                        deleteSchedule(event.id);
-	                    }
+	                	Swal.fire({
+	        				title: '정말 삭제하시겠습니까?',
+	        				text: "삭제한 일정은 되돌릴 수 없습니다.",
+	        				icon: 'warning',
+	        				showCancelButton: true,
+	        				confirmButtonColor: '#8BC541',
+	        				cancelButtonColor: '#888',
+	        				confirmButtonText: '삭제',
+	        				cancelButtonText: '취소'
+       					}).then((result) => {
+	        					if (result.isConfirmed) {
+	                        		deleteSchedule(event.id);
+	        					}
+        				});
 	                });
+	    	        
 	             	
 	             	// 수정 버튼 클릭
 	    	        $('#editScheduleBtn').on('click', function() {
@@ -294,12 +362,20 @@
                 data: JSON.stringify({ scheduleNo: scheduleNo, empNo: empNo }), // 객체 형태로 전달
                 success: function(response) {
                     if (response.success) {
-                        // 캘린더를 새로 고치기 위해 함수 호출
-                        fetchAndRenderCalendarEvents();
+                    	// 모달창 숨기기
                         $('#scheduleOneModal').modal('hide');
                         
-	                     // 삭제 성공 알림창 띄우기
-	                     alert('일정이 성공적으로 삭제되었습니다.');
+                        // 삭제확인 알림창
+                        Swal.fire({
+							icon: 'success',
+							title: '일정이 삭제되었습니다',
+							showConfirmButton: false,
+							timer: 1000
+						});
+                        
+                    	 // 캘린더를 새로 고치기 위해 함수 호출
+                        fetchAndRenderCalendarEvents();
+                    	 
                     } else {
                     	
                         console.error('Failed to delete schedule.');
@@ -322,9 +398,18 @@
 	     	// '수정' 버튼 클릭 시 수정 액션에 필요한 값들을 설정합니다.
 	        $('#updateScheduleBtn').off('click'); // 기존 클릭 이벤트 핸들러 제거
 			$('#updateScheduleBtn').on('click', function() {
-				// 세션에서 empNo 추출
+				
 	            var scheduleNo = selectedEvent.id;
+	         	// 세션에서 empNo 추출
 	            var empNo = <%= ((AccountList) session.getAttribute("loginAccount")).getEmpNo() %>;
+	            var editStartTime = $('#editScheduleStart').val();
+	            var editEndTime = $('#editScheduleEnd').val();
+	            var editTitle = $('#editScheduleTitle').val();
+	            var editContent = $('#editScheduleContent').val();
+	            
+	            if (!validateSchedule(editTitle, editContent, editStartTime, editEndTime)) {
+	                return; // 유효성 검사 실패 시 함수 종료
+	            }
 	            
 	         	// 서버로 수정된 일정 정보 전송
 	            $.ajax({
@@ -342,11 +427,23 @@
 	                }),
 	                success: function(response) {
 	                    if (response.success) {
-	                        // 일정을 다시 불러와서 FullCalendar에 업데이트
-	                        fetchAndRenderCalendarEvents();
+	                    	// 모달창 숨기기
 	                        $('#editScheduleModal').modal('hide');
+	                        
+	                    	 // 수정확인 알림창
+	                        Swal.fire({
+								icon: 'success',
+								title: '일정이 수정되었습니다',
+								showConfirmButton: false,
+								timer: 1000
+							});
+	                    	 
+	                     	// 일정을 다시 불러와서 FullCalendar에 업데이트
+	                        fetchAndRenderCalendarEvents();
+	                     
 	                     	// 수정된 내용으로 상세보기 모달창 다시 열기
 	                        openEventModal(selectedEvent);
+	                     	
 	                    } else {
 	                        console.error('Failed to update schedule.');
 	                    }

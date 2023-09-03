@@ -7,6 +7,7 @@
 		SELECT
         	schedule_no scheduleNo,
         	emp_no empNo,
+        	emp_name empName,
         	schedule_category scheduleCategory,
         	schedule_title scheduleTitle,
         	schedule_content scheduleContent,
@@ -26,6 +27,7 @@
 		SELECT
         	schedule_no scheduleNo,
         	emp_no empNo,
+        	emp_name empName,
         	schedule_category scheduleCategory,
         	schedule_title scheduleTitle,
         	schedule_content scheduleContent,
@@ -50,6 +52,7 @@
         SELECT
         	schedule_no scheduleNo,
         	emp_no empNo,
+        	emp_name empName,
         	schedule_category scheduleCategory,
         	schedule_title scheduleTitle,
         	schedule_content scheduleContent,
@@ -81,13 +84,28 @@
 	    create_id createId,
 	    update_id updateId
 	FROM schedule
-	WHERE ((schedule_category = 'S0101' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()) OR
-		       (emp_no IN (
-		           SELECT emp_no
-		           FROM emp_info
-		           WHERE dept = #{dept}
-	      ) AND schedule_category = 'S0102' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()) OR
-	       (emp_no = #{empNo} AND schedule_category = 'S0103' AND DATE(schedule_start) &lt;= CURDATE() AND schedule_end > now()));
+	WHERE 
+	    (
+	        schedule_category = 'S0101' 
+	        AND CURDATE() BETWEEN DATE(schedule_start) AND DATE(schedule_end)
+	    )
+	    OR
+	    (
+	        emp_no IN (
+	            SELECT emp_no
+	            FROM emp_info
+	            WHERE dept = #{dept}
+	        )
+	        AND schedule_category = 'S0102' 
+	        AND CURDATE() BETWEEN DATE(schedule_start) AND DATE(schedule_end)
+	    )
+	    OR
+	    (
+	        emp_no = #{empNo} 
+	        AND schedule_category = 'S0103' 
+	        AND CURDATE() BETWEEN DATE(schedule_start) AND DATE(schedule_end)
+	    )
+    
     </select>
     
     <!-- 일정 추가 -->
@@ -96,7 +114,8 @@
 	        SELECT last_insert_id()
 	    </selectKey>
    		INSERT INTO schedule(
-   			emp_no, 
+   			emp_no,
+   			emp_name,
    			schedule_category, 
    			schedule_title, 
    			schedule_content,
@@ -109,6 +128,7 @@
             update_id
         ) VALUES (
             #{empNo},
+            #{empName},
             #{scheduleCategory},
             #{scheduleTitle},
             #{scheduleContent},
@@ -127,6 +147,7 @@
         SELECT
         	schedule_no scheduleNo,
         	emp_no empNo,
+        	emp_name empName,
         	schedule_category scheduleCategory,
         	schedule_title scheduleTitle,
         	schedule_content scheduleContent,

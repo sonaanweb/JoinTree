@@ -177,6 +177,10 @@ public class ScheduleController {
 		// empNo를 schedule에 설정
 	    schedule.setEmpNo(empNo);
 	    
+	    // 세션에서 empName 정보 추출
+	    String empName = (String) session.getAttribute("empName");
+	    schedule.setEmpName(empName);
+	    
 	    // 일정 카테고리(전사)
 		String scheduleCategory = "S0101";
 	    schedule.setScheduleCategory(scheduleCategory);
@@ -204,6 +208,10 @@ public class ScheduleController {
 		int empNo = loginAccount.getEmpNo();
 		// empNo를 schedule에 설정
 	    schedule.setEmpNo(empNo);
+	    
+	    // 세션에서 empName 정보 추출
+	    String empName = (String) session.getAttribute("empName");
+	    schedule.setEmpName(empName);
 	    
 		// 일정 카테고리(부서)
 		String scheduleCategory = "S0102";
@@ -235,6 +243,10 @@ public class ScheduleController {
 		// empNo를 schedule에 설정
 	    schedule.setEmpNo(empNo);
 	    
+	    // 세션에서 empName 정보 추출
+	    String empName = (String) session.getAttribute("empName");
+	    schedule.setEmpName(empName);
+	    
 		// 일정 카테고리(개인)
 		String scheduleCategory = "S0103";
 	    schedule.setScheduleCategory(scheduleCategory);
@@ -257,8 +269,9 @@ public class ScheduleController {
 	// 일정 상세보기
 	@GetMapping("/schedule/selectScheduleOne")
     @ResponseBody
-    public ResponseEntity<Schedule> selectScheduleOne(@RequestParam(name="scheduleNo") int scheduleNo) {
-        Schedule scheduleOne = scheduleService.selectScheduleOne(scheduleNo);
+    public ResponseEntity<Schedule> selectScheduleOne(@RequestParam(name="scheduleNo") int scheduleNo, HttpSession session) {
+		
+		Schedule scheduleOne = scheduleService.selectScheduleOne(scheduleNo);
         return new ResponseEntity<>(scheduleOne, HttpStatus.OK);
 	}
 	
