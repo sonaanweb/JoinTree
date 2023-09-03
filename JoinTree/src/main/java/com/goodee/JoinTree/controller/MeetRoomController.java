@@ -1,8 +1,14 @@
 package com.goodee.JoinTree.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,8 +23,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.service.MeetRoomService;
+import com.goodee.JoinTree.vo.AccountList;
+import com.goodee.JoinTree.vo.MeetRoomFile;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,42 +61,33 @@ public class MeetRoomController {
 	// ------------------------------------------------
 	
 	// 회의실 추가
-    @PostMapping("/addMeetRoom")
-    public String addMeetRoom(HttpServletRequest request, MeetingRoom meetingRoom) {
-    	
-    	// 임시 아이디값 ---
-    	int empNo = 11111111;
-    	meetingRoom.setCreateId(empNo);
-    	meetingRoom.setUpdateId(empNo);
-    	
-        String equipCategory = "E0101"; // 회의실 공통 코드 IN
-        meetingRoom.setEquipCategory(equipCategory);
-    	meetRoomService.addMeetRoom(meetingRoom);
-        //meetRoomService.addMeetRoom(meetingRoom);
-        
-        log.debug(AN+"MeetRoomController.equipCategory : "+equipCategory.toString()+RE);
-        log.debug(AN+"MeetRoomController.addmeetingRoom : "+meetingRoom.toString()+RE);
-        
-        return "redirect:/equipment/meetRoomList";
-    }
-    /*
-    public Map<String, String> addMeetRoom(HttpServletRequest request,@RequestBody MeetingRoom meetingRoom) {
-        Map<String, String> response = new HashMap<>();
+	@PostMapping("/addMeetRoom")
+	@ResponseBody
+	public Map<String, String> addMeetRoom(@RequestBody MeetingRoom meetingRoom, HttpSession session) {
+	    
+	    // 임시 아이디값 ---
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
+		int empNo = loginAccount.getEmpNo();
+		// empNo를 schedule에 설정
+	    meetingRoom.setEmpNo(empNo);
+	    
+	    String equipCategory = "E0101"; // 회의실 공통 코드 IN
+	    meetingRoom.setEquipCategory(equipCategory);
 
-        int createId = 1111;
-        int updateId = 1111;
-        meetingRoom.setCreateId(createId);
-        meetingRoom.setUpdateId(updateId);
+	    log.debug(AN + "MeetRoomController.equipCategory : " + equipCategory.toString() + RE);
+	    log.debug(AN + "MeetRoomController.addmeetingRoom : " + meetingRoom.toString() + RE);
+	    
+	    Map<String, String> response = new HashMap<>();
+	    try {
+	        meetRoomService.addMeetRoom(meetingRoom);
+	        response.put("status", "success");
+	    } catch (Exception e) {
+	        response.put("status", "error");
+	        response.put("message", e.getMessage()); // 에러 메시지 추가
+	    }
 
-        String equipCategory = "E0101";
-        meetingRoom.setEquipCategory(equipCategory);
-
-        meetRoomService.addMeetRoom(meetingRoom);
-
-        response.put("result", "success");
-        return response;
-    }*/
-    // ------------------------------------------------
+	    return response;
+	}
     
     // 회의실 수정 액션(post)
     @PostMapping("/equipment/modifyMeetRoom")
@@ -142,5 +142,43 @@ public class MeetRoomController {
         log.debug(AN+"searchResults: "+paramMap+RE);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
-    	
+    
+    
+	/*
+	 * // 회의실 이미지 추가 (AJAX)
+	 * 
+	 * @PostMapping("/addMeetRoomFiles")
+	 * 
+	 * @ResponseBody public String addMeetRoomFiles(@RequestParam("meetRoomFiles")
+	 * List<MultipartFile> meetRoomFiles, HttpServletRequest
+	 * request, @RequestParam("roomNo") int roomNo) { try { if (meetRoomFiles !=
+	 * null && !meetRoomFiles.isEmpty()) { String path =
+	 * request.getServletContext().getRealPath("/roomImg/"); // 경로
+	 * 
+	 * List<MeetRoomFile> roomFileList = new ArrayList<>();
+	 * 
+	 * for (MultipartFile meetRoomFile : meetRoomFiles) { String filename =
+	 * saveFile(meetRoomFile, path);
+	 * 
+	 * if (filename != null) { MeetRoomFile roomFile = new MeetRoomFile();
+	 * roomFile.setRoomNo(roomNo);
+	 * roomFile.setRoomOriginFilename(meetRoomFile.getOriginalFilename());
+	 * roomFile.setRoomSaveFilename(filename);
+	 * roomFile.setRoomFiletype(meetRoomFile.getContentType());
+	 * roomFile.setRoomFilesize(meetRoomFile.getSize());
+	 * 
+	 * roomFileList.add(roomFile); } }
+	 * 
+	 * int row = meetRoomService.addMeetRoomFiles(roomFileList);
+	 * 
+	 * if (row == roomFileList.size()) { return "success"; } } } catch (Exception e)
+	 * { e.printStackTrace(); } return "error"; }
+	 * 
+	 * // UUID private String saveFile(MultipartFile file, String path) { String
+	 * filename = null; try { // 파일 저장 경로에 저장 if (!file.isEmpty()) { filename =
+	 * UUID.randomUUID().toString() + "_" + file.getOriginalFilename(); byte[] bytes
+	 * = file.getBytes(); Path filePath = Paths.get(path + filename);
+	 * Files.write(filePath, bytes); } } catch (IOException e) {
+	 * e.printStackTrace(); } return filename; }
+	 */
 }

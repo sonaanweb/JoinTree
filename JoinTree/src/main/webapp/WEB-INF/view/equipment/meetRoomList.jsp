@@ -150,42 +150,62 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
 });
 
-    $('#modalBtn').click(function() {
-        const roomName = $('#modalAddRoomName').val();
-        const roomCapacity = $('#modalAddRoomCapacity').val();
-        const roomStatus = $('#modalAddRoomStatus').val();
+ $('#modalBtn').click(function() {
+	    const roomName = $('#modalAddRoomName').val();
+	    const roomCapacity = $('#modalAddRoomCapacity').val();
+	    const roomStatus = $('#modalAddRoomStatus').val();
 
-        if (roomName.trim() === '') {
-            $("#rn_add_check").text("공백은 입력할 수 없습니다.");
-            $("#rn_add_check").css("color", "red");
-            $("#modalAddRoomName").focus();
-            return;
-        }
+	    if (roomName.trim() === '') {
+	        $("#rn_add_check").text("공백은 입력할 수 없습니다.");
+	        $("#rn_add_check").css("color", "red");
+	        $("#modalAddRoomName").focus();
+	        return;
+	    }
+	    
+	    const meetingRoom = {
+	        roomName: roomName,
+	        roomCapacity: roomCapacity,
+	        roomStatus: roomStatus
+	    };
 
-        $.ajax({
-            url: '/JoinTree/cntRoomName',
-            type: 'post',
-            data: roomName,
-            contentType: 'application/json',
-            success: function(cnt) {
-                if (cnt > 0) {
-                    $("#rn_add_check").text("이미 존재하는 이름입니다.");
-                    $("#rn_add_check").css("color", "red");
-                    $("#modalAddRoomName").focus();
-                } else {
-                    // 유효성 검사 통과시
-                    // 폼의 액션 속성과 매서드 속성을 변경. 폼을 /addMeetRoom URL로 보내는 POST 요청
-                    $('#addForm').attr('action', '/JoinTree/addMeetRoom');
-                    $('#addForm').attr('method', 'post'); // 폼 제출 방식
-                    $('#addForm')[0].submit();
-                    alert('회의실이 추가되었습니다.');
-                }
-            },
-            error: function() {
-                console.log('ajax실패');
-            }
-        });
-    });
+	    // 중복 검사 Ajax 요청
+	    $.ajax({
+	        url: '/JoinTree/cntRoomName',
+	        type: 'post',
+	        data: roomName,
+	        contentType: 'application/json',
+	        success: function(cnt) {
+	            if (cnt > 0) {
+	                $("#rn_add_check").text("이미 존재하는 이름입니다.");
+	                $("#rn_add_check").css("color", "red");
+	                $("#modalAddRoomName").focus();
+	            } else {
+	                // 중복 검사 통과
+	                $.ajax({
+	                    url: '/JoinTree/addMeetRoom',
+	                    type: 'post',
+	                    data: JSON.stringify(meetingRoom),
+	                    contentType: 'application/json',
+	                    success: function(response) {
+	                        if (response.status === "success") {
+	                            alert('회의실이 추가되었습니다.');
+
+	                            location.reload();
+	                        } else {
+	                            alert('회의실 추가에 실패했습니다.');
+	                        }
+	                    },
+	                    error: function() {
+	                        console.log('ajax 실패');
+	                    }
+	                });
+	            }
+	        },
+	        error: function() {
+	            console.log('ajax 실패');
+	        }
+	    });
+	});
 
 // 수정 모달창 스크립트
 $(document).ready(function() {

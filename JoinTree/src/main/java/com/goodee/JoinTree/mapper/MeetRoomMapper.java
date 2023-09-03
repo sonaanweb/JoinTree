@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.goodee.JoinTree.vo.MeetRoomFile;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 @Mapper
@@ -32,4 +33,18 @@ public interface MeetRoomMapper {
 	
 	// 회의실 이름 검색
 	List<MeetingRoom> searchMeetRoom(Map<String,Object> map);
+	
+	// ------------------------------------------------------
+	
+	// 회의실 이미지 추가 메서드 (파일)
+	int insertMeetRoomFile(List<MeetRoomFile> meetRoomFile);
+	
+	// 회의실 이미지 조회 메서드
+	List<MeetRoomFile> selectMeetRoomFile(int roomNo);
+	
+	// 회의실 이미지 삭제 메서드
+	int removeMeetRoomFile(int roomNo);
+	
+	// 첨부파일 개수 cnt (2장까지 업로드 가능하게 제한둘 것)
+	int selectMeetRoomFileCnt(int roomNo);
 }

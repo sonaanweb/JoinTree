@@ -5,15 +5,17 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.goodee.JoinTree.mapper.MeetRoomMapper;
+import com.goodee.JoinTree.vo.MeetRoomFile;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 @Service
 public class MeetRoomService {
 	@Autowired
 	private MeetRoomMapper meetRoomMapper;
-	
+
 	// 회의실 목록 조회 메서드
 	public List<MeetingRoom> getMeetRoomList(Map<String, Object> map) {
         return meetRoomMapper.selectMeetRoomAll(map);
@@ -50,4 +52,27 @@ public class MeetRoomService {
 	public List<MeetingRoom> searchMeetRoom(Map<String, Object> map){
 		return meetRoomMapper.searchMeetRoom(map);
 	}
+	
+	// -------------------------------------------------
+	
+	// 회의실 이미지 추가 메서드
+	public int addMeetRoomFiles(List<MeetRoomFile> meetRoomFiles) {
+        return meetRoomMapper.insertMeetRoomFile(meetRoomFiles);
+    }
+
+    // 회의실 이미지 조회 메서드
+    public List<MeetRoomFile> getMeetRoomFiles(int roomNo) {
+        return meetRoomMapper.selectMeetRoomFile(roomNo);
+    }
+
+    // 회의실 이미지 삭제 메서드(트랜잭션?)
+    @Transactional
+    public int removeMeetRoomFile(int roomNo) {
+        return meetRoomMapper.removeMeetRoomFile(roomNo);
+    }
+
+    // 첨부파일 개수 cnt
+    public int getMeetRoomFileCount(int roomNo) {
+        return meetRoomMapper.selectMeetRoomFileCnt(roomNo);
+    }
 }

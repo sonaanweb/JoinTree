@@ -104,4 +104,60 @@
 	    </where>
 		ORDER BY createdate DESC;
 	</select>
+	
+	<!-- 아래부터 이미지 관련 -->
+	
+	<!-- 회의실 이미지 추가 -->
+    <insert id="insertMeetRoomFile" parameterType="com.goodee.JoinTree.vo.MeetRoomFile">
+        INSERT INTO meet_room_file (
+            room_no,
+            room_origin_filename,
+            room_save_filename,
+            room_filetype,
+            room_filesize,
+            createdate,
+            updatedate,
+            create_id,
+            update_id
+        )
+        VALUES (
+            #{roomNo},
+            #{roomOriginFilename},
+            #{roomSaveFilename},
+            #{roomFiletype},
+            #{roomFilesize},
+            NOW(),
+            NOW(),
+            #{createId},
+            #{updateId}
+        )
+    </insert>
+
+    <!-- 회의실 이미지 조회 메서드 -->
+    <select id="selectMeetRoomFile" parameterType="int" resultType="com.goodee.JoinTree.vo.MeetRoomFile">
+        SELECT
+            room_file_no roomFileNo,
+            room_no roomNo,
+            room_origin_filename roomOriginFilename,
+            room_save_filename roomSaveFilename,
+            room_filetype roomFiletype,
+            room_filesize roomFilesize,
+            createdate,
+            updatedate,
+            create_id createId,
+            update_id updateId
+        FROM meet_room_file
+        WHERE room_no = #{roomNo}
+    </select>
+
+    <!-- 회의실 이미지 삭제 메서드 -->
+    <delete id="removeMeetRoomFile" parameterType="int">
+        DELETE FROM meet_room_file
+        WHERE room_no = #{roomNo}
+    </delete>
+    
+    <!-- 첨부파일 개수 cnt -->
+    <select id="selectMeetRoomFileCnt" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM meet_room_file WHERE room_no = #{roomNo}
+    </select>
 </mapper>
