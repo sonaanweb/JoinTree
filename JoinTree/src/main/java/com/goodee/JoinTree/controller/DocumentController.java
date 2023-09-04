@@ -310,66 +310,6 @@ public class DocumentController {
 	}
 	
 	
-	/* 결재 처리
-	@PostMapping("/document/approve1")
-	@ResponseBody
-	public String approve1(Model model, HttpSession session, int docNo, String docStatus) {
-		// 로그인 유저
-		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-		
-		int empNo = loginAccount.getEmpNo();
-		String signImg = (String) session.getAttribute("signImg");
-		
-		DocumentDefault docDefault = new DocumentDefault();
-		docDefault.setDocNo(docNo);
-		docDefault.setDocStatus(docStatus);
-		docDefault.setDocStamp2(signImg);
-		docDefault.setUpdateId(empNo);
-	
-		int signerCnt = documentService.getSignerCnt(docNo);
-		model.addAttribute("signerCnt", signerCnt);
-		
-		DocumentSigner docSigner = new DocumentSigner();
-		docSigner.setDocNo(docNo);
-		docSigner.setEmpSignerNo(empNo);
-		int signerLevel = documentService.getSignerLevel(docSigner);
-		model.addAttribute("signerLevel", signerLevel);
-
-		
-		int row = documentService.approveDocDefault1(docDefault);
-		
-		if (row == 1) {
-			return "success";
-		} else {
-			return "fail";
-		}
-	}
-	
-	// 결재 처리2
-	@PostMapping("/document/approve2")
-	@ResponseBody
-	public String approve2(HttpSession session, int docNo, String docStatus) {
-		// 로그인 유저
-		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-		
-		int empNo = loginAccount.getEmpNo();
-		String signImg = (String) session.getAttribute("signImg");
-		
-		DocumentDefault docDefault = new DocumentDefault();
-		docDefault.setDocNo(docNo);
-		docDefault.setDocStatus(docStatus);
-		docDefault.setDocStamp3(signImg);
-		docDefault.setUpdateId(empNo);
-	
-		int row = documentService.approveDocDefault2(docDefault);
-		
-		if (row == 1) {
-			return "success";
-		} else {
-			return "fail";
-		}
-	}*/
-	
 	// 결재자 문서 반려
 	@PostMapping("/document/reject")
 	@ResponseBody
