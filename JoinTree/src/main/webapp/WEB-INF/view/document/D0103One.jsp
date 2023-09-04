@@ -124,9 +124,7 @@
 		<!-- 제목 -->
 		<tr>
 			<td>제목</td>
-			<td>
-				<textarea id="docTitle"></textarea> 
-			</td>
+			<td id="docTitle"></td>
 		</tr>
 		
 		<!-- 주요 업무 -->
@@ -149,7 +147,7 @@
 		<tr>
 			<td>발령 사유</td>
 			<td>
-				<textarea id="docReshuffleReason"></textarea> 
+				<textarea id="docContent"></textarea> 
 			</td>
 		</tr>
 

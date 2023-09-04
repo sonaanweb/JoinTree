@@ -388,8 +388,7 @@
 			repo.code_name docReshufflePosition, -- 변경 후 직급
 			rede.code_name docReshuffleDept, -- 변경 후 부서
 			dr.doc_reshuffle_task docReshuffleTask, -- 주요 업무
-			dr.doc_reshuffle_result docReshuffleResult, -- 업무성과
-			dr.doc_reshuffle_reason docReshuffleReason-- 발령사유
+			dr.doc_reshuffle_result docReshuffleResult -- 업무성과
 		FROM document_default d -- 기본 기안서
 		INNER JOIN document_reshuffle dr ON d.doc_no = dr.doc_no -- 인사이동신청서
 		LEFT OUTER JOIN emp_info e ON d.emp_no = e.emp_no -- 사원 정보
