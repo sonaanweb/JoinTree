@@ -19,18 +19,18 @@ import com.goodee.JoinTree.vo.AccountList;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@WebFilter(urlPatterns = {"/home", "/community/*", "/code/*", "/empInfo/*", "/empManage/*", "/document/*"})
+@WebFilter(urlPatterns = {"/home", "/board/*", "/community/*", "/code/*",  "/document/*", "/commute/*", "/commuteManage/*", 
+		"/empInfo/*", "/empManage/*", "/empTel/*", "/equipment/*", "/schedule/*", "/reservation/*", "/project/*", "/todo/*"})
 public class SessionFilter extends HttpFilter implements Filter {
 	static final String CYAN = "\u001B[46m";
 	static final String RESET = "\u001B[0m";
-    // "/home", "/community/*", "/code/*", "/empInfo/*", "/commute/*", "/empManage/*", "/document/*", "/reservation/*", "/schedule/*"
+    // "/document/*", "", "
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 	  
         System.out.println("세션 확인 필터");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String requestURI = httpRequest.getRequestURI(); // requestURI 변수 할당
-        // System.out.println("Context Path: " + httpRequest.getContextPath()); // 컨텍스트 경로 확인
-
+        
         // 세션 가져오기
         HttpSession session = httpRequest.getSession();
         Object loginAccount = session.getAttribute("loginAccount");
