@@ -136,11 +136,12 @@ $(document).ready(function() {
 		
 		// 데이터 조회
 		$.ajax({
-			url: '/JoinTree/empTel/searchEmpTelList',
+			url: '/JoinTree/empManage/searchEmpList',
 			type: 'GET',
 			data: {
-				// 검색조건 객체를 JSON으로 변환
-				searchEmpList: JSON.stringify(searchEmpList),
+				empNo: $('#searchEmpNo').val(),
+				empName: $('#searchEmpName').val(),
+				dept: $('#searchDept').val(),
 				currentPage: page, // 현재페이지
 				rowPerPage: 10 // 한 페이지당 행의 수
 			},
