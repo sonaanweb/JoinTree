@@ -265,6 +265,7 @@ public class DocumentController {
 	        row = documentService.approveDocDefault1(docDefault); // 결재 처리
 	        row += documentService.modifySignerStatus(docSigner); // signer 테이블 변경
 	        log.debug("row:" + row);
+	        row ++; // 한명일 때도 ++
 	        
 	    } else if (signerCnt == 2) {
 	        if (signerLevel == 1) {
