@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.goodee.JoinTree.mapper.DocumentListMapper;
+import com.goodee.JoinTree.vo.DocumentDefault;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +17,7 @@ public class DocumentListService {
 	@Autowired
 	private DocumentListMapper documentListMapper;
 	
+	// 문서함 별 목록 조회
 	public Map<String, Object> getDocList(Map<String, Object> docMap) {
 		
 		// 문서함 id값 저장
@@ -95,6 +97,8 @@ public class DocumentListService {
 			searchDocListbyPage = documentListMapper.getTeamDocList(docMap);
 		}
 		
+		log.debug(searchDocListbyPage+"<-- DocumentListService searchDocListbyPage");
+		
 		
 		Map<String, Object> searchDocListResult = new HashMap<>();
 		searchDocListResult.put("searchDocListbyPage", searchDocListbyPage);
@@ -104,6 +108,24 @@ public class DocumentListService {
 		searchDocListResult.put("pageLength", pageLength);
 		
 		return searchDocListResult;
+	}
+	
+	// home.jsp 기안문서 목록 조회
+	public List<DocumentDefault> getDraftDocList(int empNo){
+		
+		List<DocumentDefault> getDraftDocList = documentListMapper.getDraftDocListHome(empNo);
+		log.debug(getDraftDocList+"<-- DocumentListService getDraftDocList");
+		
+		return getDraftDocList;
+	}
+
+	// home.jsp 결재함 목록 조회
+	public List<DocumentDefault> getApprovalDocList(int empNo){
+		
+		List<DocumentDefault> getApprovalDocList = documentListMapper.getApprovalDocListHome(empNo);
+		log.debug(getApprovalDocList+"<-- DocumentListService getApprovalDocList");
+		
+		return getApprovalDocList;
 	}
 
 }

@@ -104,7 +104,7 @@
 			d.doc_no docNo,
 			d.createdate createdate, 
 			doc.code_name category,
-			doc.code docCode, 
+			d.category docCode,
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -136,7 +136,7 @@
 			d.doc_no docNo,
 			d.createdate createdate, 
 			doc.code_name category,
-			doc.code docCode, 
+			d.category docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -171,7 +171,7 @@
 			d.doc_no docNo,
 			d.createdate createdate, 
 			doc.code_name category,
-			doc.code docCode, 
+			d.category docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -213,7 +213,7 @@
 			d.doc_no docNo,
 			d.createdate createdate, 
 			doc.code_name category,
-			doc.code docCode, 
+			d.category docCode, 
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
@@ -236,6 +236,38 @@
 		    </if>
 	    ORDER BY d.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage} 
+	</select>
+	
+	<!-- home.jsp 기안문서 목록 조회 -->
+	<select id="getDraftDocListHome" parameterType="int" 
+			resultType="com.goodee.JoinTree.vo.DocumentDefault">
+		SELECT 
+			doc_title docTitle
+		FROM document_default
+		WHERE 
+			(doc_status IN('A0201', 'A0202') 
+			OR (doc_stamp2 IS NULL 
+			AND doc_stamp3 IS NULL 
+			AND doc_status = 'A0204'))
+			AND emp_no = #{empNo}
+	    ORDER BY updatedate DESC
+	    LIMIT 3
+	</select>
+	
+	<!-- home.jsp 결재함 목록 조회 -->
+	<select id="getApprovalDocListHome" parameterType="int"
+			resultType="com.goodee.JoinTree.vo.DocumentDefault">
+		SELECT 
+			d.doc_title docTitle
+		FROM document_default d
+		LEFT OUTER JOIN document_signer ds ON d.doc_no = ds.doc_no
+		WHERE 
+			((ds.emp_signer_level = 1)
+			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
+			AND ds.doc_status NOT IN('A0203')
+			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
+	    ORDER BY d.createdate DESC
+		LIMIT 3		
 	</select>
 	
 </mapper>

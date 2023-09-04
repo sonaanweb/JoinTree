@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.goodee.JoinTree.vo.DocumentDefault;
+
 @Mapper
 public interface DocumentListMapper {
 
@@ -23,5 +25,9 @@ public interface DocumentListMapper {
 	List<Map<String, Object>> getIndividualDocList(Map<String, Object> docMap); // 개인문서함 조회
 
 	List<Map<String, Object>> getTeamDocList(Map<String, Object> docMap); // 팀별문서함 조회
+	
+	List<DocumentDefault> getDraftDocListHome(int empNo); // home.jsp 기안문서 목록 조회
+	
+	List<DocumentDefault> getApprovalDocListHome(int empNo); // home.jsp 결재함 목록 조회
 
 }

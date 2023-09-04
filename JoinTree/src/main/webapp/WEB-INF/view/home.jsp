@@ -460,14 +460,18 @@
 									<span>기안문서목록</span>
 									<hr>
 									<ul>
-									
+										<c:forEach var="draft" items="${getDraftDocList}">
+											<li>${draft.docTitle}</li>
+										</c:forEach>
 									</ul>
 								</div>
 								<div>
 									<span>결재함</span>
 									<hr>
 									<ul>
-									
+										<c:forEach var="approval" items="${getApprovalDocList}">
+											<li>${approval.docTitle}</li>
+										</c:forEach>
 									</ul>
 								</div>
 							</div>
