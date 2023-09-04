@@ -32,6 +32,9 @@
 	        <when test="searchOption == 'board_content'">
 	            AND b.board_content LIKE CONCAT('%', #{searchText}, '%')
 	        </when>
+	         <when test="searchOption == 'board_title_content'">
+	            AND (b.board_title LIKE CONCAT('%', #{searchText}, '%') OR b.board_content LIKE CONCAT('%', #{searchText}, '%'))
+	        </when>
 	    </choose>
 	    ORDER BY b.createdate DESC
 	    LIMIT #{beginRow}, #{rowPerPage}
@@ -48,11 +51,14 @@
 	        <when test="searchOption == 'board_content'">
 	            AND board_content LIKE CONCAT('%', #{searchText}, '%')
 	        </when>
+	        <when test="searchOption == 'board_title_content'">
+	            AND (board_title LIKE CONCAT('%', #{searchText}, '%') OR board_content LIKE CONCAT('%', #{searchText}, '%'))
+	        </when>
 	    </choose>
 	</select>
 	
 	
-	<!-- 게시판 게시글 리스트 -->
+<!-- 	 게시판 게시글 리스트 
 	<select id="selectCommListByPage" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
 		SELECT
             b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
@@ -64,7 +70,7 @@
         WHERE b.board_category = #{category}
         ORDER BY b.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage}
-	</select>
+	</select> -->
 	
 	<!-- 게시판별 행 개수  -->
 	<!-- boardCategory 부분 나중에 확인  -->

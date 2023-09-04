@@ -94,8 +94,6 @@ public class CommunityService {
 		List<Board> pinnedCommList = communityMapper.selectPinnedCommList(category);
 		log.debug(CYAN + pinnedCommList + " <-- pinnedCmmList(CommunityService-getCommList)" + RESET);
 		
-		
-		
 		resultMap.put("pinnedCommList", pinnedCommList);
 	
 		
