@@ -404,7 +404,7 @@
 		LEFT OUTER JOIN common_code signer1_pc ON signer1_info.position = signer1_pc.code -- 결재자1 code_name
 		LEFT OUTER JOIN common_code signer2_pc ON signer2_info.position = signer2_pc.code -- 결재자2 code_name
 		LEFT OUTER JOIN common_code repo ON dr.doc_reshuffle_position = repo.code -- 변경 후 직급 code_name
-		LEFT OUTER JOIN common_code rede ON dr.doc_reshuffle_dept = repo.code -- 변경 후 부서 code_name
+		LEFT OUTER JOIN common_code rede ON dr.doc_reshuffle_dept = rede.code -- 변경 후 부서 code_name
 		WHERE d.doc_no = #{docNo}
 	</select>
 	
