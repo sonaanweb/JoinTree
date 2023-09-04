@@ -242,15 +242,17 @@
 	<select id="getDraftDocListHome" parameterType="int" 
 			resultType="com.goodee.JoinTree.vo.DocumentDefault">
 		SELECT 
-			doc_title docTitle
-		FROM document_default
+			d.doc_title docTitle,
+			sta.code_name docStatus
+		FROM document_default d
+		INNER JOIN common_code sta ON d.doc_status = sta.code
 		WHERE 
-			(doc_status IN('A0201', 'A0202') 
-			OR (doc_stamp2 IS NULL 
-			AND doc_stamp3 IS NULL 
-			AND doc_status = 'A0204'))
-			AND emp_no = #{empNo}
-	    ORDER BY updatedate DESC
+			(d.doc_status IN('A0201', 'A0202') 
+			OR (d.doc_stamp2 IS NULL 
+			AND d.doc_stamp3 IS NULL 
+			AND d.doc_status = 'A0204'))
+			AND d.emp_no = #{empNo}
+	    ORDER BY d.updatedate DESC
 	    LIMIT 3
 	</select>
 	
@@ -258,9 +260,11 @@
 	<select id="getApprovalDocListHome" parameterType="int"
 			resultType="com.goodee.JoinTree.vo.DocumentDefault">
 		SELECT 
-			d.doc_title docTitle
+			d.doc_title docTitle,
+			sta.code_name docStatus
 		FROM document_default d
 		LEFT OUTER JOIN document_signer ds ON d.doc_no = ds.doc_no
+		INNER JOIN common_code sta ON d.doc_status = sta.code
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))

@@ -461,7 +461,7 @@
 									<hr>
 									<ul>
 										<c:forEach var="draft" items="${getDraftDocList}">
-											<li>${draft.docTitle}</li>
+											<li>${draft.docTitle}&nbsp;&nbsp;&nbsp;&#91;${draft.docStatus}&#93; </li>
 										</c:forEach>
 									</ul>
 								</div>
@@ -470,7 +470,7 @@
 									<hr>
 									<ul>
 										<c:forEach var="approval" items="${getApprovalDocList}">
-											<li>${approval.docTitle}</li>
+											<li>${approval.docTitle}&nbsp;&nbsp;&nbsp;&#91;${approval.docStatus}&#93; </li>
 										</c:forEach>
 									</ul>
 								</div>
