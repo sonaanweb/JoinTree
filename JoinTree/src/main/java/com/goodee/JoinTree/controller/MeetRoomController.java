@@ -1,16 +1,9 @@
 package com.goodee.JoinTree.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.service.MeetRoomService;
 import com.goodee.JoinTree.vo.AccountList;
-import com.goodee.JoinTree.vo.MeetRoomFile;
 import com.goodee.JoinTree.vo.MeetingRoom;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +31,9 @@ public class MeetRoomController {
 	
 	@Autowired
 	private MeetRoomService meetRoomService;
-//	@Autowired
-//	private MeetRoomMapper meetRoomMapper;
 	
-	// 아이디 세션 검사 추후 추가 예정
+	// 추가사항 : 회의실 사진추가 (캘린더 넘어가기 이전 캘린더에서 사진 칸을 넣어서 모달로 띄우기(이미지 아이콘+모달)) / 관리창 crud에서도
+	
 	// 회의실 목록 조회
 	@GetMapping("/equipment/meetRoomList")
 	public String meetRoomList(Model model, 
@@ -65,10 +55,8 @@ public class MeetRoomController {
 	@ResponseBody
 	public Map<String, String> addMeetRoom(@RequestBody MeetingRoom meetingRoom, HttpSession session) {
 	    
-	    // 임시 아이디값 ---
 		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
 		int empNo = loginAccount.getEmpNo();
-		// empNo를 schedule에 설정
 	    meetingRoom.setEmpNo(empNo);
 	    
 	    String equipCategory = "E0101"; // 회의실 공통 코드 IN
@@ -92,6 +80,10 @@ public class MeetRoomController {
     // 회의실 수정 액션(post)
     @PostMapping("/equipment/modifyMeetRoom")
     public String updateMeetRoom(HttpSession session,MeetingRoom meetingRoom) {
+    	
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
+		int empNo = loginAccount.getEmpNo();
+	    meetingRoom.setEmpNo(empNo);
         meetRoomService.modifyMeetRoom(meetingRoom); 
         log.debug(AN+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RE);
         return "redirect:/equipment/meetRoomList";

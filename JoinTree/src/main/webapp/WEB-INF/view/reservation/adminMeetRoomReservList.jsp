@@ -23,9 +23,9 @@
 		<div>
             <label>예약 상태:</label>
             <input type="radio" name="revStatus" value=""> 전체
-            <input type="radio" name="revStatus" value="A0302"> 예약완료
-            <input type="radio" name="revStatus" value="A0303"> 예약취소
-            <input type="radio" name="revStatus" value="A0304"> 사용완료
+            <input type="radio" name="revStatus" value="A0301"> 예약완료
+            <input type="radio" name="revStatus" value="A0302"> 예약취소
+            <input type="radio" name="revStatus" value="A0303"> 사용완료
         </div>
         <div>
         	<label>예약자:</label>
@@ -48,6 +48,9 @@
                 </tr>
             </thead>
             <tbody id="reservationbody">
+<!--                 <tr id="noResultRow" style="display: none;">
+        		<td colspan="9" style="text-align: center;">검색 결과가 없습니다.</td>
+    			</tr> -->
                 <c:forEach var="r" items="${empAllMeetReserved}">
                     <tr>
                         <td>${r.revNo}</td>
@@ -58,15 +61,15 @@
                         <td>${r.createdate.substring(0,10)}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${r.revStatus == 'A0302'}">예약완료</c:when>
-                                <c:when test="${r.revStatus == 'A0303'}">예약취소</c:when>
-                                <c:when test="${r.revStatus == 'A0304'}">사용완료</c:when>
+                                <c:when test="${r.revStatus == 'A0301'}">예약완료</c:when>
+                                <c:when test="${r.revStatus == 'A0302'}">예약취소</c:when>
+                                <c:when test="${r.revStatus == 'A0303'}">사용완료</c:when>
                             </c:choose>
                         </td>
-                        <td>${r.empName}(${r.empNo})</td>
+                        <td>${r.updateName}(${r.updateId})</td>
                         <!-- 예약 완료인 상태에만 취소 버튼 활성화 / 사용완료 상태는 취소 버튼 X-->
                         <c:choose>
-                            <c:when test="${r.revStatus == 'A0302'}">
+                            <c:when test="${r.revStatus == 'A0301'}">
                                 <td><button class="btn btn-sm btn-primary cancel-btn" data-revno="${r.revNo}">취소</button></td>
                             </c:when>
                             <c:otherwise>
@@ -124,7 +127,7 @@
 <!-- 스크립트 부분 -->
 <script>
 $(document).ready(function () {
-	
+var empName = "${sessionScope.empName}";
 	// 검색
 	$('#searchButton').on('click', function () {
 	    var revStatus = $("input[name='revStatus']:checked").val();
@@ -146,17 +149,6 @@ $(document).ready(function () {
             cancelReserv(revNo);
         });
     });
-	
-/*// 예약 취소 버튼 클릭 시 모달 표시
-    $('.cancel-btn').on('click', function () {
-        var revNo = $(this).data('revno');
-        $('#cancelModal').modal('show');
-
-        // 확인 버튼 클릭 이벤트 핸들러
-        $('#confirmButton').off('click').on('click', function () {
-            cancelReserv(revNo);
-        });
-    }); */
     
     function searchReservation(revStatus, revStartTime, revEndTime, empName) {
         $.ajax({
@@ -172,8 +164,9 @@ $(document).ready(function () {
             success: function (response) {
                 // 검색 결과를 화면에 업데이트하는 부분
                 var tbody = $('#reservationbody');
+                
                 tbody.empty(); // 기존 내용 지우기
-
+				                
                 // 검색 결과 데이터를 순회하며 행을 추가
                 for (var i = 0; i < response.length; i++) {
                     var reservation = response[i];
@@ -185,10 +178,10 @@ $(document).ready(function () {
                         '<td>' + reservation.revReason + '</td>' +
                         '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
                         '<td>' + getStatusText(reservation.revStatus) + '</td>' +
-                        '<td>' + reservation.empName + '(' + reservation.empNo + ')</td>';
+                        '<td>' + reservation.updateName + '(' + reservation.updateId + ')</td>';//수정이 필요함
                     
                     // 취소 버튼 또는 상태 텍스트 추가
-                    if (reservation.revStatus === 'A0302') {
+                    if (reservation.revStatus === 'A0301') {
                         row += '<td><button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>';
                     } else {
                         row += '<td></td>';
@@ -220,9 +213,9 @@ $(document).ready(function () {
     
     // 상태코드 텍스트 변환
     function getStatusText(statusCode) {
-        if (statusCode === 'A0302') return '예약완료';
-        if (statusCode === 'A0303') return '예약취소';
-        if (statusCode === 'A0304') return '사용완료';
+        if (statusCode === 'A0301') return '예약완료';
+        if (statusCode === 'A0302') return '예약취소';
+        if (statusCode === 'A0303') return '사용완료';
         return '';
     }
 
@@ -235,13 +228,18 @@ $(document).ready(function () {
             contentType: "application/json",
             success: function (response) {
                 if (response === '예약취소 완료') {
-                	
+                	 var empNo = ${loginAccount.empNo}; // empNo 가져오기
+                     var empName = "${sessionScope.empName}"; // 세션에서 empName 가져오기
+                     $('#updateId').val(empNo);
+                     $('#updateName').val(empName);
+                     
                     // 해당 예약 번호에 대한 취소 버튼을 없애기
                     $('#reservationbody tr').each(function () {
                         var rowRevNo = $(this).find('td:first-child').text();
                         if (rowRevNo === revNo.toString()) {
                             $(this).find('td:last-child').empty();
                             $(this).find('td:nth-child(7)').text('예약취소');
+                            $(this).find('td:nth-child(8)').text(empName + '(' + empNo + ')');
                         }
                     });
 

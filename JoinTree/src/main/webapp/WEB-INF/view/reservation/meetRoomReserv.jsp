@@ -22,14 +22,13 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Pretendard-Regular';
-  font-size: 14px;
 }
 .fc-event {
     background-color: #AEC3AE;
     border: none;
 }
 #calendar {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 40px auto;
   font-family: 'Pretendard-Regular';
 }
@@ -51,10 +50,12 @@ html, body {
 <body>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
-<!-- 필수 요소-->
+
 <div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+		<div class="content-wrapper">
+		 <!-- 컨텐츠부분 wrapper -->
+		 
 			<div style="font-weight: bold; font-family: 'Pretendard-Regular';">
 			<span class="badge badge-success">notice</span> 예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
 			<div><a href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a></div>
@@ -130,9 +131,14 @@ html, body {
 			                </div>
 			            </div>
 			        </div>
-   				</div>				
-			</div><!-- 컨텐츠 끝 -->
-		</div><!-- 컨텐츠전체 끝 -->
+   				</div>
+   				
+<!-- 컨텐츠전체 끝 -->			
+    		</div>
+		</div>
+<!-- footer -->
+<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -179,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     var events = [];
                     for (var i = 0; i < response.length; i++) {
                         events.push({
-                            title: response[i].title, // '', - 타이틀 안 보이게
+                            /* title: response[i].title, 예약 시간만 표시*/
                             start: response[i].start,
                             end: response[i].end
                         });

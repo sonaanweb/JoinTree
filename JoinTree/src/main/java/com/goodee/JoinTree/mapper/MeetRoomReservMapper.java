@@ -31,4 +31,5 @@ public interface MeetRoomReservMapper {
 	
 	// 예약 목록 검색 메서드
 	List<Reservation> getSearchReservation(Map<String, Object> SearchReservations);
+
 }

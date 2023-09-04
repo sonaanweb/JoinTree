@@ -58,13 +58,14 @@
 	    )
 	</insert>
 	
-	<!-- 회의실 수정 create_id.... 추가 해야함  update_id = #{updateId}-->
+	<!-- 회의실 수정 -->
 	<update id="updateMeetRoom" parameterType="com.goodee.JoinTree.vo.MeetingRoom">
 	    UPDATE meeting_room
 	    SET room_name = #{roomName},
 	        room_capacity = #{roomCapacity},
 	        room_status = #{roomStatus},
-	        updatedate = NOW()
+	        updatedate = NOW(),
+	        update_id = #{empNo}
 	    WHERE room_no = #{roomNo}
 	</update>
 	
@@ -128,8 +129,8 @@
             #{roomFilesize},
             NOW(),
             NOW(),
-            #{createId},
-            #{updateId}
+            #{empNo},
+            #{empNo}
         )
     </insert>
 

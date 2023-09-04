@@ -38,7 +38,7 @@
 			m.room_no roomNo
 		FROM reservation r
 		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
-		WHERE m.room_no = #{roomNo} AND r.rev_status = 'A0302'
+		WHERE m.room_no = #{roomNo} AND r.rev_status = 'A0301'
 	</select>
 	
 	<!-- 회의실 예약 하기 -->
@@ -112,20 +112,22 @@
 		    r.updatedate,
 		    r.create_id createId,
 		    r.update_id updateId,
+		    u.emp_name updateName,
 		    m.room_name roomName
 		FROM reservation r
 		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
 		INNER JOIN emp_info e ON r.emp_no = e.emp_no <!-- 사원 이름 -->
+		LEFT JOIN emp_info u ON r.update_id = u.emp_no <!-- 업데이트를 수행한 직원의 이름 -->
 		WHERE r.equip_category = #{equipCategory}
 		ORDER BY createdate DESC;
 	</select>
 	
-	<!-- 회의실 예약취소(상태만 변경) : 코드 A0303(예약취소) A0304(사용완료)-->
+	<!-- 회의실 예약취소(상태만 변경) : 코드 A0302(예약취소) A0303(사용완료) ::: empNo로 받지말고 udpateId라고 받기-->
 	<update id="updateMeetCal" parameterType="com.goodee.JoinTree.vo.Reservation">
 		UPDATE reservation
 		SET rev_status = #{revStatus},
 		updatedate = NOW(),
-		update_id = #{empNo}
+		update_id = #{updateId}
 		WHERE rev_no = #{revNo};
 	</update>
 	
@@ -145,10 +147,12 @@
 	        r.updatedate,
 	        r.create_id createId,
 	        r.update_id updateId,
+	        u.emp_name updateName,
 	        m.room_name roomName
 	    FROM reservation r
 	    INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
 	    INNER JOIN emp_info e ON r.emp_no = e.emp_no <!-- 사원 이름 -->
+	    LEFT JOIN emp_info u ON r.update_id = u.emp_no <!-- 업데이트를 수행한 직원의 이름 -->
 	    <where>
 	    	<if test="empName != null and empName != ''">
 	    		AND e.emp_name = #{empName}

@@ -38,14 +38,14 @@
                         <td>${r.createdate.substring(0,10)}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${r.revStatus == 'A0302'}">예약완료</c:when>
-                                <c:when test="${r.revStatus == 'A0303'}">예약취소</c:when>
-                                <c:when test="${r.revStatus == 'A0304'}">사용완료</c:when>
+                                <c:when test="${r.revStatus == 'A0301'}">예약완료</c:when>
+                                <c:when test="${r.revStatus == 'A0302'}">예약취소</c:when>
+                                <c:when test="${r.revStatus == 'A0303'}">사용완료</c:when>
                             </c:choose>
                         </td>
                         <!-- 예약 완료인 상태에만 취소 버튼 활성화 / 사용완료 상태는 취소 버튼 X-->
                         <c:choose>
-                            <c:when test="${r.revStatus == 'A0302'}">
+                            <c:when test="${r.revStatus == 'A0301'}">
                                 <td><button class="btn btn-sm btn-primary cancel-btn" data-revno="${r.revNo}">예약취소</button></td>
                             </c:when>
                             <c:otherwise>

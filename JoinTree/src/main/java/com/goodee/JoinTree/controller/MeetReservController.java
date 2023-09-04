@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.MeetRoomReservService;
 import com.goodee.JoinTree.service.MeetRoomService;
+import com.goodee.JoinTree.vo.AccountList;
 import com.goodee.JoinTree.vo.MeetingRoom;
 import com.goodee.JoinTree.vo.Reservation;
 
@@ -35,13 +36,6 @@ public class MeetReservController {
 	
 	@Autowired MeetRoomReservService meetRoomReservService;	
 	@Autowired MeetRoomService meetRoomService;
-	
-	
-	// crud 로그인 세션 다 추가 작업 필요
-	
-	// 추가사항 : 회의실 사진추가 (캘린더 넘어가기 이전 캘린더에서 사진 칸을 넣어서 모달로 띄우기(이미지 아이콘+모달))
-	// 그럼 회의실 관리창에서도 파일 업로드 기능이 추가 되어야 함
-	
 	
 	// 예약 가능한 회의실 List(클릭시 캘린더)
 	@GetMapping("/reservation/empMeetRoomList")
@@ -74,7 +68,7 @@ public class MeetReservController {
         List<Reservation> reservationList = meetRoomReservService.getMeetRoomReservCal(roomNo);
         for (Reservation reservation : reservationList) {
             Map<String, Object> event = new HashMap<>();
-            event.put("title", reservation.getRevReason()); // 예약 사유를 같이 띄워주기 위함
+            event.put("title", reservation.getEmpNo()); // 여기 수정중
             event.put("start", reservation.getRevStartTime());
             event.put("end", reservation.getRevEndTime());
             eventList.add(event);
@@ -92,11 +86,12 @@ public class MeetReservController {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            int empNo = 11111111;
+        	AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
+    		int empNo = loginAccount.getEmpNo();
             String equipCategory = "E0101"; // 회의실 공통 코드 IN
             reservation.setEmpNo(empNo);
             reservation.setEquipCategory(equipCategory);
-            reservation.setRevStatus("A0302"); // 예약 완료 상태로 바로
+            reservation.setRevStatus("A0301"); // 예약 완료 상태로 바로
             reservation.setEquipNo(reservation.getEquipNo()); //equipNo = roomNo 할당
             meetRoomReservService.addMeetRoomCal(reservation);
             response.put("success", true);
@@ -115,9 +110,8 @@ public class MeetReservController {
 	public String empMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
     	
-    	//AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
- 		//int empNo = loginAccount.getEmpNo();
- 		int empNo = 11111111;
+    	AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+ 		int empNo = loginAccount.getEmpNo();
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("equipCategory", equipCategory);
 		paramMap.put("empNo", empNo);
@@ -129,28 +123,53 @@ public class MeetReservController {
 		return "/reservation/empMeetRoomReservedList";
 	}
     
-    // (emp&admin) 예약 취소 메서드
-    @PostMapping("/cancelReserved") // ajax url
+    // (emp&admin) 예약 취소 메서드 A0301 예약완료 A0302 예약취소 A0303 사용완료
+    @PostMapping("/cancelReserved")
     @ResponseBody
     public String cancelReserved(HttpSession session, @RequestBody Reservation reservation) {
         try {
-            int empNo = 11111111; // 임시 --> 회의실 조회 그대로
+            AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+            int empNo = loginAccount.getEmpNo();
+            String empName = (String)session.getAttribute("empName");
+            log.debug(AN+"경영지원 예약 관리페이지 접속자 이름: "+empName+RE);
+            
+            // 사용자 확인(부서기준)
+            String userDept = (String)session.getAttribute("dept");
+            log.debug(AN+"경영지원 예약 관리페이지 접속자 사번, 부서: "+empNo+userDept.toString()+RE);
+            
+            boolean isAdmin = "D0202".equals(userDept); // 경영지원팀
+
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("equipCategory", "E0101");
-            paramMap.put("empNo", empNo);
+            paramMap.put("empNo",empNo);
             
-            List<Reservation> empMeetReserved = meetRoomReservService.getReservations(paramMap);
-            
-            Reservation Reserved = empMeetReserved.stream() // revNo를 가져오는 메서드가 따로 없으니, filter를 통한 검사
-                    .filter(r -> r.getRevNo() == reservation.getRevNo()) // R
-                    .findFirst() // 일치하는 예약 찾기
-                    .orElse(null); // error = null 반환
+            int revCancel = reservation.getRevNo();
+            List<Reservation> allMeetReserved = meetRoomReservService.getAllReservations(paramMap); //예약건 모두 조회
 
-            if (Reserved != null && Reserved.getRevStatus().equals("A0302")) { // null 값도 아니고 예약 완료 상태라면
-            	Reserved.setRevStatus("A0303"); // 취소 상태로 SET
+            Reservation Reserved = allMeetReserved.stream()
+                    .filter(r -> r.getRevNo() == revCancel) //revNo만을 가져오는 메서드가 없어서 모든예약조회 메서드에서 Reserved로 따로 필터링
+                    .findFirst()
+                    .orElse(null);
+
+            if (Reserved != null && Reserved.getRevStatus().equals("A0301")) {
+                // 사용자의 역할에 따라 분기하여 처리합니다.
+                if (isAdmin) {
+                    // 경영지원팀인 경우 모든 예약 건을 취소할 수 있도록 처리
+                    Reserved.setRevStatus("A0302");
+                    Reserved.setUpdateId(empNo);
+                    Reserved.setUpdateName(empName);
+                } else if (Reserved.getEmpNo() == empNo) {
+                    // 다른 사용자의 경우 자신의 예약 건만 취소 가능하도록 처리
+                    Reserved.setRevStatus("A0302");
+                    Reserved.setUpdateId(empNo);
+                    Reserved.setUpdateName(empName);
+                } else {
+                    return "다른 사용자의 예약은 취소할 수 없습니다"; // 페이지 분기가 되어있지만 서버측에서 한 번 더 막음
+                }
+                
                 int result = meetRoomReservService.modifyMeetRoomCal(Reserved);
 
-                if (result > 0) { // 메세지 확인용
+                if (result > 0) {
                     return "예약취소 완료";
                 } else {
                     return "예약취소 신청 오류";
@@ -163,6 +182,7 @@ public class MeetReservController {
             return "error";
         }
     }
+
     
     
     // 사원 회의실 예약 관리(경영지원팀) view

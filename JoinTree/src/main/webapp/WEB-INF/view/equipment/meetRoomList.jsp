@@ -67,7 +67,7 @@
 			            <div class="modal-body">
 			                <form id="addForm">
 			                <input type="hidden" id="modalAddCate" name="equipCategory">
-			                <input type="hidden" name="empNo" value="11111111"> <!-- testId -->
+			                <input type="hidden" name="empNo">
 			                    <div class="mb-3">
 			                        <label for="modalAddRoomName" class="col-form-label">이름</label>
 			                        <input type="text" class="form-control" name="roomName" id="modalAddRoomName" placeholder="회의실 이름을 입력하세요">
@@ -99,8 +99,7 @@
 			                <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
 			            </div>
 			            <div class="modal-body">
-			                <form id="updateForm">
-			                    <!-- hidden : roomNo, Category -->		                    
+			                <form id="updateForm">	                    
 			                    <input type="hidden" id="modalRoomNo" name="roomNo">
 			                    <input type="hidden" id="modalCate" name="equipCategory">
 			                    <div class="mb-3">
