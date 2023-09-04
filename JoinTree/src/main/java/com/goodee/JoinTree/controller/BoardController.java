@@ -287,14 +287,11 @@ public class BoardController {
 			
 			return "redirect:/board/boardOne?boardNo=" + boardNo +"&msg=" + msg;
 		} else {
-			// 게시글 수정 성공 시 msg
-			msg = "게시글이 삭제 되었습니다"; 
-			msg = URLEncoder.encode(msg, "UTF-8");
 			
 			if(categoryCode.equals("B0101")) {
-				return "redirect:/board/noticeList?msg=" + msg;
+				return "redirect:/board/noticeList";
 			} else {
-				return "redirect:/board/libraryList?msg=" + msg;
+				return "redirect:/board/libraryList";
 			}	
 		}
 	}

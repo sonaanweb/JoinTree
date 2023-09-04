@@ -55,7 +55,7 @@
 			<c:if test="${loginAccount.empNo == board.createId}">
 				<div>
 					<a href="/JoinTree/board/modifyBoardForm?boardNo=${board.boardNo}">수정</a>
-					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}">삭제</a>
+					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}" onclick="return confirm('게시글을 삭제하시겠습니까?')">삭제</a>
 				</div>
 			</c:if>
 			

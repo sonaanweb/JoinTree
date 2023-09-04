@@ -139,22 +139,27 @@
 	            const currentTime = $('.clock').text(); // 현재시간 저장
 	            const isCommute = commuteBtnText === '출근하기';
 	            
-	            $.ajax({
-	            	type: 'post',
-	            	url: '/JoinTree/saveCommuteTime',
-	            	data:{
-	            		time: currentTime,
-	            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
-	            	},
-		            success: function(data){
-		            	console.log(data+'<--data');
-		            	
-		    		    selectCommuteByDate(); // 출퇴근 데이터 화면 출력
-		            },
-		            error: function(error){
-		            	console.error('error commute time:', error);
-		            }
-	            });
+	            let confirmMsg = isCommute ? '출근하시겠습니까?' : '퇴근하시겠습니까?';
+	            
+	            if(confirm(confirmMsg)){
+	            	$.ajax({
+		            	type: 'post',
+		            	url: '/JoinTree/saveCommuteTime',
+		            	data:{
+		            		time: currentTime,
+		            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
+		            	},
+			            success: function(data){
+			            	console.log(data+'<--data');
+			            	
+			    		    selectCommuteByDate(); // 출퇴근 데이터 화면 출력
+			            },
+			            error: function(error){
+			            	console.error('error commute time:', error);
+			            }
+		            });
+	            }
+	            
 	        });
 		 	
 		 	// 오늘의 일정
