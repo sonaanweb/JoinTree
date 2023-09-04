@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.goodee.JoinTree.service.BoardService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.ProjectService;
 import com.goodee.JoinTree.vo.AccountList;
@@ -22,6 +23,8 @@ public class HomeController {
 	private EmpInfoService empInfoService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private BoardService boardService;
 	
 	@GetMapping("/home") 
 	public String home(Model model,HttpSession session) {
@@ -35,9 +38,13 @@ public class HomeController {
 		
 		// 서비스 레이어에서 가져온 참여중인 프로젝트 5개 조회 및 리스트 저장 
 		List<Project> homeProejctList = projectService.selectProjectListByHome(empNo);
+		
+		// 최신 공지 목록 조회
+		List<Map<String, Object>> getRecentNotice = boardService.getRecentNotice();
 				
 		model.addAttribute("empInfo", empInfo); // 로그인한 사원 정보 
 		model.addAttribute("homeProejctList", homeProejctList); // 프로젝트 정보
+		model.addAttribute("getRecentNotice", getRecentNotice); // 최신 공지 목록
 		
 		return "home"; // 포워딩
 	}

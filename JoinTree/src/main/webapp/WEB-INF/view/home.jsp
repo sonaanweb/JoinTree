@@ -408,13 +408,19 @@
 					<div class="col-md-5 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								공지사항
-								<hr>
-									<ul>
-									
-									</ul>
 								<div>
-									<div>프로젝트</div>
+									<span>공지사항</span>
+									<hr>
+									<ul>
+										<c:forEach var="notice" items="${getRecentNotice}">
+											<li>
+												<a href="/JoinTree/board/boardOne?boardNo=${notice.boardNo}">${notice.boardTitle}</a>
+											</li>
+										</c:forEach>
+									</ul>
+								</div>
+								<div>
+									<span>프로젝트</span>
 									<hr>
 									<ul>
 										<c:forEach var="p" items="${homeProejctList}">
@@ -450,9 +456,20 @@
 					<div class="col-md-9 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								결재문서목록
-								<hr>
-								문서함
+								<div>
+									<span>기안문서목록</span>
+									<hr>
+									<ul>
+									
+									</ul>
+								</div>
+								<div>
+									<span>결재함</span>
+									<hr>
+									<ul>
+									
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>		

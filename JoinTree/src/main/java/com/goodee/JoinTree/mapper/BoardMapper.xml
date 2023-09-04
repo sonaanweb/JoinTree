@@ -55,7 +55,7 @@
 	</select>
 	
 	<!-- 게시판 상단고정 목록 -->
-	<select id="getBoardPinnedList">
+	<select id="getBoardPinnedList" resultType="java.util.Map">
 		SELECT 
 			b.board_no boardNo, 
 			b.board_title boardTitle, 
@@ -70,6 +70,17 @@
 			AND board_pinned = 1
 		ORDER BY createdate DESC
 		LIMIT 5;	
+	</select>
+	
+	<!-- 게시글 최신 공지 조회 -->
+	<select id="getRecentNotice" resultType="java.util.Map">
+		SELECT  
+			board_no boardNo,
+			board_title boardTitle
+		FROM board 
+		WHERE board_category = 'B0101'
+		ORDER BY createdate DESC
+		LIMIT 5;
 	</select>
 	
 	<!-- 게시글 상세 조회 -->

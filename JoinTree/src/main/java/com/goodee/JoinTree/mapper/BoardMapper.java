@@ -26,5 +26,7 @@ public interface BoardMapper {
 	Integer getNextBoard(Map<String, Object> nextBoardMap); // 다음글 번호 조회
 
 	int removeBoard(int boardNo); // 게시글 삭제
+	
+	List<Map<String, Object>> getRecentNotice(); // 최신 공지 조회
 
 }

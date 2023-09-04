@@ -149,6 +149,15 @@ public class BoardService {
 		return getBoardPinnedList;
 	}
 	
+	// 최신 공지 목록 조회
+	public List<Map<String, Object>> getRecentNotice(){
+		
+		List<Map<String,Object>> getRecentNotice = boardMapper.getRecentNotice();
+		log.debug(getRecentNotice+"BoardService getRecentNotice");
+		
+		return getRecentNotice;
+	}
+	
 	// 게시글 상세 조회
 	public Map<String, Object> getBoardOne(int boardNo) {
 		
