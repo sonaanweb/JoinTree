@@ -273,11 +273,19 @@ public class DocumentController {
 	            docDefault.setDocStamp2(signImg); // 첫 번째 결재자의 서명 이미지 저장
 	            
 	            docSigner.setEmpSignerLevel(signerLevel);
-	            docSigner.setDocStatus("A0202"); // 승인 시 signer 테이블 상태도 변경
+	            docSigner.setDocStatus("A0203"); // 승인 시 signer 테이블 상태도 변경
 	            
-	            row = documentService.approveDocDefault1(docDefault);
+	            row += documentService.approveDocDefault1(docDefault);
 	            row += documentService.modifySignerStatus(docSigner); // 상태 변경
 	            log.debug("row:" + row);
+	            
+	            DocumentSigner secondSigner = new DocumentSigner();
+	            secondSigner.setDocNo(docNo);
+	            secondSigner.setEmpSignerLevel(2);
+	            secondSigner.setDocStatus("A0202"); // 두 번째 결재자의 상태를 결재중으로 변경
+	            row += documentService.modifySignerStatus(secondSigner);
+	            log.debug("row:" + row);
+	            
 	        } else if (signerLevel == 2) {
 	            // 두 명의 결재자가 있을 때, 두 번째 결재자의 승인 시 결재완료 상태로 변경
 	            docDefault.setDocStatus("A0203");
@@ -286,13 +294,15 @@ public class DocumentController {
 	            docSigner.setEmpSignerLevel(signerLevel);
 	            docSigner.setDocStatus("A0203"); // 승인 시 signer 테이블 상태도 변경
 	            
-	            row = documentService.approveDocDefault2(docDefault);
+	            row += documentService.approveDocDefault2(docDefault);
 	            row += documentService.modifySignerStatus(docSigner); // 상태 변경
+	            
+	            row++; // 두번째 결재의 경우에도 row를 같이 증가시켜줘야 함
 	            log.debug("row:" + row);
 	        }
 	    }
 
-	    if (row == 2) {
+	    if (row == 3) {
 	        return "success";
 	    } else {
 	        return "fail";
@@ -360,20 +370,19 @@ public class DocumentController {
 		}
 	}*/
 	
+	// 결재자 문서 반려
 	@PostMapping("/document/reject")
 	@ResponseBody
 	public String reject(HttpSession session, int docNo) {
 	    // 로그인 유저
 	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-
 	    int empNo = loginAccount.getEmpNo();
 
+	    // 문서 상태 변경
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
 	    docDefault.setUpdateId(empNo);
 	    docDefault.setDocStatus("A0204"); // 반려 코드
-
-	    // 문서 상태 변경
 	    int docDefaultRow = documentService.rejectDocDefault(docDefault);
 
 	    // 결재자 테이블 상태 변경
@@ -385,14 +394,27 @@ public class DocumentController {
 	    int empSignerLevel = documentService.getSignerLevel(docSigner);
 	    docSigner.setEmpSignerLevel(empSignerLevel);
 	    docSigner.setDocStatus("A0204");
-
 	    int docSignerRow = documentService.modifySignerStatus(docSigner);
 
-	    if (docDefaultRow == 1 && docSignerRow == 1) {
-	        return "success";
-	    } else {
-	        return "fail";
+	    // 결재자 수가 2명이고 현재 반려한 결재자가 첫 번째 결재자인 경우,
+	    // 두 번째 결재자의 문서 상태도 반려로 변경합니다.
+	    if (empSignerLevel == 1) {
+	        DocumentSigner secondSigner = new DocumentSigner();
+	        secondSigner.setDocNo(docNo);
+	        secondSigner.setEmpSignerLevel(2); // 두 번째 결재자의 레벨
+	        secondSigner.setDocStatus("A0204"); // 반려 코드
+	        int secondSignerRow = documentService.modifySignerStatus(secondSigner);
+
+	        if (docDefaultRow == 1 && docSignerRow == 1 && secondSignerRow == 1) {
+	            return "success";
+	        }
+	    } else { // 결재자 수가 1명이거나 현재 반려한 결재자가 두 번째 결재자인 경우
+	        if (docDefaultRow == 1 && docSignerRow == 1) {
+	            return "success";
+	        }
 	    }
+
+	    return "fail";
 	}
 
 
