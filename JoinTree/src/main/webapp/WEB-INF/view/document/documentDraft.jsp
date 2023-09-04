@@ -267,7 +267,7 @@
 				
 			// 기안서 - 연차
 			// 연차 종류 leave 
-			const leaveCate = $("#leaveCate").val();
+			const leaveCate = $("input[name='leaveCate']:checked").val();
 				console.log("leaveCate:",leaveCate);
 			// 연차 시작일
 			const docLeaveStartDate = $("#docLeaveStartDate").val();
@@ -293,10 +293,10 @@
 			const docReshuffleResult = $("#docReshuffleResult").val();
 				console.log("docReshuffleResult:",docReshuffleResult);
 			// 변경 후 부서
-			const docReshuffleDept = $("#docReshuffleDept").val();
-			console.log("docReshuffleDept:",docReshuffleDept);
+			const docReshuffleDept = $("input[name='docReshuffleDept']:checked").val();
+			console.log("docReshuffleDept:", docReshuffleDept);
 			// 변경 후 직급
-			const docReshufflePosition = $("#docReshufflePosition").val();
+			const docReshufflePosition = $("input[name='docReshufflePosition']:checked").val();
 			console.log("docReshufflePosition:",docReshufflePosition);
 			
 			

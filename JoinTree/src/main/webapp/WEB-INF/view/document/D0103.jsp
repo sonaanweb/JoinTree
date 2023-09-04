@@ -15,6 +15,24 @@
 			
 			$("#draftDate").val(formattedDate); // 오늘날짜 출력
 			
+			// 선택된 직급값을 저장할 변수
+			let docReshufflePosition = "";
+
+			// 라디오 버튼 값이 변경될 때마다 선택된 값을 업데이트
+			$("input[name='docReshufflePosition']").change(function() {
+				docReshufflePosition = $("input[name='docReshufflePosition']:checked").val();
+			    console.log("docReshufflePosition:", docReshufflePosition);
+			});
+			
+			// 선택된 부서값을 저장할 변수
+			let docReshuffleDept = "";
+
+			// 라디오 버튼 값이 변경될 때마다 선택된 값을 업데이트
+			$("input[name='docReshuffleDept']").change(function() {
+			    docReshuffleDept = $("input[name='docReshuffleDept']:checked").val();
+			    console.log("docReshuffleDept:", docReshuffleDept);
+			});
+			
 			$('#docOriginFilename').on("change", function() {
 				const selectedFile = event.target.files[0];
 				console.log("selectedFile", selectedFile);
@@ -156,7 +174,7 @@
 				<!-- 변경 후 직급 -->
 				<td>
 					<c:forEach var="p" items="${positionList}">
-						<input type="radio" name="docReshufflePosition" id="docReshufflePosition" value="${p.code}" style="display: inline-block; margin-right: 10px;">${p.codeName}
+						<input type="radio" name="docReshufflePosition" value="${p.code}" style="display: inline-block; margin-right: 10px;">${p.codeName}
 					</c:forEach>
 				</td>
 			</tr>
@@ -193,7 +211,8 @@
 				<!-- 변경 후 부서 -->
 				<td>
 					<c:forEach var="d" items="${deptList}">
-						<input type="radio" name="docReshuffleDept" id="docReshuffleDept" value="${d.code}" style="display: inline-block; margin-right: 10px;">${d.codeName}
+					    <input type="radio" name="docReshuffleDept" value="${d.code}" style="display: inline-block; margin-right: 10px;">
+					    ${d.codeName}
 					</c:forEach>
 				</td>
 			</tr>

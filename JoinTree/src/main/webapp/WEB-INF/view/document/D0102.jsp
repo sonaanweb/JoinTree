@@ -15,6 +15,15 @@
 			
 			$("#draftDate").val(formattedDate); // 오늘날짜 출력
 			
+			// 선택된 휴가카테고리값을 저장할 변수
+			let leaveCate = "";
+
+			// 라디오 버튼 값이 변경될 때마다 선택된 값을 업데이트
+			$("input[name='leaveCate']").change(function() {
+				leaveCate = $("input[name='leaveCate']:checked").val();
+			    console.log("leaveCate:", leaveCate);
+			});
+			
 			$('#docOriginFilename').on("change", function() {
 				const selectedFile = event.target.files[0];
 				console.log("selectedFile", selectedFile);
@@ -133,7 +142,8 @@
 			
 				<td >
 					<c:forEach var="l" items="${leaveList}">
-						<input type="radio" id="leaveCate" name="leaveCate" value="${l.code}" style="display: inline-block; margin-right: 10px;">${l.codeName}
+						<input type="radio" name="leaveCate" value="${l.code}" style="display: inline-block; margin-right: 10px;">
+						${l.codeName}
 					</c:forEach>
 				</td>		
 			</tr>
