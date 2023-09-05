@@ -105,7 +105,8 @@
 	        AND schedule_category = 'S0103' 
 	        AND CURDATE() BETWEEN DATE(schedule_start) AND DATE(schedule_end)
 	    )
-	 ORDER BY schedule_category, schedule_no
+	 ORDER BY schedule_category, createdate DESC
+	 LIMIT 0, 5
     
     </select>
     
