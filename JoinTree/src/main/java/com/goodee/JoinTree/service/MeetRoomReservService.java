@@ -53,4 +53,9 @@ public class MeetRoomReservService {
 		return meetRoomReservMapper.getSearchReservation(map);
 	}
 	
+	// 회의실 예약 일자 검색(사원)
+	public List<Reservation> searchEmpReservation(Map<String, Object> map){
+		return meetRoomReservMapper.getEmpSearchReservation(map);
+	}
+	
 }

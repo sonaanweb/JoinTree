@@ -201,7 +201,7 @@ public class MeetReservController {
 		return "/reservation/adminMeetRoomReservList";
 	}
     
-    // 사원 회의실 예약 관리 검색 메서드
+    // 경영지원팀 회의실 예약 관리 검색 메서드
     @GetMapping("/reservation/search") //ajax url
     @ResponseBody
     public ResponseEntity<List<Reservation>> searchReservation(
@@ -219,6 +219,25 @@ public class MeetReservController {
 
         // JSON 형식으로 데이터 반환
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
+    }
+    
+    
+    // 사원 회의실 예약 일자 관리 검색 메서드
+    @GetMapping("/reservation/empSearch")
+    @ResponseBody
+    public ResponseEntity<List<Reservation>> searchEmpReservation(
+    		@RequestParam(name = "empNo") int empNo,
+            @RequestParam(name = "revStartTime", required = false) String revStartTime,
+            @RequestParam(name = "revEndTime", required = false) String revEndTime) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("revStartTime", revStartTime);
+        paramMap.put("revEndTime", revEndTime);
+        paramMap.put("empNo", empNo);
+        List<Reservation> searchEmpResult = meetRoomReservService.searchEmpReservation(paramMap);
+        log.debug(AN+"reservController 사원 예약일자 : "+searchEmpResult+RE);
+
+        // JSON 형식으로 데이터 반환
+        return new ResponseEntity<>(searchEmpResult, HttpStatus.OK);
     }
     
      

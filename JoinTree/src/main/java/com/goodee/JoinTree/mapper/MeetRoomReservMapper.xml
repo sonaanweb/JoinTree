@@ -20,6 +20,39 @@
 		ORDER BY createdate DESC;	
 	</select>
 	
+	<!-- 사원view 예약 일자 검색 -->
+	<select id="getEmpSearchReservation" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Reservation">
+	   SELECT
+			r.rev_no revNo,
+			r.emp_no empNo,
+			r.equip_no equipNo,
+			r.equip_category equipCategory,
+			r.rev_start_time revStartTime,
+			r.rev_end_time revEndTime,
+			r.rev_status revStatus,
+			r.rev_reason revReason,
+			r.createdate,
+			r.updatedate,
+			r.create_id createId,
+			r.update_id updateId,
+			m.room_name roomName
+		FROM reservation r
+		INNER JOIN meeting_room m ON r.equip_no = m.room_no AND r.equip_category = m.equip_category
+		WHERE r.emp_no = #{empNo} AND r.equip_category = 'E0101'
+	    <choose>
+	        <when test="revStartTime != null and revEndTime != null and revStartTime != '' and revEndTime != ''">
+	            AND DATE(r.rev_start_time) &gt;= #{revStartTime} AND DATE(r.rev_start_time) &lt;= #{revEndTime}
+	        </when>
+	        <when test="revStartTime != null and revStartTime != ''">
+	            AND DATE(r.rev_start_time) &gt;= #{revStartTime}
+	        </when>
+	        <otherwise>
+	            AND 1 = 1
+	        </otherwise>
+	    </choose>
+	    ORDER BY r.createdate DESC;
+	</select>
+	
 	<!-- 회의실 별 캘린더(예약현황 조회) 예약완료인 건들만 -->
 	<select id="selectMeetCalList" resultType="com.goodee.JoinTree.vo.Reservation">
 		SELECT

@@ -15,7 +15,11 @@
 <div class="container-fluid page-body-wrapper">
     <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
     <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-
+		<div>
+            <label>예약일시:</label>
+			<input type="date" name="revStartTime" id="revStartTime"> ~ <input type="date" name="revEndTime" id="revEndTime">
+            <button id="searchButton">검색</button>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -103,6 +107,7 @@
 <!-- 스크립트 부분 -->
 <script>
 $(document).ready(function () {
+	var empNo = ${loginAccount.empNo};
     // 예약 취소 버튼 클릭 시 모달 표시
     $('.cancel-btn').on('click', function () {
         var revNo = $(this).data('revno');
@@ -148,6 +153,73 @@ $(document).ready(function () {
             }
         });
     }
+    
+    // 예약일자 검색 버튼 클릭 시
+    $('#searchButton').on('click', function () {
+    var revStartTime = $('#revStartTime').val();
+    var revEndTime = $('#revEndTime').val();
+
+ 	// 검색했을 시 버튼 다시 활성화
+    $('#reservationbody').on('click', '.cancel-btn', function () {
+        var revNo = $(this).data('revno');
+        $('#cancelModal').modal('show');
+
+        $('#confirmButton').off('click').on('click', function () {
+            cancelReserv(revNo);
+        });
+    });
+ 
+    // 예약 시작일과 종료일을 서버로 전송
+    $.ajax({
+        type: "GET",
+        url: "/JoinTree/reservation/empSearch",
+        data: {
+        	"empNo": empNo,
+            "revStartTime": revStartTime,
+            "revEndTime": revEndTime
+        },
+        success: function (response) {
+            // 검색 결과를 화면에 업데이트하는 부분
+            var tbody = $('#reservationbody');
+            tbody.empty(); // 기존 내용 지우기
+
+            // 검색 결과 데이터를 순회하며 행을 추가
+            for (var i = 0; i < response.length; i++) {
+                var reservation = response[i];
+
+                var row = '<tr>' +
+                    '<td>' + reservation.revNo + '</td>' +
+                    '<td>' + reservation.roomName + '</td>' +
+                    '<td>' + reservation.revStartTime.substring(0, 16) + ' ~ ' + reservation.revEndTime.substring(10, 16) + '</td>' +
+                    '<td>' + reservation.revReason + '</td>' +
+                    '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
+                    '<td>' + getStatusText(reservation.revStatus) + '</td>'
+                    +'<td>';
+                
+                if (reservation.revStatus === 'A0301') {
+                    row += '<button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">예약취소</button>';
+                } 
+                
+                row += '</td>' +
+                    '</tr>';
+
+                tbody.append(row);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            alert("검색 실패");
+        }
+    });
+});
+
+	// 상태코드 텍스트 변환 함수
+	function getStatusText(statusCode) {
+	    if (statusCode === 'A0301') return '예약완료';
+	    if (statusCode === 'A0302') return '예약취소';
+	    if (statusCode === 'A0303') return '사용완료';
+	    return '';
+	}
 });
 </script>
 </html>
