@@ -46,7 +46,6 @@ public class LoginController {
 			for (Cookie c : cookies) {
 				if (c.getName().equals("loginId") == true) {
 					request.setAttribute("loginId", c.getValue());
-					// break;
 				}
 			}
 		}
@@ -75,19 +74,23 @@ public class LoginController {
 		if (loginAccount != null) {
 			String empName = loginService.getEmpName(empNo);
 			String dept = loginService.getEmpDept(empNo);
+			String empImg = loginService.getEmpImg(empNo);
 			String signImg = loginService.getSignImg(empNo);
+
 			// 사이드바 내용을 위해 리스트도 함께 추가
 			String upCode = null;
 			List<CommonCode> childCodeList = codeService.selectChildCode(upCode);
 			
 			log.debug(CYAN + empName + " <-- empName(LoginController)"+ RESET); // 디버그 로그
 			log.debug(CYAN + dept + " <-- dept(LoginController)"+ RESET);
+			log.debug(CYAN + empImg + " <-- empImg(LoginController)"+ RESET);
 			log.debug(CYAN + signImg + " <-- signImg(LoginController)"+ RESET);
 			
 			session.setAttribute("childCodeList", childCodeList);
 			session.setAttribute("loginAccount", loginAccount);
 			session.setAttribute("empName", empName);
 			session.setAttribute("dept", dept);
+			session.setAttribute("empImg", empImg);
 			session.setAttribute("signImg", signImg);
 			
 	        // 세션의 만료 시간 설정 (30분)
@@ -99,8 +102,7 @@ public class LoginController {
 			if (saveId != null) {
 				log.debug(CYAN + "아이디 저장" + RESET); // 디버그 로그
 				Cookie loginIdCookie = new Cookie("loginId", String.valueOf(empNo));
-				loginIdCookie.setMaxAge(24 * 60 * 60); // 초단위 // 60 * 60 * 24 -> 1일  
-				// loginIdCookie.setPath("/login"); // /login 및 하위 경로에서만 유효하게 설정
+				loginIdCookie.setMaxAge(60 * 60 * 24 * 30); // 초단위 // 60 * 60 * 24 * 30 -> 30일  
 				response.addCookie(loginIdCookie);
 			}
 			
@@ -119,9 +121,6 @@ public class LoginController {
 			msg = URLEncoder.encode("아이디 또는 비밀번호를 확인해주세요.", "UTF-8");
 			return "redirect:/login/login?msg="+ msg; // 로그인 실패 시 로그인 페이지로 이동
 		}
-		
-		// model.addAttribute(empPw);
-		// 동일한 이름일 경우 (name="empNo") 생략 가능
 	}
 
 	@GetMapping("/logout")
@@ -129,7 +128,6 @@ public class LoginController {
 		String msg = URLEncoder.encode("로그아웃 되었습니다.", "UTF-8");
 		
 		String msgParam = (String) session.getAttribute("msgParam");
-		
 		
 		if (msgParam != null && !msgParam.isEmpty()) {
 			msg = msgParam;
@@ -157,7 +155,7 @@ public class LoginController {
 		if (row == 1) { // 사번, 주민번호 일치
 			return "success";
 		} else {
-			return "failure";
+			return "fail";
 		}
 	}
 	
@@ -191,7 +189,7 @@ public class LoginController {
 	    } catch (Exception e) {
 	    	log.debug(CYAN + "세션 연장 실패(LoginController)" + RESET);
 	    	
-	        return "error"; // 실패 시 오류 메시지 반환
+	        return "fail"; // 실패 시 오류 메시지 반환
 	    }
 	}
 }

@@ -8,7 +8,14 @@
 		<li class="nav-item nav-profile">
 			<a href="/JoinTree/empInfo/empInfo" class="nav-link">
 				<div class="nav-profile-image">
-					<img src="/JoinTree/empImg/${empImg}" alt="profile">
+					<c:choose>
+						<c:when test="${empty empImg or empImg eq null}">
+							<img src="${pageContext.request.contextPath}/empImg/JoinTree.png" alt="profile">
+						</c:when>
+						<c:otherwise>
+							<img src="${pageContext.request.contextPath}/empImg/${empImg}">
+						</c:otherwise>
+					</c:choose>
 					<span class="login-status online"></span>
 				</div>
 				<div class="nav-profile-text d-flex flex-column">

@@ -181,6 +181,8 @@ public class EmpInfoController {
 		log.debug(CYAN + row + " <-- row(EmpInfoController-removeEmpImg)" + RESET);
 		
 		if (row == 1) { // 사원 이미지 삭제 시 
+			session.setAttribute("empImg", null); // 세션에 파일 이름 초기화
+			
 			return "success";
 		} else {
 			return "fail";
