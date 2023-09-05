@@ -127,5 +127,29 @@ public class DocumentListService {
 		
 		return getApprovalDocList;
 	}
+	
+	// 기안문서 목록 행의 수
+	public int getgetDraftDocCnt(int empNo) {
+		
+		Map<String, Object> mapEmpNo = new HashMap<>();
+		mapEmpNo.put("empNo", empNo);
+		
+		int getDraftDocCnt = documentListMapper.getDraftDocListCnt(mapEmpNo);
+		log.debug(getDraftDocCnt+"<-- DocumentListService getDraftDocCnt");
+		
+		return getDraftDocCnt;
+	}
+	
+	// 결재함 목록 행의 수
+	public int getApprovalDocCnt(int empNo) {
+		
+		Map<String, Object> mapEmpNo = new HashMap<>();
+		mapEmpNo.put("empNo", empNo);
+		
+		int getApprovalDocCnt = documentListMapper.getApprovalDocListCnt(mapEmpNo);
+		log.debug(getApprovalDocCnt+"<-- DocumentListService getApprovalDocCnt");
+		
+		return getApprovalDocCnt;
+	}
 
 }

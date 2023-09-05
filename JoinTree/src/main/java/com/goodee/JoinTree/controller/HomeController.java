@@ -51,12 +51,20 @@ public class HomeController {
 		
 		// 결재함 목록 조회
 		List<DocumentDefault> getApprovalDocList = documentListService.getApprovalDocList(empNo);
+		
+		// 기안문서 목록 행의 수
+		int getDraftDocCnt = documentListService.getgetDraftDocCnt(empNo);
+		
+		// 결재함 목록 행의 수
+		int getApprovalDocCnt = documentListService.getApprovalDocCnt(empNo);
 				
 		model.addAttribute("empInfo", empInfo); // 로그인한 사원 정보 
 		model.addAttribute("homeProejctList", homeProejctList); // 프로젝트 정보
 		model.addAttribute("getRecentNotice", getRecentNotice); // 최신 공지 목록
 		model.addAttribute("getDraftDocList", getDraftDocList); // home.jsp 기안문서 목록
 		model.addAttribute("getApprovalDocList", getApprovalDocList); // home.jsp 결재함 목록 조회
+		model.addAttribute("getDraftDocCnt", getDraftDocCnt); // 기안문서 목록 행의 수
+		model.addAttribute("getApprovalDocCnt", getApprovalDocCnt); // 결재함 목록 행의 수
 		
 		return "home"; // 포워딩
 	}

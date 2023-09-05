@@ -457,7 +457,7 @@
 						<div class="card card-img-holder">
 							<div class="card-body"> 
 								<div>
-									<span>기안문서목록</span>
+									<span>기안문서목록&nbsp;&nbsp;&#40;${getDraftDocCnt}&#41;</span>
 									<hr>
 									<ul>
 										<c:forEach var="draft" items="${getDraftDocList}">
@@ -466,7 +466,7 @@
 									</ul>
 								</div>
 								<div>
-									<span>결재함</span>
+									<span>결재함&nbsp;&nbsp;&#40;${getApprovalDocCnt}&#41;</span>
 									<hr>
 									<ul>
 										<c:forEach var="approval" items="${getApprovalDocList}">
