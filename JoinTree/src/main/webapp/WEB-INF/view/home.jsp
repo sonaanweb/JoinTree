@@ -393,7 +393,8 @@
 						<div class="card card-img-holder">
 							<div class="card-body center ">
 								<div class="home-profile">
-									<img class="mb-2" src="/JoinTree/empImg/tiger.png" >
+									
+									<img class="mb-2" src="/JoinTree/empImg/${empImg}" >
 									<h1 class="mb-2 center">${empInfo.empName}${empInfo.position}</h1>
 									<h4 class="mb-2 center">${empInfo.dept}</h4>
 									<h1 class="mb-2 clock"></h1>

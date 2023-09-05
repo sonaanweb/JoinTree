@@ -8,7 +8,7 @@
 		<li class="nav-item nav-profile">
 			<a href="/JoinTree/empInfo/empInfo" class="nav-link">
 				<div class="nav-profile-image">
-					<img src="/JoinTree/empImg/tiger.png" alt="profile">
+					<img src="/JoinTree/empImg/${empImg}" alt="profile">
 					<span class="login-status online"></span>
 				</div>
 				<div class="nav-profile-text d-flex flex-column">

@@ -16,6 +16,9 @@ public interface LoginMapper {
 	// 로그인 성공 시 empNo로 dept 출력
 	String selectDept(int empNo);
 	
+	// 로그인 성공 시 empNo로 empSaveImgName 출력
+	String selectEmpImg(int empNo);
+	
 	// 로그인 성공 시 empNo로 signSaveImgName 출력
 	String selectSignImg(int empNo);
 	

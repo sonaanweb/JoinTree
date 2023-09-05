@@ -35,6 +35,11 @@ public class LoginService {
 		return loginMapper.selectDept(empNo);
 	}
 	
+	// 로그인 성공 시 empNo로 empImg 출력
+	public String getEmpImg(int empNo) {
+		return loginMapper.selectEmpImg(empNo);
+	}
+	
 	// 로그인 성공 시 empNo로 signImg 출력
 	public String getSignImg(int empNo) {
 		return loginMapper.selectSignImg(empNo);
