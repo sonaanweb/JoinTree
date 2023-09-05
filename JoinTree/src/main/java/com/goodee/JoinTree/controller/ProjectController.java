@@ -53,9 +53,11 @@ public class ProjectController {
 	@GetMapping("/project/count")
 	public int projectCountRows(@RequestParam(name="searchName", required = false) String searchName, // required = false 필수 X
 								@RequestParam(name="startDate", required = false) String startDate,
-								@RequestParam(name="endDate", required = false) String endDate) {
+								@RequestParam(name="endDate", required = false) String endDate,
+								@RequestParam(name="empNo",required = false) Integer empNo,
+								@RequestParam(name="projectStatus", required = false) String projectStatus) {
 		
-		return projectService.projectCountRows(searchName, startDate, endDate);
+		return projectService.projectCountRows(empNo, projectStatus, searchName, startDate, endDate);
 	}
 	
 	/* 프로젝트 */
@@ -66,11 +68,13 @@ public class ProjectController {
 											@RequestParam(name="rowPerPage") int rowPerPage,
 											@RequestParam(name="searchName") String searchName,
 											@RequestParam(name="startDate") String startDate,
-											@RequestParam(name="endDate") String endDate) {
+											@RequestParam(name="endDate") String endDate,
+											@RequestParam(name="empNo", required = false) Integer empNo,
+											@RequestParam(name="projectStatus", required = false) String projectStatus) {
 		// 서비스 레이어에서 가져온 프로젝트 리스트를 조회하여 리스트에 저장
 		// 프로젝트 리스트는 projectList라는 이름으로 resultMap에 들어가있기에 추후 호출할 때 projectList로 호출해야함
-		Map<String, Object> resultMap = projectService.selectProejectList(startRow, rowPerPage, searchName, startDate, endDate);
-		int totalCnt = projectService.projectCountRows(searchName, startDate, endDate);
+		Map<String, Object> resultMap = projectService.selectProejectList(empNo, projectStatus, startRow, rowPerPage, searchName, startDate, endDate);
+		int totalCnt = projectService.projectCountRows(empNo, projectStatus, searchName, startDate, endDate);
 		//log.debug(yellow + "startRow:" + startRow + reset);
 		//log.debug(yellow + "rowPerPage:" + rowPerPage + reset);
 		//log.debug(yellow + "resultMap:" + resultMap + reset);
@@ -81,52 +85,7 @@ public class ProjectController {
 		
 		return resultMap;
 	}
-	
-	// 프로젝트 개인별 참여 중 프로젝트 출력 -> 자신의 사번이 있고 프로젝트 상태가 진행중인거(1)
-	// json
-	@GetMapping("project/personalProjectList")
-	@ResponseBody
-	public Map<String, Object> selectProjectListByPersonal(HttpSession session,
-												@RequestParam(name="startRow")int startRow, 
-												@RequestParam(name="rowPerPage")int rowPerPage,
-												@RequestParam(name="searchName", required = false) String searchName,
-												@RequestParam(name="startDate", required = false) String startDate,
-												@RequestParam(name="endDate", required = false) String endDate){
-		// 로그인 유저
-		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
-		
-		int empNo = loginAccount.getEmpNo();
-			//log.debug(yellow + "empNo:" + empNo + reset);
-		
-		// 서비스 레이어에서 가져온 프로젝트 리스트를 조회하여 맵에 저장 및 cnt저장
-		// 프로젝트 리스트는 personalProjectList라는 이름으로 resultMap에 들어가있기에 추후 호출할 때 personalProjectList로 호출해야함
-		Map<String, Object> resultMap = projectService.selectProjectListByPersonal(empNo, startRow, rowPerPage, searchName, startDate, endDate);
-		int totalCnt = projectService.projectCountRows(searchName, startDate, endDate);
 
-		resultMap.put("totalCnt", totalCnt);
-		
-		return resultMap;
-	}
-	
-	// 프로젝트 종료된 프로젝트 출력 -> 프로젝트 상태가 완료(0)
-	// json
-	@GetMapping("project/endProjectList")
-	@ResponseBody
-	public Map<String, Object> selectEndProjectList(@RequestParam(name="startRow")int startRow, 
-												@RequestParam(name="rowPerPage")int rowPerPage,
-												@RequestParam(name="searchName", required = false) String searchName, 
-												@RequestParam(name="startDate", required = false) String startDate,
-												@RequestParam(name="endDate", required = false) String endDate) {
-		// 서비스 레이어에서 가져온 프로젝트 리스트를 조회하여 맵에 저장 및 cnt저장
-		// 프로젝트 리스트는 endProjectList라는 이름으로 resultMap에 들어가있기에 추후 호출할 때 endProjectList로 호출해야함
-		Map<String, Object> resultMap = projectService.selectEndProjectList(startRow, rowPerPage, searchName, startDate, endDate);
-		int totalCnt = projectService.projectCountRows(searchName, startDate, endDate);
-
-		resultMap.put("totalCnt", totalCnt);
-		
-		return resultMap;
-	}
-	
 	// 프로젝트 상세 projectOne 페이지로 이동
 	@GetMapping("project/projectOne")
 	public String projectOne(Model model,
@@ -287,7 +246,6 @@ public class ProjectController {
 		}
 		return "success";
 	}
-	
 	/* 프로젝트 하위작업 끝 */
 	/* 프로젝트 하위작업 댓글 */
 	// 댓글 리스트
@@ -299,7 +257,7 @@ public class ProjectController {
 		return taskCommentList;
 	}
 	// 댓글 추가
-	@PostMapping("project/addTaskCommentParent")
+	@PostMapping("project/addTaskComment")
 	@ResponseBody
 	public String addTaskComment(TaskComment taskComment) {
 		int row = projectService.addTaskComment(taskComment);
@@ -311,7 +269,7 @@ public class ProjectController {
 	}
 		
 	// 대댓글 추가
-	@PostMapping("project/addTaskComment")
+	@PostMapping("project/addTaskCommentChild")
 	@ResponseBody
 	public String addTaskCommentChild(TaskComment taskComment) {
 		int row = projectService.addTaskCommentChild(taskComment);

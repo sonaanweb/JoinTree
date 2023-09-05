@@ -20,6 +20,12 @@
 			<if test="endDate != null and endDate != ''">
 				AND project_end_date &lt;= #{endDate}
 			</if>
+			<if test="empNo != null and empNo != 0 and empNo != ''">
+				AND emp_no IN (SELECT emp_no FROM project_member WHERE emp_no = #{empNo})
+			</if>
+			<if test="projectStatus != null and projectStatus != ''">
+				AND project_status = #{projectStatus}
+			</if>
 		</where>
 	</select>
 	
@@ -39,7 +45,7 @@
 			updatedate,
 			create_id createId,
 			update_id updateId
-		FROM project
+		FROM project 
 		<where>
 			<if test="searchName != null and searchName != ''">
 				AND (
@@ -52,6 +58,12 @@
 			</if>
 			<if test="endDate != null and endDate != ''">
 				AND project_end_date &lt;= #{endDate}
+			</if>
+			<if test="empNo != null and empNo != 0 and empNo != ''">
+				AND emp_no IN (SELECT emp_no FROM project_member WHERE emp_no = #{empNo})
+			</if>
+			<if test="projectStatus != null and projectStatus != ''">
+				AND project_status = #{projectStatus}
 			</if>
 		</where>
 		ORDER BY 
