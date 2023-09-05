@@ -178,7 +178,7 @@ var empName = "${sessionScope.empName}";
                         '<td>' + reservation.revReason + '</td>' +
                         '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
                         '<td>' + getStatusText(reservation.revStatus) + '</td>' +
-                        '<td>' + reservation.updateName + '(' + reservation.updateId + ')</td>';//수정이 필요함
+                        '<td>' + reservation.updateName + '(' + reservation.updateId + ')</td>';
                     
                     // 취소 버튼 또는 상태 텍스트 추가
                     if (reservation.revStatus === 'A0301') {

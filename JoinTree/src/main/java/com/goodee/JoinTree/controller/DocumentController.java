@@ -318,7 +318,7 @@ public class DocumentController {
 	    // 로그인 유저
 	    AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
 	    int empNo = loginAccount.getEmpNo();
-
+	    
 	    // 문서 상태 변경
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
@@ -337,6 +337,14 @@ public class DocumentController {
 	    docSigner.setDocStatus("A0204");
 	    int docSignerRow = documentService.modifySignerStatus(docSigner);
 
+	   
+	    int signerCnt = documentService.getSignerCnt(docNo);
+	    
+	    if(signerCnt == 1) {
+	    	if (docDefaultRow ==1 && docSignerRow == 1) {
+	    		return "success";
+	    	}
+	    } else if (signerCnt ==2) {
 	    // 결재자 수가 2명이고 현재 반려한 결재자가 첫 번째 결재자인 경우,
 	    // 두 번째 결재자의 문서 상태도 반려로 변경합니다.
 	    if (empSignerLevel == 1) {
@@ -354,6 +362,7 @@ public class DocumentController {
 	            return "success";
 	        }
 	    }
+	 }
 
 	    return "fail";
 	}
