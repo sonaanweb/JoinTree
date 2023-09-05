@@ -8,67 +8,107 @@
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-			<h1>출퇴근 관리</h1>
+			<h3 class="col-lg-12 grid-margin">출퇴근 관리</h3>
+			
 			<!-- 검색별 조회 -->
-			<div>
-				<form id="searchAnnualLeaveListForm">
-					<div>
-						<div>사번</div>
-						<input type="text" id="searchEmpNo" name="empNo">
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<!-- 출퇴근 목록 검색 폼 -->
+						<form id="searchAnnualLeaveListForm">
+							<div class="form-row">
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
+										<div class="col-sm-9">
+											<input type="text" id="searchEmpNo" name="empNo" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchEmpName" class="col-form-label"><strong>사원명</strong></label>
+										<div class="col-sm-9">
+											<input type="text" id="searchEmpName" name="empName" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchDept" class="col-form-label"><strong>부서</strong></label>
+										<div class="col-sm-9">
+											<select id="searchDept" name="dept" class="form-control">
+												<option value="">선택하세요</option>
+												<c:forEach var="d" items="${deptCodeList}">
+													<option value="${d.code}">${d.codeName}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>	
+							<div class="form-row">
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchYear" class="col-form-label"><strong>연도</strong></label>
+										<div class="col-sm-9">
+											<select id="searchYear" name="year" class="form-control">
+												<option value="">선택하세요</option>
+												<!-- 나머지 옵션 동적으로 생성 -->
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchStartDate" class="col-form-label"><strong>조회일</strong></label>
+										<div class="col-sm-5">
+											<input type="date" id="searchStartDate" name="startDate" class="form-control">
+										</div>
+										 <span>&#126;</span>
+										 <div class="col-sm-5">
+										 	<input type="date" id="searchEndDate" name="endDate" class="form-control">	 
+										 </div>
+									</div>
+								</div>
+							</div>	
+							<!-- 검색 버튼 -->
+							<div class="center">
+								<button type="button" id="searchCommuteFullListBtn" class="btn btn-dark">검색</button>
+							</div>
+						</form>
 					</div>
-					<div>
-						<div>사원명</div>
-						<input type="text" id="searchEmpName" name="empName">
-					</div>
-					<div>
-						<div>부서</div>
-						<select id="searchDept" name="dept">
-							<option value="">선택하세요</option>
-							<c:forEach var="d" items="${deptCodeList}">
-								<option value="${d.code}">${d.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<div>연도</div>
-						<select id="searchYear" name="year">
-							<option value="">선택하세요</option>
-							<!-- 나머지 옵션 동적으로 생성 -->
-						</select>
-					</div>
-					<div>
-						<div>조회일</div>
-						<input type="date" id="searchStartDate" name="startDate"> &#126; 
-						<input type="date" id="searchEndDate" name="endDate">
-					</div>
-					<div>
-						<button type="button" id="searchCommuteFullListBtn">검색</button>
-					</div>
-				</form>
-			</div>
+				</div>
+			</div>	
 			
 			<!-- 검색별 출퇴근 목록 출력 -->
-			<table>
-				<thead>
-					<tr>
-						<th>날짜</th>
-						<th>사번</th>
-						<th>부서명</th>
-						<th>사원명</th>
-						<th>출근시간</th>
-						<th>퇴근시간</th>
-					</tr>
-				</thead>
-				<tbody id="commuteFullList">
-				
-				</tbody>
-			</table>
-			
-			
-			<!-- 페이지 네비게이션 -->
-			<div id="pagination">
-				
-			</div>
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>날짜</th>
+									<th>사번</th>
+									<th>부서명</th>
+									<th>사원명</th>
+									<th>출근시간</th>
+									<th>퇴근시간</th>
+								</tr>
+							</thead>
+							<tbody id="commuteFullList">
+							
+							</tbody>
+						</table>
+						<br>
+						<!-- 페이지 네비게이션 -->
+						<div id="pagination" class="paging center pagination">
+							
+						</div>
+						
+					</div>
+				</div>
+			</div>		
 			
 		</div>
 	</div>
@@ -101,7 +141,7 @@
 			
 			// 이전 페이지 버튼
 			if(data.startPage > 1){
-				let prevButton = $('<button type="button" class="page-btn">').text('이전');
+				let prevButton = $('<button type="button" class="page-link">').text('이전');
 	            prevButton.click(function() {
 	                goToPage(data.startPage - 1);
 	            });
@@ -111,7 +151,7 @@
 			// 페이지 버튼 생성
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
-				let pageButton = $('<button type="button" class="page-btn">').text(i);
+				let pageButton = $('<button type="button" class="page-link">').text(i);
 		        pageButton.click(function(){
 		        	goToPage(page);
 		        });
@@ -120,7 +160,7 @@
 			
 			// 다음 페이지 버튼
 			if(data.endPage < data.lastPage){
-				let nextButton = $('<button type="button" class="page-btn">').text('다음');
+				let nextButton = $('<button type="button" class="page-link">').text('다음');
 	            nextButton.click(function() {
 	                goToPage(data.endPage + 1);
 	            });

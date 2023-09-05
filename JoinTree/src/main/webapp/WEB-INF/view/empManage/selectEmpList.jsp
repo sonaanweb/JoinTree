@@ -9,80 +9,127 @@
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
 			<!-- 사원등록 모달창 버튼 -->
-			<div>
-				<button type="button" id="addEmpModalBtn" data-bs-toggle="modal" data-bs-target="#addEmpModal"> 사원등록</button>
+			<div class="col-lg-12 grid-margin text-right">
+				<button type="button" id="addEmpModalBtn" class="btn btn-dark" 
+						data-bs-toggle="modal" data-bs-target="#addEmpModal">사원등록</button>
 			</div>
+			
 			<!-- 검색별 조회 -->
-			<div>
-				<form id="searchEmpListForm">
-					<div>
-						<div>사번</div>
-						<input type="text" id="searchEmpNo" name="empNo">
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<!-- 사원 목록 검색 폼 -->
+						<form id="searchEmpListForm">
+							<div class="form-row">
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
+										<div class="col-sm-9">
+											<input type="text" id="searchEmpNo" name="empNo" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchEmpName" class="col-form-label"><strong>사원명</strong></label>
+										<div class="col-sm-9">
+											<input type="text" id="searchEmpName" name="empName" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchStartEmpHireDate" class="col-form-label"><strong>입사일</strong>&nbsp;&nbsp;&nbsp;</label>
+										<div class="col-sm-5">
+											<input type="date" id="searchStartEmpHireDate" name="startEmpHireDate" class="form-control"> 
+										</div>
+										<span>&#126;</span>
+										<div class="col-sm-5">	 
+											<input type="date" id="searchEndEmpHireDate" name="endEmpHireDate" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchDept" class="col-form-label"><strong>부서</strong></label>
+										<div class="col-sm-9">
+											<select id="searchDept" name="dept" class="form-control">
+												<option value="">선택하세요</option>
+												<c:forEach var="d" items="${deptCodeList}">
+													<option value="${d.code}">${d.codeName}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchPosition" class="col-form-label"><strong>직급</strong>&nbsp;&nbsp;&nbsp;</label>
+										<div class="col-sm-9">
+											<select id="searchPosition" name="position" class="form-control">
+												<option value="">선택하세요</option>
+												<c:forEach var="p" items="${positionCodeList}">
+													<option value="${p.code}">${p.codeName}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group row">
+										<label for="searchActive" class="col-form-label"><strong>재직상태</strong></label>
+										<div class="col-sm-9">
+											<select id="searchActive" name="active" class="form-control">
+												<option value="">선택하세요</option>
+												<c:forEach var="a" items="${activeCodeList}">
+													<option value="${a.code}">${a.codeName}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 검색 버튼 -->
+							<div class="center">
+								<button type="button" id="searchEmpListBtn" class="btn btn-dark">검색</button>
+							</div>
+						</form>
+						
 					</div>
-					<div>
-						<div>사원명</div>
-						<input type="text" id="searchEmpName" name="empName">
-					</div>
-					<div>
-						<div>상태</div>
-						<select id="searchActive" name="active">
-							<option value="">선택하세요</option>
-							<c:forEach var="a" items="${activeCodeList}">
-								<option value="${a.code}">${a.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<div>입사일</div>
-						<input type="date" id="searchStartEmpHireDate" name="startEmpHireDate"> &#126; 
-						<input type="date" id="searchEndEmpHireDate" name="endEmpHireDate">
-					</div>
-					<div>
-						<div>부서</div>
-						<select id="searchDept" name="dept">
-							<option value="">선택하세요</option>
-							<c:forEach var="d" items="${deptCodeList}">
-								<option value="${d.code}">${d.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<div>직급</div>
-						<select id="searchPosition" name="position">
-							<option value="">선택하세요</option>
-							<c:forEach var="p" items="${positionCodeList}">
-								<option value="${p.code}">${p.codeName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						<button type="button" id="searchEmpListBtn">검색</button>
-					</div>
-				</form>
-			</div>
+				</div>
+			</div>			
 			
 			<!-- 검색별 사원 목록 출력 -->
-			<table>
-				<thead>
-					<tr>
-						<th>사번</th>
-						<th>사원명</th>
-						<th>입사일</th>
-						<th>부서</th>
-						<th>직급</th>
-						<th>재직상태</th>
-					</tr>
-				</thead>
-				<tbody id="empInfoList">
-				
-				</tbody>
-			</table>
-			
-			
-			<!-- 페이지 네비게이션 -->
-			<div id="pagination">
-				
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>사번</th>
+									<th>사원명</th>
+									<th>입사일</th>
+									<th>부서</th>
+									<th>직급</th>
+									<th>재직상태</th>
+								</tr>
+							</thead>
+							<tbody id="empInfoList">
+							
+							</tbody>
+						</table>
+						
+						
+						<!-- 페이지 네비게이션 -->
+						<div id="pagination" class="paging center pagination">
+							
+						</div>
+					</div>
+				</div>
 			</div>
+						
 		</div>
 	</div>
 	
@@ -322,7 +369,7 @@
 			
 			// 이전 페이지 버튼
 			if(data.startPage > 1){
-				let prevButton = $('<button type="button" class="page-btn">').text('이전');
+				let prevButton = $('<button type="button" class="page-link">').text('이전');
 	            prevButton.click(function() {
 	                goToPage(data.startPage - 1);
 	            });
@@ -332,7 +379,7 @@
 			// 페이지 버튼 생성
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
-				let pageButton = $('<button type="button" class="page-btn">').text(i);
+				let pageButton = $('<button type="button" class="page-link">').text(i);
 		        pageButton.click(function(){
 		        	goToPage(page);
 		        });
@@ -341,7 +388,7 @@
 			
 			// 다음 페이지 버튼
 			if(data.endPage < data.lastPage){
-				let nextButton = $('<button type="button" class="page-btn">').text('다음');
+				let nextButton = $('<button type="button" class="page-link">').text('다음');
 	            nextButton.click(function() {
 	                goToPage(data.endPage + 1);
 	            });
