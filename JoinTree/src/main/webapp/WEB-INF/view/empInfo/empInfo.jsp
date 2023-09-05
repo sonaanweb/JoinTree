@@ -5,15 +5,6 @@
 <html>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
-	    <script>
-	      /*   $(document).ready(function() {
-	            const urlParams = new URL(location.href).searchParams;
-	            const msg = urlParams.get("msg");
-	            if (msg != null) {
-	                alert(msg);
-	            }
-	        }); */
-	    </script>
 	    
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
@@ -22,7 +13,7 @@
 			<div class="col-lg-12 grid-margin stretch-card">
               	<div class="card">
                 <div class="card-body">
-				<h2 class="card-title">게시글 작성</h2>
+				<h2 class="card-title">나의 정보</h2>
 				<h1>나의 정보</h1>
 		
 	<%-- 			현재 사용자 : ${empName}
@@ -35,7 +26,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName eq '이미지 없음'}">
-									<img src="${pageContext.request.contextPath}/empImg/jointree.png" style="max-width: 200px; max-height: 200px;"><br>
+									<img src="${pageContext.request.contextPath}/empImg/JoinTree.png" style="max-width: 200px; max-height: 200px;"><br>
 								</c:when>
 								<c:otherwise>
 								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" style="max-width: 300px; max-height: 300px;"><br>

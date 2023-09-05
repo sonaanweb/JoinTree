@@ -4,24 +4,8 @@
 <html>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
-		<script>
-			$(document).ready(function() {
-				const urlParams = new URL(location.href).searchParams;
-				const msg = urlParams.get("msg");
-					if (msg != null) {
-						alert(msg);
-					}
-					
-				$("#checkPwBtn").click(function() {
-					if ($("#empPw").val() == "") {
-						alert("비밀번호를 입력해주세요.");
-						$("#empPw").focus();
-					} else {
-						$("#checkPw").submit();
-					}
-				});
-			});
-	  	</script>
+	<script src="/JoinTree/resource/js/empInfo/ckeckPw.js"></script>
+
 	  	
 	  	<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->

@@ -18,35 +18,7 @@
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/style.css">
 	    <!-- endinject -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-		<script>
-			$(document).ready(function() {
-				const urlParams = new URL(location.href).searchParams;
-				const msg = urlParams.get("msg");
-					if (msg != null) {
-						alert(msg);
-					}
-					
-				// <input type="number"> 일 경우 숫자만 입력받도록 설정
-				$("input[type='number']").on("keypress", function(event) {
-					if ((event.which < 48) || (event.which > 57)) {
-						return false;
-					}
-			    });
-				
-				// 로그인 버튼 클릭 시 
-				$("#loginBtn").click(function() {
-					if ($("#empNo").val() == "") {
-						alert("사번을 입력해주세요.");
-						$("#empNo").focus();
-					} else if ($("#empPw").val() == "") {
-						alert("비밀번호를 입력해주세요.");
-						$("#empPw").focus();
-					} else {
-					 	$("#login").submit();
-					}
-				});
-			});
-	  	</script>
+		<script src="/JoinTree/resource/js/login/login.js"></script>
 	</head>
 	<body>		
 		<div class="container-scroller">
@@ -86,24 +58,7 @@
         </form>
             
             
-	        
-<%-- 	        <label for="empNo">Employee Number:</label>
-	        <input type="number" id="empNo" name="empNo" value="${loginId}" required><br>
-	        
-	        <label for="empPw">Password:</label>
-	        <input type="password" id="empPw" name="empPw" required><br> --%>
-	        
-<!-- 	        <input type="checkbox" id="saveId" name="saveId" value="y">
-	        <label for="saveId">Save ID</label><br> -->
-	        
-	       <!--  <button type="submit">Login</button> -->
-   		
-<!-- 		<div>
-			<a href="/login/resetPw">비밀번호를 잊으셨나요?</a>
-		</div> -->
-		
-		
-
+	       
 		            </div>
           		</div>
         	</div>
