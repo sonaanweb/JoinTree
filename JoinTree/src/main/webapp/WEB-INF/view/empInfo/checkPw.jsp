@@ -27,19 +27,31 @@
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 	  	
+	  		<div class="col-lg-12 grid-margin stretch-card">
+              	<div class="card">
+                 <div class="card-body">
+                 
+               	<div>
+					<a href="/JoinTree/empInfo/empInfo" class="btn btn-outline-success btn-sm">이전</a>
+				</div>
+				<br>
 
 				<h1>비밀번호 확인</h1>
 				
 			    <form action="/JoinTree/empInfo/checkPw" method="post" id="checkPw">	        
-			        <label for="empPw">Password:</label>
-			        <input type="password" id="empPw" name="empPw"><br>
+			        <!-- <label for="empPw">Password:</label> -->
+			        <input type="password" id="empPw" name="empPw" placeholder="Password" class="form-control w-25"><br>
 			       
-			        <button type="button" id="checkPwBtn">입력</button>
+			        <button type="button" id="checkPwBtn" class="btn btn-success btn-fw">입력</button>
 		   		</form>
 				
-				<div>
-					<a href="/JoinTree/empInfo/empInfo">이전</a>
-				</div>
+			
 			</div>
+			
+			</div>
+			</div>
+			</div>
+			
+			
 		</div>
 </html>

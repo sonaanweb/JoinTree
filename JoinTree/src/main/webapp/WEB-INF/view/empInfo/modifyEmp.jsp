@@ -117,29 +117,29 @@
 		        // 사진 삭제 버튼 클릭되었을 때
 		        $("#removeImgBtn").click(function() {
 		        	console.log("사진 삭제 버튼 클릭");
-		        	
-		            $.ajax({
-		                url: "/JoinTree/empInfo/modifyEmp/removeEmpImg", // 적절한 서버 엔드포인트로 변경
-		                type: "POST",
-		                success: function(response) {
-		                    console.log(response);
-		                    if (response === "success") {
-		                        alert("사진이 삭제되었습니다.");
-		                        // 서버에서 삭제된 이미지 경로로 뷰 업데이트
-		                        $("#currentImage").attr("src", "");
-		                        $("#currentImage").hide();
-		                        $("#currentImageTxt").hide();
-		                        
-		                        location.reload(); // 페이지 새로고침
-		                    } else {
-		                        alert("사진 삭제 중 오류가 발생했습니다.");
-		                    }
-		                },
-		                error: function(error) {
-		                    alert("서버 오류 발생");
-		                }
-		            });
-		        	
+		        	if (confirm("사진이 완전히 삭제됩니다.")) {
+		        		 $.ajax({
+				                url: "/JoinTree/empInfo/modifyEmp/removeEmpImg", // 적절한 서버 엔드포인트로 변경
+				                type: "POST",
+				                success: function(response) {
+				                    console.log(response);
+				                    if (response === "success") {
+				                        alert("사진이 삭제되었습니다.");
+				                        // 서버에서 삭제된 이미지 경로로 뷰 업데이트
+				                        $("#currentImage").attr("src", "");
+				                        $("#currentImage").hide();
+				                        $("#currentImageTxt").hide();
+				                        
+				                        location.reload(); // 페이지 새로고침
+				                    } else {
+				                        alert("사진 삭제 중 오류가 발생했습니다.");
+				                    }
+				                },
+				                error: function(error) {
+				                    alert("서버 오류 발생");
+				                }
+				            });
+		        		}
 		        });
 		       	  
 				// 이름 칸은 문자만 입력 허용
@@ -190,6 +190,7 @@
 						alert("연락처 세 번째 칸을 입력해주세요.");
 						$("#empPhone3").focus();
 					} else {
+						alert("사원 정보가 변경되었습니다.");
 						$("#modifyEmp").submit();
 					}
 				});
@@ -218,18 +219,19 @@
 					if (uploadSignImg.isEmpty()) {
 						alert("내용이 없습니다.");
 					} else {
-						$.ajax({
-							url : "/JoinTree/empInfo/modifyEmp/uploadSignImg",
-							data : {uploadSignImg : uploadSignImg.toDataURL("image/png", 1.0)},
-							type : "post",
-							success : function(jsonData) { // jsonData: 서버로부터 받아온 응답 데이터 (변수명 변경 가능)
-								alert("서명 저장 성공 " + jsonData);
-								location.reload(); // 현재 화면 새로고침
-							}
-						});
+						if (confirm("서명을 등록하시겠습니까? 서명은 최초 1회만 등록 가능합니다.")) {
+							$.ajax({
+								url : "/JoinTree/empInfo/modifyEmp/uploadSignImg",
+								data : {uploadSignImg : uploadSignImg.toDataURL("image/png", 1.0)},
+								type : "post",
+								success : function(jsonData) { // jsonData: 서버로부터 받아온 응답 데이터 (변수명 변경 가능)
+									alert("서명 저장 성공 " + jsonData);
+									location.reload(); // 현재 화면 새로고침
+								}
+							});
+						}
 					}
 				});
-
 			});
 			
 			// 주소API
@@ -274,13 +276,20 @@
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-
+				<div class="col-lg-12 grid-margin stretch-card">
+              	<div class="card">
+                <div class="card-body">
+				<h2 class="card-title">게시글 작성</h2>
+	
+				<div>
+					<a href="/JoinTree/empInfo/empInfo" class="btn btn-outline-success btn-sm">이전</a>
+				</div>
 				<h1>나의 정보 수정</h1>
 				<form action="/JoinTree/empInfo/modifyEmp" method="post" id="modifyEmp">
-					<table border="1">
+					<table class="table">
 						<tr>
 							<td>이름</td>
-							<td><input type="text" name="empName" value="${empInfo.empName}" id="empName"></td>
+							<td><input type="text" name="empName" value="${empInfo.empName}" id="empName" class="form-control w-25"></td>
 						</tr>
 						<tr>
 							<td>사진</td>
@@ -300,6 +309,7 @@
 										<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" id="currentImage" style="max-width: 300px; max-height: 300px;"><br>
 										<!-- <span id="currentImageTxt">기존 이미지</span><br> -->
 										<!-- <img id="previewImage" src="" style="max-width: 300px; max-height: 300px;"><br> -->
+										<br>
 										<button type="button" id="removeImgBtn">사진 삭제</button>	
 										<div>
 											* 사진 삭제 버튼 클릭 시 등록된 사진이 완전히 삭제됩니다. 
@@ -328,19 +338,19 @@
 								<div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md cen">
 			
 										<div class="bor8 m-b-20 how-pos4-parent">
-											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30" type="text" value="${empInfo.empAddress.substring(0, 5)}" id="sample6_postcode" name="zip" placeholder="우편번호">
+											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30 form-control w-25" type="text" value="${empInfo.empAddress.substring(0, 5)}" id="sample6_postcode" name="zip" placeholder="우편번호">
 										</div>
 										<div class="bor8 m-b-20 how-pos4-parent">
-											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30" type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30 btn btn-success w-25" type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
 										</div>
 										<div class="bor8 m-b-20 how-pos4-parent">
-										    <input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30" type="text" value="${extractedAddress}" id="sample6_address" name="add1" placeholder="주소">
+										    <input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30 form-control w-25" type="text" value="${extractedAddress}" id="sample6_address" name="add1" placeholder="주소">
 										</div>
 										<div class="bor8 m-b-20 how-pos4-parent">
-											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30" type="text" value="${finalExtractedAddress}" id="sample6_detailAddress" name="add2" placeholder="상세주소">
+											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30 form-control w-25" type="text" value="${finalExtractedAddress}" id="sample6_detailAddress" name="add2" placeholder="상세주소">
 										</div>
 										<div class="bor8 m-b-20 how-pos4-parent">
-											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30" type="text" value="${empInfo.empAddress.substring(empInfo.empAddress.indexOf('('))}" id="sample6_extraAddress" name="add3" placeholder="참고항목">
+											<input class="mtext-107 cl2 plh3 size-116 p-l-62 p-r-30 form-control w-25" type="text" value="${empInfo.empAddress.substring(empInfo.empAddress.indexOf('('))}" id="sample6_extraAddress" name="add3" placeholder="참고항목">
 										</div>
 									<br>
 								</div>
@@ -351,18 +361,18 @@
 						</tr>
 						<tr>
 							<td>주민등록번호</td>
-							<td>
-								<input type="text" value="${empInfo.empJuminNo.substring(0, 6)}" name="empJuminNo1" id="empJuminNo1" maxlength="6"> 
+							<td class="form-inline">
+								<input type="text" value="${empInfo.empJuminNo.substring(0, 6)}" name="empJuminNo1" id="empJuminNo1" maxlength="6" class="form-control w-25"> 
 								<span id="empJuminNoMsg" style="color: red; display: none;">주민등록번호 앞자리는 6자리까지 입력 가능합니다.</span>&#45;
-							  	<input type="text" value="${empInfo.empJuminNo.substring(7)}" name="empJuminNo2" id="empJuminNo2" maxlength="7">
+							  	<input type="text" value="${empInfo.empJuminNo.substring(7)}" name="empJuminNo2" id="empJuminNo2" maxlength="7" class="form-control w-25">
 							</td>
 						</tr>
 						<tr>
 							<td>연락처</td>
-							<td>
-								<input type="text" value="${empInfo.empPhone.substring(0, 3)}" name="empPhone1" id="empPhone1" maxlength="3"> &#45;  
-								<input type="text" value="${empInfo.empPhone.substring(4, 8)}" name="empPhone2" id="empPhone2" maxlength="4"> &#45;  
-								<input type="text" value="${empInfo.empPhone.substring(9)}" name="empPhone3" id="empPhone3" maxlength="4">
+							<td class="form-inline">
+								<input type="text" value="${empInfo.empPhone.substring(0, 3)}" name="empPhone1" id="empPhone1" maxlength="3" class="form-control w-25"> &#45;  
+								<input type="text" value="${empInfo.empPhone.substring(4, 8)}" name="empPhone2" id="empPhone2" maxlength="4" class="form-control w-25"> &#45;  
+								<input type="text" value="${empInfo.empPhone.substring(9)}" name="empPhone3" id="empPhone3" maxlength="4" class="form-control w-25">
 							</td>
 						</tr>
 						<tr>
@@ -394,11 +404,12 @@
 						</tr>
 					</table>
 					<br>
-					<button type="button" id="modifyEmpBtn">정보 수정</button>
+					<button type="button" id="modifyEmpBtn" class="btn btn-success btn-fw">정보 수정</button>
 				</form>
 				
-				<div>
-					<a href="/JoinTree/empInfo/empInfo">이전</a>
+				
+				</div>
+				</div>
 				</div>
 		</div>
 	</div>

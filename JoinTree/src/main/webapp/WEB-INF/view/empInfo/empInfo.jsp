@@ -6,25 +6,30 @@
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 	    <script>
-	        $(document).ready(function() {
+	      /*   $(document).ready(function() {
 	            const urlParams = new URL(location.href).searchParams;
 	            const msg = urlParams.get("msg");
 	            if (msg != null) {
 	                alert(msg);
 	            }
-	        });
+	        }); */
 	    </script>
 	    
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-				
+			
+			<div class="col-lg-12 grid-margin stretch-card">
+              	<div class="card">
+                <div class="card-body">
+				<h2 class="card-title">게시글 작성</h2>
 				<h1>나의 정보</h1>
 		
-				<%-- 현재 사용자 : ${empName} --%>
-				<%-- 현재 로그인 아이디: ${loginAccount.empNo} --%>
+	<%-- 			현재 사용자 : ${empName}
+				현재 로그인 아이디: ${loginAccount.empNo}
+				싸인이름: ${signImg} --%>
 				
-				<table border="1">
+				<table class="table" >
 					<tr>
 						<td>사원이미지</td>
 						<td>
@@ -94,12 +99,16 @@
 						</td>
 					</tr>
 				</table>
-				<div>
-					<a href="/JoinTree/empInfo/checkPw">정보 수정</a>
-				</div>
-				<div>
-					<a href="/JoinTree/empInfo/modifyPw">비밀번호 변경</a>
-				</div>
+				
+					
+				<a href="/JoinTree/empInfo/checkPw" class="btn btn-success btn-fw">정보 수정</a> &nbsp;
+		
+				<a href="/JoinTree/empInfo/modifyPw" class="btn btn-success btn-fw">비밀번호 변경</a>
+				
+	
+			</div>
+			</div>
+			</div>
 	
 		</div>
 	</div>

@@ -96,11 +96,15 @@
 					</div>
 					
 					<div>
-						<label for="newPw">새 비밀번호 입력</label>
-						<input type="password" name="newPw" id="newPw" class="form-control w-25">
+						<!-- <div> -->
+							<label for="newPw">새 비밀번호 입력</label>
+						<!-- </div> -->
+						<div class="form-inline">
+						<input type="password" name="newPw" id="newPw" class="form-control w-25"> &nbsp;&nbsp;
 						<!-- <span style="color: red;" id="newPwError" class="error-message"></span> -->
 						 <span id="password-requirements">영문 소문자, 숫자, 특수문자(@, #, $, %, ^, &, +, =, !)를 포함하여 8자 이상 입력해주세요.</span>
 						 <span style="color: red;" id="password-error-message"></span>
+						</div>
 					</div>
 					<!-- 
 					<div>
