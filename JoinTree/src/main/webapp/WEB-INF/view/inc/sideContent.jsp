@@ -153,7 +153,7 @@
 			</c:forEach>
 			<div class="collapse" id="reservation">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/empMeetRoomList">회의실 예약</a></li>
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/empMeetRoomReservedList">예약 조회</a></li>																		
 				</ul>
 			</div>
@@ -259,7 +259,7 @@
 				<c:forEach var="child" items="${sessionScope.childCodeList}">
 					<c:if test="${child.code == 'M0110' && child.status == '1'}">
 						<a class="nav-link" data-toggle="collapse" href="#reservationAdmin" aria-expanded="false" aria-controls="ui-basic">
-							<span class="menu-title">예약관리</span>
+							<span class="menu-title">회의실관리</span>
 							<i class="menu-arrow"></i>
 							<i class="mdi mdi mdi-calendar-clock menu-icon"></i>
 						</a>
@@ -267,25 +267,8 @@
 				</c:forEach>
 				<div class="collapse" id="reservationAdmin">
 					<ul class="nav flex-column sub-menu">
-						<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/adminMeetRoomReservList">회의실</a></li>
-					</ul>
-				</div>
-			</li>
-			
-			<!-- 왼쪽 - 기자재관리 -->
-			<li class="nav-item">
-				<c:forEach var="child" items="${sessionScope.childCodeList}">
-					<c:if test="${child.code == 'M0111' && child.status == '1'}">
-						<a class="nav-link" data-toggle="collapse" href="#equipment" aria-expanded="false" aria-controls="ui-basic">
-							<span class="menu-title">회의실관리</span>
-							<i class="menu-arrow"></i>
-							<i class="mdi mdi-newspaper menu-icon"></i>
-						</a>
-					</c:if>
-				</c:forEach>
-				<div class="collapse" id="equipment">
-					<ul class="nav flex-column sub-menu">
-						<li class="nav-item"> <a class="nav-link" href="/JoinTree/equipment/meetRoomList">회의실</a></li>
+						<li class="nav-item"> <a class="nav-link" href="/JoinTree/reservation/adminMeetRoomReservList">예약 관리</a></li>
+						<li class="nav-item"> <a class="nav-link" href="/JoinTree/equipment/meetRoomList">회의실 관리</a></li>
 					</ul>
 				</div>
 			</li>

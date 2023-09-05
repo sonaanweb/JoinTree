@@ -18,7 +18,7 @@
 			room_no roomNo,
 			equip_category equipCategory,
 			room_name roomName,
-			room_Capacity roomCapacity,
+			room_capacity roomCapacity,
 			room_status roomStatus,
 			createdate,
 			updatedate,
@@ -76,7 +76,7 @@
 			equip_category equipCategory,
 			emp_no empNo,
 			room_name roomName,
-			room_Capacity roomCapacity,
+			room_capacity roomCapacity,
 			room_status roomStatus,
 			createdate,
 			updatedate,
@@ -92,9 +92,20 @@
 		WHERE room_no = #{roomNo}
 	</delete>
 	
-	<!-- 회의실 관리 검색 기능 (회의실이름) -->
+	<!-- 회의실 관리 검색 기능 (회의실이름) select 할 때 * 쓰지 않기 -->
 	<select id="searchMeetRoom" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
-	    SELECT * FROM meeting_room
+	    SELECT
+			room_no roomNo,
+			equip_category equipCategory,
+			emp_no empNo,
+			room_name roomName,
+			room_capacity roomCapacity,
+			room_status roomStatus,
+			createdate,
+			updatedate,
+			create_id createId,
+			update_id updateId
+		FROM meeting_room
       	<where>
 	    	<if test="roomName != null and roomName != ''">
 	    		AND room_name LIKE CONCAT('%', #{roomName}, '%')

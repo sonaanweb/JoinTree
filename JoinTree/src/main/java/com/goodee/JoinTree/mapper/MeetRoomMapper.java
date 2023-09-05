@@ -45,6 +45,6 @@ public interface MeetRoomMapper {
 	// 회의실 이미지 삭제 메서드
 	int removeMeetRoomFile(int roomNo);
 	
-	// 첨부파일 개수 cnt (2장까지 업로드 가능하게 제한둘 것)
+	// 첨부파일 개수 cnt
 	int selectMeetRoomFileCnt(int roomNo);
 }

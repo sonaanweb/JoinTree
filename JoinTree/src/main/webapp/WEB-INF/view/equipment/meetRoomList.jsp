@@ -19,10 +19,10 @@
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
 			<div>
-            <label>회의실명:</label>
-            <input type="text" name="roomName">
-            <button id="searchButton">검색</button>
-        	</div>
+			    <label>회의실명:</label>
+			    <input type="text" id="searchRoomName" name="roomName">
+			    <button id="searchButton">검색</button>
+			</div>
 			<table class="table">
 			    <thead>
 			        <tr>
@@ -132,13 +132,61 @@
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
 <script>
-//검색
-/* $('#searchButton').on('click', function () {
-    var revStatus = $("input[name='roomName']").val();
-    searchmeetRoom(roomName);
+
+$('#searchButton').on('click', function () {
+	var roomName = $("#searchRoomName").val();
+	
+    searchMeetRoom(roomName);
     console.log(roomName);
 });
- */
+
+function searchMeetRoom(roomName) {
+    $.ajax({
+        type: "GET",
+        url: "/JoinTree/equipment/searchMeetRoom",
+        data: {
+            "roomName": roomName
+        },
+        contentType: "application/json",
+        success: function (response) {
+            // 검색 결과를 화면에 업데이트하는 부분
+            var tbody = $('#meetRoomList');
+            tbody.empty(); // 기존 내용 지우기
+            console.log("response:",response);
+            // 검색 결과 데이터를 순회하며 행을 추가
+            for (var i = 0; i < response.length; i++) {
+			    var meetingRoom = response[i];
+			    console.log("mettingROOM:",meetingRoom);
+			 
+			    var row = '<tr>' +
+			        '<td class="roomNo">' + meetingRoom.roomNo + '</td>' +
+			        '<td class="equipCategory">' + meetingRoom.equipCategory + '</td>' +
+			        '<td class="roomName">' + meetingRoom.roomName + '</td>' +
+			        '<td class="roomCapacity">' + meetingRoom.roomCapacity + '명</td>' +
+			        '<td class="roomStatus">' + getStatusText(meetingRoom.roomStatus) + '</td>' +
+			        '<td class="createdate">' + meetingRoom.createdate + '</td>' +
+			        '<td>' +
+			        '<button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="' + meetingRoom.roomNo + '">수정</button>' +
+			        '<button class="deleteButton" data-room-no="' + meetingRoom.roomNo + '">삭제</button>' +
+			        '</td>' +
+			        '</tr>';
+			
+			    tbody.append(row);
+			}
+        },
+        error: function (error) {
+            console.log(error);
+            alert("검색 실패");
+        }
+    });
+}
+
+// 상태코드 텍스트 변환
+function getStatusText(statusCode) {
+    if (statusCode === '1') return '사용가능';
+    if (statusCode === '0') return '사용불가';
+    return '';
+}
 
 // 추가 모달창 스크립트
 $('#addModal').on('show.bs.modal', function (event) {
@@ -210,7 +258,7 @@ $('#addModal').on('show.bs.modal', function (event) {
 $(document).ready(function() {
 	let originalRoomName; // 기존 이름 저장 - 중복검사 피하기 위함
 	
-    $('.editButton').click(function() {
+	$(document).on('click', '.editButton', function() {
         const roomNo = $(this).data('room-no'); // 버튼의 data-room-no 속성값 가져오기
         originalRoomName = $(this).closest('tr').find('.roomName').text(); // 기존 회의실 이름 저장
         
@@ -281,7 +329,7 @@ $(document).ready(function() {
 });
 
 	//삭제 버튼 클릭 시
-	$('.deleteButton').click(function(event) {
+	$(document).on('click', '.deleteButton', function(event)  {
 	    event.preventDefault(); // 기본 폼 제출 동작 막기
 	
 	    const row = $(this).closest('tr'); // 해당 행

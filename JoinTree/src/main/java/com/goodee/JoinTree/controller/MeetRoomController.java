@@ -131,7 +131,7 @@ public class MeetRoomController {
     	Map<String, Object> paramMap = new HashMap<>();
     	paramMap.put("roomName", roomName);
         List<MeetingRoom> searchResults = meetRoomService.searchMeetRoom(paramMap);
-        log.debug(AN+"searchResults: "+paramMap+RE);
+        log.debug(AN+"회의실 이름 searchResults: "+paramMap+RE);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
     
