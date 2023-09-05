@@ -25,7 +25,7 @@ public class DocumentRestController {
 	private DocumentService documentService;
 	
 	// 검색별 문서 리스트 조회
-	@GetMapping("/getDocumentList")
+	@GetMapping("/document/getDocumentList")
 	public Map<String, Object> getDocumentList(HttpSession session,
 											   @RequestParam Map<String, Object> docMap) {
 		
@@ -55,7 +55,7 @@ public class DocumentRestController {
 	}
 	
 	// 결재문서 상세 조회
-	@GetMapping("/getDocumentOne")
+	@GetMapping("/document/getDocumentOne")
 	public Map<String, Object> getDocumentOne(HttpSession session,
 											  @RequestParam int docNo, @RequestParam String docCode){
 		

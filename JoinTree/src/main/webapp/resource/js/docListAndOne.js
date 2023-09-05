@@ -67,7 +67,7 @@
 		
 		// 데이터 조회
 		$.ajax({
-			url: '/JoinTree/getDocumentList',
+			url: '/JoinTree/document/getDocumentList',
 			type: 'GET',
 			data: {
 				listId: $('#listId').val(), // 문서함 id
@@ -142,7 +142,7 @@
 	    return new Promise((resolve, reject) => {
 	        // 상세 정보 가져오기
 	        $.ajax({
-	            url: '/JoinTree/getDocumentOne',
+	            url: '/JoinTree/document/getDocumentOne',
 	            type: 'GET',
 	            data: {
 	                docNo: documentNo,

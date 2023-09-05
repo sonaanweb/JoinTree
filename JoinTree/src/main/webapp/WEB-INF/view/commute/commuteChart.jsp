@@ -79,7 +79,7 @@
 			
 			// 입사년도 조회
 			$.ajax({
-				url: '/JoinTree/getEmpHireDate',
+				url: '/JoinTree/commute/getEmpHireDate',
 				type: 'GET',
 				success: function(data){
 					console.log('commuteChartEmpHiredate : '+data);
@@ -142,7 +142,7 @@
 		function monthWorkTimeDataUpdate(year){
 			
 			$.ajax({
-				url: '/JoinTree/getMonthWorkTimeData',
+				url: '/JoinTree/commute/getMonthWorkTimeData',
 				data: {
 					year: year
 				},
@@ -232,7 +232,7 @@
 		function weekWorkTimeDataUpdate(year, month){
 			
 			$.ajax({
-				url: '/JoinTree/getWeekWorkTimeData',
+				url: '/JoinTree/commute/getWeekWorkTimeData',
 				data: {
 					year: year,
 					month: month

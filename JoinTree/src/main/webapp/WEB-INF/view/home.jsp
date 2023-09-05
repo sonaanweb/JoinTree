@@ -100,7 +100,7 @@
 			function selectCommuteByDate(){
 		    	$.ajax({
     		    	type:'GET',
-    		    	url: '/JoinTree/getCommuteTime',
+    		    	url: '/JoinTree/commute/getCommuteTime',
     		    	success: function(data){
     		    		
     		    		if(data){
@@ -144,7 +144,7 @@
 	            if(confirm(confirmMsg)){
 	            	$.ajax({
 		            	type: 'post',
-		            	url: '/JoinTree/saveCommuteTime',
+		            	url: '/JoinTree/commute/saveCommuteTime',
 		            	data:{
 		            		time: currentTime,
 		            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근

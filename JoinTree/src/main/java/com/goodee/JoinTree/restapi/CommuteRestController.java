@@ -29,7 +29,7 @@ public class CommuteRestController {
 	private CommuteService commuteService;
 	
 	// 출퇴근 시간 등록
-	@PostMapping("/saveCommuteTime")
+	@PostMapping("/commute/saveCommuteTime")
 	public int saveCommuteTime(HttpSession session,
 							   @RequestParam String time, @RequestParam String type) {
 		
@@ -75,7 +75,7 @@ public class CommuteRestController {
 	}
 	
 	// 출퇴근 시간 조회
-	@GetMapping("/getCommuteTime")
+	@GetMapping("/commute/getCommuteTime")
 	public Commute getCommuteData(HttpSession session) {
 		
 		// 세션에서 사번 가져오기
@@ -96,7 +96,7 @@ public class CommuteRestController {
 	}
 	
 	// 사원별 입사일 조회
-	@GetMapping("/getEmpHireDate")
+	@GetMapping("/commute/getEmpHireDate")
 	public EmpInfo getEmpHireDate(HttpSession session) {
 		
 		// 세션에서 사번 가져오기
@@ -117,7 +117,7 @@ public class CommuteRestController {
 	}
 	
 	// 월 별 근로시간 통계 조회
-	@GetMapping("/getMonthWorkTimeData")
+	@GetMapping("/commute/getMonthWorkTimeData")
 	public List<Map<String, Object>> getMonthWorkTimeData(HttpSession session,
 														  @RequestParam String year){
 		log.debug(year+"<-- CommuteRestController year");
@@ -145,7 +145,7 @@ public class CommuteRestController {
 	}
 	
 	// 주 별 근로시간 통계 조회
-	@GetMapping("/getWeekWorkTimeData")
+	@GetMapping("/commute/getWeekWorkTimeData")
 	public List<Map<String, Object>> getWeekWorkTimeData(HttpSession session,
 														  @RequestParam String year, @RequestParam String month){
 		log.debug(year+"<-- CommuteRestController year");
