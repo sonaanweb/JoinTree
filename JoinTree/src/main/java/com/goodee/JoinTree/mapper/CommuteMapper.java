@@ -24,7 +24,7 @@ public interface CommuteMapper {
 	int currentCommuteCnt(Map<String, Object> currentOnTimeMap);
 	
 	// 사원별 월 출퇴근 시간 조회
-	List<Commute> getCommuteTimeList(Map<String, Object> commuteTimeListMap);
+	List<Map<String, Object>> getCommuteTimeList(Map<String, Object> commuteTimeListMap);
 	
 	// 사원별 입사일 조회
 	EmpInfo getEmpHireDate(int empNo);

@@ -1,5 +1,6 @@
 package com.goodee.JoinTree.restapi;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -171,6 +173,70 @@ public class CommuteRestController {
 		List<Map<String, Object>> weekWorkTimeDataMapResult = commuteService.getWeekWorkTimeData(weekWorkTimeDataMap);
 		
 		return weekWorkTimeDataMapResult;
+	}
+	
+	// 월 별 출퇴근 목록 조회
+	@GetMapping("/commute/getCommuteList")
+	public Map<String, Object> commuteList(HttpSession session, 
+			  @RequestParam(required = false, name = "targetYear") Integer targetYear,
+			  @RequestParam(required = false, name = "targetMonth") Integer targetMonth) {
+
+		log.debug(targetYear+"<-- CommuteRestController targetYear");
+		log.debug(targetMonth+"<-- CommuteRestController targetMonth");
+		
+		// 세션에서 사번 가져오기
+		AccountList loginAccount = (AccountList)session.getAttribute("loginAccount");
+		
+		// 기본값 설정
+		int empNo = 0; // 사번
+		
+		if(loginAccount != null) {
+		
+		empNo = loginAccount.getEmpNo();
+		}
+		
+		// commuteTimeList
+		Map<String, Object> commuteTimeListMap = commuteService.getCommuteTimeList(empNo, targetYear, targetMonth);
+		log.debug(commuteTimeListMap+"<-- CommuteController commuteTimeListMap");
+		
+		// 사원별 입사일 조회
+		EmpInfo empInfo = commuteService.getEmpHireDate(empNo);
+		String empHireDateStr = (String)empInfo.getEmpHireDate();
+		log.debug(empHireDateStr+"<-- CommuteController empHireDateStr");
+		
+		// empHireDate를 LocalDate로 변환
+		LocalDate empHireDate = LocalDate.parse(empHireDateStr);
+		log.debug(empHireDate+"<-- CommuteController empHireDate");
+		
+		// 입사일 년월 추출
+		int hireYear = empHireDate.getYear();
+		int hireMonth = empHireDate.getMonthValue();
+		log.debug(hireYear+"<-- CommuteController hireYear");
+		log.debug(hireMonth+"<-- CommuteController hireMonth");
+		
+		// 현재 날짜
+		LocalDate currentDate = LocalDate.now();
+		
+		// 현재 날자 년월 추출
+		int currentYear = currentDate.getYear();
+		int currentMonth = currentDate.getMonthValue();
+		
+		// 반환 값 Map에 저장
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("targetYear", commuteTimeListMap.get("targetYear")); // 선택한 년
+		resultMap.put("targetMonth", commuteTimeListMap.get("targetMonth")); // 선택한 월
+		resultMap.put("daysInMonth", commuteTimeListMap.get("daysInMonth")); // 해당 월의 마지막 일
+		resultMap.put("daysOfWeek", commuteTimeListMap.get("daysOfWeek")); // 요일 배열
+		resultMap.put("firstDayOfWeek", commuteTimeListMap.get("firstDayOfWeek")); // 해당 월의 1일의 요일
+		resultMap.put("commuteTimeList", commuteTimeListMap.get("commuteTimeList")); // 해당 월의 출퇴근 리스트
+		resultMap.put("hireYear", hireYear); // 입사 년도
+		resultMap.put("hireMonth", hireMonth); // 입사 월
+		resultMap.put("currentYear", currentYear); // 현재 년도
+		resultMap.put("currentMonth", currentMonth); // 현재 월
+		
+		log.debug(resultMap +"<-- CommuteRestController resultMap");
+		
+		return resultMap;
 	}
 	
 }

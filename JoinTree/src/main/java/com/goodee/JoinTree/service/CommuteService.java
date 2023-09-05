@@ -138,7 +138,7 @@ public class CommuteService {
         commuteTimeListMap.put("targetYear", targetYear);
         commuteTimeListMap.put("targetMonth", targetMonth+1);
         
-        List<Commute> commuteTimeList = commuteMapper.getCommuteTimeList(commuteTimeListMap);
+        List<Map<String, Object>> commuteTimeList = commuteMapper.getCommuteTimeList(commuteTimeListMap);
         
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("targetYear", targetYear);
