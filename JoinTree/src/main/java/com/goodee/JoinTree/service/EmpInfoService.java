@@ -72,7 +72,7 @@ public class EmpInfoService {
 	    String add3 = (String) empInfo.get("add3");
       
 	    // 주소 합쳐서 저장
-        String empAddress = String.join("-", zip, add1, add2, add3);
+        String empAddress = String.join("/", zip, add1, add2, add3);
         log.debug(CYAN + empAddress + " <-- empAddress(EmpInfoService-modifyEmp)" + RESET);
       
         // 연락처
@@ -105,7 +105,7 @@ public class EmpInfoService {
 	}
 	
 	// 나의 이미지 추가
-	public int uploadEmpImg(int empNo, MultipartFile newImg, String path) {
+	public String uploadEmpImg(int empNo, MultipartFile newImg, String path) {
 		String originFilename = newImg.getOriginalFilename();
 		String ext = originFilename.substring(originFilename.lastIndexOf("."));
 		String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
@@ -137,7 +137,8 @@ public class EmpInfoService {
 			}
 		}
 		
-		return row; // 컨트롤러에서 최종 2 출력 시 DB, 로컬에 이미지 저장 완료 
+		/// return row; // 컨트롤러에서 최종 2 출력 시 DB, 로컬에 이미지 저장 완료 
+		return newFilename;
 	}
 	
 	// 나의 서명(이미지) 추가
