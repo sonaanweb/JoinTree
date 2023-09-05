@@ -64,7 +64,7 @@ public class CommunityRestController {
 	 		
 			// 페이지 블럭
 			int currentBlock = 0; // 현재 페이지 블럭 (currenetPage / pageLength)
-			int pageLength = 10; // 현재 페이지 블럭에 들어갈 페이지 수 (1~10/다음)
+			int pageLength = 10; // 현재 페이지 블럭에 들어갈 페이지 수 (1~10 / 다음)
 			if (currentPage % pageLength == 0) {
 				currentBlock = currentPage / pageLength;
 			} else {
@@ -77,7 +77,6 @@ public class CommunityRestController {
 			if (endPage > lastPage) {
 				endPage = lastPage;
 			}
-			
 			
 			// JSON 데이터에 startPage와 lastPage 값을 추가
 		    resultMap.put("startPage", startPage); // 블럭(페이징) 버튼 시작 페이지 정보 추가

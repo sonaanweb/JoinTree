@@ -41,5 +41,4 @@
 		DELETE FROM emp_info_img 
 		WHERE emp_no = #{empNo}
 	</delete>
-
 </mapper>
