@@ -36,7 +36,7 @@
 	            AND (b.board_title LIKE CONCAT('%', #{searchText}, '%') OR b.board_content LIKE CONCAT('%', #{searchText}, '%'))
 	        </when>
 	    </choose>
-	    ORDER BY b.createdate DESC
+	    ORDER BY b.board_no DESC
 	    LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
@@ -56,22 +56,7 @@
 	        </when>
 	    </choose>
 	</select>
-	
-	
-<!-- 	 게시판 게시글 리스트 
-	<select id="selectCommListByPage" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Board">
-		SELECT
-            b.board_no boardNo, b.emp_no empNo, b.board_category boardCategory, 
-            b.board_title boardTitle, b.board_content boardContent, b.board_pinned boardPinned, 
-            b.board_count boardCount, b.createdate, b.updatedate, b.create_id createId, b.update_id updateId, 
-            ei.emp_name empName
-        FROM board b INNER JOIN emp_info ei
-        ON b.emp_no = ei.emp_no
-        WHERE b.board_category = #{category}
-        ORDER BY b.createdate DESC
-		LIMIT #{beginRow}, #{rowPerPage}
-	</select> -->
-	
+		
 	<!-- 게시판별 행 개수  -->
 	<!-- boardCategory 부분 나중에 확인  -->
 	<select id="selectCommCnt">
@@ -86,70 +71,21 @@
 		WHERE board_no = #{boardNo}
 	</update>
 
-	<!-- 검색별 게시글 목록 조회 -->
-<!-- 	<select id="searchCommListByPage" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT * FROM board
-		<where>
-			<if test="boardCategory == 'B0103'">
-				제목 검색 
-				<if test="searchOption == 'boardTitle' and searchText != null and searchText != ''">
-					board_title LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-				내용 검색 
-				<if test="searchOption == 'boardContent' and searchText != null and searchText != ''">
-					board_content LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-			</if>
-			<if test="boardCategory == 'B0104'">
-				제목 검색 
-				<if test="searchOption == 'boardTitle' and searchText != null and searchText != ''">
-					board_title LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-				내용 검색 
-				<if test="searchOption == 'boardContent' and searchText != null and searchText != ''">
-					board_content LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-			</if>
-			<if test="boardCategory == 'B0105'">
-				제목 검색 
-				<if test="searchOption == 'boardTitle' and searchText != null and searchText != ''">
-					board_title LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-				내용 검색 
-				<if test="searchOption == 'boardContent' and searchText != null and searchText != ''">
-					board_content LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-			</if>
-			<if test="boardCategory == 'B0106'">
-				제목 검색 
-				<if test="searchOption == 'boardTitle' and searchText != null and searchText != ''">
-					board_title LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-				내용 검색 
-				<if test="searchOption == 'boardContent' and searchText != null and searchText != ''">
-					board_content LIKE CONCAT('%', #{searchText}, '%')
-				</if>
-			</if>
-		</where>
-		ORDER BY board_no DESC
-		LIMIT #{beginRow}, #{rowPerPage}
-	
-	</select> -->
-		<select id="searchCommListByPage" parameterType="java.util.Map" resultType="java.util.Map">
-		    SELECT * FROM board
-		    <where>
-		        <if test="(boardCategory == 'B0103' or boardCategory == 'B0104' or boardCategory == 'B0105' or boardCategory == 'B0106') and
-		                    (searchOption == 'boardTitle' or searchOption == 'boardContent') and
-		                    (searchText != null and searchText != '')">
-		            <!-- 제목 검색 및 내용 검색  -->
-		            <foreach item="category" collection="categories" separator="or">
-		                (boardCategory = #{category} and ${searchOption} LIKE CONCAT('%', #{searchText}, '%'))
-		            </foreach>
-		        </if>
-		    </where>
-		    ORDER BY board_no DESC
-		    LIMIT #{beginRow}, #{rowPerPage}
-		</select>
+	<select id="searchCommListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+	    SELECT * FROM board
+	    <where>
+	        <if test="(boardCategory == 'B0103' or boardCategory == 'B0104' or boardCategory == 'B0105' or boardCategory == 'B0106') and
+	                    (searchOption == 'boardTitle' or searchOption == 'boardContent') and
+	                    (searchText != null and searchText != '')">
+	            <!-- 제목 검색 및 내용 검색  -->
+	            <foreach item="category" collection="categories" separator="or">
+	                (boardCategory = #{category} and ${searchOption} LIKE CONCAT('%', #{searchText}, '%'))
+	            </foreach>
+	        </if>
+	    </where>
+	    ORDER BY board_no DESC
+	    LIMIT #{beginRow}, #{rowPerPage}
+	</select>
 	
 	<!-- 검색 조건별 행의 수 -->
 	<select id="searchCommCnt" resultType="int" parameterType="java.util.Map">
@@ -261,5 +197,4 @@
 		FROM board
 		WHERE board_no = #{boardNo}
 	</select>
-
 </mapper>
