@@ -74,7 +74,7 @@
 	    FROM commute c
 	    LEFT OUTER JOIN leave_recode l ON c.emp_no = l.emp_no 
 		AND c.emp_on_off_date BETWEEN l.leave_start_date AND l.leave_end_date
-		INNER JOIN common_code cl ON l.leave_type = cl.code
+		LEFT OUTER JOIN common_code cl ON l.leave_type = cl.code
 	    WHERE 
 	        c.emp_no = #{empNo} 
 	    AND YEAR(c.emp_on_off_date) = #{targetYear}
