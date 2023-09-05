@@ -34,18 +34,18 @@
 				
 				<td class="blank"></td>
 				<td class="sign"><span class="writer"></span>&nbsp;<span class="position"></span></td>
-				<td class="sign"><span id="signer1Name"></span>&nbsp;<span id="signer1Position"></span></td>
-				<td class="sign"><span id="signer2Name"></span>&nbsp;<span id="signer2Position"></span></td>
+				<td class="sign1"><span id="signer1Name"></span>&nbsp;<span id="signer1Position"></span></td>
+				<td class="sign2 hidden"><span id="signer2Name"></span>&nbsp;<span id="signer2Position"></span></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp1" src="" style="width: 100px; height: 70px;">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign1" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp2" src="" style="width: 100px; height: 70px;">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign2 hidden" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp3" src="" style="width: 100px; height: 70px;">
 				</td>
 			</tr>

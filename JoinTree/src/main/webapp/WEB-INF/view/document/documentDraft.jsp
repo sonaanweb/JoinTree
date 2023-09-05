@@ -14,7 +14,8 @@
 	<link rel="stylesheet" href="/JoinTree/resource/screen.css">
 <script>
 	$(document).ready(function() {
-		 
+		const loginEmpNo = ${loginAccount.empNo};
+		console.log("loginEmpNo:",loginEmpNo);
 		// empTree 요소에 대한 데이터를 가져옴 -> 각 부서에 맞는 사원들을 가져옴
 		$(".empTree").each(function() {
 			const dept = $(this).data("dept"); // dept데이터는 수정될 일이 없기에 const로 저장
@@ -59,8 +60,8 @@
 
 		// 트리구조의 결재선, 참조자, 수신팀 처리
 		const signerSelectedEmps = []; // 선택한 결재자 정보를 저장하는 배열
-    	const referSelectedEmps = []; // 선택한 참조자의 정보를 저장하는 배열
-    	const receiverSelectedEmps = []; // 선택한 수신팀의 정보를 저장하는 배열
+		const referSelectedEmps = []; // 선택한 참조자의 정보를 저장하는 배열
+		const receiverSelectedEmps = []; // 선택한 수신팀의 정보를 저장하는 배열
 		
 			// 결재선 모달에서 선택한 사원 처리
 			$("#signerModal").on("click", ".file.code", function() {
@@ -77,6 +78,10 @@
 					alert("이미 선택한 번호입니다.");
 				} else {
 					alert("최대 두 명까지만 선택 가능합니다.");
+				}
+				if(selectedEmpNo === loginEmpNo) {
+					alert("본인은 선택할 수 없습니다.");
+					return;
 				}
 				// 업데이트
 				updateSelectEmp(signerSelectedEmps, $("#selectSigner"),true);
@@ -122,17 +127,20 @@
 			});
 			
 			// 선택한 결재자 삭제
-				$("#deleteSignerBtn").on("click", function() {
+			$("#deleteSignerBtn").on("click", function() {
 					const checkedCheckboxes = $(".empCheckbox:checked");
 					checkedCheckboxes.each(function() {
 						const selectedEmp = $(this).data("no");
 						const index = signerSelectedEmps.indexOf(selectedEmp);
 						if (index !== -1) {
 							signerSelectedEmps.splice(index, 1); // 선택한 번호 삭제
+							$(".sign1").val('');
 						}
 					});
+					
 				// 업데이트
 				updateSelectEmp(signerSelectedEmps, $("#selectSigner"), true);
+				updateSignerFields();
 			});
 	
 			// 위로 버튼을 클릭하면 선택한 사원을 위로 이동하는 기능 추가
@@ -145,6 +153,7 @@
 					signerSelectedEmps[selectedIndex - 1] = temp;
 					// 업데이트
 					updateSelectEmp(signerSelectedEmps, $("#selectSigner"), true);
+					updateSignerFields();
 				}
 			});
 	
@@ -163,21 +172,37 @@
 			
 			// inputSignerBtn 버튼을 클릭하면 결재자의 값을 기안서 - 결재자1(signer1), 결재자2(signer2) 영역에 추가
 			$("#inputSignerBtn").on("click", function() {
+				updateSignerFields();
+			});
+			
+			function updateSignerFields() {
 				const selectedSigner1 = signerSelectedEmps[0]; // 선택한 결재자 정보 가져오기
 				const selectedSigner2 = signerSelectedEmps[1];
 				
-				const maskedSigner1 = selectedSigner1.substring(0, selectedSigner1.indexOf('('));
+				const maskedSigner1 = selectedSigner1 ? selectedSigner1.substring(0, selectedSigner1.indexOf('(')) : "";
 				let maskedSigner2 = "";
-
+				
+				// 결재자가 1명
+				if (selectedSigner1) {
+					$("#signer1").val(maskedSigner1);
+					$(".sign1").removeClass("hidden");
+				} else {
+					// 선택한 결재자1가 없을 때, 해당 값을 초기화 및 숨김
+					$("#signer1").val("");
+					$(".sign1").addClass("hidden");
+				}
+				
+				// 결재자가 2명
 				if (selectedSigner2) {
 					maskedSigner2 = selectedSigner2.substring(0, selectedSigner2.indexOf('('));
+					$("#signer2").val(maskedSigner2);
+					$(".sign2").removeClass("hidden");
+				} else {
+					// 선택한 결재자2가 없을 때, 해당 값을 초기화 및 숨김
+					$("#signer2").val("");
+					$(".sign2").addClass("hidden");
 				}
-
-				$("#signer1").val(maskedSigner1); // .text() 메서드를 사용하여 내용 변경 -> td에 넣어야 함
-			    $("#signer2").val(maskedSigner2); // .text() 메서드를 사용하여 내용 변경
-					//console.log($("#signer1").val());
-					//console.log($("#signer2").val());
-			});
+			}
 			
 			// inputReferBtn 버튼을 클릭하면 참조자 값을 기안서 - 참조자(reference) 영역에 추가
 			$("#inputReferBtn").on("click", function() {
@@ -190,9 +215,9 @@
 			
 			// inputReceiverBtn 버튼을 클릭하면 수신팀의 값을 기안서 - 수신팀(receiverTeam) 영역에 추가
 			$("#inputReceiverBtn").on("click", function() {
-			    const selectedReceiverTeam = receiverSelectedEmps; // 선택한 수신팀 정보 가져오기
-			    
-			    $("#receiverTeam").val(selectedReceiverTeam);
+				const selectedReceiverTeam = receiverSelectedEmps; // 선택한 수신팀 정보 가져오기
+				
+				$("#receiverTeam").val(selectedReceiverTeam);
 					//console.log($("#receiverTeam").val());
 			});
 			
@@ -363,7 +388,6 @@
 				}
 			}
 			
-			
 			// 기본 기안서, 퇴직기안서 값 넘기기
 			$.ajax({
 				type: 'POST',
@@ -461,6 +485,7 @@
 						}
 					});
 			}
+			
 			// 결재자 정보를 결재자 테이블에 넣어주기
 			function submitDocumentSigner(docNo, empSignerNo, empSignerLevel, createId, updateId) {
 				$.ajax({
@@ -531,7 +556,6 @@
 						docReshufflePosition: docReshufflePosition,
 						createId: createId,
 						updateId: updateId
-						
 					},
 					success: function(response) {
 						if(response === 'success'){

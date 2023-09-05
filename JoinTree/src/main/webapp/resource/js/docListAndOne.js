@@ -175,7 +175,10 @@
 					let signer1Position = data.signer1Position; // 결재자1 직급
 					let signer2Name = data.signer2Name; // 결재자2 사원명
 					let signer2No = data.signer2No; // 결재자2 사번
+					console.log("signer2No",signer2No);
+					
 					let signer2Position = data.signer2Position; // 결재자2 직급
+					console.log("signer2Position",signer2Position);
 					
 					// 휴가신청서
 					let leaveType = data.leaveType; // 연차구분
@@ -207,7 +210,10 @@
 					$('#signer1Position').text(signer1Position); // 결재자1 직급
 					$('#signer2Name').text(signer2Name); // 결재자2 사원명
 					$('#signer2Position').text(signer2Position); // 결재자2 직급
-					
+					// 결재자2가 없을 경우 해당 칸 숨기기
+					if(signer2Name && signer2Position && signer2No) {
+						$('.sign2').removeClass("hidden");
+					}
 					// 서명 경로 설정(setDocStamp : 결재자 서명 경로 설정 함수)
 					setDocStamp('#docStamp1', docStamp1); // 기안자 서명 경로 설정
 					setDocStamp('#docStamp2', docStamp2); // 결재자2 서명 경로 설정

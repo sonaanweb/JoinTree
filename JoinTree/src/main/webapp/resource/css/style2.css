@@ -23,6 +23,9 @@
 .margin-left10 {
 	margin-left: 10px;
 }
+.margin-top20 {
+	margin-top: 20px;
+}
 .margin-left30 {
 	margin-left: 30px;
 }
@@ -33,7 +36,7 @@
 	float: left;
 }
 .hidden {
-    display: none;
+	display: none;
 }
 /* 스위치 스타일 */
 .switch {

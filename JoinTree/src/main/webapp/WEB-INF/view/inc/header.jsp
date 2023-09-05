@@ -151,17 +151,6 @@
 	</div>
  		<!-- 위 - 메뉴바 -->
 	<div class="navbar-menu-wrapper d-flex align-items-stretch">
-		<!-- 위 - 검색 -->
-		<div class="search-field d-none d-md-block">
-			<form class="d-flex align-items-center h-100" action="#">
-				<div class="input-group">
-					<div class="input-group-prepend bg-transparent">
-						<i class="input-group-text border-0 mdi mdi-magnify"></i>                
-					</div>
-					<input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
-				</div>
-			</form>
-		</div>
  			<!-- 아이콘들 -->
 		<ul class="navbar-nav navbar-nav-right">
 			<!-- 위 - 세션시간 -->
@@ -179,78 +168,6 @@
 				</a>
 			</li>
 			
-			<!-- 위 - 쪽지 -->
-			<li class="nav-item dropdown">
-				<a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-					<i class="mdi mdi-message-outline"></i>
-					<span class="count-symbol bg-warning"></span>
-				</a>
-		  		<!-- 쪽지 내용 -->
-				<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-					<h6 class="p-3 mb-0">Messages</h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item preview-item">
-						<div class="preview-thumbnail">
-							<img src="/JoinTree/empImg/tiger.png" alt="image" class="profile-pic">
-						</div>
-						<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-							<h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
-							<p class="text-gray mb-0">
-							1 Minutes ago
-							</p>
-						</div>
-					</a>
-					<div class="dropdown-divider"></div>
-						<h6 class="p-3 mb-0 text-center">1 new messages</h6>
-					</div>
-			</li><!-- 위 - 쪽지 끝 -->
-			
-			<!-- 위 - 알림 -->
-			<li class="nav-item dropdown">
-				<a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-					<i class="mdi mdi-bell-outline"></i>
-					<span class="count-symbol bg-danger"></span>
-				</a>
-			 	 <!-- 알림 내용 -->
-				<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-					<h6 class="p-3 mb-0">Notifications</h6>
-						<!-- 드롭다운 1번 -->
-						<div class="dropdown-divider"></div>
-							<a class="dropdown-item preview-item">
-								<div class="preview-thumbnail">
-									<div class="preview-icon bg-success">
-										<i class="mdi mdi-calendar"></i>
-									</div>
-								</div>
-								<!-- 내용 -->
-								<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-									<h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-									<p class="text-gray ellipsis mb-0">
-										Just a reminder that you have an event today
-									</p>
-								</div>
-							</a>
-						<!-- 드롭다운 2번 -->
-						<div class="dropdown-divider"></div>
-							<a class="dropdown-item preview-item">
-								<div class="preview-thumbnail">
-									<div class="preview-icon bg-warning">
-										<i class="mdi mdi-settings"></i>
-									</div>
-								</div>
-								<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-									<h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-									<p class="text-gray ellipsis mb-0">
-										Update dashboard
-									</p>
-								</div>
-							</a>
-						<!-- 드롭다운 3번 -->
-						<div class="dropdown-divider"></div>
-						<h6 class="p-3 mb-0 text-center">See all notifications</h6>
-				</div>
-			</li><!-- 위 - 알림 끝 -->
-			
 			<!-- 위 - 로그아웃 -->
 			<li class="nav-item nav-logout d-none d-lg-block">
 				<a class="nav-link" href="/JoinTree/logout">
@@ -265,7 +182,6 @@
 	</div><!-- 위 - 메뉴바 끝 -->
 </nav><!-- 상단바 끝 -->		
 
-	<!-- 상단에 추가할 부분이 있으면 여기 아래로 작성해주세요 -->
 		<!-- 모달 -->
 		<div id="extensionModal" class="modal">
 	 		<div class="modal-content">

@@ -73,8 +73,8 @@
 					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
 					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
-				<td class="sign"><input type="text" id="signer1" readonly="readonly"></td>
-				<td class="sign"><input type="text" id="signer2" readonly="readonly"></td>
+				<td class="sign1 hidden"><input type="text" id="signer1" readonly="readonly"></td>
+				<td class="sign2 hidden"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
@@ -82,10 +82,10 @@
 					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
 					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign1 hidden" rowspan="3" style="width: 100px; height: 100px;">
 					<input type="hidden" id="docStamp2" name="docStamp2">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign2 hidden" rowspan="3" style="width: 100px; height: 100px;">
 					<input type="hidden" id="docStamp3" name="docStamp3">
 				</td>
 			</tr>
