@@ -12,11 +12,15 @@
 		text-decoration: none;
 	}
 	
+	a:hover{
+		color:#003399;
+		text-decoration: none; 
+	}
+	
 	a.text-danger.font-weight-bold:hover{
 		color:#003399 !important;
 		text-decoration: none;
-	}
-	
+	}	
 </style>
 
 	<!-- 게시글 검색 폼 -->
@@ -43,21 +47,17 @@
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<div class="row">
-					<!-- 게시판 카테고리명 -->
-					<div class="col-lg-12">
-						<h3 class="font-weight-bold">${boardCategoryName}</h3>
-					</div>
-
-					<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
-					<c:choose>
-					    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
-					        <div class="col-lg-12 text-right">
-					        	<a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}" class="btn btn-success btn-sm">글작성</a>
-					        </div>
-					    </c:when>
-					</c:choose>
-				</div>
+				<!-- 게시판 카테고리명 -->
+				<h3 class="font-weight-bold">${boardCategoryName}</h3>
+				<hr>
+				<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
+				<c:choose>
+				    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
+				        <div class="text-right">
+				        	<a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}" class="btn btn-success btn-sm">글작성</a>
+				        </div>
+				    </c:when>
+				</c:choose>
 				<br>
 				<table id="boardListTable" class="table table-bordered">
 					<thead id="pinnedList">
@@ -164,6 +164,17 @@
 		        let link = $('<a class="text-danger font-weight-bold">')
 		        .attr('href', '/JoinTree/board/boardOne?boardNo=' + pinned.boardNo)
 		        .text('[필독]'+' '+pinned.boardTitle);
+		     	
+		     	// 첨부파일 아이콘 추가(pinned.boardFileNo 가 null이 아닌 경우)
+				if(pinned.boardFileNo != null){
+					let attachmentIcon = $('<i>')
+					.addClass('mdi mdi-attachment')
+					.css('margin-left', '5px');
+					
+					// <a> 태그에 아이콘 추가
+					link.append(attachmentIcon);
+		        }
+		     
 		        // <td> 에 <a> 링크 추가
 		        let boardTitleTd = $('<td width="70%">').append(link);
 		        row.append(boardTitleTd); // 제목
@@ -195,6 +206,17 @@
 		        let link = $('<a>')
 		        .attr('href', '/JoinTree/board/boardOne?boardNo=' + notice.boardNo)
 		        .text(notice.boardTitle);
+		        
+		        // 첨부파일 아이콘 추가(notice.boardFileNo 가 null이 아닌 경우)
+				if(notice.boardFileNo != null){
+					let attachmentIcon = $('<i>')
+					.addClass('mdi mdi-attachment')
+					.css('margin-left', '5px');
+					
+					// <a> 태그에 아이콘 추가
+					link.append(attachmentIcon);
+		        }
+		        
 		        // <td> 에 <a> 링크 추가
 		        let boardTitleTd = $('<td width="70%">').append(link);
 		        row.append(boardTitleTd); // 제목

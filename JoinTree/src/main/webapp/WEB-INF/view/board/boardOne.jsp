@@ -22,7 +22,7 @@
 			<!-- 게시글 상세 -->
 			<div class="col-lg-12 stretch-card">
 				<div class="card">
-					<div class="card-body" style="height: 750px;">
+					<div class="card-body" id="contentDiv" style="height: 700px;">
 						<div>
 							<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;${board.boardTitle}</h3>
 						</div>
@@ -43,7 +43,7 @@
 							</div>	
 						</c:if>
 						<br>	
-						<div>
+						<div style="">
 							<span>${board.boardContent}</span>
 						</div>
 					</div>
@@ -78,7 +78,12 @@
 		        const newUrl = `${location.pathname}?${urlParams.toString()}`;
 		        history.replaceState({}, document.title, newUrl);
 			}
+			
+			// contentDiv의 게시글이 기본 높이 초과 시 div 높이 증가
+			let contentDiv = $('#contentDiv'); // contentDiv 선택
+	        contentDiv.css('height', contentDiv[0].scrollHeight + 'px');
 		});
+		
 	</script>
 	
 </html>

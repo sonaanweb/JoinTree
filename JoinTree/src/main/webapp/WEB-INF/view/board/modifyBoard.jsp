@@ -23,20 +23,18 @@
 							
 							<input type="hidden" name="boardNo" value="${board.boardNo}">
 							<div class="row">
-								<div class="col">
-									<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
+								<div class="col d-flex align-items-center">
+									<h3 class="">&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
 								</div>
-								<div class="col text-right">
-									<div class="d-flex justify-content-end align-items-center">
-										<div class="form-check form-check-success">
-											<label class="form-check-label">
-												<!-- 상단공지 체크박스 체크된 상태로 수정폼 호출 -->
-												<input type="checkbox" name="boardPinned" class="form-check-input" 
-												${board.boardPinned == 1 ? 'checked' : ''}> 게시판 상단고정 &nbsp;&nbsp;&nbsp;&nbsp;
-											</label>
-										</div>
-										<button type="button" id="modifyBoardBtn" class="btn btn-success btn-sm">수정</button>
+								<div class="col d-flex justify-content-end align-items-center">
+									<div class="form-check form-check-success">
+										<label class="form-check-label">
+											<!-- 상단공지 체크박스 체크된 상태로 수정폼 호출 -->
+											<input type="checkbox" name="boardPinned" class="form-check-input" 
+											${board.boardPinned == 1 ? 'checked' : ''}> 게시판 상단고정 &nbsp;&nbsp;&nbsp;&nbsp;
+										</label>
 									</div>
+									<button type="button" id="modifyBoardBtn" class="btn btn-success btn-sm">수정</button>
 								</div>
 							</div>
 							<hr>
