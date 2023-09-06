@@ -65,6 +65,7 @@ public class CommuteManageService {
 		searchAnnualLeaveListResult.put("endPage", endPage);
 		searchAnnualLeaveListResult.put("lastPage", lastPage);
 		searchAnnualLeaveListResult.put("pageLength", pageLength);
+		searchAnnualLeaveListResult.put("currentPage", currentPage);
 		
 		return searchAnnualLeaveListResult;
 	}
@@ -118,7 +119,8 @@ public class CommuteManageService {
 		searchLeaveRecodeListResult.put("endPage", endPage);
 		searchLeaveRecodeListResult.put("lastPage", lastPage);
 		searchLeaveRecodeListResult.put("pageLength", pageLength);
-				
+		searchLeaveRecodeListResult.put("currentPage", currentPage);
+		
 		return searchLeaveRecodeListResult;
 	}
 	
@@ -171,7 +173,7 @@ public class CommuteManageService {
 		searchCommuteFullListResult.put("endPage", endPage);
 		searchCommuteFullListResult.put("lastPage", lastPage);
 		searchCommuteFullListResult.put("pageLength", pageLength);
-		
+		searchCommuteFullListResult.put("currentPage", currentPage);
 		
 		return searchCommuteFullListResult;
 	}

@@ -47,10 +47,14 @@ public class EmpManageController {
 		List<CommonCode> activeCodeList = empManageService.activeCodeList();
 		log.debug(activeCodeList+"<-- EmpManageController activeCodeList");
 		
+		// 재직 사원 수 조회
+		int empCnt = empManageService.getEmpCnt();
+		log.debug(empCnt+"<-- EmpManageController empCnt");
 		// view 전달
 		model.addAttribute("deptCodeList", deptCodeList);
 		model.addAttribute("positionCodeList", positionCodeList);
 		model.addAttribute("activeCodeList", activeCodeList);
+		model.addAttribute("empCnt", empCnt);
 		
 		return "/empManage/selectEmpList";
 	}

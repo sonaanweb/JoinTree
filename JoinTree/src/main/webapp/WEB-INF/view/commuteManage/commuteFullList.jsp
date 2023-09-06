@@ -2,21 +2,28 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+<style>
+	.selected-page {
+	    font-weight: bold;
+	    background-color: #D4F4FA;
+	    pointer-events: none; /* 버튼 클릭 불가 */
+	}	
+</style>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	<div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-			<h3 class="col-lg-12 grid-margin">출퇴근 관리</h3>
-			
 			<!-- 검색별 조회 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
+						<h3 class="font-weight-bold">출퇴근 관리</h3>
+						<hr>
 						<!-- 출퇴근 목록 검색 폼 -->
 						<form id="searchAnnualLeaveListForm">
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
@@ -47,7 +54,7 @@
 									</div>
 								</div>
 							</div>	
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label for="searchYear" class="col-form-label"><strong>연도</strong></label>
@@ -152,7 +159,14 @@
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
 				let pageButton = $('<button type="button" class="page-link">').text(i);
-		        pageButton.click(function(){
+		        
+				// 현재 페이지일 때 'selected-page' 클래스 추가
+		        if (page === data.currentPage) {
+		        	pageButton.addClass('selected-page');
+   					pageButton.prop('disabled', true); // 현재 페이지 버튼 비활성화
+		        } 
+				
+				pageButton.click(function(){
 		        	goToPage(page);
 		        });
 		        pagination.append(pageButton);

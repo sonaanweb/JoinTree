@@ -47,6 +47,14 @@
 		WHERE dept = #{dept} AND YEAR(emp_hire_date) = #{currentYear}
 	</select>
 	
+	<!-- 재직 사원 수 조회 -->
+	<select id="getEmpCnt">
+		SELECT 
+			COUNT(*) 
+		FROM account_list 
+		WHERE active != 'A0102'
+	</select>
+	
 	<!-- 사원 등록 -->
 	<insert id="addEmpInfo" parameterType="java.util.Map">
 		INSERT INTO emp_info (

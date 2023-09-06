@@ -2,6 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+<style>
+	.selected-page {
+	    font-weight: bold;
+	    background-color: #D4F4FA;
+	    pointer-events: none; /* 버튼 클릭 불가 */
+	}
+	.selectde-tr:hover {
+		cursor: pointer;
+		background-color: #F9F9F9;
+	}
+</style>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	<div class="container-fluid page-body-wrapper">
@@ -9,18 +20,20 @@
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
 			<!-- 사원등록 모달창 버튼 -->
-			<div class="col-lg-12 grid-margin text-right">
+			<div class="col-lg-12 text-right">
 				<button type="button" id="addEmpModalBtn" class="btn btn-dark" 
 						data-bs-toggle="modal" data-bs-target="#addEmpModal">사원등록</button>
 			</div>
-			
+			<br>
 			<!-- 검색별 조회 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
+						<h3 class="font-weight-bold">사원 수&nbsp;&#58;&nbsp; ${empCnt}명</h3>
+						<hr>
 						<!-- 사원 목록 검색 폼 -->
 						<form id="searchEmpListForm">
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
@@ -39,7 +52,7 @@
 								</div>
 								<div class="col-md-4">
 									<div class="form-group row">
-										<label for="searchStartEmpHireDate" class="col-form-label"><strong>입사일</strong>&nbsp;&nbsp;&nbsp;</label>
+										<label for="searchStartEmpHireDate" class="col-form-label" style="margin-right: 10px"><strong>입사일</strong></label>
 										<div class="col-sm-5">
 											<input type="date" id="searchStartEmpHireDate" name="startEmpHireDate" class="form-control"> 
 										</div>
@@ -50,7 +63,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label for="searchDept" class="col-form-label"><strong>부서</strong></label>
@@ -66,7 +79,7 @@
 								</div>
 								<div class="col-md-4">
 									<div class="form-group row">
-										<label for="searchPosition" class="col-form-label"><strong>직급</strong>&nbsp;&nbsp;&nbsp;</label>
+										<label for="searchPosition" class="col-form-label" style="margin-right: 15px"><strong>직급</strong></label>
 										<div class="col-sm-9">
 											<select id="searchPosition" name="position" class="form-control">
 												<option value="">선택하세요</option>
@@ -108,20 +121,19 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th>사번</th>
-									<th>사원명</th>
-									<th>입사일</th>
-									<th>부서</th>
-									<th>직급</th>
-									<th>재직상태</th>
+									<th class="font-weight-bold">사번</th>
+									<th class="font-weight-bold">사원명</th>
+									<th class="font-weight-bold">입사일</th>
+									<th class="font-weight-bold">부서</th>
+									<th class="font-weight-bold">직급</th>
+									<th class="font-weight-bold">재직상태</th>
 								</tr>
 							</thead>
 							<tbody id="empInfoList">
 							
 							</tbody>
 						</table>
-						
-						
+						<br>
 						<!-- 페이지 네비게이션 -->
 						<div id="pagination" class="paging center pagination">
 							
@@ -150,7 +162,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
 		
 		$(document).ready(function() {
@@ -380,7 +392,14 @@
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
 				let pageButton = $('<button type="button" class="page-link">').text(i);
-		        pageButton.click(function(){
+		        
+				// 현재 페이지일 때 'selected-page' 클래스 추가
+		        if (page === data.currentPage) {
+		        	pageButton.addClass('selected-page');
+   					pageButton.prop('disabled', true); // 현재 페이지 버튼 비활성화
+		        } 
+				
+				pageButton.click(function(){
 		        	goToPage(page);
 		        });
 		        pagination.append(pageButton);
@@ -409,7 +428,7 @@
 		    // data의 길이만큼 테이블 행을 추가
 		    for (let i = 0; i < empList.length; i++) {
 		        let emp = empList[i];
-		        let row = $('<tr>');
+		        let row = $('<tr class="selectde-tr">');
 		        row.append($('<td>').text(emp.empNo));
 		        row.append($('<td>').text(emp.empName));
 		        row.append($('<td>').text(emp.empHireDate));

@@ -51,6 +51,8 @@ public interface EmpManageMapper {
 	
 	// 사원 정보 수정
 	int modifyEmpInfo(Map<String, Object> modifyEmpOneMap);
+
+	int getEmpCnt(); // 재직 사원 수 조회
 	
 	
 	

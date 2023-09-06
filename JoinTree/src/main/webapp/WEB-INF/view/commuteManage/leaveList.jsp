@@ -2,24 +2,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+<style>
+	.selected-page {
+	    font-weight: bold;
+	    background-color: #D4F4FA;
+	    pointer-events: none; /* 버튼 클릭 불가 */
+	}	
+</style>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	<div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-			<h3 class="col-lg-12 grid-margin">연가 목록</h3>
-	
 			<!-- 검색별 조회 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
+						<h3 class="font-weight-bold">연가 관리</h3>
+						<hr>
 						<!-- 연가 목록 검색 폼 -->
 						<form id="searchAnnualLeaveListForm">
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
-										<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
+										<label for="searchEmpNo" class="col-form-label" style="margin-right: 25px"><strong>사번</strong></label>
 										<div class="col-sm-9">
 											<input type="text" id="searchEmpNo" name="empNo" class="form-control">
 										</div>
@@ -47,7 +54,7 @@
 									</div>
 								</div>
 							</div>	
-							<div class="form-row">
+							<div class="col form-row">
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label for="searchLeaveType" class="col-form-label"><strong>연가구분</strong></label>
@@ -63,7 +70,7 @@
 								</div>
 								<div class="col-md-4">
 									<div class="form-group row">
-										<label for="searchYear" class="col-form-label"><strong>연도</strong></label>
+										<label for="searchYear" class="col-form-label" style="margin-right: 15px"><strong>연도</strong></label>
 										<div class="col-sm-9">
 											<select id="searchYear" name="year" class="form-control">
 												<option value="">선택하세요</option>
@@ -74,7 +81,7 @@
 								</div>
 								<div class="col-md-4">
 									<div class="form-group row">
-										<label for="searchStartDate" class="col-form-label"><strong>조회일</strong></label>
+										<label for="searchStartDate" class="col-form-label" style="margin-right: 15px"><strong>조회일</strong></label>
 										<div class="col-sm-5">
 											<input type="date" id="searchStartDate" name="startDate" class="form-control">
 										</div>
@@ -102,14 +109,14 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th>사번</th>
-									<th>부서명</th>
-									<th>사원명</th>
-									<th>연가구분</th>
-									<th>시작일</th>
-									<th>종료일</th>
-									<th>휴가일수</th>
-									<th>상태</th>
+									<th class="font-weight-bold">사번</th>
+									<th class="font-weight-bold">부서명</th>
+									<th class="font-weight-bold">사원명</th>
+									<th class="font-weight-bold">연가구분</th>
+									<th class="font-weight-bold">시작일</th>
+									<th class="font-weight-bold">종료일</th>
+									<th class="font-weight-bold">휴가일수</th>
+									<th class="font-weight-bold">상태</th>
 								</tr>
 							</thead>
 							<tbody id="leaveRecodeList">
@@ -170,7 +177,14 @@
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
 				let pageButton = $('<button type="button" class="page-link">').text(i);
-		        pageButton.click(function(){
+		        
+				// 현재 페이지일 때 'selected-page' 클래스 추가
+		        if (page === data.currentPage) {
+		        	pageButton.addClass('selected-page');
+   					pageButton.prop('disabled', true); // 현재 페이지 버튼 비활성화
+		        } 
+				
+				pageButton.click(function(){
 		        	goToPage(page);
 		        });
 		        pagination.append(pageButton);

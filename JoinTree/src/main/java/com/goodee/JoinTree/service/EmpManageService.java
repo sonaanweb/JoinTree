@@ -222,6 +222,7 @@ public class EmpManageService {
 		searchEmpListResult.put("endPage", endPage);
 		searchEmpListResult.put("lastPage", lastPage);
 		searchEmpListResult.put("pageLength", pageLength);
+		searchEmpListResult.put("currentPage", currentPage);
 		
 		return searchEmpListResult;
 	}
@@ -334,6 +335,15 @@ public class EmpManageService {
 		modifyEmpOneResult.put("modifyEmpInfoResult", modifyEmpInfoResult);
 		log.debug(modifyEmpOneResult+"<-- EmpManageService modifyEmpOneResult");
 		return modifyEmpOneResult;
+	}
+	
+	// 재직 사원 수 조회
+	public int getEmpCnt() {
+		
+		int empCnt = empManageMapper.getEmpCnt();
+		log.debug(empCnt+"<-- EmpManageService empCnt");
+		
+		return empCnt;
 	}
 
 }
