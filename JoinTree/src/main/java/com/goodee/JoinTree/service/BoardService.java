@@ -136,6 +136,7 @@ public class BoardService {
 		getBoardListResult.put("endPage", endPage);
 		getBoardListResult.put("lastPage", lastPage);
 		getBoardListResult.put("pageLength", pageLength);
+		getBoardListResult.put("currentPage", currentPage);
 		
 		return getBoardListResult;
 	}

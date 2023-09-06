@@ -63,8 +63,6 @@
 								<br>
 								<span>(3MB 이하의 파일만 첨부 가능합니다)</span>
 							</div>				
-							<br>
-							
 						</form>
 					</div>
 				</div>

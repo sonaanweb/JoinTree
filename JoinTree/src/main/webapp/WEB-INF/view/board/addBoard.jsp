@@ -159,6 +159,7 @@
 			// 유효성 검사 후 등록
 			let addBoardUrl = '/JoinTree/board/addBoard';
 			$('#addBoardForm').attr('action', addBoardUrl);
+			alert('게시글이 등록되었습니다');
 			$('#addBoardForm').submit();
 		});	
 	</script>

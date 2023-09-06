@@ -177,7 +177,7 @@ public class BoardController {
 		int addBoardRow = boardService.addBoard(board, path);
 		log.debug(addBoardRow + "<-- BoardController addBoardRow");
 		
-		// 게시글 등록, 실패 msg
+		// 게시글 실패 msg
 		String msg = "";
 		
 		// addBoardRow 값의 따른 분기
@@ -196,15 +196,11 @@ public class BoardController {
 			
 		} else {
 			
-			// 사원등록 성공 시 msg
-			msg = "게시글 등록 성공"; 
-			msg = URLEncoder.encode(msg, "UTF-8");
-			
 			// 게시판 카테고리 별 경로 분기
 			if(board.getBoardCategory().equals("B0101")) {
-				return "redirect:/board/noticeList?msg="+msg;
+				return "redirect:/board/noticeList";
 			} else {
-				return "redirect:/board/libraryList?msg="+msg;
+				return "redirect:/board/libraryList";
 			}
 		}
 		

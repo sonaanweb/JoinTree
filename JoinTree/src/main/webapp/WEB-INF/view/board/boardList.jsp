@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+	.selected-page {
+	    font-weight: bold;
+	    background-color: #D4F4FA;
+	    pointer-events: none; /* 버튼 클릭 불가 */
+	}
 	
-	<!-- 게시판 카테고리명 -->
-	<h3 class="col-lg-12">${boardCategoryName}</h3>
-	
+	.selected-title:hover {
+		cursor: pointer;
+	}
+</style>
+
 	<!-- 게시글 검색 폼 -->
 	<div class="col-lg-12 text-right">
 		<form class="form-inline justify-content-end">
@@ -28,18 +36,24 @@
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
-				<c:choose>
-				    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
-				        <div class="text-right">
-				        	<a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}" class="btn btn-success btn-sm">글작성</a>
-				        </div>
-				    </c:when>
-				</c:choose>
+				<div class="row">
+					<!-- 게시판 카테고리명 -->
+					<div class="col-lg-12">
+						<h3 class="font-weight-bold">${boardCategoryName}</h3>
+					</div>
+					<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
+					<c:choose>
+					    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
+					        <div class="col-lg-12 text-right">
+					        	<a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}" class="btn btn-success btn-sm">글작성</a>
+					        </div>
+					    </c:when>
+					</c:choose>
+				</div>
 				<br>
 				<table id="boardListTable" class="table table-bordered">
 					<thead id="pinnedList">
-						<tr class="no-click">
+						<tr class="no-click" >
 							<th class="font-weight-bold">번호</th>
 							<th class="font-weight-bold">제목</th>
 							<th class="font-weight-bold">공지부서</th>
@@ -102,7 +116,14 @@
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
 				let pageButton = $('<button type="button" class="page-link">').text(i);
-		        pageButton.click(function(){
+				
+				// 현재 페이지일 때 'selected-page' 클래스 추가
+		        if (page === data.currentPage) {
+		        	pageButton.addClass('selected-page');
+   					pageButton.prop('disabled', true); // 현재 페이지 버튼 비활성화
+		        } 
+		        
+				pageButton.click(function(){
 		        	goToPage(page);
 		        });
 		        pagination.append(pageButton);
@@ -128,14 +149,15 @@
 		    for (let i = 0; i < data.length; i++) {
 		        let pinned = data[i];
 		        let row = $('<tr class="text-danger font-weight-bold">');
-		        row.append($('<td>').text(pinned.boardNo)); // 글 번호
-		        row.append($('<td>').text('[필독]'+' '+pinned.boardTitle)); // 제목
-		        row.append($('<td>').text(pinned.dept)); // 공지부서
+		        
+		        row.append($('<td width="5%">').text(pinned.boardNo)); // 글 번호
+		        row.append($('<td width="70%" class="selected-title">').text('[필독]'+' '+pinned.boardTitle)); // 제목
+		        row.append($('<td width="10%">').text(pinned.dept)); // 공지부서
 		        
 		        let dateOnly = pinned.createdate.split("T")[0]; // 날짜 값만 저장
-		        row.append($('<td>').text(dateOnly)); // 작성일
+		        row.append($('<td width="10%">').text(dateOnly)); // 작성일
 		        
-		        row.append($('<td>').text(pinned.boardCount)); // 조회수
+		        row.append($('<td width="5%">').text(pinned.boardCount)); // 조회수
 		        thead.append(row);
 		    }
 		}
@@ -151,13 +173,13 @@
 		    for (let i = 0; i < data.length; i++) {
 		        let notice = data[i];
 		        let row = $('<tr>');
-		        row.append($('<td>').text(notice.boardNo)); // 글 번호
-		        row.append($('<td>').text(notice.boardTitle)); // 제목
-		        row.append($('<td>').text(notice.dept)); // 공지부서
-		        
+		        row.append($('<td width="5%">').text(notice.boardNo)); // 글 번호
+		        row.append($('<td width="70%" class="selected-title">').text(notice.boardTitle)); // 제목
+		        row.append($('<td width="10%">').text(notice.dept)); // 공지부서
+
 		        let dateOnly = notice.createdate.split("T")[0]; // 날짜 값만 저장
-		        row.append($('<td>').text(dateOnly)); // 작성일
-		        row.append($('<td>').text(notice.boardCount)); // 조회수
+		        row.append($('<td width="10%">').text(dateOnly)); // 작성일
+		        row.append($('<td width="5%">').text(notice.boardCount)); // 조회수
 		        tbody.append(row);
 		    }
 		}

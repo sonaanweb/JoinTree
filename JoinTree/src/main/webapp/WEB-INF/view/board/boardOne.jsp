@@ -20,9 +20,9 @@
 			</div>
 			<br>
 			<!-- 게시글 상세 -->
-			<div class="col-lg-12 grid-margin stretch-card">
+			<div class="col-lg-12 stretch-card">
 				<div class="card">
-					<div class="card-body">
+					<div class="card-body" style="height: 750px;">
 						<div>
 							<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;${board.boardTitle}</h3>
 						</div>
@@ -34,22 +34,22 @@
 							<span>조회&nbsp;${board.boardCount}</span>
 						</div>
 						<hr>
-						<div>
-							<span>${board.boardContent}</span>
-						</div>
-						<br>
 						<!-- 첨부파일 유무의 따른 분기
 							 첨부파일이 있을 경우 파일 다운로드 버튼 활성화 -->
 						<c:if test="${board.boardSaveFilename != null}">
-							<div>
+							<div class="text-right">
 								<a href="${pageContext.request.contextPath}/boardFile/${board.boardSaveFilename}" 
 									download="${board.boardOriginFilename}">${board.boardOriginFilename} 다운로드</a>
 							</div>	
-						</c:if>		
+						</c:if>
+						<br>	
+						<div>
+							<span>${board.boardContent}</span>
+						</div>
 					</div>
 				</div>
 			</div>
-			
+			<br>
 			<!-- 수정, 삭제 버튼. 작성자에 따른 버튼 활성화 분기 -->
 			<c:if test="${loginAccount.empNo == board.createId}">
 				<div class="col-lg-12 text-right">
