@@ -66,7 +66,7 @@
 								</tbody>
 							</table>	
 							<!-- 페이지 네비게이션 -->
-							<div id="pagination">
+							<div class="paging center pagination margin-top20" id="pagination">
 								
 							</div>
 						</div>
@@ -92,7 +92,7 @@ $(document).ready(function() {
 		
 		// 이전 페이지 버튼
 		if(data.startPage > 1){
-			let prevButton = $('<button type="button" class="page-btn">').text('이전');
+			let prevButton = $('<button type="button" class="page-link">').text('이전');
             prevButton.click(function() {
                 goToPage(data.startPage - 1);
             });
@@ -102,7 +102,7 @@ $(document).ready(function() {
 		// 페이지 버튼 생성
 		for(let i = data.startPage; i <= data.endPage; i++){
 			const page = i;
-			let pageButton = $('<button type="button" class="page-btn">').text(i);
+			let pageButton = $('<button type="button" class="page-link">').text(i);
 	        pageButton.click(function(){
 	        	goToPage(page);
 	        });
@@ -111,7 +111,7 @@ $(document).ready(function() {
 		
 		// 다음 페이지 버튼
 		if(data.endPage < data.lastPage){
-			let nextButton = $('<button type="button" class="page-btn">').text('다음');
+			let nextButton = $('<button type="button" class="page-link">').text('다음');
             nextButton.click(function() {
                 goToPage(data.endPage + 1);
             });

@@ -67,7 +67,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-					<button type="button" class="btn btn-primary" id="submitScheduleBtn">추가</button>
+					<button type="button" class="btn btn-success" id="submitScheduleBtn">추가</button>
 				</div>
 			</div>
 		</div>
@@ -91,8 +91,8 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	                 <button type="button" class="btn btn-warning" id="editScheduleBtn">수정</button>
-	                <button type="button" class="btn btn-danger" id="deleteScheduleBtn">삭제</button>
+	                 <button type="button" class="btn btn-success" id="editScheduleBtn">수정</button>
+	                <button type="button" class="btn btn-success" id="deleteScheduleBtn">삭제</button>
 	            </div>
 	        </div>
 	    </div>
@@ -122,7 +122,7 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	                <button type="button" class="btn btn-primary" id="updateScheduleBtn">수정</button>
+	                <button type="button" class="btn btn-success" id="updateScheduleBtn">수정</button>
 	            </div>
 	        </div>
 	    </div>
