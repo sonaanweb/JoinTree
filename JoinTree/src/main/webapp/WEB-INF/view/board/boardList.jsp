@@ -7,9 +7,16 @@
 	    pointer-events: none; /* 버튼 클릭 불가 */
 	}
 	
-	.selected-title:hover {
-		cursor: pointer;
+	a{
+		color:#000000;
+		text-decoration: none;
 	}
+	
+	a.text-danger.font-weight-bold:hover{
+		color:#003399 !important;
+		text-decoration: none;
+	}
+	
 </style>
 
 	<!-- 게시글 검색 폼 -->
@@ -41,6 +48,7 @@
 					<div class="col-lg-12">
 						<h3 class="font-weight-bold">${boardCategoryName}</h3>
 					</div>
+
 					<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
 					<c:choose>
 					    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
@@ -148,10 +156,18 @@
 		 	// data의 길이만큼 테이블 행 추가
 		    for (let i = 0; i < data.length; i++) {
 		        let pinned = data[i];
-		        let row = $('<tr class="text-danger font-weight-bold">');
+		        let row = $('<tr>');
 		        
 		        row.append($('<td width="5%">').text(pinned.boardNo)); // 글 번호
-		        row.append($('<td width="70%" class="selected-title">').text('[필독]'+' '+pinned.boardTitle)); // 제목
+		        
+		     	// <a> 태그 생성, href 속성 설정
+		        let link = $('<a class="text-danger font-weight-bold">')
+		        .attr('href', '/JoinTree/board/boardOne?boardNo=' + pinned.boardNo)
+		        .text('[필독]'+' '+pinned.boardTitle);
+		        // <td> 에 <a> 링크 추가
+		        let boardTitleTd = $('<td width="70%">').append(link);
+		        row.append(boardTitleTd); // 제목
+		     
 		        row.append($('<td width="10%">').text(pinned.dept)); // 공지부서
 		        
 		        let dateOnly = pinned.createdate.split("T")[0]; // 날짜 값만 저장
@@ -174,7 +190,15 @@
 		        let notice = data[i];
 		        let row = $('<tr>');
 		        row.append($('<td width="5%">').text(notice.boardNo)); // 글 번호
-		        row.append($('<td width="70%" class="selected-title">').text(notice.boardTitle)); // 제목
+		        
+		        // <a> 태그 생성, href 속성 설정
+		        let link = $('<a>')
+		        .attr('href', '/JoinTree/board/boardOne?boardNo=' + notice.boardNo)
+		        .text(notice.boardTitle);
+		        // <td> 에 <a> 링크 추가
+		        let boardTitleTd = $('<td width="70%">').append(link);
+		        row.append(boardTitleTd); // 제목
+		        
 		        row.append($('<td width="10%">').text(notice.dept)); // 공지부서
 
 		        let dateOnly = notice.createdate.split("T")[0]; // 날짜 값만 저장
@@ -243,11 +267,4 @@
 			searchBoardListResults();
 		});
 		
-		// 게시글 상세 페이지 이동
-		$('#boardListTable').on('click', 'tr:not(.no-click)', function(){ // 첫 번째 tr을 제외한 tr 클릭 이벤트
-			let boardNo = $(this).find('td:eq(0)').text(); // boardNo 값 저장
-			let boardOneUrl = '/JoinTree/board/boardOne?boardNo=' + boardNo; // 상세페이지 url
-			
-			window.location.href = boardOneUrl; // 상세 페이지 이동
-		});
 	</script>
