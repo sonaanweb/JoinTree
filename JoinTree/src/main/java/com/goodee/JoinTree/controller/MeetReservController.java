@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +36,7 @@ public class MeetReservController {
 	@Autowired MeetRoomReservService meetRoomReservService;	
 	@Autowired MeetRoomService meetRoomService;
 	
-	// 예약 가능한 회의실 List(클릭시 캘린더)
+	// 예약 가능한 회의실 List(클릭시 캘린더) ---- join 말고 다른 방법 고민해봐야 함 or ajax
 	@GetMapping("/reservation/empMeetRoomList")
 	public String meetRoomList(Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
@@ -45,10 +44,9 @@ public class MeetReservController {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("equipCategory", equipCategory);
 		
-		List<MeetingRoom> meetRoomList = meetRoomService.getMeetRoomList(paramMap);
-		model.addAttribute("meetRoomList", meetRoomList); //view ${}
-		
-		log.debug(AN+"MeetRoomReSERVController.meetRoomList : "+meetRoomList.toString()+RE);
+		List<MeetingRoom> meetRoomList = meetRoomReservService.getMeetRoomList(paramMap);
+		model.addAttribute("meetRoomList", meetRoomList); //view ${} 모델에 담아 보냄
+		log.debug(AN+"예약가능한 회의실 목록.meetRoomListReservCont : "+meetRoomList+RE);
 		return "/reservation/empMeetRoomList"; // 뷰 이름 랜더링
 	}
 	

@@ -50,7 +50,7 @@
 			                </td>
 			                <td class="createdate">${m.createdate}</td>
 			                <td>
-			                    <button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="${m.roomNo}">수정</button>
+			                    <button class="editButton" data-room-no="${m.roomNo}">수정</button>
 			                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
 			                </td>
 			            </tr>
@@ -65,7 +65,7 @@
 			                <h5 class="modal-title" id="addModalLabel">회의실 추가</h5>
 			            </div>
 			            <div class="modal-body">
-			                <form id="addForm">
+			                <form id="addForm" method="post" enctype="multipart/form-data">
 			                <input type="hidden" id="modalAddCate" name="equipCategory">
 			                <input type="hidden" name="empNo">
 			                    <div class="mb-3">
@@ -84,13 +84,18 @@
 			                            <option value="0">사용불가</option>
 			                        </select>
 			                    </div>
+			                    <div class="mb-3">
+                        			<label for="modalAddRoomImage" class="form-label">이미지 업로드</label>
+                        			<input type="file" class="form-control" id="modalAddRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
+                        			<img id="modalAddImagePreview" src="#" alt="미리보기" style="display: none; max-width: 100px; max-height: 100px;">
+                   			 	</div>
 			                    <button type="button" class="btn btn-primary" id="modalBtn">추가</button>
 			                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 			                </form>
 			            </div>
 			        </div>
 			    </div>
-			</div>
+			 </div>
 			<!-- 수정 모달창 -->
 			<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 			    <div class="modal-dialog">
@@ -117,7 +122,13 @@
 			                            <option value="1">사용가능</option>
 			                            <option value="0">사용불가</option>
 			                        </select>
-			                    </div>
+			                    </div>		
+                    			<!-- 저장된 이미지, 업데이트 프리뷰 출력 -->
+		                    	<div class="mb-3">
+			                        <label for="modalUpdateRoomImage" class="form-label">이미지 업로드</label>
+			                        <input type="file" class="form-control" id="modalUpdateRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
+			                        <img id="modalUpdateImagePreview" src="" alt="미리보기" style="max-width: 100px; max-height: 100px;">
+                   		 		</div>
 			                    <button type="submit" class="btn btn-primary" id="modalBtn">수정</button>
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
 			                </form>
@@ -133,6 +144,9 @@
 
 <script>
 
+
+
+// 검색 ------------------------------------------
 $('#searchButton').on('click', function () {
 	var roomName = $("#searchRoomName").val();
 	
@@ -166,7 +180,7 @@ function searchMeetRoom(roomName) {
 			        '<td class="roomStatus">' + getStatusText(meetingRoom.roomStatus) + '</td>' +
 			        '<td class="createdate">' + meetingRoom.createdate + '</td>' +
 			        '<td>' +
-			        '<button class="editButton" data-bs-toggle="modal" data-bs-target="#updateModal" data-room-no="' + meetingRoom.roomNo + '">수정</button>' +
+			        '<button class="editButton" data-room-no="' + meetingRoom.roomNo + '">수정</button>' +
 			        '<button class="deleteButton" data-room-no="' + meetingRoom.roomNo + '">삭제</button>' +
 			        '</td>' +
 			        '</tr>';
@@ -188,6 +202,7 @@ function getStatusText(statusCode) {
     return '';
 }
 
+// ------------------------------------------------------------------
 // 추가 모달창 스크립트
 $('#addModal').on('show.bs.modal', function (event) {
     //열리기 전 값 초기화 show.bs.modal (모달창이 보여지기 직전에 발생하는 event)
@@ -195,13 +210,36 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#modalAddRoomCapacity").val("1");
     $("#modalAddRoomStatus").val("1");
     $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
+    
+    // 이미지 미리보기 초기화
+    $("#modalAddImagePreview").css("display", "none");
+    $("#modalAddImagePreview").attr("src", "");
 });
 
+$("#modalAddRoomImage").on("change", function () { // 이미지 업로드 변경시 업데이트
+    readURL(this, "#modalAddImagePreview");
+});
+
+//이미지 업로드 미리보기 함수
+function readURL(input, previewSelector) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $(previewSelector).attr('src', e.target.result);
+            $(previewSelector).css("display", "block");
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 추가 버튼 클릭
  $('#modalBtn').click(function() {
 	    const roomName = $('#modalAddRoomName').val();
 	    const roomCapacity = $('#modalAddRoomCapacity').val();
 	    const roomStatus = $('#modalAddRoomStatus').val();
-
+	    
 	    if (roomName.trim() === '') {
 	        $("#rn_add_check").text("공백은 입력할 수 없습니다.");
 	        $("#rn_add_check").css("color", "red");
@@ -212,8 +250,30 @@ $('#addModal').on('show.bs.modal', function (event) {
 	    const meetingRoom = {
 	        roomName: roomName,
 	        roomCapacity: roomCapacity,
-	        roomStatus: roomStatus
+	        roomStatus: roomStatus,
+	      
 	    };
+	    
+	    // 이미지 선택 여부 확인
+	    const imageInput = $("#modalAddRoomImage")[0];
+	    if (imageInput.files.length > 0) {
+	        meetingRoom.multipartFile = imageInput.files[0];
+	    } else {
+	        meetingRoom.multipartFile = null;
+	    }
+	    
+	    var meetingRoomJSON = JSON.stringify(meetingRoom);
+
+	    // FormData 생성
+	    var formData = new FormData();
+	    formData.append("roomName", roomName);
+	    formData.append("roomCapacity", roomCapacity);
+	    formData.append("roomStatus", roomStatus);
+	    formData.append("meetingRoom", meetingRoomJSON);
+	    if (meetingRoom.multipartFile) {
+	        formData.append("multipartFile", meetingRoom.multipartFile); // 이미지 파일을 추가
+	    }
+	    console.log("폼데이터:",formData);
 
 	    // 중복 검사 Ajax 요청
 	    $.ajax({
@@ -229,14 +289,15 @@ $('#addModal').on('show.bs.modal', function (event) {
 	            } else {
 	                // 중복 검사 통과
 	                $.ajax({
-	                    url: '/JoinTree/addMeetRoom',
-	                    type: 'post',
-	                    data: JSON.stringify(meetingRoom),
-	                    contentType: 'application/json',
-	                    success: function(response) {
+					    url: '/JoinTree/addMeetRoom',
+					    type: 'post',
+					    data: formData,
+					    contentType: false,
+					    processData: false,
+					    success: function(response) {
+					    	console.log("회의실 response:",response);
 	                        if (response.status === "success") {
 	                            alert('회의실이 추가되었습니다.');
-
 	                            location.reload();
 	                        } else {
 	                            alert('회의실 추가에 실패했습니다.');
@@ -253,78 +314,126 @@ $('#addModal').on('show.bs.modal', function (event) {
 	        }
 	    });
 	});
-
+ 
+// ------------ 수정 시작
 // 수정 모달창 스크립트
 $(document).ready(function() {
-	let originalRoomName; // 기존 이름 저장 - 중복검사 피하기 위함
-	
-	$(document).on('click', '.editButton', function() {
-        const roomNo = $(this).data('room-no'); // 버튼의 data-room-no 속성값 가져오기
-        originalRoomName = $(this).closest('tr').find('.roomName').text(); // 기존 회의실 이름 저장
-        
+    let originalRoomName; // 기존 이름 저장 - 중복검사 피하기 위함
+
+    $(document).on('click', '.editButton', function() { // 클릭했을 때 정보들
+        $('#updateModal').modal('show');
+        const roomNo = $(this).data('room-no');
+        originalRoomName = $(this).closest('tr').find('.roomName').text();
+
         $.ajax({
             url: '/JoinTree/modifyMeetRoom',
-            type: 'post',
-            data: { roomNo: roomNo }, // 가져온 roomNo 전달
+            type: 'get',
+            data: { roomNo: roomNo },
             success: function(meetroom) {
                 $('#modalRoomNo').val(meetroom.roomNo);
                 $('#modalCate').val(meetroom.equipCategory);
                 $('#modalRoomName').val(meetroom.roomName);
                 $('#modalRoomCapacity').val(meetroom.roomCapacity);
                 $('#modalRoomStatus').val(meetroom.roomStatus);
+          		console.log("회의실",meetroom);
+                // 기존 이미지 미리보기 설정
+                if (meetroom.meetRoomFile) {
+                    var imageUrl = '/JoinTree/roomImg/' + meetroom.meetRoomFile;
+                    console.log("회의실이름:",meetroom.meetRoomFile);
+                    $("#modalUpdateImagePreview").attr("src", imageUrl);
+                    $("#modalUpdateImagePreview").css("display", "block");
+                    
+                    /* ${pageContext.request.contextPath}/roomImg/${modiMeetingRoom.roomSaveFilename} */
+                } else {
+                	$("#modalUpdateImagePreview").css("display", "none");
+                }
+                
             },
             error: function() {
                 console.log('ajax실패');
             }
         });
-        $("#updateModal").modal("show");
-        
         // 모달창 닫을때 메시지 rn_check 초기화
         $("#updateModal").on("hidden.bs.modal", function () {
             $("#rn_check").text("");
         });
     });
 
-	// 수정 폼 제출 시 이벤트
-	$('#updateForm').submit(function(event) {
-        event.preventDefault();
-        
-        const roomName = $('#modalRoomName').val();
-        
-	// 회의실명이 공백이거나 중복일 경우 막음. 수정하지 않았을 때는 통과
-        if (roomName.trim() === "") {
-        	 $("#rn_check").text("공백은 입력할 수 없습니다.");
-             $("#rn_check").css("color", "red");
-             $("#modalRoomName").focus();
-        } else if (roomName === originalRoomName){
-            $('#updateForm').attr('action', '/JoinTree/equipment/modifyMeetRoom');
-            $('#updateForm').attr('method', 'post');
-            $('#updateForm')[0].submit();
-            alert('수정이 완료되었습니다.');
-        } else { // 둘 다 통과시
-            $.ajax({
-                url: '/JoinTree/cntRoomName',
-                type: 'post',
-                data: roomName,
-                contentType: 'application/json',
-                success: function(cnt) {
-                    if (cnt > 0) {
-	                   	 $("#rn_check").text("이미 존재하는 이름입니다.");
-	                     $("#rn_check").css("color", "red");
-	                     $("#modalRoomName").focus();
-                    } else {
-                        // 유효성 검사 통과시
-	                    $('#updateForm').attr('action', '/JoinTree/equipment/modifyMeetRoom');
-	                    $('#updateForm').attr('method', 'post'); // 폼 제출 방식
-	                    $('#updateForm')[0].submit();
-	                    alert('수정이 완료되었습니다.');
-                    }
-                },
-                error: function() {
-                    console.log('ajax실패');
-                }
-            });
+    // 이미지 업로드 입력 변경 이벤트 처리
+    $("#modalUpdateRoomImage").on("change", function () {
+        readURL(this, "#modalUpdateImagePreview");
+    });
+
+    // 이미지 업로드 미리보기 함수
+    function readURL(input, previewSelector) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(previewSelector).attr('src', e.target.result);
+                $(previewSelector).css("display", "block");
+            }
+
+            reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    // 수정 폼 제출 시 이벤트
+    $('#updateForm').submit(function(event) {
+        event.preventDefault();
+
+        const roomName = $('#modalRoomName').val();
+        const roomCapacity = $('#modalRoomCapacity').val();
+        const roomStatus = $('#modalRoomStatus').val();
+        const roomNo = $('#modalRoomNo').val();
+
+        // 중복 검사를 위한 Ajax 요청
+        $.ajax({
+            url: '/JoinTree/cntRoomName',
+            type: 'post',
+            data: JSON.stringify({ roomName: roomName }),
+            contentType: 'application/json',
+            success: function(cnt) {
+                if (cnt > 0) {
+                    $("#rn_check").text("이미 존재하는 이름입니다.");
+                    $("#rn_check").css("color", "red");
+                    $("#modalRoomName").focus();
+                } else {
+                    const formData = new FormData($('#updateForm')[0]);
+                    formData.append("roomNo", roomNo);
+
+                    $.ajax({
+                        url: '/JoinTree/equipment/modifyMeetRoom',
+                        type: 'post',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response === "success") {
+                                alert('수정이 완료되었습니다.');
+                                $('#updateModal').modal('hide');
+                                location.reload();
+                            } else {
+                                alert('수정에 실패했습니다.');
+                            }
+                        },
+                        error: function() {
+                            console.log('ajax 실패');
+                        }
+                    });
+                }
+            },
+            error: function() {
+                console.log('ajax 실패');
+            }
+        });
+    });
+
+    // 수정 모달창 닫을 때 초기화
+    $("#updateModal").on("hidden.bs.modal", function () {
+        // 이미지 업데이트 프리뷰 초기화
+        $("#modalUpdateImagePreview").css("display", "none");
+        $("#modalUpdateImagePreview").attr("src", "");
     });
 });
 

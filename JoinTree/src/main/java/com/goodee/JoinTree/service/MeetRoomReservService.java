@@ -20,7 +20,7 @@ public class MeetRoomReservService {
 	
 	// 예약 가능한 회의실 목록 (사원)
 	public List<MeetingRoom> getMeetRoomList(Map<String, Object> map) {
-        return meetRoomMapper.selectMeetRoomAll(map);
+        return meetRoomReservMapper.empselectMeetRoomAll(map);
     }
 	
 	// 회의실 예약 현황 조회

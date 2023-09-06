@@ -3,26 +3,27 @@
 <!-- 회의실 캘린더 예약 mapper -->
 <mapper namespace="com.goodee.JoinTree.mapper.MeetRoomReservMapper">
 <!-- 캘린더에 보이는 예약 현황 조회 -->	
-	<!-- 회의실 리스트 (MeetingRoom VO)-->
-	<select id="selectMeetRoomAll" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
+	<!-- 회의실 리스트 (MeetingRoom VO) 전체조회로-->
+	<select id="empselectMeetRoomAll" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
 		SELECT
-			room_no roomNo,
-			equip_category equipCategory,
-			room_name roomName,
-			room_Capacity roomCapacity,
-			room_status roomStatus,
-			createdate,
-			updatedate,
-			create_id createId,
-			update_id updateId
-		FROM meeting_room
-		WHERE equip_category = 'E0101'
-		ORDER BY createdate DESC;	
+			m.room_no roomNo,
+			m.equip_category equipCategory,
+			m.room_name roomName,
+			m.room_Capacity roomCapacity,
+			m.room_status roomStatus,
+			s.room_save_filename roomSaveFilename,
+			m.createdate,
+			m.updatedate,
+			m.create_id createId,
+			m.update_id updateId
+		FROM meeting_room m
+		INNER JOIN meet_room_file s ON m.room_no = s.room_no
+		WHERE m.equip_category = 'E0101';
 	</select>
 	
 	<!-- 사원view 예약 일자 검색 -->
 	<select id="getEmpSearchReservation" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Reservation">
-	   SELECT
+		SELECT
 			r.rev_no revNo,
 			r.emp_no empNo,
 			r.equip_no equipNo,

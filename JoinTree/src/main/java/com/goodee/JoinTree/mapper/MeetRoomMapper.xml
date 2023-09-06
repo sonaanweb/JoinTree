@@ -140,8 +140,8 @@
             #{roomFilesize},
             NOW(),
             NOW(),
-            #{empNo},
-            #{empNo}
+            #{createId},
+            #{updateId}
         )
     </insert>
 

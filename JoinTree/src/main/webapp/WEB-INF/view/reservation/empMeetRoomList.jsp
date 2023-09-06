@@ -19,25 +19,30 @@
 			<table class="table">
 			    <thead>
 			        <tr>
-				<!-- 회의실 이름을 클릭하면 해당 회의실 캘린더로 이동합니다 -->
 			            <td>회의실이름</td>
 			            <td>수용인원</td>
+			            <td>이미지</td>
 			        </tr>
 			    </thead>
-				<tbody>
-				    <c:forEach var="m" items="${meetRoomList}">
-				        <c:if test="${m.roomStatus == 1}"> <!-- 사용 가능 상태인 회의실만 표시 -->
-				            <tr>
-				                <td class="roomName">
-				                    <a href="/JoinTree/reservation/meetRoomReserv?roomNo=${m.roomNo}&roomName=${m.roomName}">
-				                    ${m.roomName}
-				                    </a>
-				                </td>
-				                <td class="roomCapacity">${m.roomCapacity}명</td>
-				            </tr>
-				        </c:if>
-				    </c:forEach>
-				</tbody>
+			    <tbody>
+			        <c:forEach var="m" items="${meetRoomList}">
+			            <c:if test="${m.roomStatus == 1}"> <!-- 사용 가능 상태인 회의실만 표시 -->
+			                <tr>
+			                    <td class="roomName">
+			                        <a href="/JoinTree/reservation/meetRoomReserv?roomNo=${m.roomNo}&roomName=${m.roomName}">
+			                            ${m.roomName}
+			                        </a>
+			                    </td>
+			                    <td class="roomCapacity">${m.roomCapacity}명</td>
+		              			<td>
+			                        <c:if test="${not empty m.roomSaveFilename}">
+			                            <img src="${pageContext.request.contextPath}/roomImg/${m.roomSaveFilename}" alt="${m.roomName} 이미지" width="100">
+			                        </c:if>
+			                    </td>
+			                </tr>
+			            </c:if>
+			        </c:forEach>
+			    </tbody>
 			</table>
 	<!-- 컨텐츠 끝 -->
 		</div>

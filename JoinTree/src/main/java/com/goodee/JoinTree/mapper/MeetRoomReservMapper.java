@@ -10,8 +10,8 @@ import com.goodee.JoinTree.vo.Reservation;
 @Mapper
 public interface MeetRoomReservMapper {
 	
-	// 회의실 리스트
-	List<MeetingRoom> selectMeetRoomAll(Map<String,Object> map);
+	// 회의실 리스트(예약 가능한 회의실 리스트)
+	List<MeetingRoom> empselectMeetRoomAll(Map<String,Object> map);
 	
 	// 예약 캘린더 데이터 출력
 	// List<vo name> 회의실 예약 목록 메서드
@@ -35,4 +35,6 @@ public interface MeetRoomReservMapper {
 	// 회의실 예약 날짜 검색 메서드(사원)
 	List<Reservation> getEmpSearchReservation(Map<String, Object> SearchEmpReservations);
 
+	//----------------------------------------------------
+	
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.goodee.JoinTree.service.MeetRoomService;
 import com.goodee.JoinTree.vo.AccountList;
@@ -32,16 +35,12 @@ public class MeetRoomController {
 	@Autowired
 	private MeetRoomService meetRoomService;
 	
-	// 추가사항 : 회의실 사진추가 (캘린더 넘어가기 이전 캘린더에서 사진 칸을 넣어서 모달로 띄우기(이미지 아이콘+모달)) / 관리창 crud에서도
-	
 	// 회의실 목록 조회
 	@GetMapping("/equipment/meetRoomList")
 	public String meetRoomList(Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
 		
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("equipCategory", equipCategory);
-		
 		List<MeetingRoom> meetRoomList = meetRoomService.getMeetRoomList(paramMap);
 		model.addAttribute("meetRoomList", meetRoomList); //view ${}
 		
@@ -53,8 +52,11 @@ public class MeetRoomController {
 	// 회의실 추가
 	@PostMapping("/addMeetRoom")
 	@ResponseBody
-	public Map<String, String> addMeetRoom(@RequestBody MeetingRoom meetingRoom, HttpSession session) {
-	    
+	public Map<String, String> addMeetRoom(@ModelAttribute MeetingRoom meetingRoom,
+			HttpSession session,HttpServletRequest request) {
+	    		
+		String path = request.getServletContext().getRealPath("/roomImg/");
+		
 		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
 		int empNo = loginAccount.getEmpNo();
 	    meetingRoom.setEmpNo(empNo);
@@ -67,35 +69,52 @@ public class MeetRoomController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    try {
-	        meetRoomService.addMeetRoom(meetingRoom);
+	        meetRoomService.addMeetRoom(meetingRoom,path);
 	        response.put("status", "success");
 	    } catch (Exception e) {
 	        response.put("status", "error");
-	        response.put("message", e.getMessage()); // 에러 메시지 추가
+	        response.put("message", e.getMessage());
 	    }
 
 	    return response;
 	}
     
-    // 회의실 수정 액션(post)
-    @PostMapping("/equipment/modifyMeetRoom")
-    public String updateMeetRoom(HttpSession session,MeetingRoom meetingRoom) {
-    	
-		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
-		int empNo = loginAccount.getEmpNo();
-	    meetingRoom.setEmpNo(empNo);
-        meetRoomService.modifyMeetRoom(meetingRoom); 
-        log.debug(AN+"MeetRoomController.modfiymeetingRoom : "+meetingRoom.toString()+RE);
-        return "redirect:/equipment/meetRoomList";
-    }
+	// 회의실 수정
+	@PostMapping("/equipment/modifyMeetRoom")
+	@ResponseBody
+	public String updateMeetRoom(HttpSession session, MeetingRoom meetingRoom, HttpServletRequest request) {
+	    try {
+	        AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
+	        int empNo = loginAccount.getEmpNo();
+	        meetingRoom.setEmpNo(empNo);
+	        
+	        // 파일 저장 경로 설정
+	        String path = request.getServletContext().getRealPath("/roomImg/");
+	        
+	        meetRoomService.modifyMeetRoom(meetingRoom, path);
+	        
+	        log.debug(AN + "MeetRoomController.modfiymeetingRoom : " + meetingRoom.toString() + RE);
+	        
+	        return "success"; // 성공적으로 수정된 경우
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error"; // 수정 중 오류가 발생한 경우
+	    }
+	}
     // ------------------------------------------------
     
     // 회의실 수정시 불러올 정보(ajax)
-    @PostMapping("/modifyMeetRoom")
-    public @ResponseBody MeetingRoom meetingRoom(MeetingRoom meetingRoom) {
-    	MeetingRoom modiMeetingRoom = meetRoomService.getMeetRoomNo(meetingRoom);
-    	return modiMeetingRoom;
-    }
+	@GetMapping("/modifyMeetRoom")
+	public @ResponseBody MeetingRoom meetingRoom(MeetingRoom meetingRoom, Model model) {
+	    MeetingRoom modiMeetingRoom = meetRoomService.getMeetRoomNo(meetingRoom);
+
+	    MultipartFile multipartFile = meetingRoom.getMultipartFile();
+	    modiMeetingRoom.setMultipartFile(multipartFile);
+
+	    log.debug(AN + "modiMeetingRoom: 정보:" + modiMeetingRoom + RE);
+	    return modiMeetingRoom;
+	}
+	
     
     // 회의실 추가 & 수정시 회의실명 중복 검사
     @PostMapping("/cntRoomName")
@@ -135,42 +154,6 @@ public class MeetRoomController {
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
     
-    
-	/*
-	 * // 회의실 이미지 추가 (AJAX)
-	 * 
-	 * @PostMapping("/addMeetRoomFiles")
-	 * 
-	 * @ResponseBody public String addMeetRoomFiles(@RequestParam("meetRoomFiles")
-	 * List<MultipartFile> meetRoomFiles, HttpServletRequest
-	 * request, @RequestParam("roomNo") int roomNo) { try { if (meetRoomFiles !=
-	 * null && !meetRoomFiles.isEmpty()) { String path =
-	 * request.getServletContext().getRealPath("/roomImg/"); // 경로
-	 * 
-	 * List<MeetRoomFile> roomFileList = new ArrayList<>();
-	 * 
-	 * for (MultipartFile meetRoomFile : meetRoomFiles) { String filename =
-	 * saveFile(meetRoomFile, path);
-	 * 
-	 * if (filename != null) { MeetRoomFile roomFile = new MeetRoomFile();
-	 * roomFile.setRoomNo(roomNo);
-	 * roomFile.setRoomOriginFilename(meetRoomFile.getOriginalFilename());
-	 * roomFile.setRoomSaveFilename(filename);
-	 * roomFile.setRoomFiletype(meetRoomFile.getContentType());
-	 * roomFile.setRoomFilesize(meetRoomFile.getSize());
-	 * 
-	 * roomFileList.add(roomFile); } }
-	 * 
-	 * int row = meetRoomService.addMeetRoomFiles(roomFileList);
-	 * 
-	 * if (row == roomFileList.size()) { return "success"; } } } catch (Exception e)
-	 * { e.printStackTrace(); } return "error"; }
-	 * 
-	 * // UUID private String saveFile(MultipartFile file, String path) { String
-	 * filename = null; try { // 파일 저장 경로에 저장 if (!file.isEmpty()) { filename =
-	 * UUID.randomUUID().toString() + "_" + file.getOriginalFilename(); byte[] bytes
-	 * = file.getBytes(); Path filePath = Paths.get(path + filename);
-	 * Files.write(filePath, bytes); } } catch (IOException e) {
-	 * e.printStackTrace(); } return filename; }
-	 */
+    // --------------------------------------------------------------------------------------
+ 
 }

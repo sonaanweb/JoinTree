@@ -37,10 +37,10 @@ public interface MeetRoomMapper {
 	// ------------------------------------------------------
 	
 	// 회의실 이미지 추가 메서드 (파일)
-	int insertMeetRoomFile(List<MeetRoomFile> meetRoomFile);
+	int insertMeetRoomFile(MeetRoomFile meetRoomFile);
 	
-	// 회의실 이미지 조회 메서드
-	List<MeetRoomFile> selectMeetRoomFile(int roomNo);
+	// 회의실 이미지 상세 조회 메서드
+	MeetRoomFile selectMeetRoomFile(int roomNo);
 	
 	// 회의실 이미지 삭제 메서드
 	int removeMeetRoomFile(int roomNo);
