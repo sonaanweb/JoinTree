@@ -5,7 +5,7 @@ $(document).ready(function() {
 		const projectNo = urlParams.get("projectNo"); // 주소창 값 중에서 프로젝트 번호
 			console.log("projectNo",projectNo);		
 		const loginEmpNo = $("#teskHost").data("empno");
-		console.log("loginEmpNo",loginEmpNo);		
+			console.log("loginEmpNo",loginEmpNo);		
 		let taskNo;
 		let currentProjectName; // 현재 프로젝트 이름
 		let currentProjectContent;// 현재 프로젝트 내용
@@ -36,32 +36,50 @@ $(document).ready(function() {
 						
 					// projectMemeber에 있는 요소 m을 순환하면서 아래 스펜으로 가공
 					const teamMembers = projectMemeber.map(m =>
+						
 						'<div class="memberName" ' +
 							'data-empno="' + m.empNo + '" ' +
-							'data-name="' + m.empName + '">' +
+							'data-name="' + m.empName + '"><p>' +
 							m.empName  + ' (' + m.empNo + ')' +
-							(empNoToDel ? '<span class="deleteMember" style="display: none;" data-empno="' + m.empNo + '">×</span>' : '') +
-						'</div>'
+						(m.empNo !== project.empNo ? 
+							(empNoToDel ? '<span class="deleteMember" style="display: none;" data-empno="' + m.empNo + '">×</span>' : '') 
+						: "")+
+						'</p></div>'
+						
 					);
 					
 					// 서버로부터 받아온 데이터를 이용하여 해당 요소들에 추가
 					$(".projectOne").append(
 						'<div class="wrapper">' +
-							'<h1><input type="text" id="projectName" value="' + project.projectName + '"readonly="readonly""></input> <span>프로젝트</span></h1>' +
+							'<h1><input type="text" id="projectName" value="' + project.projectName + '"readonly="readonly""></input></h1>' +
 							'<div id="pjBtns">'+
 								'<button id="modifyProjectBtn" class="btn btn-success btn-sm">프로젝트 수정</button>' +
 								'<button id="modifyProjectEndBtn" style="display:none;" class="btn btn-success btn-sm">수정 완료</button>' +
 								'<button id="endProjectBtn" class="btn btn-success btn-sm">프로젝트 완료</button>' + 
-							'</div>' +
+							'</div>'+
 						'</div>'+
-						'<h3><input type="text" id="projectContent" value="' + project.projectContent +'"readonly="readonly""></input></h3>' +
-						'<h3>담당자 : ' + project.empName +'</h3>' +
-						'<h3>기간 :<input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  '<input type="date" id="projectEndDate" value="' + project.projectEndDate.substring(0, 10) + '" readonly="readonly"></input>' + '</h3>' +
-						'<div class="wrapper"><h3>팀원 :</h3><div id="memberList" class="memberList">' + teamMembers.join(" ") + '<button id="addPjMemeberBtn" class="btn btn-success btn-sm"><i class="mdi mdi-plus"></i></button></div><button type="button" id="deleteMemberAll">전체삭제</button></div>' + 
-						'<h3>진행률</h3><div class="wrapper"><div class="progress"></div><div class="progressNo"></div></div>'+
-						'<div class="wrapper"><h3>작업리스트</h3>'+
-						'<button id="addPjTaskBtn" class="btn btn-success btn-sm margin10">작업추가</button></div>'
+						'<h3>' +
+							'<input type="text" id="projectContent" value="' + project.projectContent +'"readonly="readonly""></input>' +
+						'</h3>' +
+						'<div class="wrapper"><h3><i class="mdi mdi mdi-account-outline"></i>&nbsp;담당자</h3><p>' + project.empName +'</p></div>' +
+						'<div class="wrapper"><h3><i class="mdi mdi-calendar"></i>&nbsp;기&nbsp;&nbsp;&nbsp;간 </h3><p><input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  
+							'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="projectEndDate" value="' + project.projectEndDate.substring(0, 10) + '" readonly="readonly"></input></p></div>' + 
+						'' +
+						'<div class="wrapper">'+
+							'<h3><i class="mdi mdi-account-multiple-outline"></i>&nbsp;팀&nbsp;&nbsp;&nbsp;원</h3>' +
+							'<div id="memberList" class="memberList">' 
+								+ teamMembers.join(" ") + 
+							'<button id="addPjMemeberBtn" class="btn btn-success btn-sm"><i class="mdi mdi-plus"></i></button>' +
+							'<button class="btn btn-success btn-sm" id="deleteMemberAll">전체삭제</button>' + 
+							'</div>' +
+						'</div>' +
+						'<div class="wrapper">'+
+						'<h3><i class="mdi mdi-chart-gantt"></i>&nbsp;진행률</h3>'+
+							'<div class="progress"></div><div class="progressNo"></div>'+
+						'</div>'
 					);
+					// 초기 프로젝트 이름 + 프로젝트
+					setProjectName(project.projectName);
 					
 					// 상태가 완료일때는 수정 불가로 버튼 숨기기
 					if(project.projectStatus === '0') {
@@ -71,12 +89,18 @@ $(document).ready(function() {
 						$("#addPjMemeberBtn").hide();
 						$("#addPjTaskBtn").hide();
 						$(".deleteMember").hide();
+						$("#deleteMemberAll").hide();
 					} else {
 						$(".deleteMember").show();
 					};
 					
 					if(!empNoToDel) {
+						$("#modifyProjectBtn").hide();
+						$("#modifyProjectEndBtn").hide();
+						$("#endProjectBtn").hide();
 						$("#removeProjectBtn").hide();
+						$("#addPjMemeberBtn").hide();
+						$("#deleteMemberAll").hide();
 					};
 				
 					// 팀원 명단 모달창 -> 내용이 로드되지 않았을수도 잇기에 해당 버튼은 이 함수 내에서 선언
@@ -90,6 +114,20 @@ $(document).ready(function() {
 				}
 			});
 		}
+		// 프로젝트 이름 옆에 "프로젝트" 추가
+		function setProjectName(name) {
+			const projectNameInput = $("#projectName");
+	
+			// 프로젝트 입력란의 현재 값 가져오기
+			const currentProjectName = projectNameInput.val();
+				console.log("currentProjectName",currentProjectName);
+	
+			// 입력란이 비어있거나 이미 "프로젝트"가 없는 경우에만 추가
+			if (!currentProjectName || currentProjectName.indexOf("프로젝트") === -1) {
+				
+				projectNameInput.val(name + " 프로젝트");
+			}
+		}
 	/* 프로젝트 상세정보 끝 */
 	
 	/* 프로젝트 수정 */
@@ -99,12 +137,18 @@ $(document).ready(function() {
 			$("#modifyProjectBtn").hide();
 			$("#modifyProjectEndBtn").show();
 			
-			// readonly 속성 해제
-			$("#projectContent").prop("readonly", false); 
-			$("#projectStartDate").prop("readonly", false); 
-			$("#projectEndDate").prop("readonly", false); 
-			$("#projectName").prop("readonly", false); 
-			
+			// readonly 속성 해제 및 css
+			$("#projectContent, #projectStartDate, #projectEndDate, #projectName")
+				.prop("readonly", false)
+				.css("box-shadow", "0 0 4px rgba(0, 0, 0, 0.2)")
+				.on("focus", function() {
+					$(this).css("border", "1px solid skyblue"); // 포커스 효과 추가
+				})
+				.on("blur", function() {
+					$(this).css("border", "none"); // 포커스 효과 추가
+				})
+				
+
 			// 이전 값 받아오기
 			currentProjectName = $("#projectName").val();
 			currentProjectContent = $("#projectContent").val();
@@ -142,10 +186,8 @@ $(document).ready(function() {
 			$("#modifyProjectEndBtn").hide();
 			
 			// readonly 속성 주기
-			$("#projectName").prop("readonly", true); 
-			$("#projectContent").prop("readonly", true); 
-			$("#projectStartDate").prop("readonly", true); 
-			$("#projectEndDate").prop("readonly", true); 
+			$("#projectContent, #projectStartDate, #projectEndDate, #projectName")
+				.prop("readonly", true); 
 			
 			if(currentProjectName !== newProjectName || currentProjectContent !== newProjectContent ||
 				currentProjectStartDate !== newProjectStartDate||currentProjectEndDate !== newProjectEndDate) {
@@ -174,6 +216,7 @@ $(document).ready(function() {
 							showConfirmButton: false,
 							timer: 1000
 						})
+						fetchProjectData();
 					}
 				},
 				error: function(error) {
@@ -210,6 +253,7 @@ $(document).ready(function() {
 										showConfirmButton: false,
 										timer: 1500
 									})
+									fetchProjectData();
 								}
 							}
 						});
@@ -349,9 +393,10 @@ $(document).ready(function() {
 		// 한명씩 삭제
 		$(".projectOne").on("click", ".deleteMember", function() {
 			const selectedMemeberNo = $(this).data("empno");
-				//console.log("selectedMemeberNo",selectedMemeberNo);
-			sendDelMemberDataToServer(selectedMemeberNo);
+				console.log("selectedMemeberNo",selectedMemeberNo);
+			sendDelMemberDataToServer([selectedMemeberNo]);
 		});
+		
 		// 전체삭제
 		$(".projectOne").on("click", "#deleteMemberAll", function(){
 			
@@ -371,6 +416,7 @@ $(document).ready(function() {
 			let filteredMemberNos = [];
 			if (Array.isArray(memberNos)) {
 				filteredMemberNos = memberNos.filter(empNo => empNo !== loginEmpNo);
+				console.log("filteredMemberNos",filteredMemberNos);
 			}
 			if(filteredMemberNos.length > 0) {
 				$.ajax({
@@ -411,19 +457,13 @@ $(document).ready(function() {
 						console.error("오류 내용:", error);
 					}
 				});
-			} else if(!filteredMemberNos || memberNos === loginEmpNo){
+			} else if(filteredMemberNos.length === 0){
 				Swal.fire(
 						'Error',
 						'담당자는 삭제할 수 없습니다.',
 						'error'
 					)
-			} else {
-				Swal.fire(
-						'Error',
-						'삭제할 팀원이 없습니다.',
-						'error'
-					)
-			}
+			} 
 		}
 	/* 프로젝트 팀원 삭제 끝 */
 /* 프로젝트 팀원 끝 */		
@@ -555,7 +595,7 @@ $(document).ready(function() {
 					);
 					
 					$(".progressNo").append(
-						'<div>' +progress.completedTasks+ "/"+progress.totalTasks+'</div>'
+						'<p>' +progress.completedTasks+ " / "+progress.totalTasks+'</p>'
 					);
 				});
 				
@@ -569,7 +609,7 @@ $(document).ready(function() {
 
 	/* 프로젝트 작업 추가 */
 		// 모달
-		$(".projectOne").on("click", "#addPjTaskBtn",function() {
+		$(".projectTaskListAll").on("click", "#addPjTaskBtn",function() {
 			$("#addProjectTaskModal").modal("show");
 		});
 	

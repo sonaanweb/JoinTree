@@ -14,21 +14,14 @@
 				<div class="warpper">
 					<!-- 타이틀, 이름 검색창 -->
 					<div class="input-group">
-						<div class="input-group-prepend bg-transparent">
-							<i class="input-group-text border-0 mdi mdi-magnify"></i>
-						</div>
-						<input type="text" class="form-control" id="searchName" name="searchName" placeholder="프로젝트명 / 담당자이름으로 검색가능">
-					</div>
-					<!-- 날짜 검색창 -->
-					<div class="input-group">
-						<div class="input-group-prepend bg-transparent">
-							<i class="input-group-text border-0 mdi mdi-magnify"></i>
-						</div>
-						<input type="date" class="form-control" id="startDate"> ~ 
-						<input type="date" class="form-control" id="endDate">
+					
+						<input type="date" class="form-control margin10" id="startDate"><p class="margin10">~</p><input type="date" class="form-control margin10" id="endDate">
+						
+						<input type="text" class="form-control margin10" id="searchName" name="searchName" placeholder="프로젝트명 / 담당자이름으로 검색가능">
+						<button type="button" id="searchBtn" class="btn btn-success btn-sm margin10">검색</button>
+					
 					</div>
 					<div>
-						<button type="button" id="searchBtn">검색</button>
 					</div>
 					<!-- 프로젝트 라디오 -->
 					<div>
@@ -38,7 +31,7 @@
 					</div>
 					<div>
 						<h1 id="projectCategory">전체 프로젝트</h1>
-						<button type="button" id="addProjectBtn">프로젝트 추가</button>
+						<button type="button" id="addProjectBtn" class="btn btn-success">프로젝트 추가</button>
 					</div>
 					<div class="wrapper" id="projectData">
 						<!-- 프로젝트 카드 -->

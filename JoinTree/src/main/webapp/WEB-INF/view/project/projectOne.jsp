@@ -18,35 +18,41 @@
 	<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-				<a href="/JoinTree/project/projectList">돌아가기</a>
-				<div class="projectOne">
-					<!-- 프로젝트 상세정보 출력 -->
+				<div class="card">
+					<div class="projectOne card-body">
+						<!-- 프로젝트 상세정보 출력 -->
+					</div>
 				</div>
-					<div class="projectTaskListAll col-md-4">
-						<div class="card">
-							<div>미완료</div>
-							<div class="projectTaskList1 wrapper card-body">
+			
+				<div class="projectTaskListAll col-md-4">
+					<button id="addPjTaskBtn" class="btn btn-success btn-sm margin-top20">작업추가</button>
+					<div class="card margin-top20">
+						<div class="card-body">
+							<h4 class="">미완료</h4>
+							<div class="projectTaskList1 wrapper ">
 								<!-- 프로젝트 미완료된 작업 리스트 출력 -->
 							</div>
+							
 							<div class="line"></div>
-							<div>완료</div>
-							<div class="projectTaskList2 wrapper card-body">
+							<h4>완료</h4>
+							<div class="projectTaskList2 wrapper">
 								<!-- 프로젝트 완료된 작업 리스트 출력 -->
 							</div>
 						</div>
-						<div>
-							<button id="removeProjectBtn" class="btn btn-success btn-sm margin10">프로젝트 삭제</button>
-						</div>
 					</div>
-					<div class="col-md-8 project-task-comment">
-						<div class="projectTask">
-							<!-- 프로젝트 작업 정보 출력 -->
-						</div>
-						<div class="taskComment">
-							<!-- 프로젝트 작업 댓글 정보 출력 -->
-							
-						</div>
+					<div>
+						<button id="removeProjectBtn" class="btn btn-success btn-sm margin-top20">프로젝트 삭제</button>
 					</div>
+				</div>
+				<div class="col-md-8 project-task-comment">
+					<div class="projectTask">
+						<!-- 프로젝트 작업 정보 출력 -->
+					</div>
+					<div class="taskComment">
+						<!-- 프로젝트 작업 댓글 정보 출력 -->
+						
+					</div>
+				</div>
 				
 			</div>
 	</div>

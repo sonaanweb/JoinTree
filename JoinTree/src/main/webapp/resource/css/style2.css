@@ -1,8 +1,12 @@
 @charset "UTF-8";
-
+* {
+	font-family: 'Gothic A1', sans-serif;
+	color: #464846;
+}
 .line {
 	border-bottom: 1px solid #999;
 }
+
 .center{
 	text-align: center;
 	justify-content: center;
@@ -233,8 +237,20 @@ input:checked + .slider:before {
 	background-color: #8AE6C5;
 	margin: 0px 10px 0px 1px;
 }
-.projectOne h3 {
+.projectOne h1 input {
 	margin:0px;
+	font-weight: 900;
+	font-size: 40px;
+}
+.projectOne h3{
+	font-weight: 700;
+	font-size: 20px;
+	margin-right: 40px;
+}
+.projectOne .wrapper p, .projectOne .wrapper p input {
+	font-weight: 500;
+	font-size: 18px;
+	margin-top: 1px;
 }
 .projectOne .wrapper div{
 	align-items: center;
@@ -242,34 +258,52 @@ input:checked + .slider:before {
 	flex-wrap: wrap;
 }
 .projectOne .memberList {
-	max-width: 1000px;
+	width: 700px;
 }
-.projectOne .memberName {
-	background-color: #999; 
-	border-radius: 10px; 
-	padding:4px; 
-	margin: 0px 4px 10px 4px;
+.projectOne .memberName p {
+	background-color: #888; 
+	border-radius: 5px; 
+	padding:5px 6px 2px 4px; 
+	margin: 2px 4px 10px 4px;
 	color: white;
+	font-size: 12px;
+	position: relative;
+}
+.projectOne .memberName p .deleteMember{
+	color: white;
+	float: right;
+	position: absolute;
+	top: -3px;
+	right: 2px;
+}
+.projectOne .progressNo p{
+	margin: -8px 0px 0px 10px;
+	font-size: 15px;
+	font-weight: 700;
+	color: #2196F3;
+}
+.deleteMember:hover{
+	 cursor: pointer;
 }
 .projectOne .btn {
 	margin-left: 10px;
+	color: white;
+}
+.projectOne .btn i {
+	color: white;
+	font-size: 10px;
 }
 .projectOne input {
 	border: none;
 	background-color: transparent;
-	 width: auto;
-    max-width: 100%;
-}
-.projectOne span {
-	display: flex;
-	align-items: center; /* 수직 정렬 설정 */
-	gap: 5px; /* input과 "프로젝트" 간격 설정 */
+	border-radius: 3px;
 }
 .progress {
 	width: 70%;
 	height: 20px;
 	background-color: #DBDBDB;
 	border-radius: 5px;
+	margin-top:2px;
 }
 .progress-bar {
 	height: 100%;
@@ -280,9 +314,10 @@ input:checked + .slider:before {
 }
 .project-task-comment {
 	float:right;
+	margin-top: 70px;
 }
 .projectTaskList1, .projectTaskList2 {
-	height: 100px;
+	height: 150px;
 	overflow-y: auto;
 }
 .projectTaskList1 .projectTaskOne, .projectTaskList2 .projectTaskOne  {
@@ -296,12 +331,21 @@ input:checked + .slider:before {
 }
 .projectTaskListAll{
 	float:left;
+	padding-left: 0px;
 }
 .projectTaskListAll .card-body {
 	padding : 0px;
-	padding-top: 20px;
-	height : 200px;
-	max-height : 200px;
+}
+.projectTaskListAll .card-body h4{
+	padding: 20px;
+	color: #2196F3;
+	font-weight: bold;
+}
+.projectTaskListAll .card-body h4:first-child {
+	color: crimson;
+}
+.projectTaskListAll .card-body .btn{
+	
 }
 
 /* 프로젝트 작업 */
@@ -314,6 +358,10 @@ input:checked + .slider:before {
 .projectTaskList1 .wrapper {
 	align-items: center;
 }
+.project-task-comment {
+	padding-right: 0px;
+}
+/* 프로젝트 댓글 */
 .taskComment {
 	height : 300px;
 	overflow-y: auto;
@@ -332,5 +380,4 @@ input:checked + .slider:before {
 .add-comment input {
 	width: 500px;
 	text-decoration: underline;
-	
 }

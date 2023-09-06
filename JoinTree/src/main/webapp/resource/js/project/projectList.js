@@ -34,7 +34,7 @@ $(document).ready(function() {
 	
 		// 버튼 클릭 시 이벤트
 		function attachPageButtonEventHandlers() {
-			$('.page-button').click(function() {
+			$('.pageBtn').click(function() {
 				const clickedTab = $(this).data('tab');
 				const pageNum = $(this).data('page');
 				
@@ -54,7 +54,7 @@ $(document).ready(function() {
 			// 전체페이지가 1과 같거나 크면 
 			if (tab.totalPages >= 1) {
 				for (let i = 1; i <= tab.totalPages; i++) {
-					buttons.push('<button class="page-link" data-tab="' + selectedTab + '" data-page="' + i + '">' + i + '</button>');
+					buttons.push('<button class="page-link pageBtn" data-tab="' + selectedTab + '" data-page="' + i + '">' + i + '</button>');
 				}
 			}
 			pagingElement.html(buttons.join(' '));
