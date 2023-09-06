@@ -33,8 +33,8 @@
 		              </div>
 	
 		<div>
-			<a href="/JoinTree/login/login">이전</a>
-		</div>
+			<a href="/JoinTree/login/login" class="btn btn-outline-success btn-sm">이전</a>
+		</div><br>
 		
 		<h3>비밀번호 재설정</h3>
 	

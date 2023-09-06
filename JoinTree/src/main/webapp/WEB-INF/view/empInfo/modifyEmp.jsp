@@ -19,7 +19,7 @@
 				<div class="col-lg-12 grid-margin stretch-card">
               	<div class="card">
                 <div class="card-body">
-				<h2 class="card-title">게시글 작성</h2>
+				<h2 class="card-title">나의 정보 수정</h2>
 	
 				<div>
 					<a href="/JoinTree/empInfo/empInfo" class="btn btn-outline-success btn-sm">이전</a>
@@ -39,8 +39,9 @@
 									<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName == '이미지 없음'}">
 										<input type="file" name="multipartFile" id="fileInput" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp"><br>
 										<img id="previewImage" src="" style="max-width: 300px; max-height: 300px;"><br>
-										<button type="button" id="removeBtn">파일 삭제</button>
-										<button type="button" id="uploadImgBtn">사진 등록</button>
+										<button type="button" id="removeBtn" class="btn btn-success btn-sm">미리보기 삭제</button>
+										<button type="button" id="uploadImgBtn" class="btn btn-success btn-sm">사진 등록</button><br>
+										
 										<div>
 											* 사진 선택 후 사진 등록 버튼을 클릭해야 사진이 저장됩니다. 
 										</div>
@@ -50,7 +51,8 @@
 										<!-- <span id="currentImageTxt">기존 이미지</span><br> -->
 										<!-- <img id="previewImage" src="" style="max-width: 300px; max-height: 300px;"><br> -->
 										<br>
-										<button type="button" id="removeImgBtn">사진 삭제</button>	
+										<button type="button" id="removeImgBtn" class="btn btn-success btn-sm">사진 삭제</button>	
+										<br>
 										<div>
 											* 사진 삭제 버튼 클릭 시 등록된 사진이 완전히 삭제됩니다. 
 										</div>
@@ -120,17 +122,18 @@
 							<td>						
 								<c:choose>
 									<c:when test="${empty empInfo.signSaveImgName or empInfo.signSaveImgName == '이미지 없음'}">
-										<canvas id="goal" width="500" height="200" style="border: 1px solid black"></canvas>
-										<div>
-											<!-- <img id="target" src="" style="width: 500px; height: 200px;">	 -->	
-										</div>
+										<canvas id="goal" width="500" height="250" style="border: 1px solid #ebedf2"></canvas>
+									<!-- 	<div>
+											<img id="target" src="" style="width: 500px; height: 200px;">		
+										</div> -->
+										<br>
 										<div>
 											* 서명 등록은 최초 1회만 가능합니다. 
 										</div>
 										<img id="previewImage2" src="" style="max-width: 300px; max-height: 300px;"><br>
 										<!-- <button type="button" id="save">미리보기</button> --> <!-- 이미지 보여주기  -->
-										<button type="button" id="clear">입력란 지우기</button> <!-- 이미지 삭제   -->
-										<button type="button" id="send">서명 등록</button>
+										<button type="button" id="clear" class="btn btn-success btn-sm">입력란 지우기</button> <!-- 이미지 삭제   -->
+										<button type="button" id="send" class="btn btn-success btn-sm">서명 등록</button>
 										<!-- <button type="button" id="uploadSignImgBtn">서명 등록(전송)</button> -->
 									</c:when>
 									<c:otherwise>

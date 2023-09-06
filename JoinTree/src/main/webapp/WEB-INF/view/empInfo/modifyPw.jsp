@@ -19,29 +19,29 @@
 				<h1>비밀번호 변경</h1>
 				<form action="/JoinTree/empInfo/modifyPw" method="post" id="modifyPw">
 					<div>
-						<label for="empPw">현재 비밀번호 입력</label>
-						<input type="password" name="empPw" id="empPw" class="form-control w-25">
-					</div>
+						<!-- <label for="empPw">현재 비밀번호 입력</label> -->
+						<input type="password" name="empPw" id="empPw" class="form-control w-25" placeholder="현재 비밀번호 입력">
+					</div><br>
 					
 					<div>
 						<!-- <div> -->
-							<label for="newPw">새 비밀번호 입력</label>
+							<!-- <label for="newPw">새 비밀번호 입력</label> -->
 						<!-- </div> -->
 						<div class="form-inline">
-						<input type="password" name="newPw" id="newPw" class="form-control w-25"> &nbsp;&nbsp;
+						<input type="password" name="newPw" id="newPw" class="form-control w-25" placeholder="새 비밀번호 입력"> &nbsp;&nbsp;
 						<!-- <span style="color: red;" id="newPwError" class="error-message"></span> -->
 						 <span id="password-requirements">영문 소문자, 숫자, 특수문자(@, #, $, %, ^, &, +, =, !)를 포함하여 8자 이상 입력해주세요.</span>
 						 <span style="color: red;" id="password-error-message"></span>
 						</div>
-					</div>
+					</div><br>
 					<!-- 
 					<div>
 						<p style="font-size: 14px; color: #666;">(영문 소문자, 숫자, 특수문자(@, #, $, %, ^, &, +, =, !)를 포함하여 8자 이상 입력해주세요.)</p>
 						<p style="font-size: 12px; color: #666;" id="password-error-message"></p>
 					</div> -->
 					<div>
-						<label for="newPw2">새 비밀번호 다시 입력</label>
-						<input type="password" name="newPw2" id="newPw2" class="form-control w-25">
+						<!-- <label for="newPw2">새 비밀번호 다시 입력</label> -->
+						<input type="password" name="newPw2" id="newPw2" class="form-control w-25" placeholder="새 비밀번호 다시 입력">
 						<span style="color: red;" id="newPw2Error" class="error-message"></span>
 					</div>
 					<br>
