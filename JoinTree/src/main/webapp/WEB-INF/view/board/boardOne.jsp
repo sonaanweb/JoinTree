@@ -9,32 +9,31 @@
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
 			<!-- 이전글, 다음글, 목록 버튼 -->
-			<div>
+			<div class="col-lg-12 text-right">
 				<c:if test="${preBoardNo != null}">
-					<a href="boardOne?boardNo=${preBoardNo}">이전글</a>
+					<a href="boardOne?boardNo=${preBoardNo}" class="btn btn-success btn-sm">이전글</a>
 				</c:if>
 				<c:if test="${nextBoardNo != null}">
-					<a href="boardOne?boardNo=${nextBoardNo}">다음글</a>
+					<a href="boardOne?boardNo=${nextBoardNo}" class="btn btn-success btn-sm">다음글</a>
 				</c:if>
-				<a href="/JoinTree/board/${boardCategory}?boardCategory=${board.categoryCode}">목록</a>
+				<a href="/JoinTree/board/${boardCategory}?boardCategory=${board.categoryCode}" class="btn btn-success btn-sm">목록</a>
 			</div>
-			
+			<br>
 			<!-- 게시글 상세 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
 						<div>
-							<h2>${board.boardTitle}</h2>
+							<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;${board.boardTitle}</h3>
 						</div>
 						<div>
 							<span>${board.dept}&nbsp;관리자</span>
 						</div>
 						<div>
-							<span>${board.createdate}</span>
-						</div>
-						<div>
+							<span>${board.createdate}</span>&nbsp;&nbsp;&nbsp;
 							<span>조회&nbsp;${board.boardCount}</span>
 						</div>
+						<hr>
 						<div>
 							<span>${board.boardContent}</span>
 						</div>
@@ -53,9 +52,10 @@
 			
 			<!-- 수정, 삭제 버튼. 작성자에 따른 버튼 활성화 분기 -->
 			<c:if test="${loginAccount.empNo == board.createId}">
-				<div>
-					<a href="/JoinTree/board/modifyBoardForm?boardNo=${board.boardNo}">수정</a>
-					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}" onclick="return confirm('게시글을 삭제하시겠습니까?')">삭제</a>
+				<div class="col-lg-12 text-right">
+					<a href="/JoinTree/board/modifyBoardForm?boardNo=${board.boardNo}" class="btn btn-success btn-sm">수정</a>
+					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}" class="btn btn-success btn-sm" 
+						onclick="return confirm('게시글을 삭제하시겠습니까?')">삭제</a>
 				</div>
 			</c:if>
 			

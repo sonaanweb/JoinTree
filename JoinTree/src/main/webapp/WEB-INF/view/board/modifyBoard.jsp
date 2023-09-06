@@ -14,19 +14,32 @@
 	<div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-			<!-- 게시글(공지) 작성 -->
+			<!-- 게시글 수정 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
-						<br>
+						<!-- 게시글 수정 폼 -->
 						<form id="modifyBoardForm" enctype="multipart/form-data" method="post">
+							
 							<input type="hidden" name="boardNo" value="${board.boardNo}">
-							<div>
-								<!-- 상단공지 체크박스 체크된 상태로 수정폼 호출 -->
-								<input type="checkbox" name="boardPinned" ${board.boardPinned == 1 ? 'checked' : ''}> 게시판 상단고정
+							<div class="row">
+								<div class="col">
+									<h3>&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
+								</div>
+								<div class="col text-right">
+									<div class="d-flex justify-content-end align-items-center">
+										<div class="form-check form-check-success">
+											<label class="form-check-label">
+												<!-- 상단공지 체크박스 체크된 상태로 수정폼 호출 -->
+												<input type="checkbox" name="boardPinned" class="form-check-input" 
+												${board.boardPinned == 1 ? 'checked' : ''}> 게시판 상단고정 &nbsp;&nbsp;&nbsp;&nbsp;
+											</label>
+										</div>
+										<button type="button" id="modifyBoardBtn" class="btn btn-success btn-sm">수정</button>
+									</div>
+								</div>
 							</div>
-							<br>
+							<hr>
 							<div>
 								<input type="text" id="boardTitle" name="boardTitle" value="${board.boardTitle}"class="form-control form-control-lg">
 							</div>
@@ -51,9 +64,7 @@
 								<span>(3MB 이하의 파일만 첨부 가능합니다)</span>
 							</div>				
 							<br>
-							<div>
-								<button type="button" id="modifyBoardBtn" class="btn btn-success btn-fw">수정</button>
-							</div>
+							
 						</form>
 					</div>
 				</div>

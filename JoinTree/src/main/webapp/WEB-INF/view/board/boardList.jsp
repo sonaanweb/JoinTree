@@ -2,49 +2,65 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
 	<!-- 게시판 카테고리명 -->
-	<h2>${boardCategoryName}</h2>
-	
-	<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
-	<c:choose>
-	    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
-	        <a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}">글작성</a>
-	    </c:when>
-	</c:choose>
+	<h3 class="col-lg-12">${boardCategoryName}</h3>
 	
 	<!-- 게시글 검색 폼 -->
-	<div>
-		<form>
-			<input type="hidden" id="boardCategory" name="boardCategory" value="${boardCategory}">
-			<select id="searchBoard" name="searchBoard">
-				<option value="board_title">제목</option>
-	            <option value="board_content">내용</option>
-	            <option value="board_title_content">제목+내용</option>
-			</select>
-			<input type="text" id="searchText" name="searchText">
-			<button type="button" id="searchBoardListBtn">검색</button>
+	<div class="col-lg-12 text-right">
+		<form class="form-inline justify-content-end">
+			<div class="form-group">
+				<input type="hidden" id="boardCategory" name="boardCategory" value="${boardCategory}">
+				<select id="searchBoard" name="searchBoard" class="form-control">
+					<option value="board_title">제목</option>
+		            <option value="board_content">내용</option>
+		            <option value="board_title_content">제목+내용</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="text" id="searchText" name="searchText" class="form-control">
+			</div>
+			<div class="form-group">
+				<button type="button" id="searchBoardListBtn" class="btn btn-success btn-sm">검색</button>
+			</div>
 		</form>
 	</div>
-	
+	<br>
 	<!-- 게시글 출력 -->
-	<table id="boardListTable" class="table">
-		<thead id="pinnedList">
-			<tr class="no-click">
-				<th>번호</th>
-				<th>제목</th>
-				<th>공지부서</th>
-				<th>작성일</th>
-				<th>조회수</th>
-			</tr>
-		</thead>
-		<tbody id="boardList">
-		
-		</tbody>
-	</table>
+	<div class="col-lg-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<!-- 게시글 작성 버튼 분기(대표, 인사, 경영지원만 공지 작성 가능) -->
+				<c:choose>
+				    <c:when test="${dept == 'D0201' or dept == 'D0202' or empNo == 11111111}">
+				        <div class="text-right">
+				        	<a href="/JoinTree/board/addBoardForm?boardCategory=${boardCategory}" class="btn btn-success btn-sm">글작성</a>
+				        </div>
+				    </c:when>
+				</c:choose>
+				<br>
+				<table id="boardListTable" class="table table-bordered">
+					<thead id="pinnedList">
+						<tr class="no-click">
+							<th class="font-weight-bold">번호</th>
+							<th class="font-weight-bold">제목</th>
+							<th class="font-weight-bold">공지부서</th>
+							<th class="font-weight-bold">작성일</th>
+							<th class="font-weight-bold">조회수</th>
+						</tr>
+					</thead>
+					<tbody id="boardList">
+					
+					</tbody>
+				</table>
+				<br>
+				<!-- 페이지 네비게이션 -->
+				<div id="pagination" class="paging center pagination">
+					
+				</div>
+			
+			</div>
+		</div>
+	</div>		
 	
-	<!-- 페이지 네비게이션 -->
-	<div id="pagination">
-		
-	</div>
 
 	<script>
 		$(document).ready(function(){
@@ -75,7 +91,7 @@
 			
 			// 이전 페이지 버튼
 			if(data.startPage > 1){
-				let prevButton = $('<button type="button" class="page-btn">').text('이전');
+				let prevButton = $('<button type="button" class="page-link">').text('이전');
 	            prevButton.click(function() {
 	                goToPage(data.startPage - 1);
 	            });
@@ -85,7 +101,7 @@
 			// 페이지 버튼 생성
 			for(let i = data.startPage; i <= data.endPage; i++){
 				const page = i;
-				let pageButton = $('<button type="button" class="page-btn">').text(i);
+				let pageButton = $('<button type="button" class="page-link">').text(i);
 		        pageButton.click(function(){
 		        	goToPage(page);
 		        });
@@ -94,7 +110,7 @@
 			
 			// 다음 페이지 버튼
 			if(data.endPage < data.lastPage){
-				let nextButton = $('<button type="button" class="page-btn">').text('다음');
+				let nextButton = $('<button type="button" class="page-link">').text('다음');
 	            nextButton.click(function() {
 	                goToPage(data.endPage + 1);
 	            });
@@ -111,9 +127,9 @@
 		 	// data의 길이만큼 테이블 행 추가
 		    for (let i = 0; i < data.length; i++) {
 		        let pinned = data[i];
-		        let row = $('<tr>');
+		        let row = $('<tr class="text-danger font-weight-bold">');
 		        row.append($('<td>').text(pinned.boardNo)); // 글 번호
-		        row.append($('<td>').text(pinned.boardTitle)); // 제목
+		        row.append($('<td>').text('[필독]'+' '+pinned.boardTitle)); // 제목
 		        row.append($('<td>').text(pinned.dept)); // 공지부서
 		        
 		        let dateOnly = pinned.createdate.split("T")[0]; // 날짜 값만 저장
