@@ -9,25 +9,33 @@
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 			
-			<!-- 월 별 조회 -->
-			<select id="monthSelect" >
-		    	<!-- 셀렉트 옵션 동적으로 생성 -->
-			</select>
-			
-			<!-- 주 별 근로시간 차트 -->
-			<div>
-				<canvas id="workTimeWeekChart" height="400"></canvas>
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h3>근로시간 통계</h3>
+						<br>
+						<!-- 월 별 조회 -->
+						<select id="monthSelect" class="form-control col-sm-1">
+					    	<!-- 셀렉트 옵션 동적으로 생성 -->
+						</select>
+						
+						<!-- 주 별 근로시간 차트 -->
+						<div>
+							<canvas id="workTimeWeekChart" height="400"></canvas>
+						</div>
+						
+						<!-- 년 별 조회 -->
+						<select id="yearSelect" class="form-control col-sm-1">
+					    	<!-- 셀렉트 옵션 동적으로 생성 -->
+						</select>
+						
+						<!-- 월 별 근로시간 차트 -->
+						<div>
+							<canvas id="workTimeMonthChart" height="400"></canvas>
+						</div>
+					</div>	
+				</div>
 			</div>
-			
-			<!-- 년 별 조회 -->
-			<select id="yearSelect">
-		    	<!-- 셀렉트 옵션 동적으로 생성 -->
-			</select>
-			
-			<!-- 월 별 근로시간 차트 -->
-			<div>
-				<canvas id="workTimeMonthChart" height="400"></canvas>
-			</div>	
 			
 		</div>
 	</div>
@@ -109,8 +117,8 @@
 	            {
 	                label: '월 별 근로시간',
 	                data: [], // 월 별 근로시간 데이터
-	                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 차트 색상
-	                borderColor: 'rgba(75, 192, 192, 1)', // 선 색상
+	                backgroundColor: 'rgba(21, 78, 15, 0.2)', // 차트 색상
+	                borderColor: 'rgba(3, 60, 0, 1)', // 선 색상
 	                borderWidth: 1 // 선 굵기
 	            }
 	        ]
@@ -195,8 +203,8 @@
 	            {
 	                label: '주 별 근로시간',
 	                data: [], // 주 별 근로시간 데이터
-	                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 차트 색상
-	                borderColor: 'rgba(75, 192, 192, 1)', // 선 색상
+	                backgroundColor: 'rgba(21, 78, 15, 0.2)', // 차트 색상
+	                borderColor: 'rgba(3, 60, 0, 1)', // 선 색상
 	                borderWidth: 1 // 선 굵기
 	            }
 	        ]
@@ -213,10 +221,6 @@
 		            title: {
 		                display: true,
 		                text: '근로시간'
-		            },
-		            ticks: {
-		                min: 40, // y축 최소값
-		                max: 52, // y축 최대값
 		            }
 				},
 				x: {

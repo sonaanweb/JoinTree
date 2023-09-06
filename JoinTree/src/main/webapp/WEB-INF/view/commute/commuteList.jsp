@@ -5,11 +5,11 @@
 <html>
 <style>
     .saturday {
-        background-color: lightblue;
+        background-color: #D9E5FF;
     }
     
     .sunday {
-        background-color: lightpink;
+        background-color: #FFD8D8;
     }
 </style>
 <!-- header -->
@@ -17,34 +17,47 @@
 	<div class="container-fluid page-body-wrapper">
 	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-			
-			<div>
-				<h1><span id="targetYear"></span><span id="targetMonth"></span></h1>
-			</div>
-			
-			<!-- 연월 이동 버튼. 입사 연월에 따른 이전달, 다음달 버튼 분기-->
-			<div>
-				<button type="button" id="prevBtn">이전달</button>
-				<button type="button" id="nextBtn">다음달</button>
-			</div>
-			
-			<!-- 월별 출퇴근 리스트 출력 -->
-			<div>
-				<table class="table table-sm">
-					<thead>
-						<tr>
-							<th style="width:100px">날짜</th>
-							<th style="width:80px">요일</th>
-							<th>출근시간</th>
-							<th>퇴근시간</th>
-							<th>연가</th>
-						</tr>
-					</thead>
-					<tbody id="commuteList">
-					
-					</tbody>
-				</table>
-			</div>
+			<div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<!-- 년, 월 표시 -->
+							<div class="col">
+								<h3>
+									<span id="targetYear"></span>
+									<span id="targetMonth"></span>
+									<span>출퇴근 리스트</span>
+								</h3>
+							</div>
+							<!-- 연월 이동 버튼. 입사 연월에 따른 이전달, 다음달 버튼 분기-->
+							<div class="col d-flex justify-content-end align-items-center">
+								<div class="btn-group" role="group" >
+									<button type="button" id="prevBtn" class="btn btn-dark btn-sm">이전달</button>
+									<button type="button" id="nextBtn" class="btn btn-dark btn-sm">다음달</button>
+								</div>
+							</div>
+						</div>
+						<br>
+						<!-- 월별 출퇴근 리스트 출력 -->
+						<div>
+							<table class="table table-sm">
+								<thead>
+									<tr>
+										<th class="font-weight-bold" style="width:5%">날짜</th>
+										<th class="font-weight-bold" style="width:5%">요일</th>
+										<th class="font-weight-bold">출근시간</th>
+										<th class="font-weight-bold">퇴근시간</th>
+										<th class="font-weight-bold">연가구분</th>
+									</tr>
+								</thead>
+								<tbody id="commuteList">
+								
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>		
 			
 		</div>
 	</div>
