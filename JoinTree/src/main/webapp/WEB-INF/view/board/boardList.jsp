@@ -35,7 +35,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<input type="text" id="searchText" name="searchText" class="form-control">
+				<input type="text" id="searchText" name="searchText" class="form-control" placeholder="검색어를 입력하세요">
 			</div>
 			<div class="form-group">
 				<button type="button" id="searchBoardListBtn" class="btn btn-success btn-sm">검색</button>
@@ -62,11 +62,11 @@
 				<table id="boardListTable" class="table table-bordered">
 					<thead id="pinnedList">
 						<tr class="no-click" >
-							<th class="font-weight-bold">번호</th>
-							<th class="font-weight-bold">제목</th>
+							<th class="font-weight-bold text-center">번호</th>
+							<th class="font-weight-bold text-center">제목</th>
 							<th class="font-weight-bold">공지부서</th>
-							<th class="font-weight-bold">작성일</th>
-							<th class="font-weight-bold">조회수</th>
+							<th class="font-weight-bold text-center">작성일</th>
+							<th class="font-weight-bold text-center">조회수</th>
 						</tr>
 					</thead>
 					<tbody id="boardList">
@@ -158,7 +158,7 @@
 		        let pinned = data[i];
 		        let row = $('<tr>');
 		        
-		        row.append($('<td width="5%">').text(pinned.boardNo)); // 글 번호
+		        row.append($('<td width="7%" class="text-center">').text(pinned.boardNo)); // 글 번호
 		        
 		     	// <a> 태그 생성, href 속성 설정
 		        let link = $('<a class="text-danger font-weight-bold">')
@@ -176,15 +176,15 @@
 		        }
 		     
 		        // <td> 에 <a> 링크 추가
-		        let boardTitleTd = $('<td width="70%">').append(link);
+		        let boardTitleTd = $('<td width="55%">').append(link);
 		        row.append(boardTitleTd); // 제목
 		     
-		        row.append($('<td width="10%">').text(pinned.dept)); // 공지부서
+		        row.append($('<td>').text(pinned.dept)); // 공지부서
 		        
 		        let dateOnly = pinned.createdate.split("T")[0]; // 날짜 값만 저장
-		        row.append($('<td width="10%">').text(dateOnly)); // 작성일
+		        row.append($('<td class="text-center">').text(dateOnly)); // 작성일
 		        
-		        row.append($('<td width="5%">').text(pinned.boardCount)); // 조회수
+		        row.append($('<td width="7%" class="text-center">').text(pinned.boardCount)); // 조회수
 		        thead.append(row);
 		    }
 		}
@@ -200,7 +200,7 @@
 		    for (let i = 0; i < data.length; i++) {
 		        let notice = data[i];
 		        let row = $('<tr>');
-		        row.append($('<td width="5%">').text(notice.boardNo)); // 글 번호
+		        row.append($('<td width="%" class="text-center">').text(notice.boardNo)); // 글 번호
 		        
 		        // <a> 태그 생성, href 속성 설정
 		        let link = $('<a>')
@@ -218,14 +218,14 @@
 		        }
 		        
 		        // <td> 에 <a> 링크 추가
-		        let boardTitleTd = $('<td width="70%">').append(link);
+		        let boardTitleTd = $('<td width="%">').append(link);
 		        row.append(boardTitleTd); // 제목
 		        
-		        row.append($('<td width="10%">').text(notice.dept)); // 공지부서
+		        row.append($('<td width="%">').text(notice.dept)); // 공지부서
 
 		        let dateOnly = notice.createdate.split("T")[0]; // 날짜 값만 저장
-		        row.append($('<td width="10%">').text(dateOnly)); // 작성일
-		        row.append($('<td width="5%">').text(notice.boardCount)); // 조회수
+		        row.append($('<td width="%" class="text-center">').text(dateOnly)); // 작성일
+		        row.append($('<td width="%" class="text-center">').text(notice.boardCount)); // 조회수
 		        tbody.append(row);
 		    }
 		}

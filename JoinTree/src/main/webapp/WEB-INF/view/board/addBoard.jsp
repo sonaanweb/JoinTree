@@ -33,7 +33,7 @@
 												<input type="checkbox" name="boardPinned" class="form-check-input"> 게시판 상단고정 &nbsp;&nbsp;&nbsp;&nbsp;
 											</label>
 										</div>
-										<button type="button" id="addBoardBtn" class="btn btn-success btn-sm">등록</button>
+										<button type="button" id="addBoardBtn" class="btn btn-success btn-fw">게시글 등록</button>
 									</div>
 								</div>
 							</div>
