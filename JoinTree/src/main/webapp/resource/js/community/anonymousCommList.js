@@ -12,7 +12,7 @@ $(document).ready(function() {
 	    	
 	    	// 이전 페이지 버튼
 	    	if (startPage > 1) {
-	    		let prevButton = $('<button type="button" class="btn btn-success">').text('이전');
+	    		let prevButton = $('<button type="button" class="page-link">').text('이전');
 	            prevButton.click(function() {
 	                goToPage(startPage - 1);
 	            });
@@ -22,7 +22,7 @@ $(document).ready(function() {
 	    	// 페이지 버튼 생성
 	    	for (let i = startPage; i <= endPage; i++){
 				const page = i;
-				let pageButton = $('<button type="button" class="btn btn-success">').text(i);
+				let pageButton = $('<button type="button" class="page-link">').text(i);
 		        
 			  // 현재 페이지일 때 'selected-page' 클래스 추가
 		        if (page === currentPage) {
@@ -32,7 +32,7 @@ $(document).ready(function() {
 		        }
 			  
 		     	// 추가할 클래스를 여기에 추가
-		        pageButton.addClass('btn btn-success');
+		        pageButton.addClass('page-link');
 				
 				pageButton.click(function(){
 		        	goToPage(page);
@@ -43,7 +43,7 @@ $(document).ready(function() {
 	    	
 			// 다음 페이지 버튼
 			if (endPage < lastPage){
-				let nextButton = $('<button type="button" class="btn btn-success">').text('다음');
+				let nextButton = $('<button type="button" class="page-link">').text('다음');
 	            nextButton.click(function() {
 	                goToPage(endPage + 1);
 	            });
@@ -81,11 +81,11 @@ $(document).ready(function() {
 	        
 	     	// 헤더 추가
 	        let headerRow = $("<tr>");
-	        headerRow.append("<th>번호</th>");
-	        headerRow.append("<th>제목</th>");
-	        headerRow.append("<th>작성자</th>");
-	        headerRow.append("<th>작성일</th>");
-	        headerRow.append("<th>조회수</th>"); // 헤더를 추가하는 부분
+	        headerRow.append("<th class='font-weight-bold text-center'>번호</th>");
+	        headerRow.append("<th class='font-weight-bold text-center'>제목</th>");
+	        headerRow.append("<th class='font-weight-bold text-center'>작성자</th>");
+	        headerRow.append("<th class='font-weight-bold text-center'>작성일</th>");
+	        headerRow.append("<th class='font-weight-bold text-center'>조회수</th>"); // 헤더를 추가하는 부분
 	        thead.append(headerRow);
 
 	        $.each(pinnedCommList, function(index, pinnedComm) {
@@ -94,14 +94,14 @@ $(document).ready(function() {
 	            var titleCell = $("<td width='40%'>");
 	            var titleLink = $("<a>").attr("href", "/JoinTree/community/anonymousCommList/anonymousCommOne?boardNo=" + pinnedComm.boardNo);
 	            if (pinnedComm.commentCnt > 0) {
-	                titleLink.append("<span style='color:red;'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
+	                titleLink.append("<span >[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
 	            } else {
 	                titleLink.append("<span style='color:red;'>[공지] " + pinnedComm.boardTitle + "</span>");
 	            }
 	            titleCell.append(titleLink);
 	            row.append(titleCell);
 	            row.append("<td width='20%'>" + pinnedComm.empName + "</td>");
-	            row.append("<td width='15%'>" + pinnedComm.createdate + "</td>");
+	            row.append("<td width='15%'>" + pinnedComm.createdate.substring(0, 10) + "</td>");
 	            row.append("<td width='15%'>" + pinnedComm.boardCount + "</td>");
 	            thead.append(row);
 	        });
@@ -132,7 +132,7 @@ $(document).ready(function() {
                 	row.append("<td width='20%'>익명</td>");
                 }
                 
-                row.append("<td width='15%'>" + comm.createdate + "</td>");
+                row.append("<td width='15%'>" + comm.createdate.substring(0, 10) + "</td>");
                 row.append("<td width='15%'>" + comm.boardCount + "</td>");
                 tbody.append(row);
             });
