@@ -64,23 +64,35 @@
 	
 	<!-- 사원별 월 출퇴근 시간 조회 -->
 	<select id="getCommuteTimeList" 
-			parameterType="java.util.Map" resultType="java.util.Map">
+			parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.Commute">
 		SELECT 
-	        c.emp_no empNo, 
-	        c.emp_on_off_date empOnOffDate, 
-	        c.emp_on_time empOnTime, 
-	        c.emp_off_time empOffTime,
-	        cl.code_name leaveType
-	    FROM commute c
-	    LEFT OUTER JOIN leave_recode l ON c.emp_no = l.emp_no 
-		AND c.emp_on_off_date BETWEEN l.leave_start_date AND l.leave_end_date
-		LEFT OUTER JOIN common_code cl ON l.leave_type = cl.code
+	        emp_no empNo, 
+	        emp_on_off_date empOnOffDate, 
+	        emp_on_time empOnTime, 
+	        emp_off_time empOffTime
+	    FROM commute 
 	    WHERE 
-	        c.emp_no = #{empNo} 
-	    AND YEAR(c.emp_on_off_date) = #{targetYear}
-	    AND MONTH(c.emp_on_off_date) = #{targetMonth}
+	        emp_no = #{empNo} 
+		    AND YEAR(emp_on_off_date) = #{targetYear}
+		    AND MONTH(emp_on_off_date) = #{targetMonth}
 	</select>
 	
+	<!-- 사원별 월 연가 기록 조회 -->
+	<select id="getLeaveRecodeList" parameterType="int"
+			resultType="com.goodee.JoinTree.vo.LeaveRecode">
+		SELECT 
+			l.leave_start_date leaveStartDate,
+			l.leave_end_date leaveEndDate,
+			l.leave_period_date leavePeriodDate,
+			c.code_name leaveType
+			FROM leave_recode l
+			INNER JOIN common_code c ON l.leave_type = c.code
+			WHERE l.emp_no = #{empNo}
+		AND YEAR(leave_start_date) = #{targetYear} 
+    	AND MONTH(leave_start_date) = #{targetMonth}
+	</select>
+	
+	<!-- 사원 입사일 조회 -->
 	<select id="getEmpHireDate"
 			parameterType="int" resultType="com.goodee.JoinTree.vo.EmpInfo">
 		

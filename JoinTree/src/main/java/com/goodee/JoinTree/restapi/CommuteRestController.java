@@ -229,6 +229,7 @@ public class CommuteRestController {
 		resultMap.put("daysOfWeek", commuteTimeListMap.get("daysOfWeek")); // 요일 배열
 		resultMap.put("firstDayOfWeek", commuteTimeListMap.get("firstDayOfWeek")); // 해당 월의 1일의 요일
 		resultMap.put("commuteTimeList", commuteTimeListMap.get("commuteTimeList")); // 해당 월의 출퇴근 리스트
+		resultMap.put("leaveRecodeList", commuteTimeListMap.get("leaveRecodeList")); // 해당 월의 연가 리스트
 		resultMap.put("hireYear", hireYear); // 입사 년도
 		resultMap.put("hireMonth", hireMonth); // 입사 월
 		resultMap.put("currentYear", currentYear); // 현재 년도

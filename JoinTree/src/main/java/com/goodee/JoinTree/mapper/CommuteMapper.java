@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.goodee.JoinTree.vo.Commute;
 import com.goodee.JoinTree.vo.EmpInfo;
+import com.goodee.JoinTree.vo.LeaveRecode;
 
 @Mapper
 public interface CommuteMapper {
@@ -24,7 +25,7 @@ public interface CommuteMapper {
 	int currentCommuteCnt(Map<String, Object> currentOnTimeMap);
 	
 	// 사원별 월 출퇴근 시간 조회
-	List<Map<String, Object>> getCommuteTimeList(Map<String, Object> commuteTimeListMap);
+	List<Commute> getCommuteTimeList(Map<String, Object> paramMap);
 	
 	// 사원별 입사일 조회
 	EmpInfo getEmpHireDate(int empNo);
@@ -34,5 +35,8 @@ public interface CommuteMapper {
 	
 	// 주 별 근로시간 통계 조회
 	List<Map<String, Object>> getWeekWorkTimeDate(Map<String, Object> weekWorkTimeDataMap);
+	
+	// 사원별 월 연가 조회
+	List<LeaveRecode> getLeaveRecodeList(Map<String, Object> paramMap);
 	
 }

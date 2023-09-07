@@ -23,10 +23,10 @@
 						<div class="row">
 							<!-- 년, 월 표시 -->
 							<div class="col">
-								<h3>
+								<h3 class="font-weight-bold">
 									<span id="targetYear"></span>
 									<span id="targetMonth"></span>
-									<span>출퇴근 리스트</span>
+									<span>출근부</span>
 								</h3>
 							</div>
 							<!-- 연월 이동 버튼. 입사 연월에 따른 이전달, 다음달 버튼 분기-->
@@ -61,7 +61,7 @@
 			
 		</div>
 	</div>
-	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 	<script>
 		$(document).ready(function(){
 			
@@ -134,6 +134,7 @@
 			let daysOfWeek = data.daysOfWeek; // 요일 배열
 			let firstDayOfWeek = data.firstDayOfWeek; // 해당 월의 1일의 요일
 			let commuteTimeList = data.commuteTimeList; // 해당 월의 출퇴근 리스트
+			let leaveRecodeList = data.leaveRecodeList // 해당 월의 연가 리스트
 			
 			$('#targetYear').text(targetYear + '년');
 			$('#targetMonth').text(targetMonth +1 + '월');
@@ -173,12 +174,26 @@
 	                	if(commute.empOffTime){ // 퇴근 값이 있을 경우 값 저장
 	                		offTime = commute.empOffTime;
 	                	}
-	                	
-	                	if(commute.leaveType){ // 연가 값이 있을 겨우 값 저장
-	                		leaveType = commute.leaveType;
-	                	}
 	                }
 	            });
+	         	
+	         	// currentDate를 moment 객체로 변환
+	         	let currentDateMoment = moment(currentDate, 'YYYY-MM-DD'); 
+	         	
+	         	// DB에 저장된 날짜, 달력의 현재 날짜 비교하여 동일한 날짜에 연가 목록 출력
+	         	$.each(leaveRecodeList, function(index, leave){
+	         		console.log('leaveStartDate:', leave.leaveStartDate, 'leaveEndDate:', leave.leaveEndDate);
+	         	    
+	         		let leaveStartDate = moment(leave.leaveStartDate, 'YYYY-MM-DD');
+	         		let leaveEndDate = moment(leave.leaveEndDate, 'YYYY-MM-DD');
+	         		
+	         		// 현재 날짜가 연가 항목의 시작 날짜와 종료 날짜 사이에 있는지 여부 확인
+	         		if(currentDateMoment.isBetween(leaveStartDate, leaveEndDate, null, '[]')){
+	         			if(leave.leaveType){ // 해당 날짜의 연가 값이 있을 겨우 값 저장
+	         				leaveType = leave.leaveType;
+	                	}
+	         		}
+	         	});
 	            
 	            $('<td>').text(onTime).appendTo(row); // 출근시간
 	            $('<td>').text(offTime).appendTo(row); // 퇴근시간

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.goodee.JoinTree.mapper.CommuteMapper;
 import com.goodee.JoinTree.vo.Commute;
 import com.goodee.JoinTree.vo.EmpInfo;
+import com.goodee.JoinTree.vo.LeaveRecode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -133,12 +134,16 @@ public class CommuteService {
         int firstDayOfWeek = firstDay.get(Calendar.DAY_OF_WEEK);
  		
 		// 사원별 월 출퇴근 시간 목록
-        Map<String, Object> commuteTimeListMap = new HashMap<>();
-        commuteTimeListMap.put("empNo", empNo);
-        commuteTimeListMap.put("targetYear", targetYear);
-        commuteTimeListMap.put("targetMonth", targetMonth+1);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("empNo", empNo);
+        paramMap.put("targetYear", targetYear);
+        paramMap.put("targetMonth", targetMonth+1);
         
-        List<Map<String, Object>> commuteTimeList = commuteMapper.getCommuteTimeList(commuteTimeListMap);
+        // 출퇴근 리스트 조회
+        List<Commute> commuteTimeList = commuteMapper.getCommuteTimeList(paramMap);
+        
+        // 연가 리스트 조회
+        List<LeaveRecode> leaveRecodeList = commuteMapper.getLeaveRecodeList(paramMap);
         
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("targetYear", targetYear);
@@ -147,6 +152,7 @@ public class CommuteService {
         resultMap.put("daysOfWeek", daysOfWeek);
         resultMap.put("firstDayOfWeek", firstDayOfWeek);
         resultMap.put("commuteTimeList", commuteTimeList);
+        resultMap.put("leaveRecodeList", leaveRecodeList);
         
         log.debug(resultMap.toString() + "<-- CommuteService resultMap");
 		

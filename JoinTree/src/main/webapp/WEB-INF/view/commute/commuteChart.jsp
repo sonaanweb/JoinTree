@@ -12,7 +12,7 @@
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h3>근로시간 통계</h3>
+						<h3 class="font-weight-bold">근로시간 통계</h3>
 						<br>
 						<!-- 월 별 조회 -->
 						<select id="monthSelect" class="form-control col-sm-1">
