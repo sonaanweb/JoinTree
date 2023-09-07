@@ -79,10 +79,10 @@ public class MeetRoomController {
 	    return response;
 	}
     
-	// 회의실 수정
+	// 회의실 수정 액션
 	@PostMapping("/equipment/modifyMeetRoom")
 	@ResponseBody
-	public String updateMeetRoom(HttpSession session, MeetingRoom meetingRoom, HttpServletRequest request) {
+	public String updateMeetRoom(@ModelAttribute MeetingRoom meetingRoom, HttpSession session, HttpServletRequest request) {
 	    try {
 	        AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
 	        int empNo = loginAccount.getEmpNo();
