@@ -11,69 +11,86 @@
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		
-		
+			<!-- 검색폼 -->
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h4 class="card-title">주소록</h4>
-							<div>
-								사번
-								<input type="text" id="searchEmpNo" name="empNo">
-							</div>
-							<br>
-							<div>
-								사원명
-								<input type="text" id="searchEmpName" name="empName">
-							</div>
-							<br>
-							<div>
-								부서
-								<select id="searchDept" name="dept">
-									<option value="">선택하세요</option>
-									<c:forEach var="d" items="${deptCodeList}">
-										<option value="${d.code}">${d.codeName}</option>
-									</c:forEach>
-								</select>
-							</div>
-							<div>
-								<button type="button" id="searchEmpListBtn">검색</button>
-							</div>
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>
-											사번
-										</th>
-										<th>
-											사원명
-										</th>
-										<th>
-											부서
-										</th>
-										<th>
-											직급
-										</th>
-										<th>
-											연락처
-										</th>
-										<th>
-											내선번호
-										</th>
-									</tr>
-								</thead>
-								<tbody id="empTelList">
-								
-								</tbody>
-							</table>	
-							<!-- 페이지 네비게이션 -->
-							<div class="paging center pagination margin-top20" id="pagination">
+						<form>
+							<div class="form-row">
+												<div class="col-md-4">
+													<div class="form-group row">
+														<label for="searchEmpNo" class="col-form-label"><strong>사번</strong></label>
+														<div class="col-sm-9">
+															<input type="text" id="searchEmpNo" name="empNo" class="form-control">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group row">
+														<label for="searchEmpName" class="col-form-label"><strong>사원명</strong></label>
+														<div class="col-sm-9">
+															<input type="text" id="searchEmpName" name="empName" class="form-control">
+														</div>
+													</div>
+												</div>
+												
+												
+												<div class="col-md-4">
+													<div class="form-group row">
+														<label for="searchDept" class="col-form-label"><strong>부서</strong></label>
+														<div class="col-sm-9">
+															<select id="searchDept" name="dept" class="form-control">
+																<option value="">선택하세요</option>
+																<c:forEach var="d" items="${deptCodeList}">
+																	<option value="${d.code}">${d.codeName}</option>
+																</c:forEach>
+															</select>
+														</div>
+														</div>
+													<div>
+												</div>
+												
+											</div>
 								
 							</div>
-						</div>
+							<div class="center">
+								<button type="button" id="searchEmpListBtn" class="btn btn-dark">검색</button>
+								</div>
+						</form>
 					</div>
 				</div>
 			</div>
- 		</div>
+							
+									<div class="col-lg-12 grid-margin stretch-card">
+										<div class="card">
+											<div class="card-body">
+												<table class="table">
+													<thead>
+														<tr>
+															<th>사번</th>
+															<th>사원명</th>
+															<th>부서</th>
+															<th>직급</th>
+															<th>연락처</th>
+															<th>내선번호</th>
+														</tr>
+													</thead>
+													<tbody id="empTelList">
+													
+													</tbody>
+												</table>	
+												<!-- 페이지 네비게이션 -->
+												<div class="paging center pagination margin-top20" id="pagination">
+								
+												</div>
+											</div>
+										</div>
+									</div>
+			
+			
+			
+		</div>
+	</div>
                       
 	
 	<!-- footer -->

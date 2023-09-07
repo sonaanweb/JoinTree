@@ -580,9 +580,11 @@
 			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 				<div class="row">	
 					<!-- 기안서 -->
-					<div class="col-md-3">
+					<div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
 						<div>
-							<select id="slectDocument" name="document">
+							<select id="slectDocument" name="document" class="form-control">
 								<c:forEach var="d" items="${documentCodeList}">
 									<option id="category" value="${d.code}">${d.codeName}</option>
 								</c:forEach>
@@ -590,8 +592,8 @@
 						</div>
 						<!-- 결재선 -->
 						<div>
-							<h1>결재선</h1>
-							<button type="button" id="modalSingerBtn"><i class="mdi mdi-account-plus"></i></button>	
+							<h3>결재선</h3>
+							<button type="button" id="modalSingerBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-account-plus"></i></button>	
 							<div style="border: 1px solid #999; width:200px; height: 200px;">
 								<div>
 									${empInfo.empName}
@@ -602,33 +604,36 @@
 								</div>
 								
 							</div>
-							<button type="button" id="deleteSignerBtn"><i class="mdi mdi-close"></i></button>
-							<button type="button" id="moveUpBtn"><i class="mdi mdi-arrow-up"></i></button>
-							<button type="button" id="moveDownBtn"><i class="mdi mdi-arrow-down"></i></button>
-							<button type="button" id="inputSignerBtn"><i class="mdi mdi-plus"></i></button>
+							<button type="button" id="deleteSignerBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-close"></i></button>
+							<button type="button" id="moveUpBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-arrow-up"></i></button>
+							<button type="button" id="moveDownBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-arrow-down"></i></button>
+							<button type="button" id="inputSignerBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-plus"></i></button>
 						</div>
 						<div>
-							<h1>참조자</h1>
-							<button type="button" id="modalReferBtn"><i class="mdi mdi-account-plus"></i></button>	
+							<h3>참조자</h3>
+							<button type="button" id="modalReferBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-account-plus"></i></button>	
 							<div id="selectReference" style="border: 1px solid #999; width:200px; height: 200px;">
 								<!-- 여기에 데이터를 추가하는 부분 -->
 							</div>
-							<button type="button" id="inputReferBtn"><i class="mdi mdi-plus"></i></button>
+							<button type="button" id="inputReferBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-plus"></i></button>
 						</div>
 						
 						<div>
-							<h1>수신팀</h1>
-							<button type="button" id="modalReceiverBtn"><i class="mdi mdi-account-plus"></i></button>
+							<h3>수신팀</h3>
+							<button type="button" id="modalReceiverBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-account-plus"></i></button>
 							<div id="selectReceiverTeam" style="border: 1px solid #999; width:200px; height: 200px;">
 								<!-- 여기에 데이터를 추가하는 부분 -->
 							</div>
-							<button type="button" id="inputReceiverBtn"><i class="mdi mdi-plus"></i></button>
+							<button type="button" id="inputReceiverBtn" class="btn btn-inverse-dark btn-icon"><i class="mdi mdi-plus"></i></button>
 						</div>
 					</div><!-- col-md-3 끝 -->
+					</div>
+					</div>
+					
 					<div class="col-md-9 grid-margin stretch-card">
 						<div class="card">
 							<div class="card-body">
-								<button type="button" id="docFormBtn">결재상신</button>
+								<button type="button" id="docFormBtn" class="btn btn-dark btn-sm">결재상신</button>
 								<div id="documentForm">
 									<!-- 폼데이터 추가 -->
 								</div>
