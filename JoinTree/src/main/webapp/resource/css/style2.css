@@ -1,12 +1,22 @@
 @charset "UTF-8";
+
+@font-face {
+	font-family: 'Pretendard-Regular';
+	src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
 * {
-	font-family: 'Gothic A1', sans-serif;
 	color: #464846;
+	font-family: 'Pretendard-Regular';
+}
+html,body {
+	color: #464846;
+	font-family: 'Pretendard-Regular' !important;
 }
 .line {
 	border-bottom: 1px solid #999;
 }
-
 .center{
 	text-align: center;
 	justify-content: center;
@@ -27,11 +37,17 @@
 .margin-left10 {
 	margin-left: 10px;
 }
+.margin-top10 {
+	margin-top: 10px;
+}
 .margin-top20 {
 	margin-top: 20px;
 }
 .margin-left30 {
 	margin-left: 30px;
+}
+.margin-top190 {
+	margin-top: 190px;
 }
 .floatR{
 	float: right;
@@ -42,6 +58,16 @@
 .hidden {
 	display: none;
 }
+/* 사이드 바*/
+.sidebar .nav .nav-item.active > .nav-link i {
+	color:#25A8E0 !important;
+}
+.sidebar .nav .nav-item.active > .nav-link .menu-title {
+	color:#25A8E0 !important;
+}
+.sidebar .nav.sub-menu .nav-item .nav-link.active {
+	color:#25A8E0 !important;
+}
 /* 스위치 스타일 */
 .switch {
 	position: relative;
@@ -49,13 +75,11 @@
 	width: 40px;
 	height: 20px;
 }
-
 .switch input {
 	opacity: 0;
 	width: 0;
 	height: 0;
 }
-
 .slider {
 	position: absolute;
 	cursor: pointer;
@@ -67,7 +91,6 @@
 	-webkit-transition: .4s;
 	transition: .4s;
 }
-
 .slider:before {
 	position: absolute;
 	content: "";
@@ -79,15 +102,12 @@
 	-webkit-transition: .4s;
 	transition: .4s;
 }
-
 input:checked + .slider {
 	background-color: #2196F3;
 }
-
 input:focus + .slider {
 	box-shadow: 0 0 1px #2196F3;
 }
-
 input:checked + .slider:before {
 	-webkit-transform: translateX(20px);
 	-ms-transform: translateX(20px);
@@ -98,7 +118,6 @@ input:checked + .slider:before {
 .slider.round {
 	border-radius: 34px;
 }
-
 .slider.round:before {
 	border-radius: 50%;
 }
@@ -106,13 +125,14 @@ input:checked + .slider:before {
 /* 공통코드 테이블*/
 .code {
 	overflow-y: hidden;
-	border: 1px solid #ccc; /* 스크롤 바깥쪽 테두리 추가 */
 	margin-bottom: 20px; /* 아래 여백 추가 */
 	position: relative; /* Relative 포지션 추가 */
 }
-.scrollable-tbody {
+.codelist {
 	height: 400px; 
 	overflow-y: auto;
+	box-shadow: 2px 2px 4px rgba(153, 153, 153, 0.5);
+	margin: 3px 3px 3px 0;
 }
 .code table {
 	border-collapse: collapse;
@@ -123,13 +143,25 @@ input:checked + .slider:before {
 	top: 0;
 	z-index: 2; /* 더 높은 z-index 값을 사용하여 스티키 헤더를 위로 유지 */
 }
+.code .table th {
+	background-color: #ccc;
+	width: 100px;
+}
+.code-one table{
+	box-shadow: 2px 2px 4px rgba(153, 153, 153, 0.3);
+	margin: 3px 3px 3px 0;
+}
 .upCodeLink:hover {
-	background-color: lightskyblue;
+	background-color: #efefef;
 }
 .codeOneLink:hover {
-	background-color: lightskyblue;
+	background-color: #efefef;
 }
-
+.code input {
+	border: none;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+	height: 20px;
+}
 .add-code {
 	margin-top: 20px;
 	border: 1px solid #999;
@@ -145,8 +177,8 @@ input:checked + .slider:before {
 /*홈*/
 .home-profile img{
 	width: 100px;
-    height: 100px;
-    border-radius: 100%;
+	height: 100px;
+	border-radius: 100%;
 }
 
 /*기안서*/
@@ -213,20 +245,52 @@ input:checked + .slider:before {
 .doc .doc-comment input {
 	width: auto;
 }
-
+.doc-line .btn{
+	width: 25px;
+	height: 25px;
+	padding: 0px;
+	margin-top: 3px;
+}
+.doc-line .wrapper h3{
+	margin: 0;
+}
+.doc-line .wrapper button{
+	margin: 0px 0px 0px 5px;
+}
+.doc-line .line {
+	border-bottom: 1px solid #efefef;
+}
+.doc_selete {
+	border: 1px solid #999; 
+	box-shadow: 0px 0px 5px rgba(153, 153, 153, 0.5);
+	width: 100%; 
+	height: 130px;
+	font-size: 15px;
+	padding: 15px;
+}
 /*프로젝트*/
-.project .card{
+.project .projectData .card{
 	width: 300px;
 	height: 300px;
 	margin: 30px 0px 0px 0px;
 }
-.project .wrapper {
-	height: 650px;
+.project h1 {
+	font-weight: 900;
+	font-size: 40px;
 }
-.project .paging {
-	margin-top: 70px;
+.projectData {
+	height: 750px;
+	overflow-y: auto;
 }
-.project-modal .wrapper{
+.projectData .card {
+	position: relative;
+}
+.projectData .membercnt {
+	position: absolute;
+	bottom: 10px;
+	left: calc(50% - 40px);
+}
+.project-modal .wrapper {
 	align-items: center;
 }
 .color {
@@ -247,10 +311,15 @@ input:checked + .slider:before {
 	font-size: 20px;
 	margin-right: 40px;
 }
-.projectOne .wrapper p, .projectOne .wrapper p input {
+.projectOne .wrapper p {
 	font-weight: 500;
 	font-size: 18px;
-	margin-top: 1px;
+	margin-top: -1px;
+}
+.projectOne .wrapper p input {
+	font-weight: 500;
+	font-size: 18px;
+	margin-top: -5px;
 }
 .projectOne .wrapper div{
 	align-items: center;
@@ -298,6 +367,9 @@ input:checked + .slider:before {
 	background-color: transparent;
 	border-radius: 3px;
 }
+.projectOne h3 input{
+	width: 50%;
+}
 .progress {
 	width: 70%;
 	height: 20px;
@@ -344,9 +416,6 @@ input:checked + .slider:before {
 .projectTaskListAll .card-body h4:first-child {
 	color: crimson;
 }
-.projectTaskListAll .card-body .btn{
-	
-}
 
 /* 프로젝트 작업 */
 .projectTask .card{
@@ -380,4 +449,27 @@ input:checked + .slider:before {
 .add-comment input {
 	width: 500px;
 	text-decoration: underline;
+}
+.taskFile input {
+	height: 50px;
+}
+
+/* 캘린더 */
+.fc-daygrid-block-event .fc-event-title {
+	color: red;
+}
+/* 모달 */
+.modal-content  {
+	background-color: #efefef !important;
+}
+.modal .modal-title {
+	width: 100%;
+}
+.modal .btn-close {
+	width: 10px;
+	text-align: right;
+	padding: 17px -26px 13px 10px;
+	margin: -25px -26px -25px auto;
+	border: none;
+	font-size: 23px;
 }

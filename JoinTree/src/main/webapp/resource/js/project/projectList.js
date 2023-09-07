@@ -6,6 +6,7 @@ $(document).ready(function() {
 		const projectDataElement = $('#projectData'); // 프로젝트 목록을 담는 요소
 		const pagingElement = $('#paging'); // 페이징 버튼 컨테이너
 		let selectedTab = 'all'; // 선택된 탭을 나타내는 변수
+		let pageNum = 1; // 선택된 탭을 나타내는 변수
 		
 		const tabs = { // 페이징 관리
 			all: {
@@ -31,21 +32,31 @@ $(document).ready(function() {
 		const rowPerPage = 8; // 한 페이지당 수
 		
 		fetchProjectListAndUpdate(selectedTab);
-	
+		
+	 	updatePagingButtons(selectedTab, pageNum);
+		
 		// 버튼 클릭 시 이벤트
 		function attachPageButtonEventHandlers() {
-			$('.pageBtn').click(function() {
+			// 기존의 클릭 이벤트 제거 (중복연결로 인해 같은 동작 실행 방지)
+			$('.pageBtn').off('click');
+	
+			// 클릭 이벤트 핸들러 다시 연결
+			$('.pageBtn').on('click',function() {
 				const clickedTab = $(this).data('tab');
-				const pageNum = $(this).data('page');
+				pageNum = $(this).data('page');
 				
 				tabs[clickedTab].startRow = (pageNum - 1) * rowPerPage;
+				
+				// 페이지 버튼 클릭 시 업데이트 함수 호출
+				updatePagingButtons(clickedTab, pageNum);
 				
 				fetchProjectListAndUpdate(clickedTab); 	
 			});
 		}
 		
 		// 버튼 생성 및 삭제 -> 버튼 업데이트
-		function updatePagingButtons(selectedTab) {
+		function updatePagingButtons(selectedTab, selectedPageNum) {
+			console.log("selectedPageNum2",selectedPageNum);
 				//console.log("selectedTab",selectedTab);
 			// tab은 tabs에서 선택된 탭
 			const tab = tabs[selectedTab];
@@ -54,11 +65,12 @@ $(document).ready(function() {
 			// 전체페이지가 1과 같거나 크면 
 			if (tab.totalPages >= 1) {
 				for (let i = 1; i <= tab.totalPages; i++) {
-					buttons.push('<button class="page-link pageBtn" data-tab="' + selectedTab + '" data-page="' + i + '">' + i + '</button>');
+					const activeClass = selectedPageNum === i ? ' active' : '';
+					buttons.push('<div class="page-item' + activeClass + '"><button class="page-link pageBtn" data-tab="' + selectedTab + '" data-page="' + i + '">' + i + '</button></div>');
 				}
 			}
 			pagingElement.html(buttons.join(' '));
-		
+			
 			// 새로운 클릭 이벤트 핸들러 추가
 			attachPageButtonEventHandlers();
 		}
@@ -109,14 +121,14 @@ $(document).ready(function() {
 						projectDataElement.empty(); // 기존 내용을 지우기
 						
 						projectList.forEach(function(project) {
-							console.log("project",project);
+							//console.log("project",project);
 							const html = 
 								'<div class="col-md-3 stretch-card grid-margin">'+
 									'<div class="card" style="background-color: ' + project.projectColor + ';">'+
 										'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
-											'<div>' + project.projectName + '</div>'+
+											'<div><b>' + project.projectName + '</b></div>'+
 											'<div>' + project.projectContent + '</div>'+
-											'<div>' + project.empCnt + '명 참여중</div>'+
+											'<div class="membercnt">' + project.empCnt + '명 참여중</div>'+
 										'</div>'+
 									'</div>'+
 								'</div>';
@@ -129,7 +141,7 @@ $(document).ready(function() {
 							// console.log("Åll tab.totalItems",tab.totalItems);
 						tab.totalPages = calculateTotalPages(tab.totalItems); // 총 페이지 수
 							// console.log("Åll tab.totalPages",tab.totalPages);
-						updatePagingButtons(selectedTab);
+						updatePagingButtons(selectedTab,pageNum);
 					},
 					error: function() {
 						projectDataElement.text('데이터를 불러오는 데 실패했습니다.');
@@ -165,7 +177,7 @@ $(document).ready(function() {
 										'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
 											'<div data-pjNo=' + project.projectNo+'>' + project.projectName + '</div>'+
 											'<div>' + project.projectContent + '</div>'+
-											'<div>' + project.empCnt + '명 참여중</div>'+
+											'<div class="membercnt">' + project.empCnt + '명 참여중</div>'+
 										'</div>'+
 									'</div>'+
 								'</div>';
@@ -178,7 +190,7 @@ $(document).ready(function() {
 						tab.totalPages = calculateTotalPages(tab.totalItems); // 총 페이지 수
 						// console.log("personal tab.totalPages",tab.totalPages);
 
-						updatePagingButtons(selectedTab);
+						updatePagingButtons(selectedTab,pageNum);
 					},
 					error: function() {
 						projectDataElement.text('데이터를 불러오는 데 실패했습니다.');
@@ -213,7 +225,7 @@ $(document).ready(function() {
 										'<div class="card-body center" data-pjno=' + project.projectNo+'>'+
 											'<div data-pjNo=' + project.projectNo+'>' + project.projectName + '</div>'+
 											'<div>' + project.projectContent + '</div>'+
-											'<div>' + project.empCnt + '명 참여중</div>'+
+											'<div class="membercnt">' + project.empCnt + '명 참여중</div>'+
 										'</div>'+
 									'</div>'+
 								'</div>';
@@ -223,7 +235,7 @@ $(document).ready(function() {
 						// 페이징 버튼 업데이트
 						tab.totalItems = totalCnt; // 총 프로젝트 수
 						tab.totalPages = calculateTotalPages(tab.totalItems); // 총 페이지 수
-						updatePagingButtons(selectedTab);
+						updatePagingButtons(selectedTab,pageNum);
 					},
 					error: function() {
 						projectDataElement.text('데이터를 불러오는 데 실패했습니다.');

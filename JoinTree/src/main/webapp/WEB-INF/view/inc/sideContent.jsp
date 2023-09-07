@@ -179,7 +179,7 @@
 			</c:forEach>
 			<div class="collapse" id="commute">
 				<ul class="nav flex-column sub-menu">
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/commute/commuteList">일별 출퇴근 리스트</a></li>									
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/commute/commuteList">출근부</a></li>									
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/commute/commuteChart">근로시간 통계</a></li>									
 				</ul>
 			</div>

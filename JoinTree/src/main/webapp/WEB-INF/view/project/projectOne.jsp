@@ -90,21 +90,38 @@
 			<div class="modal-content project-modal">
 				<div class="modal-header">
 					<h5 class="modal-title">프로젝트 작업 추가</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
 				</div>
 					
 				<div class="modal-body">
-					<div>
-						담당자 : <input type="text" readonly="readonly" value="${empName}" data-empno="${loginAccount.empNo}" id="teskHost">
+					<div class="margin-top20">
+						<b>담당자</b>
+						<input type="text" readonly="readonly" class="form-control" value="${empName}" data-empno="${loginAccount.empNo}" id="teskHost">
 					</div>
-					<div>
-						작업명 : <input type="text" id="taskTitle">
+					<div class="margin-top20">
+						<b>작업명</b>
+						<input type="text" class="form-control" id="taskTitle">
 					</div>
-					<div>작업 시작일 : <input type="date" id="taskStartDate"></div>
-					<div>작업 종료일 : <input type="date" id="taskEndDate"></div>
-					<div>작업 설명 : <textarea id="taskContent"></textarea></div>
-					<div>첨부파일 :<input type="file" id="taskOriginFilename"></div>
-					<div>
+					<div class="margin-top20">
+						<b>작업 시작일 </b>
+						<input type="date" class="form-control" id="taskStartDate">
+					</div>
+					<div class="margin-top20">
+						<b>작업 종료일</b>
+						<input type="date" class="form-control" id="taskEndDate">
+					</div>
+					<div class="margin-top20">
+						<b>작업 설명</b>
+						<textarea id="taskContent" class="form-control"></textarea>
+					</div>
+					
+					<div class="margin-top20 taskFile">
+						<b>첨부파일</b>
+						<input type="file" class="form-control " id="taskOriginFilename">
+					</div>						
+					<div class="margin-top20">
 						<button type="button" id="addTaskSubmitBtn" class="btn btn-success">작업 추가</button>
 					</div>
 				</div>
