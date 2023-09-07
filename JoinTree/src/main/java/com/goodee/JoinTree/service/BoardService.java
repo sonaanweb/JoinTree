@@ -52,8 +52,8 @@ public class BoardService {
 			bf.setBoardOriginFilename(file.getOriginalFilename()); // 파일 원본 이름
 			bf.setBoardFilesize(file.getSize()); // 파일 사이즈
 			bf.setBoardFiletype(file.getContentType()); // 파일 타입(MIME)
-			bf.setCreateId(board.getCreateId());
-			bf.setUpdateId(board.getUpdateId());
+			bf.setCreateId(board.getEmpNo());
+			bf.setUpdateId(board.getEmpNo());
 		
 		
 			// 확장자
