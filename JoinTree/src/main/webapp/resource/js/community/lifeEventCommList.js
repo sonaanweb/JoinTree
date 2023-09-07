@@ -94,9 +94,9 @@ $(document).ready(function() {
 		            var titleCell = $("<td width='40%'>");
 		            var titleLink = $("<a>").attr("href", "/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=" + pinnedComm.boardNo);
 		            if (pinnedComm.commentCnt > 0) {
-		                titleLink.append("<span class='text-danger font-weight-bol'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
+		                titleLink.append("<span class='text-danger font-weight-bold'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
 		            } else {
-		                titleLink.append("<span class='text-danger font-weight-bol'>[공지] " + pinnedComm.boardTitle + "</span>");
+		                titleLink.append("<span class='text-danger font-weight-bold'>[공지] " + pinnedComm.boardTitle + "</span>");
 		            }
 		            titleCell.append(titleLink);
 		            row.append(titleCell);

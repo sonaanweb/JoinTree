@@ -94,7 +94,7 @@ $(document).ready(function() {
 		            var titleCell = $("<td width='40%'>");
 		            var titleLink = $("<a>").attr("href", "/JoinTree/community/freeCommList/freeCommOne?boardNo=" + pinnedComm.boardNo);
 		            if (pinnedComm.commentCnt > 0) {
-		                titleLink.append("<span class='text-danger font-weight-bol'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
+		                titleLink.append("<span class='text-danger font-weight-bold'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
 		            } else {
 		                titleLink.append("<span class='text-danger font-weight-bold'>[공지] " + pinnedComm.boardTitle + "</span>");
 		            }
