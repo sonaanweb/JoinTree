@@ -202,6 +202,20 @@ public class DocumentService {
 	
 		return row;	
 	}
+	
+	// 연가 기록 조회
+	public Map<String, Object> getDocumentLeave(int docNo) {
 		
+		Map<String, Object> documentLeave = documentMapper.getDocumentLeaveOne(docNo);
+		log.debug(documentLeave+"<-- DocumentService documentLeave");
+		return documentLeave;
+	}
+	
+	// 기본 기안서 조회
+	public Map<String, Object> getDocumentDefaultOne(int docNo) {
+		
+		Map<String, Object> docDefaultOne = documentMapper.getDocumentDefaultOne(docNo);
+		return docDefaultOne;
+	}	
 
 }

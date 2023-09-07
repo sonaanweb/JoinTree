@@ -7,9 +7,11 @@
 			parameterType="java.util.Map" resultType="int">
 		SELECT 
 			COUNT(*) 
-		FROM emp_info
+		FROM emp_info e
+		LEFT OUTER JOIN account_list alist ON e.emp_no = alist.emp_no
  		WHERE 
  			1=1
+ 			AND alist.active = 'A0101'
  			<if test="empNo != null and empNo != 0">
 		        AND emp_no = #{empNo}
 		    </if>
@@ -28,12 +30,14 @@
 			e.emp_no empNo, 
 			e.emp_name empName, 
 			dc.code_name dept, 
-			al.annual_count annualCount
+			SUM(al.annual_count) annualCount
 		FROM emp_info e 
 		LEFT OUTER JOIN annual_leave al ON e.emp_no = al.emp_no
+		LEFT OUTER JOIN account_list alist ON e.emp_no = alist.emp_no
 		INNER JOIN common_code dc ON e.dept = dc.code
 		WHERE
 			1=1
+			AND alist.active = 'A0101'
 			<if test="empNo !=null and empNo != 0">
 		    	AND e.emp_no = #{empNo}
 		    </if>
@@ -42,7 +46,8 @@
 		    </if>
 		    <if test="dept != null and dept != ''">
 		     	AND dc.code = #{dept}
-		    </if> 
+		    </if>
+		GROUP BY e.emp_no     
 		ORDER BY e.emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}     
 	</select>
@@ -57,6 +62,7 @@
 		LEFT OUTER JOIN account_list al ON lr.emp_no = al.emp_no
 		WHERE
 			1=1
+			AND al.active = 'A0101'
 			<if test="empNo !=null and empNo != 0">
 		    	AND lr.emp_no = #{empNo}
 		    </if>
@@ -98,6 +104,7 @@
 		INNER JOIN common_code dc ON ei.dept = dc.code
 		WHERE
 			1=1
+			AND al.active = 'A0101'
 			<if test="empNo !=null and empNo != 0">
 		    	AND lr.emp_no = #{empNo}
 		    </if>
@@ -129,8 +136,10 @@
 			COUNT(*)
 		FROM commute c
 		LEFT OUTER JOIN emp_info e ON c.emp_no = e.emp_no
+		LEFT OUTER JOIN account_list al ON e.emp_no = al.emp_no
 		WHERE
 			1=1
+			AND al.active = 'A0101'
 			<if test="empNo !=null and empNo != 0">
 		    	AND e.emp_no = #{empNo}
 		    </if>
@@ -162,9 +171,11 @@
 			c.emp_off_time empOffTime
 		FROM commute c
 		LEFT OUTER JOIN emp_info e ON c.emp_no = e.emp_no
+		LEFT OUTER JOIN account_list al ON e.emp_no = al.emp_no
 		INNER JOIN common_code dc ON e.dept = dc.code
 		WHERE
 			1=1
+			AND al.active = 'A0101'
 			<if test="empNo !=null and empNo != 0">
 		    	AND e.emp_no = #{empNo}
 		    </if>
@@ -184,5 +195,36 @@
 		ORDER BY c.emp_on_off_date DESC, c.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage}  
 	</select>
+	
+	<!-- 연가 사용 입력 -->
+	<insert id="addLeaveRecode">
+		INSERT INTO leave_recode (
+			emp_no, 
+			doc_no, 
+			leave_start_date, 
+			leave_end_date, 
+			leave_period_date, 
+			leave_type, 
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+			)
+		VALUES (
+			#{docEmpNo},
+			#{docNo},
+			#{leaveStartDate},
+			#{leaveEndDate},
+			#{leavePeriodDate},
+			#{leaveType},
+			NOW(),
+			NOW(),
+			#{empNo},
+			#{empNo}
+		)
+	</insert>
+	
+	<!-- 연차 업데이트 -->
+	
 
 </mapper>

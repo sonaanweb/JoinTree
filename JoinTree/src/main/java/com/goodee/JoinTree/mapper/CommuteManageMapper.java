@@ -25,5 +25,8 @@ public interface CommuteManageMapper {
 
 	// 검색 조건별 행의 수 (출퇴근 목록)
 	int searchCommuteFullListCnt(Map<String, Object> searchCommuteFullList);
+	
+	// 연가 기록 등록
+	int addLeaveRecode(Map<String, Object> addLeaveRecodeMap);
 
 }

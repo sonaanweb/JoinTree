@@ -1,5 +1,6 @@
 package com.goodee.JoinTree.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.goodee.JoinTree.mapper.DocumentFileMapper;
 import com.goodee.JoinTree.service.CodeService;
-import com.goodee.JoinTree.service.DocumentListService;
+import com.goodee.JoinTree.service.CommuteManageService;
 import com.goodee.JoinTree.service.DocumentService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.OrgChartService;
@@ -47,7 +47,7 @@ public class DocumentController {
 	@Autowired
 	private CodeService codeService;
 	@Autowired
-	DocumentListService documentListService;
+	private CommuteManageService commuteManageService;
 	
 	// document.jsp
 	@GetMapping("/document/documentDraft")
@@ -252,7 +252,7 @@ public class DocumentController {
 	    model.addAttribute("signerCnt", signerCnt);
 	    
 	    log.debug("signerCnt:" + signerCnt);
-
+	    
 	    int row = 0;
 	    
 	    // 문서 결재 상태 A0201 대기(default) A0202 결재중 A0203 결재완료 A0204 반려
@@ -304,6 +304,30 @@ public class DocumentController {
 	    }
 
 	    if (row == 3) {
+	    	
+	    	// DocumentDefault Map
+	    	Map<String, Object> docDefaultOne = documentService.getDocumentDefaultOne(docNo);
+	    	
+	    	// DocumentLeave Map
+	    	Map<String, Object> documentLeave = null;
+	    	
+	    	// 변수에 값 저장
+	    	int docEmpNo = (Integer) docDefaultOne.get("empNo"); // 기안문서 사번
+	    	String docCategory = (String) docDefaultOne.get("category"); // 문서 카테고리
+	    	String docStatus = (String) docDefaultOne.get("docStatus"); // 문서 상태
+	    	
+	    	// 문서 카테고리 휴가('D0102'), 문서상태 결재완료('A0203') 연가 사용 등록, 연차 일 수 차감(공가 제외)
+	    	if(docCategory.equals("D0102")) {
+	    		
+	    		if(docStatus.equals("A0203")) {
+	    			
+	    			documentLeave = new HashMap<>();
+	    			documentLeave = documentService.getDocumentLeave(docNo); // DocumentLeave 값 저장
+	    			
+	    			int addLeaveRecoderow = commuteManageService.addLeaveRecode(empNo,docEmpNo, documentLeave); // 연가 기록 등록
+	    		}
+	    	}
+	    	
 	        return "success";
 	    } else {
 	        return "fail";

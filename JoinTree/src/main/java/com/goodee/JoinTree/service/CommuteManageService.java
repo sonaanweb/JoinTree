@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.goodee.JoinTree.mapper.CommuteManageMapper;
+import com.goodee.JoinTree.vo.DocumentDefault;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -176,6 +177,24 @@ public class CommuteManageService {
 		searchCommuteFullListResult.put("currentPage", currentPage);
 		
 		return searchCommuteFullListResult;
+	}
+	
+	// 연가 기록 등록
+	public int addLeaveRecode(int empNo, int docEmpNo, Map<String, Object> documentLeave) {
+		
+		// commuteManageMapper에 전달 할 값 Map에 저장
+		Map<String, Object> addLeaveRecodeMap = new HashMap<>();
+		addLeaveRecodeMap.put("docEmpNo", docEmpNo); // 연차 문서 작성 사번
+		addLeaveRecodeMap.put("empNo", empNo); // 생성자, 수정자
+		addLeaveRecodeMap.put("docNo", documentLeave.get("docNo")); // 문서번호
+		addLeaveRecodeMap.put("leaveStartDate", documentLeave.get("docLeaveStartDate")); // 시작일
+		addLeaveRecodeMap.put("leaveEndDate", documentLeave.get("docLeaveEndDate")); // 종료일
+		addLeaveRecodeMap.put("leavePeriodDate", documentLeave.get("docLeavePeriodDate")); // 연가 사용일 수
+		addLeaveRecodeMap.put("leaveType", documentLeave.get("leaveCategory")); // 연가 구분
+		
+		int addLeaveRecodeRow = commuteManageMapper.addLeaveRecode(addLeaveRecodeMap);
+		log.debug(addLeaveRecodeRow + "<-- CommuteService addLeaveRecodeRow");
+		return addLeaveRecodeRow;
 	}
 
 }

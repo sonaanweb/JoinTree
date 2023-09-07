@@ -275,6 +275,9 @@
 			parameterType="int" resultType="java.util.Map">
 		SELECT 
 			d.doc_no docNo, -- 문서번호
+			d.category, -- 문서 카테고리
+			d.doc_status docStatus, -- 문서 상태
+			d.emp_no empNo, -- 기안자 사번
 			d.createdate, -- 기안일
 			d.writer, -- 기안자
 			d.doc_stamp1 docStamp1, -- 기안자 서명
@@ -337,6 +340,7 @@
 			signer2_info.emp_no signer2No, -- 결재자 2 사번
 			signer2_pc.code_name signer2Position, -- 결재자 2 직급
 			leave_type.code_name leaveType, -- 연차구분
+			leave_type.code leaveCategory, -- 연가 코드
 			dl.doc_leave_start_date docLeaveStartDate, -- 연차 시작일
 			dl.doc_leave_end_date docLeaveEndDate, -- 연차 종료일
 			dl.doc_leave_period_date docLeavePeriodDate, -- 연차 일수
