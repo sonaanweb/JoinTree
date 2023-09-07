@@ -9,8 +9,7 @@
 			COUNT(*)
 		FROM document_default
 		WHERE 
-			(doc_status IN('A0201', 'A0202') 
-			OR (doc_stamp2 IS NULL AND doc_stamp3 IS NULL AND doc_status = 'A0204'))
+			doc_status IN('A0201', 'A0202') 
 			AND emp_no = #{empNo}
 		    <if test="docTitle != null and docTitle != ''">
 		        AND doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -31,7 +30,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status  NOT IN('A0203')
+			AND d.doc_status IN('A0201', 'A0202')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
@@ -52,14 +51,15 @@
 			COUNT(*)
 		FROM document_default d
 		WHERE 
-		    (doc_status = 'A0203' AND emp_no = #{empNo})
+		    (doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
+		    OR (d.doc_status IN('A0203', 'A0204') AND d.reference = #{empNo})
 		    OR 
 		    (1=1 
 		     AND EXISTS (
 	             SELECT 1
 	             FROM document_signer ds
 	             WHERE ds.doc_no = d.doc_no
-	             	AND ds.doc_status = 'A0203'
+	             	AND ds.doc_status IN('A0203', 'A0204')
 	                AND ds.emp_signer_level IN (1, 2)
 	                AND ds.emp_signer_no = #{empNo}
 		        )
@@ -83,7 +83,7 @@
 			COUNT(*)
 		FROM document_default
 		WHERE 
-			doc_status = 'A0203' 
+			doc_status IN('A0203', 'A0204') 
 			AND receiver_team = #{dept}
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
@@ -113,10 +113,7 @@
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		INNER JOIN common_code doc ON d.category = doc.code
 		WHERE 
-			(d.doc_status IN('A0201', 'A0202') 
-			OR (d.doc_stamp2 IS NULL 
-			AND d.doc_stamp3 IS NULL 
-			AND d.doc_status = 'A0204'))
+			d.doc_status IN('A0201', 'A0202') 
 			AND d.emp_no = #{empNo}
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -148,7 +145,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status NOT IN('A0203')
+			AND d.doc_status IN('A0201', 'A0202')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
@@ -180,14 +177,15 @@
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		INNER JOIN common_code doc ON d.category = doc.code
 		WHERE 
-		    (doc_status = 'A0203' AND emp_no = #{empNo})
+		    (doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
+		    OR (d.doc_status IN('A0203', 'A0204') AND d.reference = #{empNo})
 		    OR 
 		    (1=1
 		     AND EXISTS (
 	             SELECT 1
 	             FROM document_signer ds
 	             WHERE ds.doc_no = d.doc_no
-	             	AND ds.doc_status = 'A0203'
+	             	AND ds.doc_status IN('A0203', 'A0204')
 	                AND ds.emp_signer_level IN (1, 2)
 	                AND ds.emp_signer_no = #{empNo}
 		        )
@@ -222,7 +220,7 @@
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		INNER JOIN common_code doc ON d.category = doc.code
 		WHERE 
-			d.doc_status = 'A0203' 
+			d.doc_status IN('A0203', 'A0204') 
 			AND d.receiver_team = #{dept}
 			<if test="writer != null and writer != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
@@ -268,7 +266,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status NOT IN('A0203')
+			AND ds.doc_status IN('A0201', 'A0202')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 	    ORDER BY d.createdate DESC
 		LIMIT 3		
