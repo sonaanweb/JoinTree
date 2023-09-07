@@ -266,7 +266,7 @@
 		WHERE 
 			((ds.emp_signer_level = 1)
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND ds.doc_status IN('A0201', 'A0202')
+			AND d.doc_status IN('A0201', 'A0202')
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 	    ORDER BY d.createdate DESC
 		LIMIT 3		
