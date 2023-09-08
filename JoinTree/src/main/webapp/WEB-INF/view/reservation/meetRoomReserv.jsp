@@ -57,7 +57,7 @@ html, body {
 		 <!-- 컨텐츠부분 wrapper -->
 		 
 			<div style="font-weight: bold; font-family: 'Pretendard-Regular';">
-			<span class="badge badge-success">notice</span> 예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
+			<span class="badge badge-success">notice</span> test예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
 			<div><a href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a></div>
 			<!-- fullCal -->
 			<div id='calendar'></div>
