@@ -18,7 +18,12 @@
    			const urlParams = new URL(location.href).searchParams;
    			const msg = urlParams.get("msg");
    				if (msg != null) {
-   					alert(msg);
+   					Swal.fire({
+						icon: 'success',
+						title: msg,
+						showConfirmButton: false,
+						timer: 1000
+					});
    				}
    				
    			const fileInput = $('#fileInput');
@@ -54,11 +59,23 @@
    	                const fileExtension = file.name.substr(file.name.lastIndexOf('.')).toLowerCase();
 
    	                if (fileSize > maxSize) {
-   	                    alert("파일 크기가 3MB를 초과합니다.");
+   	                    // alert("파일 크기가 3MB를 초과합니다.");
+	   	                Swal.fire({
+							icon: 'warning',
+							title: '파일 크기가 3MB를 초과합니다.',
+							showConfirmButton: false,
+							timer: 1000
+						});
    	                    $(this).val('');
    	                    previewImage.attr('src', '');
    	                } else if (!allowedExtensions.includes(fileExtension)) {
-   	                    alert("이미지 파일만 첨부 가능합니다.");
+   	                    // alert("이미지 파일만 첨부 가능합니다.");
+   	                 	Swal.fire({
+							icon: 'warning',
+							title: '이미지 파일만 첨부 가능합니다.',
+							showConfirmButton: false,
+							timer: 1000
+						});
    	                    $(this).val('');
    	                    previewImage.attr('src', '');
    	                } else {
@@ -104,7 +121,13 @@
    	                    success: function(response) {
    	                        console.log(response);
    	                        if (response === "success") {
-   	                            alert("사진이 등록되었습니다.");
+   	                            // alert("사진이 등록되었습니다.");
+   	                             Swal.fire({
+									icon: 'success',
+									title: '사진이 등록되었습니다.',
+									showConfirmButton: false,
+									timer: 1000
+								});
    	                            // $("#currentImage").attr("src", response.newImagePath);
    	                            $("#attachmentCell").load(location.href + " #attachmentCell>*", function() {
    	                                //$("#uploadImgBtn").click(); // 이미지 등록 이벤트 재등록
@@ -119,7 +142,13 @@
    	                    }
    	                });
    	            } else {
-   	                alert("업로드할 사진을 선택해주세요.");
+   	                // alert("업로드할 사진을 선택해주세요.");
+	   	            Swal.fire({
+						icon: 'warning',
+						title: '업로드할 사진을 선택해주세요.',
+						showConfirmButton: false,
+						timer: 1000
+					});
    	            }
    	        });
 
@@ -134,7 +163,13 @@
  	                success: function(response) {
  	                    console.log(response);
  	                    if (response === "success") {
- 	                        alert("이미지가 삭제되었습니다.");		
+ 	                        // alert("이미지가 삭제되었습니다.");	
+ 	                        Swal.fire({
+ 								icon: 'success',
+ 								title: '이미지가 삭제되었습니다.',
+ 								showConfirmButton: false,
+ 								timer: 1000
+ 							});
  	                      
  	                    	
  	                        $("#attachmentCell").load(location.href + " #attachmentCell>*", function() { // 이미지 셀 리로드
@@ -263,12 +298,30 @@
 			    document.querySelector('#modifyLifeEventCommBtn').addEventListener( 'click', () => {
 			    	const editorData = editorInstance.getData();
 			    	if (document.querySelector("#boardTitle").value == "") {
-						alert("제목을 입력해주세요.");
+						// alert("제목을 입력해주세요.");
+						Swal.fire({
+								icon: 'warning',
+								title: '제목을 입력해주세요.',
+								showConfirmButton: false,
+								timer: 1000
+							});
 						$("#boardTitle").focus();
 					} else if (editorData == "") {
-						alert("내용을 입력해주세요.");
+						// alert("내용을 입력해주세요.");
+						Swal.fire({
+							icon: 'warning',
+							title: '내용을 입력해주세요.',
+							showConfirmButton: false,
+							timer: 1000
+						});
 					} else {
-						alert("게시글이 수정되었습니다.");
+						// alert("게시글이 수정되었습니다.");
+						Swal.fire({
+							icon: 'success',
+							title: '게시글이 수정되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						});
 						$("#modifyLifeEventComm").submit();
 					}
 			    });

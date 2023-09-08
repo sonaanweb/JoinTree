@@ -18,6 +18,7 @@
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/style.css">
 	    <!-- endinject -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 		<script src="/JoinTree/resource/js/login/login.js"></script>
 	</head>
 	<body>		

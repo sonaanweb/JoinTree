@@ -13,7 +13,13 @@
 			const urlParams = new URL(location.href).searchParams;
 			const msg = urlParams.get("msg");
 				if (msg != null) {
-					alert(msg);
+					// alert(msg);
+					Swal.fire({
+						icon: 'success',
+						title: msg,
+						showConfirmButton: false,
+						timer: 1000
+					});
 				}
 			
 			// 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트 (새로고침 시 메시지 알림창 출력하지 않음)

@@ -8,14 +8,14 @@
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 	<script src="/JoinTree/resource/js/community/freeCommOne.js"></script>
 
-		<style>
-			.comment-section {
-			    max-height: 400px; 
-			    overflow-y: auto;
-			    /* border: 1px solid #ccc; */
-			    padding: 10px;
-			}		    
-		</style>
+	<style>
+		.comment-section {
+		    max-height: 400px; 
+		    overflow-y: auto;
+		    /* border: 1px solid #ccc; */
+		    padding: 10px;
+		}		    
+	</style>
 		
 		
 		<div class="container-fluid page-body-wrapper">
@@ -68,59 +68,13 @@
 							</c:if>
 						</div>
 						
-		<%-- 				<c:choose>
-					        <c:when test="${boardFile.boardSaveFilename eq null or boardFile.boardSaveFilename == '이미지 없음'}">
-					            이미지 없음
-					        </c:when>
-					        <c:otherwise>
-					            <img src="${pageContext.request.contextPath}/commImg/${boardFile.boardSaveFilename}" style="width: 300px; height: auto;"><br>
-					        </c:otherwise>
-					    </c:choose> --%>
-
-				
-				
-				<%-- ${loginAccount.empNo} --%>
-				<%-- ${comm.boardCategory} --%>
-				
-<%-- 				<table class="table table-bordered">
-					<tr>
-						<th>제목</th>
-						<td>${comm.boardTitle}</td>
-					</tr>
-					<tr>
-						<th>내용</th>
-						<td>${comm.boardContent}</td>
-					</tr>
-					<tr>
-						<th>작성자</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>작성일자</th>
-						<td>${comm.createdate}</td>
-					</tr>
-					<tr>
-						<th>수정일자</th>
-						<td>${comm.boardCount}</td>
-					</tr>
-					<tr>
-					<th>첨부파일</th>
-						<td>
-					    
-						</td>
-					</tr>
-				</table> --%>
-			
 				</div>
 			  </div>
 			</div>
 			
-	
-			
 			   <div class="col-lg-12 grid-margin stretch-card">
               	<div class="card">
                 <div class="card-body">
-				
 				
 				<!-- 댓글 작성 폼 -->
 				<h3>댓글 작성</h3>
@@ -133,11 +87,9 @@
 					<button type="button" id="addCommentBtn" class="btn btn-success btn-md">댓글 입력</button>
 				</form>
 				<hr><br>
-				
-				
+			
 				<!-- 댓글 목록 -->
 				<h3>댓글</h3>
-				
 				<div class="comment-section" id="commentSection">
 					<table class="table">
 						<tr>
@@ -212,13 +164,9 @@
 						</c:forEach>
 					</table>
 				</div>
-				
-				
-			
-				
+
 			<%--${preBoard.boardCategory} ${preBoard.boardNo}<br>
 				${nextBoard.boardCategory} ${nextBoard.boardNo}<br> --%>
-				
 		
 				
 			</div>
@@ -227,4 +175,6 @@
 			
 		</div>
 	</div>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 </html>

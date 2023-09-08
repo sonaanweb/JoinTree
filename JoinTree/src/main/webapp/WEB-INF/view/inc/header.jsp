@@ -50,15 +50,13 @@
            });
            
            function resetTimer(newDuration) {
-           	clearInterval(interval); // 기존 타이머 중지
+           	   clearInterval(interval); // 기존 타이머 중지
                startTimer(newDuration); // 새로운 타이머 시작
            }
            
            // 세션 연장 알림 모달 "예" 버튼 클릭 시
            $('#extensionYesBtn').click(function () {
               $('#extensionModal').css('display', 'none'); // 세션 연장 알림 모달 닫음
-              // TODO: 세션 연장 처리 로직 추가
-              
                   if (!isTimerRunning) {
 			        isTimerRunning = true;
 			        
@@ -135,7 +133,6 @@
 	    }
 		
         function showSessionExpirationAlert() {
-            // TODO: 세션 만료 알림 및 세션 연장 버튼 표시 로직 구현
         	alert("세션이 만료되었습니다. 다시 로그인해주세요.");
         }
        });
@@ -191,8 +188,8 @@
 				</div>
 				<div class="modal-body">
 				   <p>자동 로그아웃까지 5분 남았습니다. 로그인 시간을 연장하시겠습니까?</p>
-				   <button id="extensionYesBtn">예</button>
-				   <button id="extensionNoBtn">아니오</button>
+				   <button type="button" class="btn btn-success" id="extensionYesBtn">예</button>
+				   <button type="button" class="btn btn-success" id="extensionNoBtn">아니오</button>
 				</div>
 		   </div>
 		</div>	

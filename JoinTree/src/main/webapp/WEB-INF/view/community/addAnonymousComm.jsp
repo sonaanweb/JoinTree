@@ -82,12 +82,30 @@
         document.querySelector( '#addAnonymousCommBtn' ).addEventListener( 'click', () => {
         	const editorData = editorInstance.getData();
         	if (document.querySelector("#boardTitle").value == "") {
-    			alert("제목을 입력해주세요.");
+    			// alert("제목을 입력해주세요.");
+    			Swal.fire({
+					icon: 'warning',
+					title: '제목을 입력해주세요.',
+					showConfirmButton: false,
+					timer: 1000
+				});
     			$("#boardTitle").focus();
     		} else if (editorData == "") {
-    			alert("내용을 입력해주세요.");
+    			// alert("내용을 입력해주세요.");
+    			Swal.fire({
+					icon: 'warning',
+					title: '내용을 입력해주세요.',
+					showConfirmButton: false,
+					timer: 1000
+				});
     		} else {
-    			alert("게시글이 작성되었습니다.");
+    			// alert("게시글이 작성되었습니다.");
+    			Swal.fire({
+					icon: 'success',
+					title: '게시글이 작성되었습니다.',
+					showConfirmButton: false,
+					timer: 1000
+				});
     			$("#addAnonymousComm").submit();
     		}
         });

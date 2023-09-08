@@ -30,10 +30,10 @@
 							<!-- <label for="newPw">새 비밀번호 입력</label> -->
 						<!-- </div> -->
 						<div class="form-inline">
-						<input type="password" name="newPw" id="newPw" class="form-control w-25" placeholder="새 비밀번호 입력"> &nbsp;&nbsp;
-						<!-- <span style="color: red;" id="newPwError" class="error-message"></span> -->
-						 <span id="password-requirements">영문 소문자, 숫자, 특수문자(@, #, $, %, ^, &, +, =, !)를 포함하여 8자 이상 입력해주세요.</span>
-						 <span style="color: red;" id="password-error-message"></span>
+							<input type="password" name="newPw" id="newPw" class="form-control w-25" placeholder="새 비밀번호 입력"> &nbsp;&nbsp;
+							<!-- <span style="color: red;" id="newPwError" class="error-message"></span> -->
+							 <span id="password-requirements">영문 소문자, 숫자, 특수문자(@, #, $, %, ^, &, +, =, !)를 포함하여 8자 이상 입력해주세요.</span>
+							 <span style="color: red;" id="password-error-message"></span>
 						</div>
 					</div><br>
 					<!-- 
@@ -42,9 +42,11 @@
 						<p style="font-size: 12px; color: #666;" id="password-error-message"></p>
 					</div> -->
 					<div>
-						<!-- <label for="newPw2">새 비밀번호 다시 입력</label> -->
-						<input type="password" name="newPw2" id="newPw2" class="form-control w-25" placeholder="새 비밀번호 다시 입력">
-						<span style="color: red;" id="newPw2Error" class="error-message"></span>
+						<div class="form-inline">
+							<!-- <label for="newPw2">새 비밀번호 다시 입력</label> -->
+							<input type="password" name="newPw2" id="newPw2" class="form-control w-25" placeholder="새 비밀번호 다시 입력"> &nbsp;&nbsp;
+							<span style="color: red;" id="newPw2Error"></span>
+						</div>
 					</div>
 					<br>
 					<button type="button" id="modifyPwBtn" class="btn btn-success btn-fw">비밀번호 변경</button>
