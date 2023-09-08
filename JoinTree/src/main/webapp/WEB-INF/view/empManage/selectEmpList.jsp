@@ -150,7 +150,7 @@
 	
 	<!-- 사원 상세정보, 수정 모달창 -->
 	<div class="modal" id="empOneModal">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-xl">
 			<div class="modal-content" id="empOneModalContent">
 			
 			<!-- 사원 상세 정보 조회 -->
