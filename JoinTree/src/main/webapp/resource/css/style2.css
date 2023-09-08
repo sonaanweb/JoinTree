@@ -180,6 +180,12 @@ input:checked + .slider:before {
 	height: 100px;
 	border-radius: 100%;
 }
+.todoBtn{
+	width: 25px;
+	height: 25px;
+	padding: 0px;
+	margin-top: 3px;
+}
 
 /*기안서*/
 .doc h1{
@@ -267,6 +273,19 @@ input:checked + .slider:before {
 	height: 130px;
 	font-size: 15px;
 	padding: 15px;
+}
+.menu-title {
+	position: relative;
+}
+.doc-cnt {
+	border: 1px solid #F70817;
+	border-radius: 100%;
+	background-color: #F70817;
+	width: 8px;
+	height: 8px;
+	top: -4px;
+	right: -10px;
+	position: absolute;
 }
 /*프로젝트*/
 .project .projectData .card{

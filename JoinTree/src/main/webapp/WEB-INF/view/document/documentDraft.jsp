@@ -34,7 +34,7 @@
 								<div class="margin-top20">
 									<div class="wrapper">
 										<h4>결재선</h4>
-										<button type="button" id="modalSingerBtn" class="btn btn-inverse-dark"><i class="mdi mdi-file-tree"></i></button>	
+										<button type="button" id="modalSingerBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>	
 									</div>
 									<div class="doc_selete">
 										<div id="docApproval" data-empno="${loginAccount.empNo}">
@@ -55,7 +55,7 @@
 								<div class="margin-top20">
 									<div class="wrapper">
 										<h4>참조자</h4>
-										<button type="button" id="modalReferBtn" class="btn btn-inverse-dark"><i class="mdi mdi-file-tree"></i></button>	
+										<button type="button" id="modalReferBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>	
 									</div>
 									<div id="selectReference" class="doc_selete">
 										<!-- 여기에 데이터를 추가하는 부분 -->
@@ -66,7 +66,7 @@
 								<div class="margin-top20">
 									<div class="wrapper">
 										<h4>수신팀</h4>
-										<button type="button" id="modalReceiverBtn" class="btn btn-inverse-dark"><i class="mdi mdi-file-tree"></i></button>
+										<button type="button" id="modalReceiverBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>
 									</div>
 									<div id="selectReceiverTeam" class="doc_selete">
 										<!-- 여기에 데이터를 추가하는 부분 -->

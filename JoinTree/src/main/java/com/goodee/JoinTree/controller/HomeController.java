@@ -1,5 +1,6 @@
 package com.goodee.JoinTree.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.goodee.JoinTree.service.BoardService;
 import com.goodee.JoinTree.service.DocumentListService;
@@ -76,7 +78,29 @@ public class HomeController {
 		List<CommonCode> childCodeList = (List<CommonCode>) session.getAttribute("childCodeList");
 		
 		session.setAttribute("childCodeList", childCodeList);
+		
 		return "inc/sideContent";
 	}
 	
+	// 사이드바에 전자결재 문서 카운트 출력
+	@GetMapping("/sideContectWithDoc")
+	@ResponseBody
+	public Map<String, Object> sideContectWithDoc(HttpSession session, Model model) {
+		
+		AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");
+		
+		int empNo = loginAccount.getEmpNo();
+					
+		Map<String, Object> docCnt = new HashMap<>();
+		// 기안문서 목록 행의 수
+		int getDraftDocCnt = documentListService.getgetDraftDocCnt(empNo);
+		
+		// 결재함 목록 행의 수
+		int getApprovalDocCnt = documentListService.getApprovalDocCnt(empNo);
+		
+		docCnt.put("daftDocCnt", getDraftDocCnt);
+		docCnt.put("approvalDocCnt", getApprovalDocCnt);
+	
+		return docCnt;
+	}
 }

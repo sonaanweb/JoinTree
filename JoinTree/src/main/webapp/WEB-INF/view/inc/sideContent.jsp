@@ -1,6 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
+<script>
+	$(document).ready(function() {
+		function updateElectronicApprovalMenu() {
+		$.ajax({
+			url: '/JoinTree/sideContectWithDoc',
+			type: 'GET',
+			success: function(data) {
+				console.log("data",data);
+				$('#draftCnt').text(data.daftDocCnt);
+				$('#approvalCnt').text(data.approvalDocCnt);
+				if(data.daftDocCnt > 0 || data.approvalDocCnt) {
+					$('#doc').addClass("doc-cnt");
+				}
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				console.error('오류 발생:', textStatus, errorThrown);
+			}
+			});
+		}
+		
+		// 페이지 로드 후 초기 업데이트 실행
+		updateElectronicApprovalMenu();
+	});
+</script>
 	<!-- 왼쪽바 -->
 	<nav class="sidebar sidebar-offcanvas" id="sidebar">
 	<ul class="nav">
@@ -189,18 +214,18 @@
 		<li class="nav-item">
 			<c:forEach var="child" items="${sessionScope.childCodeList}">
 				<c:if test="${child.code == 'M0106' && child.status == '1'}">
-					<a class="nav-link" data-toggle="collapse" href="#document" aria-expanded="false" aria-controls="ui-basic">
-						<span class="menu-title">전자결재</span>
-						<i class="menu-arrow"></i>
-						<i class="mdi mdi-clipboard-text menu-icon"></i>
-					</a>
+						<a class="nav-link" data-toggle="collapse" href="#document" aria-expanded="false" aria-controls="ui-basic">
+							<span class="menu-title">전자결재<span id="doc"></span></span>
+							<i class="menu-arrow"></i>
+							<i class="mdi mdi-clipboard-text menu-icon"></i>
+						</a>
 				</c:if>
 			</c:forEach>
 		 	<div class="collapse" id="document">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/documentDraft">기안하기</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/draftDocList">기안문서목록</a></li>
-					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/approvalDocList">결재함</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/draftDocList">기안문서목록(<span id="draftCnt"></span>)</a></li>
+					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/approvalDocList">결재함(<span id="approvalCnt"></span>)</a></li>
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/individualDocList">개인문서함</a></li>
 					<li class="nav-item"> <a class="nav-link" href="/JoinTree/document/teamDocList">팀별문서함</a></li>
 				</ul>
