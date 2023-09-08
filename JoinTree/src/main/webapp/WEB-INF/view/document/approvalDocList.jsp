@@ -141,7 +141,7 @@
 	                    location.reload(); // 현재 메인 페이지 새로고침
 	                } else {
 	                    // 실패한 경우 처리
-	                    alert("결재 실패");
+	                    alert("결재 실패. 서명을 먼저 등록해주세요.");
 	                }
 	            },
 	            error: function(error) {

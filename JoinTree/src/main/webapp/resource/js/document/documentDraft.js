@@ -345,6 +345,8 @@
 			// 기안자 도장 정보 1
 			const docStamp1 = $("#docStamp1").val();
 				console.log("docStamp1:",docStamp1);
+				
+	
 			// 작성자
 			const createId = $("#createId").val();
 				console.log("createId:",createId);
@@ -371,6 +373,11 @@
 				console.log("signer2:",signer2);
 				
 			// 필수 입력값 유효성 검사
+		    if (docStamp1 === null || docStamp1 === "") {
+		        alert("서명을 먼저 등록해주세요.");
+		        return;
+		    }
+			
 			if(category == "D0101" || category == "D0104"){
 				if (!docTitle || !reference || !receiverTeam ||!signer1) {
 					alert("모든 필수 정보를 입력해주세요.");
@@ -389,7 +396,7 @@
 					return;
 				}
 			}
-			
+		
 			// 기본 기안서, 퇴직기안서 값 넘기기
 			$.ajax({
 				type: 'POST',
@@ -432,7 +439,8 @@
 					if(category === 'D0103') {
 						submitReshuffleDocument(docNo, docReshuffleDate, docReshuffleTask, docReshuffleResult, docReshuffleDept, docReshufflePosition, createId, updateId);
 					}					
-
+					
+					alert("기안이 완료되었습니다.");
 					window.location.href = '/JoinTree/document/draftDocList'; // 홈 페이지 URL로 변경					
 				},
 				error: function(textStatus, errorThrown) {

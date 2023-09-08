@@ -233,6 +233,10 @@ public class DocumentController {
 
 	    String signImg = (String) session.getAttribute("signImg");
         log.debug("signImg:" + signImg);
+        
+        if (signImg == null || signImg == "") {
+        	return "fail";
+        }
 
 	    DocumentDefault docDefault = new DocumentDefault();
 	    docDefault.setDocNo(docNo);
