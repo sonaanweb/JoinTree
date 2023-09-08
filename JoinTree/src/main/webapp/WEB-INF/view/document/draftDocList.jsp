@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+	.selected-page {
+	    font-weight: bold;
+	    background-color: #D4F4FA;
+	    pointer-events: none; /* 버튼 클릭 불가 */
+	}
+	.selectde-tr:hover {
+		cursor: pointer;
+		background-color: #F9F9F9;
+	}
+</style>
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 <div class="container-fluid page-body-wrapper">
@@ -10,21 +21,35 @@
 		<div class="col-lg-12 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
+				<h3 class="font-weight-bold">기안문서 목록</h3>
+				<hr>
 					<form id="searchDocListForm">
 						<input type="hidden" id="listId" name="listId" value="draftDocList">
-						<div>
-							<div>
-								<label>제목</label>
-								<input type="text" id="searchDocTitle" name="docTitle">
+						<div class="col form-row">
+							<div class="col-md-4">
+								<div class="form-group row">
+									<label for="searchDocTitle" class="col-form-label"><strong>제목</strong></label>
+									<div class="col-sm-9">
+										<input type="text" id="searchDocTitle" name="docTitle" class="form-control">		
+									</div>
+								</div>
 							</div>
-							<div>
-								<label>조회일</label>
-								<input type="date" id="searchStartDate" name="startDate"> &#126; 
-								<input type="date" id="searchEndDate" name="endDate">
-							</div>
-							<div>
-								<button type="button" id="searchDocListBtn">검색</button>
-							</div>
+							<div class="col-md-4">
+								<div class="form-group row">
+									<label for="searchStartDate" class="col-form-label"><strong>조회일</strong></label>
+									<div class="col-sm-5">
+										<input type="date" id="searchStartDate" name="startDate" class="form-control">		
+									</div>
+									<span>&#126;</span>
+									<div class="col-sm-5">
+										<input type="date" id="searchEndDate" name="endDate" class="form-control">		
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- 검색 버튼 -->
+						<div class="text-center">
+							<button type="button" id="searchDocListBtn" class="btn btn-dark btn-md">검색</button>
 						</div>
 					</form>
 				</div>
@@ -38,13 +63,12 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th>문서번호</th>
-								<th>기안일</th>
-								<th>기안양식</th>
-								<th>제목</th>
-								<th>기안자</th>
-								<th>상태</th>
-								<th colspan="2">&nbsp;</th>
+								<th class="font-weight-bold text-center" width="7%">문서번호</th>
+								<th class="font-weight-bold text-center">기안일</th>
+								<th class="font-weight-bold text-center">기안양식</th>
+								<th class="font-weight-bold" width="60%">제목</th>
+								<th class="font-weight-bold">기안자</th>
+								<th class="font-weight-bold text-center">상태</th>
 							</tr>
 						</thead>
 						<tbody id="docList">
@@ -53,7 +77,7 @@
 					</table>
 					
 					<!-- 페이지 네비게이션 -->
-					<div id="pagination">
+					<div id="pagination" class="paging center pagination">
 					
 					</div>
 					 
@@ -71,8 +95,9 @@
 				
 				<!-- Modal Header -->
 				<div class="modal-header">
-					<h4 class="modal-title"></h4>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>x</span>
+					</button>
 				</div>
 				
 				<!-- Modal body -->

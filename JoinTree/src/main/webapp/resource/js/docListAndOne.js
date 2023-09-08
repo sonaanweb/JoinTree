@@ -11,7 +11,7 @@
 		
 		// 이전 페이지 버튼
 		if(data.startPage > 1){
-			let prevButton = $('<button type="button" class="page-btn">').text('이전');
+			let prevButton = $('<button type="button" class="page-link">').text('이전');
             prevButton.click(function() {
                 goToPage(data.startPage - 1);
             });
@@ -21,7 +21,14 @@
 		// 페이지 버튼 생성
 		for(let i = data.startPage; i <= data.endPage; i++){
 			const page = i;
-			let pageButton = $('<button type="button" class="page-btn">').text(i);
+			let pageButton = $('<button type="button" class="page-link">').text(i);
+	        
+	        // 현재 페이지일 때 'selected-page' 클래스 추가
+	        if (page === data.currentPage) {
+	        	pageButton.addClass('selected-page');
+				pageButton.prop('disabled', true); // 현재 페이지 버튼 비활성화
+	        }
+	        
 	        pageButton.click(function(){
 	        	goToPage(page);
 	        });
@@ -30,7 +37,7 @@
 		
 		// 다음 페이지 버튼
 		if(data.endPage < data.lastPage){
-			let nextButton = $('<button type="button" class="page-btn">').text('다음');
+			let nextButton = $('<button type="button" class="page-link">').text('다음');
             nextButton.click(function() {
                 goToPage(data.endPage + 1);
             });
@@ -39,25 +46,40 @@
 	}
 	
 	// 문서함별 사원 목록 테이블(docList) 테이터 수정 함수
-	function updateDocListTableData(data){
+	function updateDocListTableData(docList, data){
 		
 		// 테이블의 tbody를 선택하고 초기화
 	    let tbody = $('#docList');
 	    tbody.empty();
 	    
+	    // 로그인 사번 값 저장
+	    let loginEmpNo = data.loginEmpNo;
+	    
 	    // data의 길이만큼 테이블 행 추가
-	    for (let i = 0; i < data.length; i++) {
-	        let doc = data[i];
-	        let row = $('<tr>').data('docCode', doc.docCode);
-	        row.append($('<td>').text(doc.docNo)); // 문서번호
+	    for (let i = 0; i < docList.length; i++) {
+	        let doc = docList[i];
+	        
+	        let row = $('<tr class="selectde-tr">').data('docCode', doc.docCode);
+	        row.append($('<td class="text-center">').text(doc.docNo)); // 문서번호
 	        
 	        let dateOnly = doc.createdate.split("T")[0]; // 기안일 날짜 값만 저장
-	        row.append($('<td>').text(dateOnly)); // 기안일
+	        row.append($('<td class="text-center">').text(dateOnly)); // 기안일
 	        
-	        row.append($('<td>').text(doc.category)); // 기안 양식
-	        row.append($('<td>').text(doc.docTitle)); // 부서명
+	        row.append($('<td class="text-center">').text(doc.category)); // 기안 양식
+	        
+	        // 로그인 사번이 참조자인 경우 제목에 [참조] 표시
+	        let docTitle;
+	        console.log(loginEmpNo+'<--loginEmpNo');
+	        console.log(doc.referenceNo+'<--referenceNo');
+	        if(loginEmpNo == doc.referenceNo){
+				docTitle = doc.docTitle + ' [참조]';
+			} else{
+				docTitle = doc.docTitle;
+			}
+			console.log(docTitle+'<--docTitle');
+	        row.append($('<td>').text(docTitle)); // 제목
 	        row.append($('<td>').text(doc.empNo + " " + doc.writer)); // 기안자(사번 + 이름)
-	        row.append($('<td>').text(doc.docStatus)); // 상태
+	        row.append($('<td class="text-center">').text(doc.docStatus)); // 상태
 	        tbody.append(row);
 	    }
 	}
@@ -83,7 +105,7 @@
 				
 				let docList = data.searchDocListbyPage; // 문서 목록
 				
-				updateDocListTableData(docList); // 테이블 데이터 수정 함수
+				updateDocListTableData(docList, data); // 테이블 데이터 수정 함수
 				updatePagination(data); // 페이지 네비게이션 데이터 수정 함수
 			},
 			error: function(error){

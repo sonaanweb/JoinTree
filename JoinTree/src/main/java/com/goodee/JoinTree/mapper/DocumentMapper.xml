@@ -283,8 +283,8 @@
 			d.doc_stamp1 docStamp1, -- 기안자 서명
 			d.doc_stamp2 docStamp2, -- 결재자 1 서명
 			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			d.reference referenceNo, -- 참조자 사번
 			reference_info.emp_name reference, -- 참조자
-			reference_info.emp_no referenceNo, -- 참조자 사번
 			rec.code_name receiverTeam, -- 수신팀
 			d.doc_title docTitle, -- 문서 제목
 			d.doc_content docContent, -- 문서 내용
@@ -324,8 +324,8 @@
 			d.doc_stamp1 docStamp1, -- 기안자 서명
 			d.doc_stamp2 docStamp2, -- 결재자 1 서명
 			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			d.reference referenceNo, -- 참조자 사번
 			reference_info.emp_name reference, -- 참조자
-			reference_info.emp_no referenceNo, -- 참조자 사번
 			rec.code_name receiverTeam, -- 수신팀
 			d.doc_title docTitle, -- 문서 제목
 			d.doc_content docContent, -- 문서 내용
@@ -373,8 +373,8 @@
 			d.doc_stamp1 docStamp1, -- 기안자 서명
 			d.doc_stamp2 docStamp2, -- 결재자 1 서명
 			d.doc_stamp3 docStamp3, -- 결재자 2 서명
+			d.reference referenceNo, -- 참조자 사번
 			reference_info.emp_name reference, -- 참조자
-			reference_info.emp_no referenceNo, -- 참조자 사번
 			rec.code_name receiverTeam, -- 수신팀
 			d.doc_title docTitle, -- 문서 제목
 			d.doc_content docContent, -- 문서 내용

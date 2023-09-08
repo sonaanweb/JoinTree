@@ -106,6 +106,7 @@ public class DocumentListService {
 		searchDocListResult.put("endPage", endPage);
 		searchDocListResult.put("lastPage", lastPage);
 		searchDocListResult.put("pageLength", pageLength);
+		searchDocListResult.put("currentPage", currentPage);
 		
 		return searchDocListResult;
 	}

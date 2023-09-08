@@ -49,6 +49,10 @@ public class DocumentRestController {
 		
 		// 문서함 별 문서 목록 조회
 		Map<String, Object> getDocumentListResult = documentListService.getDocList(docMap);
+		
+		// 반환 값에 로그인 사번 값 저장
+		getDocumentListResult.put("loginEmpNo", empNo);
+		
 		log.debug(getDocumentListResult +"<-- DocumentListRestController getDocumentListResult");
 		
 		return getDocumentListResult;

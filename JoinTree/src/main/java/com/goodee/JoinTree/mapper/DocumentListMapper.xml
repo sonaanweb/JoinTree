@@ -32,7 +32,7 @@
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL AND d.doc_status = 'A0202'))
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND d.writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -50,7 +50,7 @@
 			COUNT(*)
 		FROM document_default d
 		WHERE 
-		    (doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
+		    ((doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
 		    OR (d.doc_status IN('A0203', 'A0204') AND d.reference = #{empNo})
 		    OR 
 		    (1=1 
@@ -62,9 +62,9 @@
 	                AND ds.emp_signer_level IN (1, 2)
 	                AND ds.emp_signer_no = #{empNo}
 		        )
-		    )
+		    ))
 		    <if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND d.writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -85,10 +85,10 @@
 			doc_status IN('A0203', 'A0204') 
 			AND receiver_team = #{dept}
 			<if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
+		        AND doc_title LIKE CONCAT('%', #{docTitle}, '%')
 		    </if>
 		    <if test="startDate != null and endDate != null 
 		    			and startDate != '' and endDate != ''">
@@ -136,9 +136,11 @@
 			d.doc_title docTitle, 
 			d.emp_no empNo, 
 			d.writer writer, 
-			sta.code_name docStatus
+			sta.code_name docStatus,
+			reference_info.emp_no referenceNo
 		FROM document_default d
 		LEFT OUTER JOIN document_signer ds ON d.doc_no = ds.doc_no
+		LEFT OUTER JOIN emp_info reference_info ON d.reference = reference_info.emp_no
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		INNER JOIN common_code doc ON d.category = doc.code
 		WHERE 
@@ -146,7 +148,7 @@
 			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL AND d.doc_status = 'A0202'))
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 			<if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND d.writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -175,7 +177,7 @@
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		INNER JOIN common_code doc ON d.category = doc.code
 		WHERE 
-		    (doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
+		    ((doc_status IN('A0203', 'A0204') AND emp_no = #{empNo})
 		    OR (d.doc_status IN('A0203', 'A0204') AND d.reference = #{empNo})
 		    OR 
 		    (1=1
@@ -187,9 +189,9 @@
 	                AND ds.emp_signer_level IN (1, 2)
 	                AND ds.emp_signer_no = #{empNo}
 		        )
-		    )
+		    ))
 		    <if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND d.writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
@@ -221,7 +223,7 @@
 			d.doc_status IN('A0203', 'A0204') 
 			AND d.receiver_team = #{dept}
 			<if test="writer != null and writer != ''">
-		        AND d.doc_title LIKE CONCAT('%', #{writer}, '%')
+		        AND d.writer LIKE CONCAT('%', #{writer}, '%')
 		    </if>
 		    <if test="docTitle != null and docTitle != ''">
 		        AND d.doc_title LIKE CONCAT('%', #{docTitle}, '%')
