@@ -8,7 +8,7 @@
 	    <script src="/JoinTree/resource/js/community/addSecondhandComm.js"></script>
 	    <style>
         .ck-editor__editable {
-            min-height: 300px;
+            min-height: 450px;
             overflow: auto;
         }
    		 </style>

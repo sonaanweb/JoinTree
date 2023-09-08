@@ -52,7 +52,7 @@
 		<div class="col-lg-12 grid-margin stretch-card">
         	<div class="card">
               	<div class="card-body">
-					<h3 class="font-weight-bold">자유 게시판</h3>
+					<h3 class="font-weight-bold">익명 게시판</h3>
 					<hr>
 					<div class="text-right">
 						<a href="/JoinTree/community/anonymousCommList/addAnonymousComm" class="btn btn-success btn-sm">게시글 작성</a>

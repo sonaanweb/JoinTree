@@ -8,7 +8,7 @@
 		<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 	    <style>
         .ck-editor__editable {
-            min-height: 300px;
+            min-height: 450px;
             overflow: auto;
         }
    		</style>
@@ -171,7 +171,7 @@
 				<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 	
 					<div class="col-lg-12 text-right">	
-					<a href="/JoinTree/community/lifeEventCommList/LifeEventCommOne?boardNo=${comm.boardNo}" class="btn btn-success btn-sm">이전</a><br>
+					<a href="/JoinTree/community/lifeEventCommList/lifeEventCommOne?boardNo=${comm.boardNo}" class="btn btn-success btn-sm">이전</a><br>
 				</div><br>				
 				<div class="col-lg-12 grid-margin stretch-card">
 					<div class="card">

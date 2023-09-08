@@ -8,7 +8,7 @@
 		<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 	    <style>
         .ck-editor__editable {
-            min-height: 300px;
+            min-height: 450px;
             overflow: auto;
         }
    		 </style>
