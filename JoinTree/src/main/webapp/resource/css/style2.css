@@ -7,10 +7,9 @@
 	font-style: normal;
 }
 * {
-	color: #464846;
 	font-family: 'Pretendard-Regular';
 }
-html,body {
+html, body, .table {
 	color: #464846;
 	font-family: 'Pretendard-Regular' !important;
 }
@@ -43,11 +42,14 @@ html,body {
 .margin-top20 {
 	margin-top: 20px;
 }
-.margin-left30 {
-	margin-left: 30px;
+.margin-top40 {
+	margin-top: 40px;
 }
 .margin-top190 {
 	margin-top: 190px;
+}
+.margin-left30 {
+	margin-left: 30px;
 }
 .floatR{
 	float: right;
@@ -58,7 +60,14 @@ html,body {
 .hidden {
 	display: none;
 }
+.height180 {
+	height: 180px;
+}
+
 /* 사이드 바*/
+.sidebar.sidebar-offcanvas {
+	min-height: calc(100% - 70px);
+}
 .sidebar .nav .nav-item.active > .nav-link i {
 	color:#25A8E0 !important;
 }
@@ -186,8 +195,21 @@ input:checked + .slider:before {
 	padding: 0px;
 	margin-top: 3px;
 }
-
+.home a{
+	color: #464846;
+}
+.home .card {
+	height: 470px;
+}
+.schedule-item:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
 /*기안서*/
+.doc .row {
+	height: 100%;
+	margin-bottom: 0;
+}
 .doc h1{
 	font-size: 45px;
 	font-weight: bold;
@@ -286,6 +308,9 @@ input:checked + .slider:before {
 	top: -4px;
 	right: -10px;
 	position: absolute;
+}
+.doc select.form-control{
+	color: #464846 !important;
 }
 /*프로젝트*/
 .project .projectData .card{
@@ -449,6 +474,7 @@ input:checked + .slider:before {
 .project-task-comment {
 	padding-right: 0px;
 }
+
 /* 프로젝트 댓글 */
 .taskComment {
 	height : 300px;
@@ -459,24 +485,35 @@ input:checked + .slider:before {
 }
 .taskComment .card{
 	min-width: 140px;
-	margin-left: 30px;
+	margin: 0 0 10px 30px;
 }
+.add-comment textarea {
+	border: none;
+	box-shadow: 0px 0px 5px rgba(153, 153, 153, 0.5);
+	width: 100%;
+	margin: 10px 0 10px 0;
+	font-size: 15px;
+}
+.add-comment .wrapper{
+	flex-wrap: unset;
+}
+.add-comment .wrapper button{
+	width: 76px;
+	height: 56px;
+	margin-top: 9px;
+}
+/* 대댓글 */
 .taskComment .childComment {
 	min-width: 140px;
-	margin-left: 60px;
+	margin: 0 0 10px 60px;
 }
-.add-comment input {
-	width: 500px;
-	text-decoration: underline;
-}
+
 .taskFile input {
 	height: 50px;
 }
 
 /* 캘린더 */
-.fc-daygrid-block-event .fc-event-title {
-	color: red;
-}
+
 /* 모달 */
 .modal-content  {
 	background-color: #efefef !important;

@@ -17,10 +17,10 @@
 	
 	<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+			<div class="content-wrapper doc"> <!-- 컨텐츠부분 wrapper -->
 				<div class="row">	
 					<!-- 기안서 -->
-					<div class="col-md-3 grid-margin stretch-card">
+					<div class="col-md-3 stretch-card">
 						<div class="card">
 							<div class="card-body doc-line">
 								<div>
@@ -31,7 +31,8 @@
 									</select>
 								</div>
 								<!-- 결재선 -->
-								<div class="margin-top20">
+								<div class="line margin-top40"></div>
+								<div class="margin-top40">
 									<div class="wrapper">
 										<h4>결재선</h4>
 										<button type="button" id="modalSingerBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>	
@@ -51,8 +52,8 @@
 									<button type="button" id="moveDownBtn" class="btn btn-inverse-dark"><i class="mdi mdi-arrow-down"></i></button>
 									<button type="button" id="inputSignerBtn" class="btn btn-inverse-dark"><i class="mdi mdi-plus"></i></button>
 								</div>
-								<div class="line margin-top20"></div>
-								<div class="margin-top20">
+								<div class="line margin-top40"></div>
+								<div class="margin-top40">
 									<div class="wrapper">
 										<h4>참조자</h4>
 										<button type="button" id="modalReferBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>	
@@ -62,8 +63,8 @@
 									</div>
 									<button type="button" id="inputReferBtn" class="btn btn-inverse-dark"><i class="mdi mdi-plus"></i></button>
 								</div>
-								<div class="line margin-top20"></div>
-								<div class="margin-top20">
+								<div class="line margin-top40"></div>
+								<div class="margin-top40">
 									<div class="wrapper">
 										<h4>수신팀</h4>
 										<button type="button" id="modalReceiverBtn" class="btn btn-inverse-dark"><i class="mdi mdi mdi-sitemap"></i></button>
@@ -77,7 +78,7 @@
 						</div>
 					</div>
 					
-					<div class="col-md-9 grid-margin stretch-card">
+					<div class="col-md-9 stretch-card">
 						<div class="card">
 							<div class="card-body">
 								<button type="button" id="docFormBtn" class="btn btn-dark btn-sm">결재상신</button>

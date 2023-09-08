@@ -4,58 +4,7 @@
 <html>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
-	
-		<!-- 오늘의 일정 상세보기 모달창 -->
-		<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
-		                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<span>×</span>
-					</button>
-		            </div>
-		            <div class="modal-body">
-		                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
-		                <p><strong>내용:</strong> <span id="viewContent"></span></p>
-		                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
-		                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
-		                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
-		                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
-		            </div>
-		            <div class="modal-footer">
-		            </div>
-		        </div>
-		    </div>
-		</div>
-		
-		
-		<!-- todo 추가 모달창 -->
-		<div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
-		    <div class="modal-dialog" role="document">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h5 class="modal-title" id="addTodoModalLabel">TODO</h5>
-		                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
-							<span>×</span>
-						</button>
-		            </div>
-		            <div class="modal-body">
-		                <!-- TODO 추가 폼 -->
-		                <form id="todoForm">
-		                    <div class="form-group">
-		                        <input type="text" class="form-control" id="todoContent" name="todoContent" required placeholder="할일을 입력해주세요">
-		                    </div>
-		                </form>
-		            </div>
-		            <div class="modal-footer">
-		                <button type="button" class="btn btn-success" id="addTodoBtn">추가</button>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-		
-		
+			
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 	<script>
 		$(document).ready(function() {
@@ -192,7 +141,7 @@
 			                   
 			                }
 			                
-			                const scheduleItem = '<div class="schedule-item" data-schedule-id="' + schedule.scheduleNo + '">' +
+			                const scheduleItem = '<div class="schedule-item margin-top10" data-schedule-id="' + schedule.scheduleNo + '">' +
 		                    '<div class="schedule-title"><i class="' + iconClass + '"></i>&nbsp;' + schedule.scheduleTitle + '</div>' +
 		                    '</div>';
 
@@ -250,7 +199,7 @@
 	                    	const isChecked = todo.todoStatus === '1';
 	                    	const textDecoration = isChecked ? 'text-decoration: line-through;' : '';
 	                    	// id = "todoList" 영역에 리스트 출력
-	                    	const todoItem = '<div class="todo-item">' +
+	                    	const todoItem = '<div class="todo-item margin-top10">' +
 	                    	   '<input type="checkbox" class="todo-checkbox " data-todono="' + todo.todoNo + '" ' + (todo.todoStatus === '1' ? 'checked' : '') + '>&nbsp;' +
 	                    	   '<span class="todo-content" style="' + textDecoration + '">' + todo.todoContent + '</span>&nbsp;' +
 	                    	   '<i class="mdi mdi-delete delete-todo" data-todono="' + todo.todoNo + '"></i>' +
@@ -417,10 +366,13 @@
 					<div class="col-md-5 stretch-card grid-margin">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								<div>
-									<span>공지사항</span>
+								<div class="height180">
+									<div class="d-flex justify-content-between align-items-center">
+										<span>공지사항</span>
+										<a href="/JoinTree/board/noticeList"><i class="mdi mdi-chevron-right"></i></a>
+									</div>
 									<hr>
-									<ul>
+									<ul class="list-arrow">
 										<c:forEach var="notice" items="${getRecentNotice}">
 											<li>
 												<a href="/JoinTree/board/boardOne?boardNo=${notice.boardNo}">${notice.boardTitle}</a>
@@ -428,10 +380,13 @@
 										</c:forEach>
 									</ul>
 								</div>
-								<div>
-									<span>프로젝트</span>
+								<div class="margin-top40 height180">
+									<div class="d-flex justify-content-between align-items-center">
+										<span>프로젝트</span>
+										<a href="/JoinTree/project/projectList"><i class="mdi mdi-chevron-right"></i></a>
+									</div>
 									<hr>
-									<ul>
+									<ul class="list-arrow">
 										<c:forEach var="p" items="${homeProejctList}">
 											<li>
 												<a href="project/projectOne?projectNo=${p.projectNo}">${p.projectName}(${p.empName})</a>
@@ -461,23 +416,29 @@
 					</div>
 				</div>
 				<!--  두번째 줄 -->
-				<div class="row">
-					<div class="col-md-9 stretch-card grid-margin">
+				<div class="row home">
+					<div class="col-md-9 stretch-card">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
-								<div>
-									<span>기안문서목록&nbsp;&nbsp;&#40;${getDraftDocCnt}&#41;</span>
+								<div class="height180">
+									<div class="d-flex justify-content-between align-items-center">
+										<span>기안문서목록&nbsp;&nbsp;&#40;${getDraftDocCnt}&#41;</span>
+										<a href="/JoinTree/document/draftDocList"><i class="mdi mdi-chevron-right"></i></a>
+									</div>
 									<hr>
-									<ul>
+									<ul class="list-arrow">
 										<c:forEach var="draft" items="${getDraftDocList}">
 											<li>${draft.docTitle}&nbsp;&nbsp;&nbsp;&#91;${draft.docStatus}&#93; </li>
 										</c:forEach>
 									</ul>
 								</div>
-								<div>
-									<span>결재함&nbsp;&nbsp;&#40;${getApprovalDocCnt}&#41;</span>
+								<div class="height200 margin-top40">
+									<div class="d-flex justify-content-between align-items-center">
+										<span>결재함&nbsp;&nbsp;&#40;${getApprovalDocCnt}&#41;</span>
+										<a href="/JoinTree/document/approvalDocList"><i class="mdi mdi-chevron-right"></i></a>
+									</div>
 									<hr>
-									<ul>
+									<ul class="list-arrow">
 										<c:forEach var="approval" items="${getApprovalDocList}">
 											<li>${approval.docTitle}&nbsp;&nbsp;&nbsp;&#91;${approval.docStatus}&#93; </li>
 										</c:forEach>
@@ -487,7 +448,7 @@
 						</div>
 					</div>		
 					
-					<div class="col-md-3 stretch-card grid-margin">
+					<div class="col-md-3 stretch-card">
 						<div class="card card-img-holder">
 							<div class="card-body"> 
 								오늘의 일정
@@ -502,5 +463,57 @@
 				</div>
 		</div><!-- 컨텐츠 끝 -->
 	</div><!-- 컨텐츠전체 끝 -->
+	
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 
+	<!-- 오늘의 일정 상세보기 모달창 -->
+		<div class="modal fade" id="scheduleOneModal" tabindex="-1" role="dialog" aria-labelledby="viewScheduleModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
+		                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
+		            </div>
+		            <div class="modal-body">
+		                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
+		                <p><strong>내용:</strong> <span id="viewContent"></span></p>
+		                <p><strong>장소:</strong> <span id="viewLocation"></span></p>
+		                <p><strong>시작일:</strong> <span id="viewStart"></span></p>
+		                <p><strong>종료일:</strong> <span id="viewEnd"></span></p>
+		                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
+		            </div>
+		            <div class="modal-footer">
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		<!-- todo 추가 모달창 -->
+		<div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="addTodoModalLabel" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="addTodoModalLabel">TODO</h5>
+		                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+							<span>×</span>
+						</button>
+		            </div>
+		            <div class="modal-body">
+		                <!-- TODO 추가 폼 -->
+		                <form id="todoForm">
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" id="todoContent" name="todoContent" required placeholder="할일을 입력해주세요">
+		                    </div>
+		                </form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-success" id="addTodoBtn">추가</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
 </html>

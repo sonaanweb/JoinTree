@@ -577,8 +577,8 @@ $(document).ready(function() {
 							'<div class="card">' +
 								'<div class="card-body">' +
 									'<div><b>' + empName + '(' + loginEmpNo + ')</b></div>' +
-									'<div><input type="text" id="taskCommentInput"></input></div>' +
-									'<div class="right"><button type="button" class="taskCommentInputBtn btn btn-success btn-sm">댓글등록</button></div>' +
+									'<div class="wrapper"><textarea id="taskCommentInput" class="form-control"></textarea>' +
+									'<button type="button" class="taskCommentInputBtn btn btn-success btn-sm">등록</button></div>' +
 								'</div>' +
 							'</div>'
 					);
@@ -824,7 +824,7 @@ $(document).ready(function() {
 						// 댓글
 						if(comment.commentParentNo === 0){
 							$(".taskComment").append(
-								'<div class="stretch-card grid-margin">' +
+								'<div class="stretch-card">' +
 									'<div class="floatL">  </div>' + 
 									'<div class="card">' +
 										'<div class="card-body">' +
@@ -842,14 +842,14 @@ $(document).ready(function() {
 						} else if(comment.commentParentNo !== 0){
 							$(".taskComment").append(
 								'<div class="child">'+
-								'<div class="stretch-card grid-margin childComment hidden" data-commentno=' + comment.commentParentNo + '>' +
-									'<div class="floatL"> -> </div>' + 
-									'<div class="card"' +
+								'<div class="stretch-card childComment hidden" data-commentno=' + comment.commentParentNo + '>' +
+									'<div class="floatL"><i class="mdi mdi-arrow-right"></i></div>' + 
+									'<div class="card">' +
 										'<div class="card-body">' +
-											'<div>'+ comment.empName + "(" + comment.empNo + ")" +
-											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div></div>' +
+											'<div><b>'+ comment.empName + "(" + comment.empNo + ")</b>" +
+											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div>' +
 											'<div>' + comment.taskCommentContent +'</div>' +
-											'<div><button data-commentno=' + comment.taskCommentNo + ' id="delTaskCommentChild">삭제</button></div>'+
+											'<div class="right"><button data-commentno=' + comment.taskCommentNo + 'id="delTaskCommentChild" class="btn btn-success btn-sm">삭제</button></div>'+
 										'</div>' +
 									'</div>'+
 								'</div></div>'
