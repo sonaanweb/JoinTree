@@ -99,7 +99,7 @@
 					</div>
 					<div class="margin-top20">
 						<b>프로젝트 설명</b>
-						<textarea id="taskContent" class="form-control" id="projectContent"></textarea>
+						<textarea id="projectContent" class="form-control"></textarea>
 					</div>
 					<div class="margin-top20 right">
 						<button type="button" id="addProjectSubmitBtn" class="btn btn-success">프로젝트 추가</button>
