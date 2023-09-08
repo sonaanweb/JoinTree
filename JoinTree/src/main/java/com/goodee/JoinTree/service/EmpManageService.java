@@ -66,7 +66,7 @@ public class EmpManageService {
 		// 부서코드 번호
 		String dept = (String)empInfo.get("dept"); // empInfo에 저장된 dept
 		System.out.println(dept+"<-- dept");
-		int deptNo = Integer.parseInt(dept.substring(dept.length() -1)) * 100; // 코드의 마지막 번호 추출. 자리 수를 맞추기 위해 * 100
+		int deptNo = Integer.parseInt(dept.substring(dept.length() -1)) * 1000; // 코드의 마지막 번호 추출. 자리 수를 맞추기 위해 * 1000
 		log.debug(deptNo+"<-- EmpManageService deptNo");
 		
 		// 현재 연도 부서별 입사순서
