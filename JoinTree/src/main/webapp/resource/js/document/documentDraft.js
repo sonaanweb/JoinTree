@@ -54,6 +54,10 @@
 				const selectedEmpName = $(this).data("name");
 				const selectedEmpPosition = $(this).data("position");
 				
+				if(selectedEmpNo === loginEmpNo) {
+					alert("본인은 선택할 수 없습니다.");
+					return;
+				}
 				if (!signerSelectedEmps.includes(selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")") && signerSelectedEmps.length < 2) {
 					signerSelectedEmps.push(selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")");
 				
@@ -64,10 +68,7 @@
 				} else {
 					alert("최대 두 명까지만 선택 가능합니다.");
 				}
-				if(selectedEmpNo === loginEmpNo) {
-					alert("본인은 선택할 수 없습니다.");
-					return;
-				}
+				
 				// 업데이트
 				updateSelectEmp(signerSelectedEmps, $("#selectSigner"),true);
 			});
