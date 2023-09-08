@@ -20,7 +20,9 @@
 				</div>
 				<br>
 
-				<h1>비밀번호 확인</h1>
+				<div class="col d-flex align-items-center">
+					<h3>비밀번호 확인</h3>
+				</div>
 				
 			    <form action="/JoinTree/empInfo/checkPw" method="post" id="checkPw">	        
 			        <!-- <label for="empPw">Password:</label> -->

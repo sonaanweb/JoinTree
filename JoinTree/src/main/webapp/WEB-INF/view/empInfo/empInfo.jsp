@@ -13,8 +13,9 @@
 			<div class="col-lg-12 grid-margin stretch-card">
               	<div class="card">
                 <div class="card-body">
-				<h2 class="card-title">나의 정보</h2>
-				<h1>나의 정보</h1>
+				<div class="col d-flex align-items-center">
+					<h3>나의 정보</h3>
+				</div><br>
 		
 	<%-- 			현재 사용자 : ${empName}
 				현재 로그인 아이디: ${loginAccount.empNo}
@@ -26,10 +27,10 @@
 						<td>
 							<c:choose>
 								<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName eq '이미지 없음'}">
-									<img src="${pageContext.request.contextPath}/empImg/JoinTree.png" style="max-width: 200px; max-height: 200px;"><br>
+									사진을 등록해주세요.<br>
 								</c:when>
 								<c:otherwise>
-								<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" style="max-width: 300px; max-height: 300px;"><br>
+									<img src="${pageContext.request.contextPath}/empImg/${empInfo.empSaveImgName}" alt="employee image" style="max-width: 300px; max-height: 300px;"><br>
 								</c:otherwise>
 							</c:choose>				
 						</td>

@@ -16,7 +16,9 @@
                 <div class="card-body">
 
 	
-				<h1>비밀번호 변경</h1>
+				<div class="col d-flex align-items-center">
+					<h3>비밀번호 변경</h3>
+				</div><br>
 				<form action="/JoinTree/empInfo/modifyPw" method="post" id="modifyPw">
 					<div>
 						<!-- <label for="empPw">현재 비밀번호 입력</label> -->

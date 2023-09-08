@@ -19,12 +19,13 @@
 				<div class="col-lg-12 grid-margin stretch-card">
               	<div class="card">
                 <div class="card-body">
-				<h2 class="card-title">나의 정보 수정</h2>
-	
+			
 				<div>
 					<a href="/JoinTree/empInfo/empInfo" class="btn btn-outline-success btn-sm">이전</a>
-				</div>
-				<h1>나의 정보 수정</h1>
+				</div><br>
+				<div class="col d-flex align-items-center">
+					<h3>나의 정보 수정</h3>
+				</div><br>
 				<form action="/JoinTree/empInfo/modifyEmp" method="post" id="modifyEmp">
 					<table class="table">
 						<tr>
