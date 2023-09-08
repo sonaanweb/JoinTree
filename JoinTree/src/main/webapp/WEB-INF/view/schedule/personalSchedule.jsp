@@ -49,7 +49,9 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">일정 추가</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
 				</div>
 				<div class="modal-body">
 					<input type="text" id="scheduleTitle" class="form-control" name="scheduleTitle" placeholder="제목을 입력하세요(필수)">
@@ -66,7 +68,6 @@
 					<br>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-success" id="submitScheduleBtn">추가</button>
 				</div>
 			</div>
@@ -79,7 +80,9 @@
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title" id="exampleModalLabel">일정 상세보기</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
 	            </div>
 	            <div class="modal-body">
 	                <p><strong>제목:</strong> <span id="viewTitle"></span></p>
@@ -90,7 +93,6 @@
 	                <p><strong>작성자:</strong> <span id="viewWriter"></span></p>
 	            </div>
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 	                <button type="button" class="btn btn-success" id="editScheduleBtn">수정</button>
 	                <button type="button" class="btn btn-success" id="deleteScheduleBtn">삭제</button>
 	            </div>
@@ -104,7 +106,9 @@
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title" id="exampleModalLabel">일정 수정</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
 	            </div>
 	            <div class="modal-body">
                     <input type="text" id="editScheduleTitle" class="form-control" placeholder="제목을 입력하세요(필수)">
@@ -121,7 +125,6 @@
                     <br>
 	            </div>
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 	                <button type="button" class="btn btn-success" id="updateScheduleBtn">수정</button>
 	            </div>
 	        </div>

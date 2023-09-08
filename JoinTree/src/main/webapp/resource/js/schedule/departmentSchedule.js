@@ -79,8 +79,8 @@
 	        $('#scheduleEnd').val($('#scheduleStart').val());
 	        
 	        // 종료 시간 설정 (오후 11시 59분)
-	        var endHour = 23; // 시간을 23 (오후 11시)으로 설정
-	        var endMinute = 59; // 분을 59로 설정
+	        var endHour = 18; // 시간을 23 (오후 11시)으로 설정
+	        var endMinute = 00; // 분을 59로 설정
 	        
 	        // 종료 시간을 시간과 분 입력 필드에 설정
 	        $('#scheduleEnd').val($('#scheduleEnd').val().slice(0, 11) + formatTime(endHour, endMinute));
