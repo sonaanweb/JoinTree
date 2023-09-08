@@ -244,15 +244,16 @@
 					
 					// 문서결재 결제, 반려 버튼 분기
 					if(empNo == referenceNo ){ 
-						// 로그인 사번이 참조자일 경우 버튼 비활성화
-						$('#approvalAndRejectBtn').hide();
-					} else if(signer1No == empNo && docStamp2 == null) { 
-					    // 로그인 사번이 결재자1 이면서 결재자 서명이 없을 경우 버튼 활성화
+						// 로그인 사번이 참조자 이면서 결재자인 경우 결재자 서명이 없을 경우 버튼 활성화
+						if ((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) {
+					        $('#approvalAndRejectBtn').show();
+					    } else {
+					        $('#approvalAndRejectBtn').hide();
+					    }
+					} else if((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) { 
+					    // 로그인 사번이 결재자1 또는 결재자2 이면서 결재자 서명이 없을 경우 버튼 활성화
 					    $('#approvalAndRejectBtn').show(); 
-					} else if(signer2No == empNo && docStamp3 == null){
-						// 로그인 사번이 결재자2 이면서 결재자 서명이 없을 경우 버튼 활성화
-						$('#approvalAndRejectBtn').show(); 
-					}else{
+					} else{
 						$('#approvalAndRejectBtn').hide();
 					}
 					
