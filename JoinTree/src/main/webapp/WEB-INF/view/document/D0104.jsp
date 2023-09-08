@@ -80,7 +80,16 @@
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
 					<input type="hidden" id="docStamp1" name="docStamp1" value="${signImg}">
-					<img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				    <c:choose>
+				        <c:when test="${empty signImg or signImg eq null}">
+				            <!-- signImg가 비어있는 경우 기본 이미지 출력 -->
+				            <img src="${pageContext.request.contextPath}/empImg/JoinTree.png" style="width: 100px; height: 70px;">
+				        </c:when>
+				        <c:otherwise>
+				            <!-- signImg가 비어있지 않은 경우 이미지 출력 -->
+				            <img src="${pageContext.request.contextPath}/signImg/${signImg}" style="width: 100px; height: 70px;">
+				        </c:otherwise>
+			    	</c:choose>
 				</td>
 				<td class="sign1 hidden" rowspan="3" style="width: 100px; height: 100px;">
 					<input type="hidden" id="docStamp2" name="docStamp2">
