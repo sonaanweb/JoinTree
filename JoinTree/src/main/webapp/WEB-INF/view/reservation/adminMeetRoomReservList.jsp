@@ -16,22 +16,26 @@
     <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
     <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		<h4>경영지원팀 예약관리</h4>
-		<div>
-            <label>예약일시:</label>
-            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
+	<div class="card">
+		<div class="card-body">
+			<div>
+	            <label>예약일시:</label>
+	            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
+	        </div>
+			<div>
+	            <label>예약 상태:</label>
+	            <input type="radio" name="revStatus" value=""> 전체
+	            <input type="radio" name="revStatus" value="A0301"> 예약완료
+	            <input type="radio" name="revStatus" value="A0302"> 예약취소
+	            <input type="radio" name="revStatus" value="A0303"> 사용완료
+	        </div>
+	        <div>
+	        	<label>예약자:</label>
+	        	<input type="text" name="empName">
+	        	<button id="searchButton">검색</button>
+	        </div>
         </div>
-		<div>
-            <label>예약 상태:</label>
-            <input type="radio" name="revStatus" value=""> 전체
-            <input type="radio" name="revStatus" value="A0301"> 예약완료
-            <input type="radio" name="revStatus" value="A0302"> 예약취소
-            <input type="radio" name="revStatus" value="A0303"> 사용완료
-        </div>
-        <div>
-        	<label>예약자:</label>
-        	<input type="text" name="empName">
-        	<button id="searchButton">검색</button>
-        </div>
+     </div>
 		
         <table class="table">
             <thead>

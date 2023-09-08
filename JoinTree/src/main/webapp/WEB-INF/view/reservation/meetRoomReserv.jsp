@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 
 <style>
-@font-face {
+/* @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
     font-weight: 400;
@@ -22,7 +22,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Pretendard-Regular';
-}
+} */
 .fc-event {
     background-color: #AEC3AE;
     border: none;

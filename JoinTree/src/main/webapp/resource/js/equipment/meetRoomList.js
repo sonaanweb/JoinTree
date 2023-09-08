@@ -163,7 +163,7 @@ function readURL(input, previewSelector) {
 	                        } else {
 							Swal.fire(
 								'Error',
-								'회의실 삭제 실패',
+								'회의실 추가 실패',
 								'error'
 								)
 	                        }
@@ -295,7 +295,7 @@ $('#updateForm').submit(function(event) {
                 } else {
                     Swal.fire(
 					'Error',
-					'회의실 삭제 실패',
+					'회의실 수정 실패',
 					'error'
 					)
                 }
