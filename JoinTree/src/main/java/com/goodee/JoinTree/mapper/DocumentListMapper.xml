@@ -262,9 +262,8 @@
 		LEFT OUTER JOIN document_signer ds ON d.doc_no = ds.doc_no
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		WHERE 
-			((ds.emp_signer_level = 1)
-			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL))
-			AND d.doc_status IN('A0201', 'A0202')
+			((ds.emp_signer_level = 1 AND d.doc_status = 'A0201')
+			OR (ds.emp_signer_level = 2 AND d.doc_stamp2 IS NOT NULL AND d.doc_status = 'A0202'))
 			AND (ds.emp_signer_no = #{empNo} OR d.reference = #{empNo})
 	    ORDER BY d.createdate DESC
 		LIMIT 5
