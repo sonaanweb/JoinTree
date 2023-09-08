@@ -9,6 +9,11 @@
   margin: 40px auto;
 }
 
+.fc .fc-button-primary {
+	border: none;
+	background-color: #C8E4B2;
+}
+
 </style>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 

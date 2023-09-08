@@ -19,7 +19,13 @@
 	          return year + "년 " + month + "월";
 	        },
 	        timeZone: 'Asia/Seoul',
+	        locale: 'ko',
 	        selectable: true,
+	        headerToolbar : {
+            start : 'prev next today',
+            center : 'title',
+            right: 'dayGridMonth'
+        	},
 	        events: '/JoinTree/schedule/getCompanySchedules',
 	        select: function(info) {
 	        	// 세션에서 dept 정보 추출
