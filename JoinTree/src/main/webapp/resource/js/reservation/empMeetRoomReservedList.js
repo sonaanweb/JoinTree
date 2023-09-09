@@ -112,7 +112,7 @@ $(document).ready(function () {
                         +'<td>';
                     
                     if (reservation.revStatus === 'A0301') {
-                        row += '<button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">예약취소</button>';
+                        row += '<button class="btn btn-success btn-sm cancel-btn" data-revno="' + reservation.revNo + '">예약취소</button>';
                     } 
                     
                     row += '</td>' +

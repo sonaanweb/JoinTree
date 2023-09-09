@@ -4,59 +4,68 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>[경영지원]회의실 관리</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-</style>
 </head>
-<body>
-	<!-- header -->
-	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
-		<div class="container-fluid page-body-wrapper">
-		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-			<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
-			<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">추가</button>
-			<div>
-			    <label>회의실명:</label>
-			    <input type="text" id="searchRoomName" name="roomName">
-			    <button id="searchButton">검색</button>
+<!-- header -->
+<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+<div class="container-fluid page-body-wrapper">
+<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+
+	<div class="col-lg-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div>
+				    <label>회의실명:</label>
+				    <input type="text" id="searchRoomName" name="roomName">
+				    <button id="searchButton">검색</button>
+				</div>
 			</div>
-			<table class="table">
-			    <thead>
-			        <tr>
-			            <td>회의실 번호</td>
-			            <td>카테고리</td>
-			            <td>회의실이름</td>
-			            <td>수용인원</td>
-			            <td>사용여부</td>
-			            <td rowspan="1">추가일</td>
-			            <td></td>
-			        </tr>
-			    </thead>
-			    <tbody id="meetRoomList">
-			        <c:forEach var="m" items="${meetRoomList}">
-			            <tr>
-			                <td class="roomNo">${m.roomNo}</td>
-			                <td class="equipCategory">${m.equipCategory}</td>
-			                <td class="roomName">${m.roomName}</td>
-			                <td class="roomCapacity">${m.roomCapacity}명</td>
-			                <td class="roomStatus">
-			                    <c:choose>
-			                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
-			                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
-			                    </c:choose>
-			                </td>
-			                <td class="createdate">${m.createdate}</td>
-			                <td>
-			                    <button class="editButton" data-room-no="${m.roomNo}">수정</button>
-			                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
-			                </td>
-			            </tr>
-			        </c:forEach>
-			    </tbody>
-			</table>
+		</div>
+	</div>
+	
+	<div class="col-lg-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+			<button type="button" class="btn btn-success btn-sm margin10 floatR" data-bs-toggle="modal" data-bs-target="#addModal" >추가</button>
+				<table class="table">
+				    <thead>
+				        <tr>
+				            <td>회의실 번호</td>
+				            <td>카테고리</td>
+				            <td>회의실이름</td>
+				            <td>수용인원</td>
+				            <td>사용여부</td>
+				            <td rowspan="1">추가일</td>
+				            <td></td>
+				        </tr>
+				    </thead>
+				    <tbody id="meetRoomList">
+				        <c:forEach var="m" items="${meetRoomList}">
+				            <tr>
+				                <td class="roomNo">${m.roomNo}</td>
+				                <td class="equipCategory">${m.equipCategory}</td>
+				                <td class="roomName">${m.roomName}</td>
+				                <td class="roomCapacity">${m.roomCapacity}명</td>
+				                <td class="roomStatus">
+				                    <c:choose>
+				                        <c:when test="${m.roomStatus == 1}">사용가능</c:when>
+				                        <c:when test="${m.roomStatus == 0}">사용불가</c:when>
+				                    </c:choose>
+				                </td>
+				                <td class="createdate">${m.createdate}</td>
+				                <td>
+				                    <button class="editButton" data-room-no="${m.roomNo}">수정</button>
+				                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
+				                </td>
+				            </tr>
+				        </c:forEach>
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
 			<!-- 추가 모달창 -->
 			<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
 			    <div class="modal-dialog">
@@ -143,5 +152,4 @@
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 	<div id="empNo" data-empno="${loginAccount.empNo}"></div>
 	<script src="/JoinTree/resource/js/equipment/meetRoomList.js"></script>
-</body>
 </html>

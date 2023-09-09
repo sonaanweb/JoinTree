@@ -130,11 +130,13 @@ public class MeetRoomController {
     // 회의실 삭제
     @PostMapping("/deleteMeetRoom")
     @ResponseBody
-    public String deleteMeetRoom(int roomNo) {
+    public String deleteMeetRoom(int roomNo, String path,HttpServletRequest request) {
+    	
+    	path = request.getServletContext().getRealPath("/roomImg/");
     	MeetingRoom meetingRoom = new MeetingRoom();
     	meetingRoom.setRoomNo(roomNo);
     	//meetingRoom.setCreateId();
-		int row = meetRoomService.removeMeetRoom(meetingRoom);
+		int row = meetRoomService.removeMeetRoom(meetingRoom,path);
         if (row > 0) {
             return "success";
         } else {

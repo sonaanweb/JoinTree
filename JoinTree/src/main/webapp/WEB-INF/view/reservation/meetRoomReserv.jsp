@@ -9,28 +9,15 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.36/moment-timezone-with-data.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 
 <style>
-/* @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Pretendard-Regular';
-} */
 .fc-event {
     background-color: #AEC3AE;
     border: none;
 }
 #calendar {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 40px auto;
-  font-family: 'Pretendard-Regular';
 }
 .fc .fc-button-primary {
 	border: none;
@@ -45,16 +32,13 @@ html, body {
 }
 
 </style>
-<title>예약 현황 창(캘린더) + 예약하기</title>
 </head>
-<body>
 <!-- header -->
-<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
-
+<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
 <div class="container-fluid page-body-wrapper">
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-		<div class="content-wrapper">
-		 <!-- 컨텐츠부분 wrapper -->
+<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+<div class="content-wrapper">
+<!-- 컨텐츠부분 wrapper -->
 		 
 			<div style="font-weight: bold; font-family: 'Pretendard-Regular';">
 			<span class="badge badge-success">notice</span> test예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
@@ -120,8 +104,8 @@ html, body {
 										<option value="17:30">17:30</option>
 										<option value="18:00">18:00</option>
 							        </select>
-			                        <label for="taskId" class="col-form-label">내용</label>
-			                        <input type="text" class="form-control" id="revReason" name="revReason" placeholder="예약 내용을 적어주세요 :) 캘린더에 함께 표시됩니다.">
+			                        <label for="taskId" class="col-form-label">예약 사유</label>
+			                        <input type="text" class="form-control" id="revReason" name="revReason" placeholder="간단한 예약 사유를 적어주세요.">
 			                    	<div class="check" id="rn_check"></div>
 			                    </div>
 			                </div>
@@ -132,12 +116,12 @@ html, body {
 			            </div>
 			        </div>
    				</div>
+   				
 <!-- 컨텐츠전체 끝 -->			
-    		</div>
-		</div>
+</div>
+</div>
 <!-- footer -->
 <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 	<div id="empNo" data-empno="${loginAccount.empNo}"></div>
 	<script src="/JoinTree/resource/js/reservation/meetRoomReserv.js"></script>
-</body>
 </html>

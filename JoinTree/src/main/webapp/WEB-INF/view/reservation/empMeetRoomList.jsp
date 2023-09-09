@@ -7,15 +7,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <style>
-@font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-html, body {
-  font-family: 'Pretendard-Regular';
-}
  .container {
      max-height: 1000px; /*최대 높이 */
      overflow-y: auto; /*스크롤 자동 표시 */
@@ -52,9 +43,9 @@ margin-top: 56px;
 <!-- header -->
 <!-- body, title 삭제 -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
-	<div class="container-fluid page-body-wrapper">
-	<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
-		<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
+<div class="container-fluid page-body-wrapper">
+<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
+<div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		
 			<div class="card">
 			<br><br>
@@ -88,7 +79,7 @@ margin-top: 56px;
 		                                        <span class="detail-value">평일 : 9시~18시 <br>( 그 외 시간은 별도의 예약 없이 사용가능합니다. ) <br>* 정각이 되기 전 미리 예약해주세요.</span>
 		                                    </div>
 		                                	</div>             
-				                                 <a href="/JoinTree/reservation/meetRoomReserv?roomNo=${m.roomNo}&roomName=${m.roomName}" class="btn btn-success btn-fw" style="font-family: 'Pretendard-Regular';">예약하기</a>		                                
+				                                 <a href="/JoinTree/reservation/meetRoomReserv?roomNo=${m.roomNo}&roomName=${m.roomName}" class="btn btn-success btn-fw">예약하기</a>		                                
 				                            </div>
 				                        </div>
 				                    </div>

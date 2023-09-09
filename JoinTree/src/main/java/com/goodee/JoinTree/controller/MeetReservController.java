@@ -36,7 +36,7 @@ public class MeetReservController {
 	@Autowired MeetRoomReservService meetRoomReservService;	
 	@Autowired MeetRoomService meetRoomService;
 	
-	// 예약 가능한 회의실 List(클릭시 캘린더) ---- join 말고 다른 방법 고민해봐야 함 or ajax
+	// 예약 가능한 회의실 List(클릭시 캘린더)
 	@GetMapping("/reservation/empMeetRoomList")
 	public String meetRoomList(Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
@@ -75,7 +75,7 @@ public class MeetReservController {
         return new ResponseEntity<>(eventList, HttpStatus.OK);//ResponseEntity를 통한 반환
     }
     
-    // + 동시성 (같은 시간대에 같은 시간대 예약을 했을 시...? 데이터 검사) --- 컨트롤단에서 중복검사 한 번 더
+    // + 예약추가 동시성 - 컨트롤단에서 중복검사 (예외처리)
 
     // 회의실 예약 추가
     @PostMapping("/addReservation")

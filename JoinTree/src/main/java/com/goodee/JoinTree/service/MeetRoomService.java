@@ -155,7 +155,7 @@ public class MeetRoomService {
 	}
 	
 	
-	// 회의실 이미지 삭제 메서드
+	// 회의실 이미지 삭제 메서드(이미지만 따로 삭제할 때 사용)
 	public int removeImg(int roomNo, String path) {
 		MeetRoomFile meetRoomFile = meetRoomMapper.selectMeetRoomFile(roomNo);
 		
@@ -200,10 +200,41 @@ public class MeetRoomService {
 	}
 
 	// 회의실 삭제
-	public int removeMeetRoom(MeetingRoom meetingRoom) {
-		return meetRoomMapper.deleteMeetRoom(meetingRoom);
+	public int removeMeetRoom(MeetingRoom meetingRoom, String path) {
+		
+	    int meetRoomFileCnt = meetRoomMapper.selectMeetRoomFileCnt(meetingRoom.getRoomNo());  
+		/* log.debug(AN+"파일개수(remove 확인):"+meetRoomFileCnt); */
+	    
+		    if (meetRoomFileCnt == 1) { // 파일 1(이미지 존재) 하면 삭제
+		        MeetRoomFile file = meetRoomMapper.selectMeetRoomFile(meetingRoom.getRoomNo());
+				/* log.debug(AN+"삭제 파일 불러오기:"+file); */
+	
+		        if (file != null) {
+		            File f = new File(path + file.getRoomSaveFilename());
+		            if (f.exists()) {
+		                f.delete();
+		            }
+					/* log.debug(AN + "프로젝트 내 파일 삭제완료" + RE); */
+		        }
+	
+		        int row = meetRoomMapper.removeMeetRoomFile(meetingRoom.getRoomNo());
+				/* log.debug(AN+"파일 삭제 첫번째 로우"+row); */
+	
+		        if (row == 1) {
+		            row = meetRoomMapper.deleteMeetRoom(meetingRoom); // 파일삭제 -> 회의실 삭제
+					/* log.debug(AN+"파일 두번째 로우"+row); */
+		        }
+	
+		        return row;
+		        
+		    } else {
+		        // 이미지 파일이 없는 경우 바로 회의실 삭제
+		        int row = meetRoomMapper.deleteMeetRoom(meetingRoom);
+		        return row;
+		    }
 	}
 
+	
 	// 회의실 이름 검색
 	public List<MeetingRoom> searchMeetRoom(Map<String, Object> map) {
 		return meetRoomMapper.searchMeetRoom(map);

@@ -49,7 +49,7 @@ $(document).ready(function () {
                     
                     // 취소 버튼 또는 상태 텍스트 추가
                     if (reservation.revStatus === 'A0301') {
-                        row += '<td><button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>';
+                        row += '<td><button class="btn btn-success btn-sm cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>';
                     } else {
                         row += '<td></td>';
                     }
@@ -64,7 +64,7 @@ $(document).ready(function () {
                     for (var i = 0; i < response.length; i++) {
                         var reservation = response[i];
                         var row = '<tr>' +
-                            '<td><button class="btn btn-sm btn-primary cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>' +
+                            '<td><button class="btn btn-success btn-sm cancel-btn" data-revno="' + reservation.revNo + '">취소</button></td>' +
                             '</tr>';
                         tbody.append(row);
                     }
