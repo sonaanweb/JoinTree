@@ -53,21 +53,40 @@
 				const selectedEmpNo = $(this).data("no");
 				const selectedEmpName = $(this).data("name");
 				const selectedEmpPosition = $(this).data("position");
+				const selectedEmpInfo = selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")";
 				
 				if(selectedEmpNo === loginEmpNo) {
-					alert("본인은 선택할 수 없습니다.");
+					Swal.fire(
+		                'Error',
+		                '본인은 선택할 수 없습니다.',
+		                'error'
+	            	);
 					return;
 				}
-				if (!signerSelectedEmps.includes(selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")") && signerSelectedEmps.length < 2) {
-					signerSelectedEmps.push(selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")");
-				
-					$("#signerModal").modal("hide");
-					
-				} else if (signerSelectedEmps.includes(selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")")) {
-					alert("이미 선택한 번호입니다.");
-				} else {
-					alert("최대 두 명까지만 선택 가능합니다.");
-				}
+				// 이미 참조자로 선택된 사원인지 확인
+			    if (referSelectedEmps.includes(selectedEmpInfo)) {
+			        Swal.fire(
+			            'Error',
+			            '이미 선택한 참조자는 결재자로 선택할 수 없습니다.',
+			            'error'
+			        );
+			    } else if (!signerSelectedEmps.includes(selectedEmpInfo) && signerSelectedEmps.length < 2) {
+			        signerSelectedEmps.push(selectedEmpInfo);
+			        
+			        $("#signerModal").modal("hide");
+			    } else if (signerSelectedEmps.includes(selectedEmpInfo)) {
+			        Swal.fire(
+			            'Error',
+			            '이미 선택한 결제자 입니다.',
+			            'error'
+			        );
+			    } else {
+			        Swal.fire(
+			            'Error',
+			            '최대 두 명까지만 선택 가능합니다.',
+			            'error'
+			        );
+			    }
 				
 				// 업데이트
 				updateSelectEmp(signerSelectedEmps, $("#selectSigner"),true);
@@ -80,7 +99,15 @@
 				const selectedEmpPosition = $(this).data("position");
 				const selectedEmpInfo = selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")";
 				
-				if (!referSelectedEmps.includes(selectedEmpInfo)) {
+				// 이미 결제자로 선택된 사원인지 확인
+			    if (signerSelectedEmps.includes(selectedEmpInfo)) {
+			        Swal.fire(
+			            'Error',
+			            '이미 선택한 결제자는 참조자로 선택할 수 없습니다.',
+			            'error'
+			        );
+				
+				} else if (!referSelectedEmps.includes(selectedEmpInfo)) {
 					referSelectedEmps.splice(0, 1, selectedEmpInfo);
 					// 업데이트
 					updateSelectEmp(referSelectedEmps, $("#selectReference"),false);
@@ -88,8 +115,13 @@
 					$("#referModal").modal("hide");
 					
 				} else if (referSelectedEmps.includes(selectedEmpInfo)) {
-					alert("이미 선택한 번호입니다.");
+					Swal.fire(
+		                'Error',
+		                '이미 선택한 참조자 입니다.',
+		                'error'
+	            	);
 				}
+			
 			});
 			
 			// 수신팀 모달에서 선택한 팀 처리
@@ -375,25 +407,41 @@
 				
 			// 필수 입력값 유효성 검사
 		    if (docStamp1 === null || docStamp1 === "") {
-		        alert("서명을 먼저 등록해주세요.");
+				Swal.fire(
+	                'Error',
+	                '서명을 먼저 등록해주세요.',
+	                'error'
+            	);
 		        return;
 		    }
 			
 			if(category == "D0101" || category == "D0104"){
 				if (!docTitle || !reference || !receiverTeam ||!signer1) {
-					alert("모든 필수 정보를 입력해주세요.");
+					Swal.fire(
+		                'Error',
+		                '모든 필수 정보를 입력해주세요.',
+		                'error'
+	            	);
 					return;
 				}
 			}
 			if(category == "D0102"){
 				if(!docTitle || !reference || !receiverTeam ||!signer1 || !leaveCate || !docLeaveStartDate || !docLeaveEndDate || !docLeavePeriodDate || !docLeaveTel){
-					alert("모든 필수 정보를 입력해주세요.");
+					Swal.fire(
+		                'Error',
+		                '모든 필수 정보를 입력해주세요.',
+		                'error'
+	            	);
 					return;
 				}
 			}
 			if(category == "D0103"){
 				if(!docTitle || !reference || !receiverTeam ||!signer1 || !docReshuffleDate || !docReshuffleTask || !docReshuffleResult || !docReshuffleDept || !docReshufflePosition){
-					alert("모든 필수 정보를 입력해주세요.");
+					Swal.fire(
+		                'Error',
+		                '모든 필수 정보를 입력해주세요.',
+		                'error'
+	            	);
 					return;
 				}
 			}
@@ -439,9 +487,15 @@
 					// 카테고리가 인사이동 일때 
 					if(category === 'D0103') {
 						submitReshuffleDocument(docNo, docReshuffleDate, docReshuffleTask, docReshuffleResult, docReshuffleDept, docReshufflePosition, createId, updateId);
-					}					
-					
-					alert("기안이 완료되었습니다.");
+					}
+					/*					
+					Swal.fire({
+							icon: 'success',
+							title: '기안이 완료되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						});
+					*/
 					window.location.href = '/JoinTree/document/draftDocList'; // 홈 페이지 URL로 변경					
 				},
 				error: function(textStatus, errorThrown) {
@@ -484,11 +538,11 @@
 								$('#docOriginFilename').val('');
 								// alert("업로드 성공");
 							} else {
-								alert("업로드 실패");
+								//alert("업로드 실패");
 							}
 						},
 						error : function() {
-							alert("업로드 실패");
+							//alert("업로드 실패");
 						}
 					});
 			}
@@ -511,7 +565,7 @@
 						if(response === 'success'){
 							// alert("결재자 등록성공");
 						} else {
-							alert("결재자 등록실패");
+							//alert("결재자 등록실패");
 						}
 					},
 					error: function(textStatus, errorThrown) {
@@ -537,9 +591,9 @@
 					},
 					success: function(response) {
 						if(response === 'success'){
-							alert("휴가기안 등록성공");
+							//alert("휴가기안 등록성공");
 						} else {
-							alert("휴가기안 등록실패");
+							//alert("휴가기안 등록실패");
 						}
 					},
 					error: function(textStatus, errorThrown) {
@@ -565,9 +619,9 @@
 					},
 					success: function(response) {
 						if(response === 'success'){
-							alert("인사이동기안 등록성공");
+							//alert("인사이동기안 등록성공");
 						} else {
-							alert("인사이동기안 등록실패");
+							//alert("인사이동기안 등록실패");
 						}
 						
 					},
