@@ -104,6 +104,11 @@ public class LoginController {
 				Cookie loginIdCookie = new Cookie("loginId", String.valueOf(empNo));
 				loginIdCookie.setMaxAge(60 * 60 * 24 * 30); // 초단위 // 60 * 60 * 24 * 30 -> 30일  
 				response.addCookie(loginIdCookie);
+			} else {
+				// saveId가 null이거나 "y"가 아니라면 쿠키 삭제
+			    Cookie loginIdCookie = new Cookie("loginId", "");
+			    loginIdCookie.setMaxAge(0); // 즉시 삭제
+			    response.addCookie(loginIdCookie);
 			}
 			
 			// 최초 로그인 시 비밀번호 변경 여부 확인
@@ -111,7 +116,7 @@ public class LoginController {
 				msg = URLEncoder.encode(empName + "님, 환영합니다. 비밀번호 변경 후 이용 가능합니다.", "UTF-8");
 				
 				return "redirect:/empInfo/modifyPw?msg=" + msg; // 비밀번호 변경 페이지로 이동
-			}
+			} 
 			
 			// 로그인 성공 시 메시지를 URL 매개변수로 전달
 			msg = URLEncoder.encode(empName + "님, 환영합니다.", "UTF-8");
