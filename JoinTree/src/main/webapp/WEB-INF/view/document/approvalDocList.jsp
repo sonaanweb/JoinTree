@@ -110,18 +110,24 @@
 				
 				<!-- Modal body -->
 				<div class="modal-body">
-					
-					<!-- 결재 문서 상세조회 폼 -->
-					<div id="documentOneForm">
-					
-					</div>
-					
+					<div class="col-lg-12 grid-margin stretch-card">
+						<div class="card">
+							<div class="card-body">
+							
+								<!-- 결재 문서 상세조회 폼 -->
+								<div id="documentOneForm">
+								
+								
+								</div>
+							
+							</div>
+						</div>
+					</div>		
 					<!-- 결재, 반려 버튼 -->
-					<div id="approvalAndRejectBtn">
-						<button type="button" id="approvalBtn">결재</button>
-						<button type="button" id="rejectBtn">반려</button>
+					<div id="approvalAndRejectBtn" class="text-center">
+						<button type="button" id="approvalBtn" class="btn btn-dark btn-md">결재</button>
+						<button type="button" id="rejectBtn" class="btn btn-dark btn-md">반려</button>
 					</div>
-		
 				</div>
 				
 			</div>

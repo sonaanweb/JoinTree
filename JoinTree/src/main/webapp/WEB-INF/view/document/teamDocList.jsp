@@ -110,12 +110,18 @@
 				
 				<!-- Modal body -->
 				<div class="modal-body">
-					
-					<!-- 결재 문서 상세조회 폼 -->
-					<div id="documentOneForm">
-					
-					</div>
-					
+					<div class="col-lg-12 grid-margin stretch-card">
+						<div class="card">
+							<div class="card-body">
+								
+								<!-- 결재 문서 상세조회 폼 -->
+								<div id="documentOneForm">
+								
+								</div>
+								
+							</div>
+						</div>
+					</div>			
 				</div>
 				
 			</div>
