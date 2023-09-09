@@ -2,7 +2,13 @@ $(document).ready(function() {
 	const urlParams = new URL(location.href).searchParams;
 	const msg = urlParams.get("msg");
 		if (msg != null) {
-			alert(msg);
+			// alert(msg);
+			Swal.fire({
+				icon: 'success',
+				title: msg,
+				showConfirmButton: false,
+				timer: 1000
+			});
 		}
 		
 	// <input type="number"> 일 경우 숫자만 입력받도록 설정
@@ -15,10 +21,22 @@ $(document).ready(function() {
 	// 로그인 버튼 클릭 시 
 	$("#loginBtn").click(function() {
 		if ($("#empNo").val() == "") {
-			alert("사번을 입력해주세요.");
+			// alert("사번을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '사번을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empNo").focus();
 		} else if ($("#empPw").val() == "") {
-			alert("비밀번호를 입력해주세요.");
+			// alert("비밀번호를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '비밀번호를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empPw").focus();
 		} else {
 		 	$("#login").submit();

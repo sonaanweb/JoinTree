@@ -5,6 +5,7 @@
 <html>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+	<script src="/JoinTree/resource/js/empInfo/empInfo.js"></script>
 	    
 		<div class="container-fluid page-body-wrapper">
 		<jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->

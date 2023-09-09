@@ -53,7 +53,7 @@
 						<c:if test="${loginAccount.empNo eq comm.empNo}">
 							<div class="col-lg-12 text-right">
 								<a href="/JoinTree/community/secondhandCommList/modifySecondhandComm?boardNo=${comm.boardNo}" class="btn btn-success btn-sm">수정</a>
-								<a href="/JoinTree/community/removeComm?boardNo=${comm.boardNo}" onclick="return confirm('게시글을 삭제하시겠습니까?')" class="btn btn-success btn-sm">삭제</a>
+								<a href="/JoinTree/community/removeComm?boardNo=${comm.boardNo}" id="removeBtn" class="btn btn-success btn-sm">삭제</a>
 							</div>
 						</c:if>
 						<hr>

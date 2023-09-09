@@ -325,13 +325,6 @@
 							timer: 1000
 						});
 					} else {
-						// alert("게시글이 수정되었습니다.");
-						Swal.fire({
-							icon: 'success',
-							title: '게시글이 수정되었습니다.',
-							showConfirmButton: false,
-							timer: 1000
-						});
 						$("#modifyFreeComm").submit();
 					}
 			    });

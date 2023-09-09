@@ -2,7 +2,12 @@
 	const urlParams = new URL(location.href).searchParams;
 	const msg = urlParams.get("msg");
 		if (msg != null) {
-			alert(msg);
+			Swal.fire({
+				icon: 'success',
+				title: msg,
+				showConfirmButton: false,
+				timer: 1000
+			});
 		}
 		
 	const fileInput = $('#fileInput');
@@ -30,12 +35,24 @@
             const fileExtensions = file.name.substr(file.name.lastIndexOf('.')).toLowerCase();
             
             if (fileSize > maxSize) {
-            	alert("파일 크기가 3MB를 초과합니다.");
+            	// alert("파일 크기가 3MB를 초과합니다.");
+            	Swal.fire({
+					icon: 'warning',
+					title: '파일 크기가 3MB를 초과합니다.',
+					showConfirmButton: false,
+					timer: 1000
+				});
             	fileInput.val(''); // 파일 선택 초기화
             	previewImage.attr('src', ''); // 미리보기 초기화
             	// removeBtn.hide(); // 파일 삭제 버튼 숨기기
             } else if (!allowedExtensions.includes(fileExtensions)) {
-            	alert("이미지 파일만 첨부 가능합니다.");
+            	// alert("이미지 파일만 첨부 가능합니다.");
+            	Swal.fire({
+					icon: 'warning',
+					title: '이미지 파일만 첨부 가능합니다.',
+					showConfirmButton: false,
+					timer: 1000
+				});
             	fileInput.val(''); // 파일 선택 초기화
             	previewImage.attr('src', ''); // 미리보기 초기화
             } else {

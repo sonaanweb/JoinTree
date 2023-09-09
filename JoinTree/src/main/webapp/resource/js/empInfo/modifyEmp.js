@@ -2,14 +2,18 @@
 $(document).ready(function(){
 	const urlParams = new URL(location.href).searchParams;
 	const msg = urlParams.get("msg");
-		if (msg != null) {
-			alert(msg);
-		}
+	if (msg != null) {
+		Swal.fire({
+			icon: 'success',
+			title: msg,
+			showConfirmButton: false,
+			timer: 1000
+		});
+	}
 		
 	const fileInput = $('#fileInput');
     const previewImage = $('#previewImage');	
     const currentImage = $('#currentImage');
-    const currentImageTxt = $('#currentImageTxt');
     
     const removeBtn = $('#removeBtn');
 	
@@ -37,11 +41,21 @@ $(document).ready(function(){
         	const fileExtensions = file.name.substr(file.name.lastIndexOf('.')).toLowerCase();
         	
         	if (fileSize > maxSize) {
-        		alert("파일 크기가 3MB를 초과합니다.");
+        		Swal.fire({
+					icon: 'warning',
+					title: '파일 크기가 3MB를 초과합니다.',
+					showConfirmButton: false,
+					timer: 1000
+				});
         		fileInput.val(''); // 파일 선택 초기화
         		previewImage.attr('src', ''); // 미리보기 초기화
         	} else if (!allowedExtensions.includes(fileExtensions)) {
-        		alert("이미지 파일만 첨부 가능합니다.");
+        		Swal.fire({
+					icon: 'warning',
+					title: '이미지 파일만 첨부 가능합니다.',
+					showConfirmButton: false,
+					timer: 1000
+				});
             	fileInput.val(''); // 파일 선택 초기화
             	previewImage.attr('src', ''); // 미리보기 초기화
         	} else {
@@ -86,12 +100,23 @@ $(document).ready(function(){
         		success: function(response) {
         			console.log(response);
         	 		if (response === "success") {
-		    			alert("사진이 등록되었습니다.");
+	    				Swal.fire({
+							icon: 'success',
+							title: '사진이 등록되었습니다.',
+							showConfirmButton: false,
+							timer: 2000
+						});
+		    			
 		    			// 서버에서 새로 업데이트된 이미지 경로로 뷰 업데이트
 		                $("#currentImage").attr("src", response.newImagePath);
 		    			location.reload(); // 현재 메인 페이지 새로고침
 		    		} else {		
-        	 			alert("사진 등록 중 오류가 발생했습니다.");
+    	 				Swal.fire({
+							icon: 'warning',
+							title: '사진 등록 중 오류가 발생했습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						});
 		    		}
         		}, 
         		error: function(error) {
@@ -99,16 +124,66 @@ $(document).ready(function(){
         		}	
         	});
     	} else {
-    		alert("업로드할 사진을 선택해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '업로드할 사진을 선택해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
+ 
     	}
     });
     
     // 사진 삭제 버튼 클릭되었을 때
     $("#removeImgBtn").click(function() {
     	console.log("사진 삭제 버튼 클릭");
+    	Swal.fire({
+            title: '사진이 완전히 삭제됩니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#8BC541',
+            cancelButtonColor: '#888',
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+            }).then((result) => {
+               if (result.isConfirmed) {
+                  $.ajax({
+                     type : "POST",
+                     url : "/JoinTree/empInfo/modifyEmp/removeEmpImg",
+                     success : function(response) {
+                        console.log("respose",response);
+                        if (response === "success") {
+                           Swal.fire({
+                              icon: 'success',
+                              title: '사진이 삭제되었습니다.',
+                              showConfirmButton: false,
+                              timer: 3000
+                           });
+                            // 서버에서 삭제된 이미지 경로로 뷰 업데이트
+	                        $("#currentImage").attr("src", "");
+	                        $("#currentImage").hide();
+	                        $("#currentImageTxt").hide();
+	                        
+	                        location.reload(); // 페이지 새로고침
+                        } else {
+							Swal.fire({
+								icon: 'warning',
+								title: '사진 삭제 중 오류가 발생했습니다.',
+								showConfirmButton: false,
+								timer: 1000
+							});
+						}
+                     }, 
+                      error: function(error) {
+	                    alert("서버 오류 발생");
+	                }
+                  });
+               }
+            });
+		/*
     	if (confirm("사진이 완전히 삭제됩니다.")) {
     		 $.ajax({
-	                url: "/JoinTree/empInfo/modifyEmp/removeEmpImg", // 적절한 서버 엔드포인트로 변경
+	                url: "/JoinTree/empInfo/modifyEmp/removeEmpImg", 
 	                type: "POST",
 	                success: function(response) {
 	                    console.log(response);
@@ -121,7 +196,12 @@ $(document).ready(function(){
 	                        
 	                        location.reload(); // 페이지 새로고침
 	                    } else {
-	                        alert("사진 삭제 중 오류가 발생했습니다.");
+                        	Swal.fire({
+								icon: 'warning',
+								title: '사진 삭제 중 오류가 발생했습니다.',
+								showConfirmButton: false,
+								timer: 1000
+							});
 	                    }
 	                },
 	                error: function(error) {
@@ -129,6 +209,7 @@ $(document).ready(function(){
 	                }
 	            });
     		}
+    		*/
     });
    	  
 	// 이름 칸은 문자만 입력 허용
@@ -155,44 +236,108 @@ $(document).ready(function(){
 	    if (detailAddressValue.includes("/")) {
 	        const cleanedValue = detailAddressValue.replace("/", "").trim();
 	        detailAddressInput.val(cleanedValue);
-	        alert("/는 입력할 수 없습니다.");
+        	Swal.fire({
+				icon: 'warning',
+				title: '/ 는 입력할 수 없습니다.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 	    }
 	});
 	
 	// 정보 수정 버튼 클릭 시 
 	$("#modifyEmpBtn").click(function() {
 		if ($("#empName").val() == "") {
-			alert("이름을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '이름을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empName").focus();
 		} else if ($("#sample6_postcode").val() == "") {
-			alert("우편번호를 입력해주세요.");
+			// alert("우편번호를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '우편번호를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#sample6_postcode").focus();
 		} else if ($("#sample6_address").val() == "") {
-			alert("주소를 입력해주세요.");
+			// alert("주소를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '주소를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#sample6_address").focus();
 		} else if ($("#sample6_detailAddress").val() == "") {
-			alert("상세주소를 입력해주세요.");
+			// alert("상세주소를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '상세주소를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#sample6_detailAddress").focus();
 		} else if ($("#sample6_extraAddress").val() == "") {
-			alert("참고항목을 입력해주세요.");
+			// alert("참고항목을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '참고항목을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#sample6_extraAddress").focus();
 		} else if ($("#empJuminNo1").val() == "") {
-			alert("주민등록번호 앞자리를 입력해주세요.");
+			// alert("주민등록번호 앞자리를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '주민등록번호 앞자리를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empJuminNo1").focus();
 		} else if ($("#empJuminNo2").val() == "") {
-			alert("주민등록번호 뒷자리를 입력해주세요.");
+			// alert("주민등록번호 뒷자리를 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '주민등록번호 뒷자리를 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empJuminNo2").focus();
 		} else if ($("#empPhone1").val() == "") {
-			alert("연락처 첫 번째 칸을 입력해주세요.");
+			// alert("연락처 첫 번째 칸을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '연락처 첫 번째 칸을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empPhone1").focus();
 		} else if ($("#empPhone2").val() == "") {
-			alert("연락처 두 번째 칸을 입력해주세요.");
+			// alert("연락처 두 번째 칸을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '연락처 두 번째 칸을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empPhone2").focus();
 		} else if ($("#empPhone3").val() == "") {
-			alert("연락처 세 번째 칸을 입력해주세요.");
+			// alert("연락처 세 번째 칸을 입력해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '연락처 세 번째 칸을 입력해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 			$("#empPhone3").focus();
 		} else {
-			alert("사원 정보가 변경되었습니다.");
+			// alert("사원 정보가 변경되었습니다.");
 			$("#modifyEmp").submit();
 		}
 	});
@@ -219,8 +364,15 @@ $(document).ready(function(){
 	$("#send").click(function() { // 저장
 		console.log("send 버튼 클릭");
 		if (uploadSignImg.isEmpty()) {
-			alert("내용이 없습니다.");
+			// alert("내용이 없습니다.");
+			Swal.fire({
+				icon: 'warning',
+				title: '내용이 없습니다.',
+				showConfirmButton: false,
+				timer: 1000
+			});
 		} else {
+			/*
 			if (confirm("서명을 등록하시겠습니까? 서명은 최초 1회만 등록 가능합니다.")) {
 				$.ajax({
 					url : "/JoinTree/empInfo/modifyEmp/uploadSignImg",
@@ -232,6 +384,34 @@ $(document).ready(function(){
 					}
 				});
 			}
+			*/
+			Swal.fire({
+			    title: '서명을 등록하시겠습니까?',
+			    text: '서명은 최초 1회만 등록 가능합니다.',
+			    icon: 'warning',
+			    showCancelButton: true,
+			    confirmButtonColor: '#8BC541',
+			    cancelButtonColor: '#888',
+			    confirmButtonText: '확인',
+			    cancelButtonText: '취소'
+			}).then((result) => {
+			    if (result.isConfirmed) {
+			        $.ajax({
+			            url: '/JoinTree/empInfo/modifyEmp/uploadSignImg',
+			            data: { uploadSignImg: uploadSignImg.toDataURL('image/png', 1.0) },
+			            type: 'post',
+			            success: function (jsonData) { // jsonData: 서버로부터 받아온 응답 데이터 (변수명 변경 가능)
+		                Swal.fire({
+		                    icon: 'success',
+		                    title: '서명 저장 성공 ' + jsonData,
+		                    showConfirmButton: false,
+		                    timer: 1500
+		                });
+		                location.reload(); // 현재 화면 새로고침
+			            }
+        	});
+    }
+});
 		}
 	});
 });

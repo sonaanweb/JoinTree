@@ -108,12 +108,12 @@
 			});
 		} else {
 			// alert("게시글이 작성되었습니다.");
-			Swal.fire({
+/* 			Swal.fire({
 				icon: 'success',
 				title: '게시글이 작성되었습니다.',
 				showConfirmButton: false,
 				timer: 1000
-			});
+			}); */
 			$("#addFreeComm").submit();
 		}
     	
