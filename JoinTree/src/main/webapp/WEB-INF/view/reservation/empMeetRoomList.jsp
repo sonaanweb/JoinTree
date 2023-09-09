@@ -7,6 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <style>
+
  .container {
      max-height: 1000px; /*최대 높이 */
      overflow-y: auto; /*스크롤 자동 표시 */
@@ -37,7 +38,9 @@
 float:right;
 margin-top: 56px;
 }
-
+.img-responsive {
+    max-width: 100%;
+}
 
 </style>
 <!-- header -->
@@ -47,10 +50,10 @@ margin-top: 56px;
 <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 		
-			<div class="card">
+		<div class="card">
 			<br><br>
 				<div class="container">
-				<h2 style="font-family: 'Pretendard-Regular';"><span class="mdi mdi-pine-tree"></span> 회의실 목록</h2>
+				<h2 style="font-family: 'Pretendard-Regular';"><span class="mdi mdi-format-list-bulleted-type"></span> 회의실 목록</h2>
 				<div class="line"></div>
 				    <div class="row margin-top20">
 				        <c:forEach var="m" items="${meetRoomList}">
@@ -60,7 +63,7 @@ margin-top: 56px;
 				                        <div class="row">
 				                            <div class="col-md-6">
 				                                <c:if test="${not empty m.roomSaveFilename}">
-				                                    <img src="${pageContext.request.contextPath}/roomImg/${m.roomSaveFilename}" alt="${m.roomName} 이미지" id="imgsize" width="500" height="300">
+				                                    <img src="${pageContext.request.contextPath}/roomImg/${m.roomSaveFilename}" alt="${m.roomName} 이미지" id="imgsize" width="500" height="300"  class="img-responsive">
 				                                </c:if>
 				                            </div>
 				                            <div class="col-md-6">

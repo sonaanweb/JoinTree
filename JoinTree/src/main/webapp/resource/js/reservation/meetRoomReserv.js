@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var urlParams = new URLSearchParams(window.location.search);
     var roomNo = urlParams.get('roomNo'); // URL 매개변수에서 roomNo 호출
     var roomName = urlParams.get('roomName'); // URL 매개변수에서 roomName 호출
-
+    
     var calendar = new FullCalendar.Calendar(calendarEl, {
-    	
+    	    	
     	timeZone: 'Asia/Seoul',
     	locale: 'ko',
         initialView : 'timeGridWeek',
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         allDaySlot: false,
         slotLabelFormat: '',
         height: 'auto',
-        slotDuration: '00:30:00',
+      	slotDuration: '00:30:00',
         slotMinTime: '09:00:00', // 오전 9시부터 슬롯 시작
         slotMaxTime: '18:00:00', // 오후 6시까지 슬롯 끝
         slotLabelInterval: { hours: 1 },

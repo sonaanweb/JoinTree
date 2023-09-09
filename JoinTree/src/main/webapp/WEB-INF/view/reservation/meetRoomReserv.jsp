@@ -30,7 +30,9 @@
 .fc .fc-toolbar-title {
   font-family: 'Pretendard-Regular';
 }
-
+.today-slot {
+    background-color: black;
+}
 </style>
 </head>
 <!-- header -->
@@ -39,13 +41,29 @@
 <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 <div class="content-wrapper">
 <!-- 컨텐츠부분 wrapper -->
-		 
-			<div style="font-weight: bold; font-family: 'Pretendard-Regular';">
-			<span class="badge badge-success">notice</span> test예약 신청을 하시려면 빈 시간대를 클릭해주세요(정각 이전 예약)</div>
-			<div><a href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a></div>
+		 		
+			<div>
+			<span class="badge badge-success">notice</span>
+			예약 신청을 하시려면 빈 시간대를 클릭해주세요(*정각 이전 예약)
+			</div>
+			<br>
+			
+			<div class="row">
+				<div class="col-12 grid-margin">
+					<div class="card">
+ 						<div class="card-body">
+			
+							<div class="mdi mdi-format-list-bulleted-type">
+							<a href="/JoinTree/reservation/empMeetRoomList">회의실 목록</a>
+							</div>
 			<!-- fullCal -->
-			<div id='calendar'></div>
+							<div id='calendar'></div>
 			<!------------->
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<!-- modal 추가 -->
 			    <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
 			        <div class="modal-dialog" role="document">

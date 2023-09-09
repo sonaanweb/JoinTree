@@ -12,22 +12,27 @@
 <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 
+<h4>경영지원팀 회의실 관리</h4>
+	
+<div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
 				<div>
-				    <label>회의실명:</label>
-				    <input type="text" id="searchRoomName" name="roomName">
-				    <button id="searchButton">검색</button>
+				    <label class="adminsearch">회의실명</label>
+				    <input type="text" id="searchRoomName" name="roomName" placeholder="회의실 이름을 입력해주세요">
+				    <button id="searchButton" class="btn btn-success btn-sm margin10">검색</button>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 	
+<div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-			<button type="button" class="btn btn-success btn-sm margin10 floatR" data-bs-toggle="modal" data-bs-target="#addModal" >추가</button>
+			<button type="button" class="btn btn-success btn-sm margin10 floatL" data-bs-toggle="modal" data-bs-target="#addModal" >추가</button>
 				<table class="table">
 				    <thead>
 				        <tr>
@@ -55,8 +60,8 @@
 				                </td>
 				                <td class="createdate">${m.createdate}</td>
 				                <td>
-				                    <button class="editButton" data-room-no="${m.roomNo}">수정</button>
-				                	<button class="deleteButton" data-room-no="${m.roomNo}">삭제</button>
+				                    <button class="editButton btn btn-success btn-sm" data-room-no="${m.roomNo}">수정</button>
+				                	<button class="deleteButton btn btn-secondary btn-sm" data-room-no="${m.roomNo}">삭제</button>
 				                </td>
 				            </tr>
 				        </c:forEach>
@@ -65,6 +70,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 	
 			<!-- 추가 모달창 -->
 			<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -72,6 +78,10 @@
 			        <div class="modal-content">
 			            <div class="modal-header">
 			                <h5 class="modal-title" id="addModalLabel">회의실 추가</h5>
+			                
+					            <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span>×</span>
+								</button>
 			            </div>
 			            <div class="modal-body">
 			                <form id="addForm" method="post" enctype="multipart/form-data">
@@ -93,13 +103,13 @@
 			                            <option value="0">사용불가</option>
 			                        </select>
 			                    </div>
-			                    <div class="mb-3">
+		                    	<div class="mb-3">
                         			<label for="modalAddRoomImage" class="form-label">이미지 업로드</label>
                         			<input type="file" class="form-control" id="modalAddRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
-                        			<img id="modalAddImagePreview" src="#" alt="미리보기" style="display: none; max-width: 100px; max-height: 100px;">
+                        			<br>
+                        			<img id="modalAddImagePreview" src="" alt="미리보기" style=" max-width: 200px; max-height: 200px;">
                    			 	</div>
-			                    <button type="button" class="btn btn-primary" id="modalBtn">추가</button>
-			                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                    <button type="button" class="btn btn-success floatR" id="modalBtn">추가</button>
 			                </form>
 			            </div>
 			        </div>
@@ -111,6 +121,10 @@
 			        <div class="modal-content">
 			            <div class="modal-header">
 			                <h5 class="modal-title" id="updateModalLabel">회의실 수정</h5>
+			                	 
+			                	 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+								 <span>×</span>
+								 </button>
 			            </div>
 			            <div class="modal-body">
 			                <form id="updateForm" enctype="multipart/form-data" method="post" >	                    
@@ -136,10 +150,10 @@
 		                    	<div class="mb-3">
 			                        <label for="modalUpdateRoomImage" class="form-label">이미지 업로드</label>
 			                        <input type="file" class="form-control" id="modalUpdateRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
-			                        <img id="modalUpdateImagePreview" src="" alt="미리보기" style="max-width: 100px; max-height: 100px;">
+			                        <br>
+			                        <img id="modalUpdateImagePreview" src="" alt="미리보기" style="max-width: 200px; max-height: 200px;">
                    		 		</div>
-			                    <button type="submit" class="btn btn-primary" id="modalBtn">수정</button>
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>		                
+			                    <button type="submit" class="btn btn-success floatR" id="modalBtn">수정</button>               
 			                </form>
 			            </div>
 			        </div>

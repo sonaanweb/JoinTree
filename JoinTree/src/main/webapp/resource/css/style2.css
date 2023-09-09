@@ -532,3 +532,8 @@ input:checked + .slider:before {
 	border: none;
 	font-size: 23px;
 }
+
+/* 검색 간격 */
+.adminsearch{
+	width: 80px;
+}

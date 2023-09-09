@@ -19,9 +19,9 @@
 			<div class="card-body">
 
 				<div>
-		            <label>예약일시:</label>
+		            <label class="adminsearch">예약일시</label>
 					<input type="date" name="revStartTime" id="revStartTime"> ~ <input type="date" name="revEndTime" id="revEndTime">
-		            <button id="searchButton">검색</button>
+		            <button id="searchButton" class="btn btn-success btn-sm margin10">검색</button>
 		        </div>
 		        
 			</div>

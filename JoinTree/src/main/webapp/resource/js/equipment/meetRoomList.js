@@ -35,8 +35,8 @@ function searchMeetRoom(roomName) {
 			        '<td class="roomStatus">' + getStatusText(meetingRoom.roomStatus) + '</td>' +
 			        '<td class="createdate">' + meetingRoom.createdate + '</td>' +
 			        '<td>' +
-			        '<button class="editButton" data-room-no="' + meetingRoom.roomNo + '">수정</button>' +
-			        '<button class="deleteButton" data-room-no="' + meetingRoom.roomNo + '">삭제</button>' +
+			        '<button class="editButton btn btn-success btn-sm" data-room-no="' + meetingRoom.roomNo + '">수정</button>'  +
+			        ' <button class="deleteButton btn btn-secondary btn-sm" data-room-no="' + meetingRoom.roomNo + '">삭제</button>' +
 			        '</td>' +
 			        '</tr>';
 			
@@ -67,8 +67,9 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
     
     // 이미지 미리보기 초기화
-    $("#modalAddImagePreview").css("display", "none");
-    $("#modalAddImagePreview").attr("src", "");
+    $("#modalAddImagePreview").css("display", "block"); // 이미지 미리보기
+    $("#modalAddImagePreview").attr("src", "/JoinTree/roomImg/no_img.jpg"); // 디폴트 이미지 경로
+    $("#modalAddRoomImage").val(""); // 이미지 업로드 입력 필드 초기화
 });
 
 $("#modalAddRoomImage").on("change", function () { // 이미지 업로드 변경시 업데이트
@@ -201,16 +202,18 @@ $(document).ready(function() {
                 $('#modalRoomCapacity').val(meetroom.roomCapacity);
                 $('#modalRoomStatus').val(meetroom.roomStatus);
                 console.log("회의실", meetroom);
+
                 // 기존 이미지 미리보기 설정
                 if (meetroom.meetRoomFile) {
                     var imageUrl = '/JoinTree/roomImg/' + meetroom.meetRoomFile;
                     console.log("회의실 파일", meetroom.meetRoomFile);
                     $("#modalUpdateImagePreview").attr("src", imageUrl);
                     $("#modalUpdateImagePreview").css("display", "block");
-
-                    /* ${pageContext.request.contextPath}/roomImg/${modiMeetingRoom.roomSaveFilename} */
                 } else {
-                    $("#modalUpdateImagePreview").css("display", "none");
+                    // 이미지가 없는 경우 디폴트 이미지 표시
+                    var defaultImageUrl = '/JoinTree/roomImg/no_img.jpg';
+                    $("#modalUpdateImagePreview").attr("src", defaultImageUrl);
+                    $("#modalUpdateImagePreview").css("display", "block");
                 }
             },
             error: function() {
@@ -221,6 +224,7 @@ $(document).ready(function() {
         // 모달창 닫을때 메시지 rn_check 초기화
         $("#updateModal").on("hidden.bs.modal", function () {
             $("#rn_check").text("");
+             $("#modalUpdateRoomImage").val(""); 
         });
     });
 

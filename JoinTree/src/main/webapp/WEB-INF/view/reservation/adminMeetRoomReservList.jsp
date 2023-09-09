@@ -15,35 +15,39 @@
 	<h4>경영지원팀 예약관리</h4>
 	
 	<!-- 검색 -->
+<div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
 			
 				<div>
-		            <label>예약일시:</label>
+		            <label class="adminsearch">예약일시</label>
 		            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
 		        </div>
-				<div>
-		            <label>예약 상태:</label>
+		        <div class="form-check form-check-success">
+		            <label class="adminsearch">예약상태</label>
 		            <input type="radio" name="revStatus" value=""> 전체
 		            <input type="radio" name="revStatus" value="A0301"> 예약완료
 		            <input type="radio" name="revStatus" value="A0302"> 예약취소
 		            <input type="radio" name="revStatus" value="A0303"> 사용완료
 		        </div>
 		        <div>
-		        	<label>예약자:</label>
-		        	<input type="text" name="empName">
-		        	<button id="searchButton">검색</button>
+		        	<label class="adminsearch">예약자</label>
+		        	<input type="text" name="empName" placeholder="예약자 성명을 입력해주세요">
+		        	<button id="searchButton" class="btn btn-success btn-sm margin10">검색</button>
 		        </div>
 		        
 			</div>
 		</div>
 	</div>
+</div>
 	<!-- -- -->
 	
+ <div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
+			
 		        <table class="table">
 		            <thead>
 		                <tr>
@@ -91,6 +95,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 	    <!-- 컨텐츠 끝 -->
 </div>
 </div>
