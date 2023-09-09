@@ -170,9 +170,23 @@
 			// 사원등록 성공, 실패 시 메세지
 			const urlParams = new URL(location.href).searchParams;
 		    const msg = urlParams.get("msg");
+		    const row = urlParams.get("addEmpInfoRow");
 		    if (msg != null) {
-		       alert(msg);
-		       
+		       if(row == 0){ // 사원 등록 성공
+		    	   Swal.fire({
+						icon: 'warning',
+						title: msg,
+						showConfirmButton: false,
+						timer: 1000
+					});
+		       } else{
+		    	   Swal.fire({ // 사원 등록 실패
+						icon: 'success',
+						title: msg,
+						showConfirmButton: false,
+						timer: 1000
+					});
+		       }
 		    // 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트
 	        urlParams.delete("msg");
 	        const newUrl = `${location.pathname}?${urlParams.toString()}`;
@@ -186,7 +200,12 @@
 		// 요청 값 공백검사 함수
 		function checkEmptyAndAlert(input, message, focus) {
 		    if (input.trim() == '') {
-		        alert(message);
+		        Swal.fire({
+					icon: 'warning',
+					title: message,
+					showConfirmButton: false,
+					timer: 1000
+				});
 		        $(focus).focus();
 		        return true;
 		    }
@@ -319,7 +338,12 @@
 			let empJuminNo1 = $('#empJuminNo1').val(); // 주민번호1
 			let empJuminNo2 = $('#empJuminNo2').val(); // 주민번호2
 			if (!isValidEmpJuminNo(empJuminNo1, empJuminNo2)) {
-			   	alert('유효하지 않은 주민등록번호입니다');
+			   	Swal.fire({
+					icon: 'warning',
+					title: '유효하지 않은 주민등록번호입니다',
+					showConfirmButton: false,
+					timer: 1000
+				});
 			   	$('#empJuminNo1').focus();
 			   	return;
 			} 
@@ -329,7 +353,12 @@
 			let empPhone2 = $('#empPhone2').val(); // 주민번호2
 			let empPhone3 = $('#empPhone3').val(); // 주민번호3
 			if(!isValidEmpPhone(empPhone1, empPhone2, empPhone3)) {
-				alert('유효하지 않은 연락처입니다');
+				Swal.fire({
+					icon: 'warning',
+					title: '유효하지 않은 연락처입니다',
+					showConfirmButton: false,
+					timer: 1000
+				});
 				$('#empPhone1').focus();
 				return;
 			}
@@ -337,7 +366,12 @@
 			// 내선번호 유효성 검사
 			let empExtensionNo = $('#empExtensionNo').val();
 			if(!isValidEmpExtensionNo(empExtensionNo)){
-				alert('유효하지 않은 내선번호입니다');
+				Swal.fire({
+					icon: 'warning',
+					title: '유효하지 않은 내선번호입니다',
+					showConfirmButton: false,
+					timer: 1000
+				});
 				$('#empExtensionNo').focus();
 				return;
 			}
@@ -653,7 +687,12 @@
 	   		if (checkEmptyAndAlert($('#modifyEmpExtensionNo').val(), '내선번호를 입력해주세요', '#modifyEmpExtensionNo')) return; // 내선번호
 	
 			if(!isValidEmpExtensionNo(empExtensionNo)){
-				alert('유효하지 않은 내선번호입니다');
+				Swal.fire({
+					icon: 'warning',
+					title: '유효하지 않은 내선번호입니다',
+					showConfirmButton: false,
+					timer: 1000
+				});
 				$('#modifyEmpExtensionNo').focus();
 				return;
 			}
@@ -679,8 +718,12 @@
 	   				let empInfoResult = data.modifyEmpInfoResult;
 	   				
 	   				if(activeResult == 1 || empInfoResult == 1){
-	   					alert('사원 정보 수정 성공');
-	   					
+	   					Swal.fire({
+	   						icon: 'success',
+	   						title: '사원 정보가 수정되었습니다',
+	   						showConfirmButton: false,
+	   						timer: 1000
+	   					});
 	 					// 사원정보 수정 후 업데이트
 		 	            selectEmpInfoOne(empNo); // 사원 상세정보 호출 함수
 		 	            searchEmpListResults(); // empList 초기화
@@ -688,6 +731,13 @@
 	   					// 모달 창 내용 변경 후, 수정 폼을 숨기고 상세 정보를 보이게 설정
 	   		            $('#modifyEmpFormModalContent').hide();
 	   		            $('#empOneInfoModalContent').show();
+	   				} else if(activeResult == 0 && empInfoResult == 0){
+	   					Swal.fire({
+	   						icon: 'warning',
+	   						title: '수정할 사원 정보가 없습니다',
+	   						showConfirmButton: false,
+	   						timer: 1000
+	   					});
 	   				} 
 	   			},
 	   			error: function(){
@@ -703,7 +753,5 @@
 	        $('#empOneInfoModalContent').show();
 	 	});
 		 	
-	</script>	
-			
-			
+	</script>			
 </html>

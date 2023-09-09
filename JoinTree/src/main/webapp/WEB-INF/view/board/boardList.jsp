@@ -87,13 +87,18 @@
 	<script>
 		$(document).ready(function(){
 			
-			// 게시글 등록 성공 후 msg
+			// 게시글 등록, 삭제 성공 후 msg
 			const urlParams = new URL(location.href).searchParams;
 			const msg = urlParams.get("msg");
 			
 			if (msg != null) {
 				
-				alert(msg);
+				Swal.fire({ // 게시글 등록, 삭제 성공 메세지
+					icon: 'success',
+					title: msg,
+					showConfirmButton: false,
+					timer: 1000
+				});
 				
 				// 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트
 		        urlParams.delete("msg");

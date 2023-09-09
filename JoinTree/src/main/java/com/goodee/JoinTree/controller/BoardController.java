@@ -177,7 +177,7 @@ public class BoardController {
 		int addBoardRow = boardService.addBoard(board, path);
 		log.debug(addBoardRow + "<-- BoardController addBoardRow");
 		
-		// 게시글 실패 msg
+		// 게시글 등록, 실패 msg
 		String msg = "";
 		
 		// addBoardRow 값의 따른 분기
@@ -195,12 +195,15 @@ public class BoardController {
 			}
 			
 		} else {
+			// 게시글 등록 성공 시 msg
+			msg = "게시글이 등록되었습니다"; 
+			msg = URLEncoder.encode(msg, "UTF-8");
 			
 			// 게시판 카테고리 별 경로 분기
 			if(board.getBoardCategory().equals("B0101")) {
-				return "redirect:/board/noticeList";
+				return "redirect:/board/noticeList?msg=" + msg;
 			} else {
-				return "redirect:/board/libraryList";
+				return "redirect:/board/libraryList?msg=" + msg;
 			}
 		}
 		
@@ -250,7 +253,7 @@ public class BoardController {
 		} else {
 			
 			// 게시글 수정 성공 시 msg
-			msg = "게시글 수정 성공"; 
+			msg = "게시글이 수정 되었습니다"; 
 			msg = URLEncoder.encode(msg, "UTF-8");
 			
 			return "redirect:/board/boardOne?boardNo=" + boardNo +"&msg=" + msg;
@@ -277,17 +280,21 @@ public class BoardController {
 		
 		// 반환 값의 따른 경로 분기
 		if(removeBoardRow == 0) {
-			// 게시글 수정 실패 시 msg
+			// 게시글 삭제 실패 시 msg
 			msg = "게시글 삭제 실패"; 
 			msg = URLEncoder.encode(msg, "UTF-8");
 			
-			return "redirect:/board/boardOne?boardNo=" + boardNo +"&msg=" + msg;
+			return "redirect:/board/boardOne?boardNo=" + boardNo +"&msg=" + msg + "&removeBoardRow=" + removeBoardRow;
 		} else {
 			
+			// 게시글 삭제 실패 시 msg
+			msg = "게시글이 삭제되었습니다"; 
+			msg = URLEncoder.encode(msg, "UTF-8");
+			
 			if(categoryCode.equals("B0101")) {
-				return "redirect:/board/noticeList";
+				return "redirect:/board/noticeList?msg=" + msg;
 			} else {
-				return "redirect:/board/libraryList";
+				return "redirect:/board/libraryList?msg=" + msg;
 			}	
 		}
 	}

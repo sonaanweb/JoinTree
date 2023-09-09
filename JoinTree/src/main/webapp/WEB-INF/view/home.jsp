@@ -90,32 +90,42 @@
 			
 		 	// 출근/퇴근 버튼 클릭 이벤트 처리
 	        $('#commuteBtn').click(function() {
-	            const commuteBtnText = $('#commuteBtn').text().trim(); // 버튼 텍스트 저장
-	            const currentTime = $('.clock').text(); // 현재시간 저장
-	            const isCommute = commuteBtnText === '출근하기';
-	            
-	            let confirmMsg = isCommute ? '출근하시겠습니까?' : '퇴근하시겠습니까?';
-	            
-	            if(confirm(confirmMsg)){
-	            	$.ajax({
-		            	type: 'post',
-		            	url: '/JoinTree/commute/saveCommuteTime',
-		            	data:{
-		            		time: currentTime,
-		            		type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
-		            	},
-			            success: function(data){
-			            	console.log(data+'<--data');
-			            	
-			    		    selectCommuteByDate(); // 출퇴근 데이터 화면 출력
-			            },
-			            error: function(error){
-			            	console.error('error commute time:', error);
-			            }
-		            });
-	            }
-	            
-	        });
+			    const commuteBtnText = $('#commuteBtn').text().trim(); // 버튼 텍스트 저장
+			    const currentTime = $('.clock').text(); // 현재시간 저장
+			    const isCommute = commuteBtnText === '출근하기';
+			    
+			    let confirmMsg = isCommute ? '출근하시겠습니까?' : '퇴근하시겠습니까?';
+			    
+			    Swal.fire({
+			        title: confirmMsg,
+			        text: '현재 서버 시간 : '+ currentTime,
+			        icon: 'question',
+			        showCancelButton: true,
+			        confirmButtonColor: '#8BC541',
+			        cancelButtonColor: '#888',
+			        confirmButtonText: '확인',
+			        cancelButtonText: '취소'
+			    }).then((result) => {
+			        if (result.isConfirmed) {
+			            $.ajax({
+			                type: 'post',
+			                url: '/JoinTree/commute/saveCommuteTime',
+			                data: {
+			                    time: currentTime,
+			                    type: isCommute ? 'C0101' : 'C0102' // C0101:출근, C0102:퇴근
+			                },
+			                success: function(data) {
+			                    console.log(data + '<--data');
+			                    
+			                    selectCommuteByDate(); // 출퇴근 데이터 화면 출력
+			                },
+			                error: function(error) {
+			                    console.error('error commute time:', error);
+			                }
+			            });
+			        }
+			    });
+			});
 		 	
 		 	// 오늘의 일정
 		 	// 초기 페이지 로드 시 오늘의 일정 표시

@@ -98,11 +98,11 @@ public class EmpManageController {
 		} else {
 			
 			// 사원등록 성공 시 msg
-			msg = "사원 등록 성공"; // msg
+			msg = "사원 정보가 등록되었습니다"; // msg
 			msg = URLEncoder.encode(msg, "UTF-8");
 		}
 		
-		return "redirect:/empManage/selectEmpList?msg="+ msg;
+		return "redirect:/empManage/selectEmpList?msg=" + msg + "&addEmpInfoRow=" + addEmpInfoRow;
 		
 	}
 	

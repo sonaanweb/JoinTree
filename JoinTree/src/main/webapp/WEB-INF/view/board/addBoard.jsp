@@ -63,13 +63,17 @@
 	<script>
 		$(document).ready(function(){
 			
-			// addBoard 실행 후 메세지
+			// addBoard 실행 후 메세지(게시글 등록 실패 메세지)
 			const urlParams = new URL(location.href).searchParams;
 			const msg = urlParams.get("msg");
 			
 			if (msg != null) {
-				
-				alert(msg);
+				Swal.fire({
+					icon: 'warning',
+					title: msg,
+					showConfirmButton: false,
+					timer: 1000
+				});
 				
 				// 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트
 		        urlParams.delete("msg");
@@ -122,7 +126,12 @@
 				const maxSize = 3 * 1024 * 1024; // 최대 파일 크기 3MB
 				
 				if(fileSize > maxSize){
-					alert("파일 크기가 3MB를 초과합니다.");
+					Swal.fire({
+						icon: 'warning',
+						title: '파일 크기가 3MB를 초과합니다',
+						showConfirmButton: false,
+						timer: 1000
+					});
                 	fileInput.val(''); // 파일 선택 초기화
 				} else{
 					// 파일 선택 시 파일 삭제 버튼 표시
@@ -140,7 +149,12 @@
 		// 요청 값 공백검사 함수
 		function checkEmptyAndAlert(input, message, focus) {
 		    if (input.trim() == '') {
-		        alert(message);
+		        Swal.fire({
+					icon: 'warning',
+					title: message,
+					showConfirmButton: false,
+					timer: 1000
+				});
 		        $(focus).focus();
 		        return true;
 		    }
@@ -159,7 +173,6 @@
 			// 유효성 검사 후 등록
 			let addBoardUrl = '/JoinTree/board/addBoard';
 			$('#addBoardForm').attr('action', addBoardUrl);
-			alert('게시글이 등록되었습니다');
 			$('#addBoardForm').submit();
 		});	
 	</script>

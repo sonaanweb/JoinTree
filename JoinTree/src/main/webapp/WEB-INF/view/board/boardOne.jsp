@@ -54,8 +54,7 @@
 			<c:if test="${loginAccount.empNo == board.createId}">
 				<div class="col-lg-12 text-right">
 					<a href="/JoinTree/board/modifyBoardForm?boardNo=${board.boardNo}" class="btn btn-success btn-sm">수정</a>
-					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}" class="btn btn-success btn-sm" 
-						onclick="return confirm('게시글을 삭제하시겠습니까?')">삭제</a>
+					<a href="/JoinTree/board/removeBoard?boardNo=${board.boardNo}" class="btn btn-success btn-sm" id="removeBtn">삭제</a>
 				</div>
 			</c:if>
 			
@@ -65,13 +64,28 @@
 	<script>
 		$(document).ready(function(){
 			
-			// addBoard 실행 후 메세지
+			// modifyBoard, removeBoard 실행 후 메세지
 			const urlParams = new URL(location.href).searchParams;
 			const msg = urlParams.get("msg");
+			const removeBoardRow = urlParams.get("removeBoardRow");
 			
 			if (msg != null) {
 				
-				alert(msg);
+				Swal.fire({ // 게시글 수정 성공 메세지
+					icon: 'success',
+					title: msg,
+					showConfirmButton: false,
+					timer: 1000
+				});
+				
+				if(removeBoardRow == 0){ // 게시글 삭제 실패 메세지
+					Swal.fire({
+						icon: 'warning',
+						title: msg,
+						showConfirmButton: false,
+						timer: 1000
+					});
+				}
 				
 				// 쿼리 매개변수 "msg"를 제거하고 URL을 업데이트
 		        urlParams.delete("msg");
@@ -84,6 +98,26 @@
 	        contentDiv.css('height', contentDiv[0].scrollHeight + 'px');
 		});
 		
-	</script>
-	
+		// 삭제 시 confirm 실행
+		let removeBtn = $('#removeBtn');
+		removeBtn.click(function (event) {
+		    event.preventDefault(); // 기본 링크 동작 중단
+					
+		    Swal.fire({
+		        title: '게시글을 삭제하시겠습니까?',
+		        text: '삭제한 게시글은 복구할 수 없습니다.',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#8BC541',
+		        cancelButtonColor: '#888',
+		        confirmButtonText: '삭제',
+		        cancelButtonText: '취소',
+		        preConfirm: () => {
+		            
+		        	// 확인 버튼을 클릭한 경우 링크로 이동
+		            window.location.href = removeBtn.attr('href');
+		        }
+		    });
+		});
+	</script>	
 </html>
