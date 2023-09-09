@@ -14,6 +14,7 @@
 <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
 
+<div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
@@ -26,8 +27,10 @@
 		        
 			</div>
 		</div>
-	</div>	        
+	</div>
+</div>    
 
+<div class="row">
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
@@ -74,6 +77,7 @@
        		</div>
 		</div>
 	</div>
+</div>
 	
 <!-- 컨텐츠 끝 -->
 </div>

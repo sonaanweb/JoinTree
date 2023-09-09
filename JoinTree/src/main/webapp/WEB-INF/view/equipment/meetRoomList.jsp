@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <!-- header -->
-<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
+<jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 <div class="container-fluid page-body-wrapper">
 <jsp:include page="/WEB-INF/view/inc/sideContent.jsp"/> <!-- 사이드바 -->
 <div class="content-wrapper"> <!-- 컨텐츠부분 wrapper -->
@@ -104,7 +104,7 @@
 			                        </select>
 			                    </div>
 		                    	<div class="mb-3">
-                        			<label for="modalAddRoomImage" class="form-label">이미지 업로드</label>
+                        			<label for="modalAddRoomImage" class="form-label">이미지 업로드<span class="check" id="rn_img_check"></span></label>
                         			<input type="file" class="form-control" id="modalAddRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
                         			<br>
                         			<img id="modalAddImagePreview" src="" alt="미리보기" style=" max-width: 200px; max-height: 200px;">
@@ -148,7 +148,7 @@
 			                    </div>		
                     			<!-- 저장된 이미지, 업데이트 프리뷰 출력 -->
 		                    	<div class="mb-3">
-			                        <label for="modalUpdateRoomImage" class="form-label">이미지 업로드</label>
+			                        <label for="modalUpdateRoomImage" class="form-label">이미지 업로드<span class="check" id="img_check"></span></label>
 			                        <input type="file" class="form-control" id="modalUpdateRoomImage" name="multipartFile" accept="image/jpg, image/jpeg, image/png, image/gif, image/bmp">
 			                        <br>
 			                        <img id="modalUpdateImagePreview" src="" alt="미리보기" style="max-width: 200px; max-height: 200px;">

@@ -65,6 +65,7 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#modalAddRoomCapacity").val("1");
     $("#modalAddRoomStatus").val("1");
     $("#rn_add_check").text(""); // 유효성 검사 메시지 초기화
+    $("#rn_img_check").text("");
     
     // 이미지 미리보기 초기화
     $("#modalAddImagePreview").css("display", "block"); // 이미지 미리보기
@@ -72,8 +73,24 @@ $('#addModal').on('show.bs.modal', function (event) {
     $("#modalAddRoomImage").val(""); // 이미지 업로드 입력 필드 초기화
 });
 
-$("#modalAddRoomImage").on("change", function () { // 이미지 업로드 변경시 업데이트
-    readURL(this, "#modalAddImagePreview");
+$("#modalAddRoomImage").on("change", function () { // 이미지 업로드 변경시 업데이트 및 유효성 검사
+    var fileInput = $(this)[0]; //this = modalAddRoomImage, [0] = 첫번째 파일
+    var file = fileInput.files[0];
+    
+    if (file) {
+        var fileName = file.name;
+        var fileExtension = fileName.split('.').pop().toLowerCase();
+        
+        // image/jpeg/png만 받을 것 그 외 업로드 하면 애초에 받아지지 않음(초기화)
+        if (fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== 'png') {
+            $("#rn_img_check").text(" jpg/png 파일만 업로드 가능합니다.");
+            $("#rn_img_check").css("color", "red");
+            fileInput.value = ""; // 파일 입력 필드 비우고
+        } else {          
+            $("#rn_img_check").text(""); // 오류 메시지 제거하고 업로드
+            readURL(this, "#modalAddImagePreview");
+        }
+    }
 });
 
 //이미지 업로드 미리보기 함수
@@ -189,6 +206,7 @@ $(document).ready(function() {
         $('#updateModal').modal('show');
         const roomNo = $(this).data('room-no');
         originalRoomName = $(this).closest('tr').find('.roomName').text();
+        
         console.log("회의실 기존 이름:", originalRoomName);
 
         $.ajax({
@@ -224,14 +242,32 @@ $(document).ready(function() {
         // 모달창 닫을때 메시지 rn_check 초기화
         $("#updateModal").on("hidden.bs.modal", function () {
             $("#rn_check").text("");
-             $("#modalUpdateRoomImage").val(""); 
+            $("#modalUpdateRoomImage").val("");
+            $("#img_check").text("");
         });
     });
 
     // 이미지 업로드 입력 변경 이벤트 처리
     $("#modalUpdateRoomImage").on("change", function () {
-        readURL(this, "#modalUpdateImagePreview");
-    });
+	 	var fileInput = $(this)[0];
+	    var file = fileInput.files[0];
+	
+	    if (file) {
+	        var fileName = file.name;
+	        var fileExtension = fileName.split('.').pop().toLowerCase();
+	
+	        if (fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== 'png') {
+				console.log("이미지 확장자 오류");
+	            $("#img_check").text(" jpg/png 파일만 업로드 가능합니다.");
+	            $("#img_check").css("color", "red");
+	            fileInput.value = ""; // 파일 입력 필드 비우기
+	        } else {
+				 console.log("이미지 유효성 검사 통과");
+	            $("#img_check").text(""); // 오류 메시지 제거
+	            readURL(this, "#modalUpdateImagePreview");
+	        }
+	    }
+	});
 
     // 이미지 업로드 미리보기 함수
     function readURL(input, previewSelector) {
