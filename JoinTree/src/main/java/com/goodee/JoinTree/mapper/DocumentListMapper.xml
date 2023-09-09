@@ -244,18 +244,14 @@
 	<select id="getDraftDocListHome" parameterType="int" 
 			resultType="com.goodee.JoinTree.vo.DocumentDefault">
 		SELECT 
-			d.doc_title docTitle,
-			sta.code_name docStatus
+		    d.doc_title docTitle,
+		    sta.code_name docStatus
 		FROM document_default d
 		INNER JOIN common_code sta ON d.doc_status = sta.code
 		WHERE 
-			(d.doc_status IN('A0201', 'A0202') 
-			OR (d.doc_stamp2 IS NULL 
-			AND d.doc_stamp3 IS NULL 
-			AND d.doc_status = 'A0204'))
-			AND d.emp_no = #{empNo}
-	    ORDER BY d.updatedate DESC
-	    LIMIT 5
+		    d.emp_no = #{empNo}
+			AND d.updatedate >= DATE_ADD(NOW(), INTERVAL -7 DAY) <!-- 현재 날짜로부터 일주일 전까지의 문서 조회 -->
+			ORDER BY d.updatedate DESC
 	</select>
 	
 	<!-- home.jsp 결재함 목록 조회 -->
