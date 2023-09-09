@@ -67,11 +67,13 @@
 	        
 	        row.append($('<td class="text-center">').text(doc.category)); // 기안 양식
 	        
-	        // 로그인 사번이 참조자인 경우 제목에 [참조] 표시
+	        // 로그인 사번이 참조자인 경우 분기
 	        let docTitle;
-	        console.log(loginEmpNo+'<--loginEmpNo');
-	        console.log(doc.referenceNo+'<--referenceNo');
-	        if(loginEmpNo == doc.referenceNo){
+	        if((loginEmpNo == doc.signer1No || loginEmpNo == doc.signer2No) && loginEmpNo == doc.referenceNo){
+				// 참조자 이면서 결재자인 경우
+				docTitle = doc.docTitle + ' [참조 / 결재]';
+			} else if(loginEmpNo == doc.referenceNo){
+				// 참조자인 경우
 				docTitle = doc.docTitle + ' [참조]';
 			} else{
 				docTitle = doc.docTitle;
