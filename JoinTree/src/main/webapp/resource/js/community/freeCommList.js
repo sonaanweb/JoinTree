@@ -106,8 +106,8 @@ $(document).ready(function() {
 
 	        $.each(pinnedCommList, function(index, pinnedComm) {
 	            var row = $("<tr>");
-	            row.append("<td width='10%'>" + pinnedComm.boardNo + "</td>");
-	            var titleCell = $("<td width='40%'>");
+	            row.append("<td width='7%' class='text-center'>" + pinnedComm.boardNo + "</td>");
+	            var titleCell = $("<td width='55%'>");
 	            var titleLink = $("<a>").attr("href", "/JoinTree/community/freeCommList/freeCommOne?boardNo=" + pinnedComm.boardNo);
 	            if (pinnedComm.commentCnt > 0) {
 	                titleLink.append("<span class='text-danger font-weight-bold'>[공지] " + pinnedComm.boardTitle + " [" + pinnedComm.commentCnt + "]</span>");
@@ -116,9 +116,9 @@ $(document).ready(function() {
 	            }
 	            titleCell.append(titleLink);
 	            row.append(titleCell);
-	            row.append("<td width='20%'>" + pinnedComm.empName + "</td>");
-	            row.append("<td width='15%'>" + pinnedComm.createdate.substring(0, 10) + "</td>");
-	            row.append("<td width='15%'>" + pinnedComm.boardCount + "</td>");
+	            row.append("<td>" + pinnedComm.empName + "</td>");
+	            row.append("<td class='text-center'>" + pinnedComm.createdate.substring(0, 10) + "</td>");
+	            row.append("<td width='7%' class='text-center'>" + pinnedComm.boardCount + "</td>");
 	            thead.append(row);
 	        });
 	    }
@@ -132,8 +132,8 @@ $(document).ready(function() {
             tbody.empty(); // 새로운 데이터를 가져오기 전 기존 데이터 삭제 
             $.each(data.commList, function(index, comm) {
                 var row = $("<tr>");
-                row.append("<td width='10%'>" + comm.boardNo + "</td>");
-                var titleCell = $("<td width='40%'>");
+                row.append("<td width='7%' class='text-center'>" + comm.boardNo + "</td>");
+                var titleCell = $("<td width='55%'>");
                 var titleLink = $("<a>").attr("href", "/JoinTree/community/freeCommList/freeCommOne?boardNo=" + comm.boardNo);
                 if (comm.commentCnt > 0) {
                     titleLink.append("<span>" + comm.boardTitle + " [" + comm.commentCnt + "]</span>");
@@ -142,9 +142,9 @@ $(document).ready(function() {
                 }
                 titleCell.append(titleLink);
                 row.append(titleCell);
-                row.append("<td width='20%'>" + comm.empName + "</td>");
-                row.append("<td width='15%'>" + comm.createdate.substring(0, 10) + "</td>");
-                row.append("<td width='15%'>" + comm.boardCount + "</td>");
+                row.append("<td>" + comm.empName + "</td>");
+                row.append("<td class='text-center'>" + comm.createdate.substring(0, 10) + "</td>");
+                row.append("<td width='7%' class='text-center'>" + comm.boardCount + "</td>");
                 tbody.append(row);
             });
             

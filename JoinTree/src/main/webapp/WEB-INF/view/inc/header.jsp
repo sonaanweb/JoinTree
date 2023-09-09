@@ -181,16 +181,18 @@
 
 		<!-- 모달 -->
 		<div id="extensionModal" class="modal">
-	 		<div class="modal-content">
-				<div class="modal-header">
-				   <h4>세션 연장 알림</h4>
-				   <span class="close">&times;</span>
-				</div>
-				<div class="modal-body">
-				   <p>자동 로그아웃까지 5분 남았습니다. 로그인 시간을 연장하시겠습니까?</p>
-				   <button type="button" class="btn btn-success" id="extensionYesBtn">예</button>
-				   <button type="button" class="btn btn-success" id="extensionNoBtn">아니오</button>
-				</div>
+			<div class="modal-dialog modal-md">
+		 		<div class="modal-content">
+					<div class="modal-header">
+					   <h4>세션 연장 알림</h4>
+					   <!-- <span class="close">&times;</span> -->
+					</div>
+					<div class="modal-body text-center">
+					   <p>자동 로그아웃까지 5분 남았습니다. 로그인 시간을 연장하시겠습니까?</p>
+					   <button type="button" class="btn btn-success" id="extensionYesBtn">예</button>
+					   <button type="button" class="btn btn-success" id="extensionNoBtn">아니오</button>
+					</div>
+			   </div>
 		   </div>
 		</div>	
 </body>
