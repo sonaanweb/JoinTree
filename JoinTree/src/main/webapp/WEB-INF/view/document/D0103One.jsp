@@ -11,7 +11,7 @@
 					<table class="table">
 						<tbody>
 							<tr>
-								<td>문서번호</td>
+								<td width="15%">문서번호</td>
 								<td id="docNo"></td>
 							</tr>
 							
@@ -35,18 +35,18 @@
 				
 				<td class="blank"></td>
 				<td class="sign"><span class="writer"></span>&nbsp;<span class="position"></span></td>
-				<td class="sign"><span id="signer1Name"></span>&nbsp;<span id="signer1Position"></span></td>
-				<td class="sign"><span id="signer2Name"></span>&nbsp;<span id="signer2Position"></span></td>
+				<td class="sign1"><span id="signer1Name"></span>&nbsp;<span id="signer1Position"></span></td>
+				<td class="sign2 hidden"><span id="signer2Name"></span>&nbsp;<span id="signer2Position"></span></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
 				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp1" src="" style="width: 100px; height: 70px;">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign1" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp2" src="" style="width: 100px; height: 70px;">
 				</td>
-				<td class="sign" rowspan="3" style="width: 100px; height: 100px;">
+				<td class="sign2 hidden" rowspan="3" style="width: 100px; height: 100px;">
 					<img id="docStamp3" src="" style="width: 100px; height: 70px;">
 				</td>
 			</tr>
@@ -61,7 +61,7 @@
 		<tbody>
 			<!-- 직접 입력불가 -->
 			<tr>
-				<td>참조자</td>
+				<td width="17%">참조자</td>
 				<td id="reference"></td>
 			</tr>
 			<tr>
@@ -82,7 +82,7 @@
 		<tbody>
 			<!-- 사원명 -->
 			<tr>
-				<td>사원명</td>
+				<td width="17%">사원명</td>
 				<td class="writer"></td>
 			<tr>
 			<!-- 변경 전 직급 -->
@@ -104,7 +104,7 @@
 		<tbody>
 			<!-- 사원명 -->
 			<tr>
-				<td>사원명</td>
+				<td width="17%">사원명</td>
 				<td class="writer"></td>
 			</tr>
 			<!-- 변경 전 부서 -->
@@ -123,7 +123,7 @@
 	<table class="table doc-comment">
 		<!-- 제목 -->
 		<tr>
-			<td>제목</td>
+			<td width="17%">제목</td>
 			<td id="docTitle"></td>
 		</tr>
 		

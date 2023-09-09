@@ -252,6 +252,7 @@
 		    d.emp_no = #{empNo}
 			AND d.updatedate >= DATE_ADD(NOW(), INTERVAL -7 DAY) <!-- 현재 날짜로부터 일주일 전까지의 문서 조회 -->
 			ORDER BY d.updatedate DESC
+			LIMIT 5
 	</select>
 	
 	<!-- home.jsp 결재함 목록 조회 -->

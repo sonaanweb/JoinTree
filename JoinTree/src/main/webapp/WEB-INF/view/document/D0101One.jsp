@@ -10,7 +10,7 @@
 					<table class="table">
 						<tbody>
 							<tr>
-								<td>문서번호</td>
+								<td width="10%">문서번호</td>
 								<td id="docNo"></td>
 							</tr>
 							
@@ -58,7 +58,7 @@
 		<tbody>
 			<!-- 직접 입력불가 -->
 			<tr>
-				<td>참조자</td>
+				<td width="17%">참조자</td>
 				<td id="reference"></td>
 			</tr>
 			<tr>
