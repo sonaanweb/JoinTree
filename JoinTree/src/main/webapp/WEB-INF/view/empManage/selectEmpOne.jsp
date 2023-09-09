@@ -15,7 +15,7 @@
 	 
 	 <!-- Modal body -->
 	 <div class="modal-body">
-		 
+		<div class="col card " style="padding-top: 35px; padding-bottom: 35px;">
 		<!-- 사원 상세정보, 인사이동이력 탭 이동 버튼 -->
 		<div class="w3-bar w3-border-bottom">
 			<button class="tablink w3-bar-item w3-button" data-target="empInfoOne">사원상세정보</button>
@@ -95,6 +95,7 @@
 		 		
 		 		</tbody>
 		 	</table>
+		</div>
 		</div>
 	 </div>
  </div>

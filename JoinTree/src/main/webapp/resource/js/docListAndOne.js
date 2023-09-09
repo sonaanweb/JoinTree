@@ -186,7 +186,6 @@
 					let docStamp2= data.docStamp2; // 결재자1 서명
 					let docStamp3 = data.docStamp3; // 결재자2 서명
 					let reference = data.reference; // 참조자
-					let referenceNo = data.referenceNo // 참조자 사번
 					let receiverTeam = data.receiverTeam; // 수신팀
 					let docTitle = data.docTitle; // 문서 제목
 					let docContent = data.docContent; // 문서 내용
@@ -267,16 +266,12 @@
 					$('#docReshuffleReason').text(docReshuffleReason); // 발령사유
 					
 					// 문서결재 결제, 반려 버튼 분기
-					if(empNo == referenceNo ){ 
-						// 로그인 사번이 참조자 이면서 결재자인 경우 결재자 서명이 없을 경우 버튼 활성화
-						if ((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) {
-					        $('#approvalAndRejectBtn').show();
-					    } else {
-					        $('#approvalAndRejectBtn').hide();
-					    }
-					} else if((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) { 
-					    // 로그인 사번이 결재자1 또는 결재자2 이면서 결재자 서명이 없을 경우 버튼 활성화
-					    $('#approvalAndRejectBtn').show(); 
+					// 로그인 사번이 결재자인 경우 결재자 서명이 없을 경우 버튼 활성화
+					if ((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) {
+				        $('#approvalAndRejectBtn').show();
+				    } else if((signer1No == empNo && docStamp2 == null) || (signer2No == empNo && docStamp3 == null)) { 
+				    // 로그인 사번이 결재자1 또는 결재자2 이면서 결재자 서명이 없을 경우 버튼 활성화
+				    $('#approvalAndRejectBtn').show(); 
 					} else{
 						$('#approvalAndRejectBtn').hide();
 					}

@@ -717,7 +717,7 @@
 	   				let activeResult = data.modifyActiveResult;
 	   				let empInfoResult = data.modifyEmpInfoResult;
 	   				
-	   				if(activeResult == 1 || empInfoResult == 1){
+	   				if(activeResult == 1 || empInfoResult == 1){ // 사원 정보 수정 성공
 	   					Swal.fire({
 	   						icon: 'success',
 	   						title: '사원 정보가 수정되었습니다',
@@ -731,7 +731,7 @@
 	   					// 모달 창 내용 변경 후, 수정 폼을 숨기고 상세 정보를 보이게 설정
 	   		            $('#modifyEmpFormModalContent').hide();
 	   		            $('#empOneInfoModalContent').show();
-	   				} else if(activeResult == 0 && empInfoResult == 0){
+	   				} else if(activeResult == 0 && empInfoResult == 0){ // 수정할 사원 정보가 없을 시
 	   					Swal.fire({
 	   						icon: 'warning',
 	   						title: '수정할 사원 정보가 없습니다',
