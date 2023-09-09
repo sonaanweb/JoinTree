@@ -1,12 +1,18 @@
 package com.goodee.JoinTree.service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.goodee.JoinTree.mapper.CommuteManageMapper;
+import com.goodee.JoinTree.mapper.CommuteMapper;
 import com.goodee.JoinTree.vo.DocumentDefault;
+import com.goodee.JoinTree.vo.EmpInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +22,8 @@ public class CommuteManageService {
 	
 	@Autowired
 	private CommuteManageMapper commuteManageMapper;
+	@Autowired 
+	private CommuteMapper commuteMapper;
 	
 	// 검색별 연차 목록 조회
 	public Map<String, Object> searchAnnualLeaveList(Map<String, Object> searchAnnualLeaveList) {
@@ -195,6 +203,39 @@ public class CommuteManageService {
 		int addLeaveRecodeRow = commuteManageMapper.addLeaveRecode(addLeaveRecodeMap);
 		log.debug(addLeaveRecodeRow + "<-- CommuteService addLeaveRecodeRow");
 		return addLeaveRecodeRow;
+	}
+	
+	// 사원 근로일 수 조회
+	public Map<String, Object> getWorkDay(int empNo) {
+		
+		// 사원 정보 조회
+		EmpInfo empInfo = commuteMapper.getEmpHireDate(empNo);
+		String empHireDate = empInfo.getEmpHireDate(); // 입사일
+		String empName = empInfo.getEmpName(); // 사원명
+		
+		// 입사일 LocalDate로 변환
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 사용하는 날짜 형식에 맞게 포맷 설정
+		LocalDate hireDate = LocalDate.parse((CharSequence) empHireDate, formatter);
+		
+		// 현재 날짜 조회
+		LocalDate currentDate = LocalDate.now();
+		
+		// 근로일 수 계산
+	    int getWorkDay = 0;
+	    while (hireDate.isBefore(currentDate)) {
+	        if (hireDate.getDayOfWeek() != DayOfWeek.SATURDAY && hireDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
+	            // 주말이 아닌 경우에만 근로일로 간주
+	        	getWorkDay++;
+	        }
+	        hireDate = hireDate.plusDays(1); // 다음 날짜로 이동
+	    }
+	    
+	    Map<String, Object> annualInfo = new HashMap<>();
+	    annualInfo.put("empHireDate", empHireDate);
+	    annualInfo.put("empName", empName);
+	    annualInfo.put("getWorkDay", getWorkDay);
+		
+		return annualInfo;
 	}
 
 }

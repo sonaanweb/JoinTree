@@ -97,6 +97,7 @@
 			parameterType="int" resultType="com.goodee.JoinTree.vo.EmpInfo">
 		
 		SELECT 
+			emp_name empName,
 			emp_hire_date empHireDate 
 		FROM 
 			emp_info 

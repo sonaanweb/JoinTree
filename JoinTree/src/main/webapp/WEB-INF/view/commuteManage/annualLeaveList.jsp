@@ -7,6 +7,10 @@
 	    font-weight: bold;
 	    background-color: #D4F4FA;
 	    pointer-events: none; /* 버튼 클릭 불가 */
+	}
+	.selectde-tr:hover {
+		cursor: pointer;
+		background-color: #F9F9F9;
 	}	
 </style>
 <!-- header -->
@@ -72,7 +76,7 @@
 									<th class="font-weight-bold" width="25%">사번</th>
 									<th class="font-weight-bold" width="25%">부서</th>
 									<th class="font-weight-bold" width="25%">사원명</th>
-									<th class="font-weight-bold" width="25%">사용가능 연차</th>
+									<th class="font-weight-bold" width="25%">잔여연차</th>
 								</tr>
 							</thead>
 							<tbody id="annualLeaveList">
@@ -91,6 +95,9 @@
 			
 		</div>
 	</div>
+	
+	<!-- 연차관리 모달창 -->
+	<jsp:include page="./annualLeaveModal.jsp"></jsp:include>
 	
 	<script>
 		$(document).ready(function(){
@@ -149,7 +156,7 @@
 		    // data의 길이만큼 테이블 행 추가
 		    for (let i = 0; i < data.length; i++) {
 		        let annual = data[i];
-		        let row = $('<tr>');
+		        let row = $('<tr class="selectde-tr">');
 		        row.append($('<td>').text(annual.empNo));
 		        row.append($('<td>').text(annual.dept));
 		        row.append($('<td>').text(annual.empName));
@@ -195,5 +202,37 @@
 		$('#searchAnnualLeaveListBtn').click(function(){
 			searchAnnualLeaveListResults();
 		});
+		
+		// 사원 연차관리, 연차 기록 조회
+		$('#annualLeaveList').on('click', 'tr', function(){
+			let empNo = $(this).find('td:eq(0)').text(); // 사번 값 저장
+			getEmpWorkDay(empNo); // 사원 근로일 수 조회 함수
+			$('#annualLeaveModal').modal('show'); // 모달창 열기
+		});
+		
+		// 사원 근로일 수 조회
+		function getEmpWorkDay(empNo){
+			$.ajax({
+				url: '/JoinTree/commuteManage/getWorkDay',
+				type: 'GET',
+				data:{
+					empNo: empNo
+				},
+				success: function(data){
+					console.log(data+"<--getWorkDay");
+					
+					// 값 저장
+					let empName = data.empName; // 사원명
+					let empHireDate = data.empHireDate // 입사일
+					let workDay = data.getWorkDay; // 근속일 수
+					
+					// 값 설정
+					$('#empName').text(empName); // 사원명
+					$('#empHireDate').text(empHireDate); // 입사일
+					$('#workDay').text(workDay); // 근속일 수
+				}
+			});
+		};
+		
 	</script>	
 </html>

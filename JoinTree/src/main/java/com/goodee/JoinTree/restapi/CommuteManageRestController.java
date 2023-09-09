@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommuteManageRestController {
 	
 	@Autowired
-	CommuteManageService commuteManageService;
+	private CommuteManageService commuteManageService;
 	
 	// 연차 목록 조회
 	@GetMapping("/commuteManage/searchAnnualLeaveList")
@@ -55,6 +55,15 @@ public class CommuteManageRestController {
 		log.debug(searchCommuteFullListResult+"<-- CommuteManageRestControllre searchCommuteFullListResult");
 		
 		return searchCommuteFullListResult;
+	}
+	
+	// 사원 연차 정보 조회
+	@GetMapping("/commuteManage/getWorkDay")
+	public Map<String, Object> getWorkDay (@RequestParam int empNo) {
+		
+		Map<String, Object> annualInfo = commuteManageService.getWorkDay(empNo);
+		
+		return annualInfo;
 	}
 	
 }
