@@ -5,7 +5,7 @@
 <html>
 <style>
 #calendar {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 40px auto;
 }
 

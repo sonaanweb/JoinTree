@@ -245,13 +245,15 @@
 	                    isChecked: isChecked
 	                }),
 	                success: function(data) {
-	                    getTodoList(); // Todo 리스트 업데이트
+	                    
 	                    
 	                },
 	                error: function(error) {
 	                    console.error('Error updating todo status', error);
 	                }
 	            });
+	            
+	            getTodoList(); // Todo 리스트 업데이트
 	        });
 	     	
 	     	// 버튼 클릭 이벤트 처리
@@ -315,6 +317,7 @@
 				}).then((result) => {
 	   					if (result.isConfirmed) {
 	   						removeTodoItem(todoNo);
+	   						getTodoList();
 	   					}
    				});
 	        });

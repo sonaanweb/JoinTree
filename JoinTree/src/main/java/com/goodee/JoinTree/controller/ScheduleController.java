@@ -58,7 +58,6 @@ public class ScheduleController {
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());
-            eventData.put("allDay", false); // 현재 데이터에 allDay 정보가 없으므로 기본값으로 설정
             eventDataList.add(eventData);
         }
         
@@ -94,7 +93,6 @@ public class ScheduleController {
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());
-            eventData.put("allDay", false); // 현재 데이터에 allDay 정보가 없으므로 기본값으로 설정
             eventDataList.add(eventData);
         }
         
@@ -131,7 +129,6 @@ public class ScheduleController {
             eventData.put("title", schedule.getScheduleTitle());
             eventData.put("start", schedule.getScheduleStart());
             eventData.put("end", schedule.getScheduleEnd());
-            eventData.put("allDay", false); // 현재 데이터에 allDay 정보가 없으므로 기본값으로 설정
             eventDataList.add(eventData);
         }
         
