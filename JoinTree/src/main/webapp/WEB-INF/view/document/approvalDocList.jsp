@@ -154,62 +154,113 @@
 	});
 		
  
-  	 // 'approvalBtn' 버튼 클릭 이벤트 핸들러 내부에서
-	 $('#approvalBtn').click(function() {
-	   
-	    if (confirm("결재를 진행하시겠습니까?")) {
-	
-	        // 현재 선택된 문서 번호 가져오기
-	        let documentNo = $('#docNo').text();
-	
-	        // 상태 정보를 서버로 전송하는 코드
-	        $.ajax({
-	            url: '/JoinTree/document/approveDocument',
-	            type: 'POST',
-	            data: {
-	                docNo: documentNo 
-	            },
-	            success: function(response) {
-	                if (response === 'success') {
-	                    // 성공한 경우 처리
-	                    alert("결재 성공");
-	                    location.reload(); // 현재 메인 페이지 새로고침
-	                } else {
-	                    // 실패한 경우 처리
-	                    alert("결재 실패. 서명을 먼저 등록해주세요.");
-	                }
-	            },
-	            error: function(error) {
-	                alert("서버 오류 발생. 관리자에게 문의해주세요.");
-	            }
-	        });
-	    }
-	});
+  	 // 결재버튼 클릭시 이벤트
+        $('#approvalBtn').click(function() {
+        	let documentNo = $('#docNo').text();
+        
+    	    Swal.fire({
+    	        title: '결재 진행',
+    	        text: '해당 문서를 결재하시겠습니까?',
+    	        icon: 'question',
+    	        showCancelButton: true,
+    	        confirmButtonColor: '#8BC541',
+    			cancelButtonColor: '#888',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+    	    }).then((result) => {
+    	        if (result.isConfirmed) {
+    	            // 현재 선택된 문서 번호 가져오기
+    	            let documentNo = $('#docNo').text();
+    	    
+    	            // 상태 정보를 서버로 전송하는 코드
+    	            $.ajax({
+    	                url: '/JoinTree/document/approveDocument',
+    	                type: 'POST',
+    	                data: {
+    	                    docNo: documentNo 
+    	                },
+    	                success: function(response) {
+    	                    if (response === 'success') {
+    	                        // 성공한 경우 처리
+    	                        Swal.fire({
+    	                            icon: 'success',
+    	                            title: '결재 완료되었습니다.',
+    	                            showConfirmButton: false,
+    	                            timer: 1500 // 메시지가 자동으로 사라질 시간 (밀리초)
+    	                        }).then(() => {
+                               		location.reload();
+                            	});
+    	                    } else {
+    	                        // 실패한 경우 처리
+    	                        Swal.fire({
+    	                            icon: 'error',
+    	                            title: '결재 실패',
+    	                            text: '서명을 먼저 등록해주세요.'
+    	                        });
+    	                    }
+    	                },
+    	                error: function(error) {
+    	                    Swal.fire({
+    	                        icon: 'error',
+    	                        title: '서버 오류 발생',
+    	                        text: '관리자에게 문의해주세요.'
+    	                    });
+    	                }
+    	            });
+    	        }
+    	    });
+    	});
    
     // 반려 버튼
 	$('#rejectBtn').click(function() {
-    if (confirm("문서를 반려하시겠습니까?")) {
         let documentNo = $('#docNo').text();
 
-        $.ajax({
-            url: '/JoinTree/document/reject',
-            type: 'POST',
-            data: {
-                docNo: documentNo 
-            },
-            success: function(response) {
-                if (response === 'success') {
-                    alert("문서 반려 완료");
-                    location.reload(); // 현재 메인 페이지 새로고침
-                } else {
-                    alert("문서 반려 실패");
-                }
-            },
-            error: function(error) {
-                alert("서버 오류 발생. 관리자에게 문의해주세요.");
+        Swal.fire({
+            title: '결재 반려',
+            text: '해당 문서를 반려하시겠습니까?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#8BC541',
+			cancelButtonColor: '#888',
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/JoinTree/document/reject',
+                    type: 'POST',
+                    data: {
+                        docNo: documentNo 
+                    },
+                    success: function(response) {
+                        if (response === 'success') {
+                        	Swal.fire({
+        						icon: 'success',
+        						title: '반려처리 되었습니다.',
+        						showConfirmButton: false,
+        						timer: 1000
+        					}).then(() => {
+                           		location.reload();
+                        	});
+                        } else {
+							Swal.fire(
+								'Error',
+								'반려처리 실패',
+								'error'
+								)
+	                        }
+                    },
+                    error: function(error) {
+                    	  Swal.fire({
+  	                        icon: 'error',
+  	                        title: '서버 오류 발생',
+  	                        text: '관리자에게 문의해주세요.'
+  	                    });
+                    }
+                });
             }
         });
-    }
+        
 });
 </script>
 </html>

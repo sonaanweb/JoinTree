@@ -128,11 +128,11 @@ $(document).ready(function () {
         });
     });
 
-    // 상태코드 텍스트 변환 함수
+    // 상태코드 텍스트 변환
     function getStatusText(statusCode) {
-        if (statusCode === 'A0301') return '예약완료';
-        if (statusCode === 'A0302') return '예약취소';
-        if (statusCode === 'A0303') return '사용완료';
-        return '';
-    }
+    if (statusCode === 'A0301') return '<span class="badge badge-success">예약완료</span>';
+    if (statusCode === 'A0302') return '<span class="badge badge-secondary">예약취소</span>';
+    if (statusCode === 'A0303') return '<span class="badge badge-dark">사용완료</span>';
+    return '';
+	}
 });
