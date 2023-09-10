@@ -51,7 +51,7 @@
 		                    <tr>
 		                        <td>${r.revNo}</td>
 		                        <td>${r.roomName}</td>
-		                        <td>${r.revStartTime.substring(0,16)} ~ ${r.revEndTime.substring(10,16)}</td>
+		                        <td>${r.revStartTime.toString().substring(0, 16)} ~ ${r.revEndTime.toString().substring(10, 16)}</td>
 		                        <td>${r.revReason}</td>
 		                        <td>${r.createdate.substring(0,10)}</td>
 		                        <td>

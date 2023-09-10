@@ -237,9 +237,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         var reservationInfo = {
             equipNo: roomNo,
-            revStartTime: $('#selectedDate').val() + ' ' + $('#revStartTime').val(),
-            revEndTime: $('#selectedDate').val() + ' ' + $('#revEndTime').val(),
+		/* revStartTime: $('#selectedDate').val() + ' ' + $('#revStartTime').val(),
+            revEndTime: $('#selectedDate').val() + ' ' + $('#revEndTime').val(),*/
+            revStartTime: $('#selectedDate').val() + 'T' + $('#revStartTime').val(),
+    		revEndTime: $('#selectedDate').val() + 'T' + $('#revEndTime').val(),
             revReason: revReason // 변경된 예약 사유 사용
+ 
         };
 
         $.ajax({
@@ -262,6 +265,11 @@ document.addEventListener('DOMContentLoaded', function() {
             error: function() {
                 //console.log('Reservation Info:', reservationInfo);
                 console.error('예약 추가 실패');
+                Swal.fire(
+					'Error',
+					'이미 예약된 시간이 포함되어 있습니다 (새로고침하여 확인해주세요)',
+					'error'
+				)
             }
         });
     });

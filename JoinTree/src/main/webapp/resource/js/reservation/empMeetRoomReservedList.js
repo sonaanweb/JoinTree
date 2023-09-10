@@ -35,7 +35,7 @@ $(document).ready(function () {
                         var rowRevNo = $(this).find('td:first-child').text();
                         if (rowRevNo === revNo.toString()) {
                             $(this).find('td:last-child').empty();
-                            $(this).find('td:nth-child(6)').text('예약취소');
+                            $(this).find('td:nth-child(6)').html(getStatusText('A0302')); // 취소 상태 뱃지
                         }
                     });
 					Swal.fire({
@@ -105,7 +105,7 @@ $(document).ready(function () {
                     var row = '<tr>' +
                         '<td>' + reservation.revNo + '</td>' +
                         '<td>' + reservation.roomName + '</td>' +
-                        '<td>' + reservation.revStartTime.substring(0, 16) + ' ~ ' + reservation.revEndTime.substring(10, 16) + '</td>' +
+                        '<td>' + reservation.revStartTime.toString().substring(0, 16) + ' ~ ' + reservation.revEndTime.toString().substring(10, 16) + '</td>' +
                         '<td>' + reservation.revReason + '</td>' +
                         '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
                         '<td>' + getStatusText(reservation.revStatus) + '</td>'

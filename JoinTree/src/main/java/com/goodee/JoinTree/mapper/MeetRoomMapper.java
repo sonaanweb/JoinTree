@@ -13,9 +13,6 @@ public interface MeetRoomMapper {
 	// List<vo name> 회의실 목록 메서드
 	List<MeetingRoom> selectMeetRoomAll(Map<String,Object> map);
 	
-	// 전체 행의 수 (리스트 페이징)
-	// int selectMeetRoomCount();
-	
 	// 회의실 추가 메서드
 	int insertMeetRoom(MeetingRoom meetingRoom);
 	
@@ -47,4 +44,5 @@ public interface MeetRoomMapper {
 	
 	// 첨부파일 개수 cnt
 	int selectMeetRoomFileCnt(int roomNo);
+
 }

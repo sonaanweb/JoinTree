@@ -75,7 +75,7 @@
 			                    <div class="form-group">
 			                    	<!-- 회의실 이름 끌고오기 , roomNo를 할당해줍니다 -->
 			                    	<input type="hidden" id="equipNo" name="equipNo" value="${roomNo}">
-			                        <label for="taskId" class="col-form-label">회의실 이름</label>
+			                        <label for="roomName" class="col-form-label">회의실 이름</label>
 			                        <input type="text" class="form-control" id="roomName" name="roomName" readonly="readonly">
 			                        <!-- 날짜와 시간을 따로 두었기 때문에 합쳐서 DB에 들어가는 작업이 필요함 -->
 			 						<label for="selectedDate" class="col-form-label">선택 날짜</label>
@@ -122,7 +122,7 @@
 										<option value="17:30">17:30</option>
 										<option value="18:00">18:00</option>
 							        </select>
-			                        <label for="taskId" class="col-form-label">예약 사유</label>
+			                        <label for="revReason" class="col-form-label">예약 사유</label>
 			                        <input type="text" class="form-control" id="revReason" name="revReason" placeholder="간단한 예약 사유를 적어주세요.">
 			                    	<div class="check" id="rn_check"></div>
 			                    </div>

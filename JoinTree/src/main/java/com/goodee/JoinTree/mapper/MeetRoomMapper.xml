@@ -12,7 +12,7 @@
     	</where>
 	</select>
 	
-	<!-- 경영지원 회의실 목록 조회 -->
+	<!-- 경영지원 회의실 목록 조회 (페이징때는 전체행으로 사용)-->
 	<select id="selectMeetRoomAll" parameterType="java.util.Map" resultType="com.goodee.JoinTree.vo.MeetingRoom">
 		SELECT
 			room_no roomNo,
@@ -117,8 +117,25 @@
 		ORDER BY createdate DESC;
 	</select>
 	
-	<!-- 아래부터 이미지 관련 -->
+	<!-- 검색조건 행의수 -->
+	<select id="searchMeetListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM meeting_room
+		<where>
+	    	<if test="roomName != null and roomName != ''">
+	    		AND room_name LIKE CONCAT('%', #{roomName}, '%')
+	    	</if>
+	    	<if test="roomName == null and roomName == ''">
+	            AND 1 = 1
+	        </if>
+	    </where>
+		ORDER BY createdate DESC;
+	</select>
 	
+	
+	
+	
+	<!-- 아래부터 이미지 관련 -->
 	<!-- 회의실 이미지 추가 -->
     <insert id="insertMeetRoomFile" parameterType="com.goodee.JoinTree.vo.MeetRoomFile">
         INSERT INTO meet_room_file (

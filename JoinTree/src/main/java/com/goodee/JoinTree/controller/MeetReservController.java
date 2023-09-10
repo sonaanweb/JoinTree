@@ -1,5 +1,6 @@
 package com.goodee.JoinTree.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +67,7 @@ public class MeetReservController {
         List<Reservation> reservationList = meetRoomReservService.getMeetRoomReservCal(roomNo);
         for (Reservation reservation : reservationList) {
             Map<String, Object> event = new HashMap<>();
-            event.put("title", reservation.getEmpNo()); // 여기 수정중
+            event.put("title", reservation.getEmpNo());
             event.put("start", reservation.getRevStartTime());
             event.put("end", reservation.getRevEndTime());
             eventList.add(event);
@@ -84,18 +85,29 @@ public class MeetReservController {
         Map<String, Object> response = new HashMap<>();
         
         try {
-        	AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");	
-    		int empNo = loginAccount.getEmpNo();
+            AccountList loginAccount = (AccountList) session.getAttribute("loginAccount");    
+            int empNo = loginAccount.getEmpNo();
             String equipCategory = "E0101"; // 회의실 공통 코드 IN
             reservation.setEmpNo(empNo);
             reservation.setEquipCategory(equipCategory);
             reservation.setRevStatus("A0301"); // 예약 완료 상태로 바로
-            reservation.setEquipNo(reservation.getEquipNo()); //equipNo = roomNo 할당
+            
+            // 중복 예약 검사 - 시간대가 겹치면
+            if (isOverLapping(reservation)) { // isOverLapping(중복검사 메서드) ----
+            									// 아래(true(중복),false(예약완료))기본 순서가 true false, 헷갈려서 바꾸려면 !연산자 사용
+                response.put("success", false);
+                response.put("message", "중복된 예약이 있습니다.");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            
+            // 안 겹칠 시 예약 완료
+            reservation.setEquipNo(reservation.getEquipNo()); // equipNo = roomNo 할당
             meetRoomReservService.addMeetRoomCal(reservation);
             response.put("success", true);
             response.put("message", "controller 예약 성공");
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
+            
+        } catch (Exception e) { //또 다른 예외 메세지
             e.printStackTrace();
             response.put("success", false);
             response.put("message", "controller 예약 실패");
@@ -103,7 +115,31 @@ public class MeetReservController {
         }
     }
     
-    // (emp) 예약한 회의실 조회(예약 취소 가능)
+    // 회의실 캘린더 내 중복 예약 확인 메서드 (new ---)
+    private boolean isOverLapping(Reservation newReservation) {
+        // 새로운 예약의 시작 시간과 종료 시간
+        LocalDateTime newStartTime = newReservation.getRevStartTime();
+        LocalDateTime newEndTime = newReservation.getRevEndTime();
+        
+        // 해당 roomNo 기존 예약 정보 조회
+        List<Reservation> existingReservations = meetRoomReservService.getMeetRoomReservCal(newReservation.getEquipNo());
+        
+        for (Reservation existingReservation : existingReservations) {
+            LocalDateTime existingStartTime = existingReservation.getRevStartTime();
+            LocalDateTime existingEndTime = existingReservation.getRevEndTime();
+            
+            // 시간대가 겹치면 중복으로 처리(true)
+            if (newStartTime.isBefore(existingEndTime) && newEndTime.isAfter(existingStartTime)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    
+    // (emp) 예약한 회의실 조회(예약 취소 가능) + 페이징 추가하기
     @GetMapping("/reservation/empMeetRoomReservedList")
 	public String empMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
@@ -183,7 +219,7 @@ public class MeetReservController {
 
     
     
-    // 사원 회의실 예약 관리(경영지원팀) view
+    // 사원 회의실 예약 관리(경영지원팀) view + 페이징 추가하기
     @GetMapping("/reservation/adminMeetRoomReservList")
 	public String empAllMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){

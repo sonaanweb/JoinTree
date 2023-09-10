@@ -2,6 +2,7 @@ package com.goodee.JoinTree.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class MeetRoomService {
 
 	// 회의실 목록 조회 메서드
 	public List<MeetingRoom> getMeetRoomList(Map<String, Object> map) {
-		return meetRoomMapper.selectMeetRoomAll(map);
+			return meetRoomMapper.selectMeetRoomAll(map);
 	}
 
 	// 회의실 추가 메서드
@@ -241,5 +242,5 @@ public class MeetRoomService {
 	}
 
 	// -------------------------------------------------
-
+	
 }
