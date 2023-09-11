@@ -23,9 +23,11 @@
 						<!-- 프로젝트 상세정보 출력 -->
 					</div>
 				</div>
-			
-				<div class="projectTaskListAll col-md-4">
+				<div>
 					<button id="addPjTaskBtn" class="btn btn-success btn-sm margin-top20">작업추가</button>
+				</div>
+				<div class="projectTaskListAll col-md-4">
+					
 					<div class="card margin-top20">
 						<div class="card-body">
 							<h4 class="">미완료</h4>
@@ -61,12 +63,14 @@
 	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 	
 	<!-- 사원 트리 리스트 모달 -->
-	<div class="modal" id="projectMemberModal" tabindex="-1">
+	<div class="modal fade" id="projectMemberModal" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">JOINTREE</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span>×</span>
+					</button>
 				</div>
 				
 				<div class="modal-body">
@@ -85,7 +89,7 @@
 		</div>
 	</div>
 	<!-- 프로젝트 작업추가 모달 -->
-	<div class="modal" id="addProjectTaskModal" tabindex="-1">
+	<div class="modal fade" id="addProjectTaskModal" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content project-modal">
 				<div class="modal-header">

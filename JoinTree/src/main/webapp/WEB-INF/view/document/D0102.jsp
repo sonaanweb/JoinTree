@@ -163,7 +163,7 @@
 				</td>
 				<td>
 					<input type="date" id="docLeaveStartDate"> ~ <input type="date" id="docLeaveEndDate">
-					<input type="number" id="docLeavePeriodDate" style="width: 40px">&nbsp;일
+					<input type="number" id="docLeavePeriodDate" min="0.5" style="width: 50px">&nbsp;일
 				</td>
 			</tr>
 			<!-- 연차사유 -->

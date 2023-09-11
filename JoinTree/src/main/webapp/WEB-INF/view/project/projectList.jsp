@@ -29,17 +29,17 @@
 							<button type="button" id="addProjectBtn" class="btn btn-success floatR">프로젝트 추가</button>
 							<!-- 프로젝트 라디오 -->
 							<div class="wrapper">
-								<div class="form-check">
+								<div class="form-check form-check-success">
 									<label class="form-check-label">
 										<input type="radio" class="form-check-input" name="projectCate" value="all" checked>전체 프로젝트 
 									</label>
 								</div>
-								<div class="form-check margin-left10">
+								<div class="form-check margin-left10 form-check-success">
 									<label class="form-check-label">
 										<input type="radio" class="form-check-input" name="projectCate" value="participating">참여중인 프로젝트 
 									</label>
 								</div>
-								<div class="form-check margin-left10">
+								<div class="form-check margin-left10 form-check-success">
 									<label class="form-check-label">
 										<input type="radio" class="form-check-input" name="projectCate" value="completed">종료된 프로젝트 
 									</label>

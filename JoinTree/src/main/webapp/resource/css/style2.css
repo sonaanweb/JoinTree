@@ -12,7 +12,7 @@
 .btn{
 	font-family: 'Pretendard-Regular';
 }
-html, body, .table {
+html, body, .table, .fontGray, .h1, .h2, h3, h4, h5, h6, input {
 	color: #464846;
 	font-family: 'Pretendard-Regular' !important;
 }
@@ -433,7 +433,6 @@ input:checked + .slider:before {
 }
 .project-task-comment {
 	float:right;
-	margin-top: 70px;
 }
 .projectTaskList1, .projectTaskList2 {
 	height: 150px;
@@ -515,8 +514,6 @@ input:checked + .slider:before {
 	height: 50px;
 }
 
-/* 캘린더 */
-
 /* 모달 */
 .modal-content  {
 	background-color: #efefef !important;
@@ -533,6 +530,7 @@ input:checked + .slider:before {
 	font-size: 23px;
 }
 
+/
 /* 검색 간격 */
 .adminsearch{
 	width: 80px;

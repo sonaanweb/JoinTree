@@ -62,6 +62,7 @@ $(document).ready(function() {
 			const tab = tabs[selectedTab];
 			const buttons = [];
 				//console.log("tab.totalPages",tab.totalPages);
+			
 			// 전체페이지가 1과 같거나 크면 
 			if (tab.totalPages >= 1) {
 				for (let i = 1; i <= tab.totalPages; i++) {
@@ -334,7 +335,12 @@ $(document).ready(function() {
 					}
 					//alert("성공");
 					$("#addProject").modal("hide");
-					
+					Swal.fire({
+							icon: 'success',
+							title: '프로젝트가 추가되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						})
 					$("#projectName").val('');
 					$("input.projectColor:checked").val('');
 					$("#projectStartDate").val('');

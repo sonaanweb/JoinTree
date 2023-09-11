@@ -11,6 +11,7 @@ $(document).ready(function() {
 		let currentProjectContent;// 현재 프로젝트 내용
 		let currentProjectStartDate; // 현재 프로젝트 시작일
 		let currentProjectEndDate; // 현재 프로젝트 종료일
+		let taskStatus;
 	/* 전역변수 끝 */
 /* 프로젝트 */
 	/* 프로젝트 상세정보 출력 */
@@ -29,6 +30,7 @@ $(document).ready(function() {
 					const projectMemeber = response.projectMemeber;
 
 					$(".projectOne").empty();
+					$(".taskComment").empty();
 					// 팀원 정보 추가
 					const empNoToDel = loginEmpNo === project.empNo;
 						//console.log("loginEmpNo",loginEmpNo);
@@ -61,8 +63,9 @@ $(document).ready(function() {
 						'<h3>' +
 							'<input type="text" id="projectContent" value="' + project.projectContent +'"readonly="readonly""></input>' +
 						'</h3>' +
-						'<div class="wrapper"><h3><i class="mdi mdi mdi-account-outline"></i>&nbsp;담당자</h3><p>' + project.empName +'</p></div>' +
-						'<div class="wrapper"><h3><i class="mdi mdi-calendar"></i>&nbsp;기&nbsp;&nbsp;&nbsp;간 </h3><p><input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  
+						'<hr>' +
+						'<div class="wrapper fontGray"><h3><i class="mdi mdi mdi-account-outline"></i>&nbsp;담당자</h3><p>' + project.empName + "(" + project.createdate.substring(5,7) + "." + project.createdate.substring(8,10)  + " " + project.createdate.substring(11,16) + ")" +'</p></div>' +
+						'<div class="wrapper fontGray"><h3><i class="mdi mdi-calendar"></i>&nbsp;기&nbsp;&nbsp;&nbsp;간 </h3><p><input type="date" id="projectStartDate" value="' + project.projectStartDate.substring(0, 10) + '" readonly="readonly"></input> ~ ' +  
 							'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="projectEndDate" value="' + project.projectEndDate.substring(0, 10) + '" readonly="readonly"></input></p></div>' + 
 						'' +
 						'<div class="wrapper">'+
@@ -226,6 +229,18 @@ $(document).ready(function() {
 	/* 프로젝트 수정 끝 */
 	/* 프로젝트 완료로 상태변경 */
 		$(".projectOne").on("click", "#endProjectBtn", function() {
+			 // projectTaskList1 내에 projectTaskOne 클래스를 가진 요소를 선택
+			const projectTaskOnes = $(".projectTaskList1 .projectTaskOne");
+				console.log("projectTaskOnes",projectTaskOnes);
+			// 미완료된 작업이 없을 경우에만 삭제 가능 
+			if (projectTaskOnes.length > 0) {
+				Swal.fire(
+						'Error',
+						'완료되지 않은 작업이 있어 완료처리 할 수 없습니다.',
+						'error'
+					)
+				return;
+			} else {
 			Swal.fire({
 				title: '프로젝트를 완료하시겠습니까?',
 				text: "완료한 프로젝트는 더이상 수정할 수 없습니다.",
@@ -258,6 +273,7 @@ $(document).ready(function() {
 						});
 					}
 				});
+			}
 		});
 	/* 프로젝트 상태 수정 끝 */
 	/* 프로젝트 삭제 */
@@ -282,7 +298,15 @@ $(document).ready(function() {
 							success : function(response) {
 								console.log("response",response);
 								if(response === "success") {
-									window.location.href = '/JoinTree/project/projectList';
+									 Swal.fire({
+										icon: 'success',
+										title: '프로젝트가 삭제처리 되었습니다.',
+										showConfirmButton: false,
+										timer: 1500
+									}).then(function() {
+										// 타이머가 종료된 후에 이동할 URL 설정
+										window.location.href = '/JoinTree/project/projectList';
+									});
 								}
 							}
 						});
@@ -377,7 +401,7 @@ $(document).ready(function() {
 					} else if (response === "duplicate") {
 						Swal.fire({
 							icon: 'success',
-							title: '프로젝트 정보가 수정되었습니다.',
+							title: '포함된 사원을 제외하고 추가합니다.',
 							showConfirmButton: false,
 							timer: 1000
 						})
@@ -441,7 +465,7 @@ $(document).ready(function() {
 							
 							Swal.fire({
 								icon: 'success',
-								title: '담당자를 제외한 팀원을 삭제합니다.',
+								title: '담당자를 제외하고 삭제되었습니다.',
 								showConfirmButton: false,
 								timer: 1000
 							})
@@ -449,7 +473,7 @@ $(document).ready(function() {
 						} else if(response === "success") {
 							Swal.fire({
 								icon: 'success',
-								title: '삭제되었습니다',
+								title: '선택한 팀원이 삭제되었습니다.',
 								showConfirmButton: false,
 								timer: 1000
 							})
@@ -541,17 +565,17 @@ $(document).ready(function() {
 					const taskContent = $(this).data("taskcontent");
 					const taskStartDate = $(this).data("taskstartdate");
 					const taskEndDate = $(this).data("taskenddate");
-					const taskStatus = $(this).data("taskstatus");
+					taskStatus = $(this).data("taskstatus");
 					const taskOriginFilename = $(this).data("taskoriginfilename");
 					const taskSaveFilename = $(this).data("tasksavefilename");
-					const empName =  $("#teskHost").val();;
+					const empName =  $("#teskHost").val();
 					//console.log("taskEmpName:",taskEmpName);
 					// 댓글
 					fetchProjectTaskComment(taskNo);
 					
 					$(".projectTask").empty();
 					$(".projectTask").append(
-						'<div class="stretch-card">' +
+						'<div class="stretch-card margin-top20">' +
 							'<div class="card">' +
 								'<div class="card-body projectTaskCard"> ' +
 									'<div><h3>' + taskTitle + '</h3></div>' +
@@ -584,9 +608,11 @@ $(document).ready(function() {
 								'<div class="card-body">' +
 									'<div><b>' + empName + '(' + loginEmpNo + ')</b></div>' +
 									'<div class="wrapper"><textarea id="taskCommentInput" class="form-control"></textarea>' +
-									'<button type="button" class="taskCommentInputBtn btn btn-success btn-sm">등록</button></div>' +
+										'<button type="button" class="taskCommentInputBtn btn btn-success btn-sm">등록</button>' +
+									'</div>' +
 								'</div>' +
-							'</div>'
+							'</div>'+
+						'</div>'
 					);
 				});
 				
@@ -615,7 +641,7 @@ $(document).ready(function() {
 
 	/* 프로젝트 작업 추가 */
 		// 모달
-		$(".projectTaskListAll").on("click", "#addPjTaskBtn",function() {
+		$("#addPjTaskBtn").on("click",function() {
 			$("#addProjectTaskModal").modal("show");
 		});
 	
@@ -647,10 +673,10 @@ $(document).ready(function() {
 				$("#taskStartDate").val('');
 				$("#taskEndDate").val('');
 				Swal.fire(
-						'Error',
-						'종료일자는 시작일자보다 커야합니다.',
-						'error'
-					)
+					'Error',
+					'종료일자는 시작일자보다 커야합니다.',
+					'error'
+				)
 				return; // 추가 작업 중단
 			}
 			if(!taskTitle || !taskStartDate || !taskEndDate || !taskContent){
@@ -688,8 +714,7 @@ $(document).ready(function() {
 							timer: 1000
 						})
 					}
-					
-					
+				
 					$("#addProjectTaskModal").modal("hide");
 					
 					$("#taskTitle").val('');
@@ -701,8 +726,9 @@ $(document).ready(function() {
 						uploadProjectTaskFile(response);
 					}
 					$(".projectTaskCard").empty();
+					$(".taskComment").empty();
 					fetchProjectTaskData();
-					
+				
 				},error: function(error) {
 					console.log("프로젝트 작업 추가 실패",error);
 				}
@@ -822,7 +848,6 @@ $(document).ready(function() {
 									})								
 									fetchProjectData();
 									fetchProjectTaskData();
-									$(".taskComment").empty();
 								}
 							}
 						});
@@ -832,7 +857,6 @@ $(document).ready(function() {
 	/* 프로젝트 작업 삭제 끝 */
 /* 프로젝트 작업 끝 */
 /* 프로젝트 작업 */
-	/* 대댓글 카운트 */ 
 	/* 프로젝트 작업 댓글 리스트 */
 		function fetchProjectTaskComment(taskNo) {
 			console.log("taskNo",taskNo);
@@ -842,8 +866,10 @@ $(document).ready(function() {
 				data : {taskNo: taskNo},
 				success: function(taskCommentList) {
 					console.log("taskCommentList",taskCommentList);
-					let commentParentNo = 0;
 					$(".taskComment").empty();
+					
+					//console.log("taskStatus",taskStatus);
+					
 					//alert("댓글리스트 성공");
 					taskCommentList.forEach(function (comment) {
 						// 댓글
@@ -856,7 +882,7 @@ $(document).ready(function() {
 											'<div data-commentno=' + comment.taskCommentNo+ '><b>' + comment.empName + "(" + comment.empNo + ")</b>" +
 											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div></div>'+
 											'<div>' + comment.taskCommentContent +'</div>'+
-											'<div class="wrapper right"><button id="addTaskComment" class="btn btn-success btn-sm">댓글작성</button>'+
+											'<div class="wrapper right"><button id="addTaskComment" class="btn btn-success btn-sm" data-commentno=' + comment.taskCommentNo + '>댓글작성</button>'+
 											'<button id="delTaskComment" class="btn btn-success btn-sm margin-left10" data-commentno=' + comment.taskCommentNo + '>삭제</button>'+
 											'<button data-commentno=' + comment.taskCommentNo + ' data-parentno='+ comment.commentParentNo + ' class="tcShowandhideBtn btn btn-success btn-sm margin-left10">대댓글 보기<span id="childCommentCnt"></span></button></div>' +
 										'</div>' +
@@ -868,13 +894,20 @@ $(document).ready(function() {
 								url: "/JoinTree/project/taskCommentChildCnt",
 								data: { commentParentNo: comment.taskCommentNo },
 								success: function (data) {
-									console.log("data",data);
+									//console.log("data",data);
 									if (data > 0) {
 										// 대댓글 수를 해당 버튼 옆의 span에 표시
-										$(".tcShowandhideBtn[data-commentno='" + comment.taskCommentNo + "']").append('<span class="childCommentCount">' + data + '</span>');
+										$(".childCommentCount").empty();
+										$(".tcShowandhideBtn[data-commentno='" + comment.taskCommentNo + "']").append('<span class="childCommentCount">' + "(" + data + ")" +'</span>');
 									} else {
 										// 대댓글이 없는 경우 해당 버튼 숨김
 										$(".tcShowandhideBtn[data-commentno='" + comment.taskCommentNo + "']").hide();
+									}
+									if(taskStatus === '완료') {
+										$(".add-comment").hide();
+										$("#addTaskComment[data-commentno='" + comment.taskCommentNo + "']").hide();
+										$("#delTaskComment[data-commentno='" + comment.taskCommentNo + "']").hide();
+										$("#delTaskCommentChild[data-commentno='" + comment.taskCommentNo + "']").hide();
 									}
 								},
 								error: function (error) {
@@ -898,7 +931,9 @@ $(document).ready(function() {
 									'</div>'+
 								'</div></div>'
 							)
-							
+							if(taskStatus === '완료') {
+								$("#delTaskCommentChild[data-commentno='" + comment.taskCommentNo + "']").hide();
+							}
 						}
 					}); // foreach
 				},
@@ -907,8 +942,8 @@ $(document).ready(function() {
 				}
 			});
 		}
-		/* 프로젝트 작업 댓글 리스트 끝 */
-		/* 프로젝트 작업 댓글 추가 */
+	/* 프로젝트 작업 댓글 리스트 끝 */
+	/* 프로젝트 작업 댓글 추가 */
 		$(".projectTask").on("click", ".taskCommentInputBtn", function() {
 			const taskCommentContent =  $("#taskCommentInput").val();
 			
@@ -952,8 +987,7 @@ $(document).ready(function() {
 			const empName =  $("#teskHost").val();;
 			const commentNo = currentCard.find('[data-commentno]').data('commentno');
 				//console.log("commentNo" ,commentNo);
-				 // 이미 존재하는 인풋 필드를 찾습니다.
-			
+		if (!currentCard.next().hasClass('childComment')) {	
 			const addCard = $('<div class="stretch-card grid-margin childComment">' +
 			'<div class="floatL"><i class="mdi mdi-arrow-right"></i></div>' + 
 				'<div class="card">' +
@@ -964,8 +998,9 @@ $(document).ready(function() {
 					'</div>' +
 				'</div>'
 			);
+		
 			currentCard.after(addCard);
-			
+		}	
 			$("#taskCommentChildInput").focus();
 		});
 		
@@ -998,20 +1033,11 @@ $(document).ready(function() {
 					updateId : loginEmpNo
 				},
 				success:function(response){
-					console.log("response",response);
-					console.log("commentNo",commentNo);
+					//console.log("response",response);
+					//console.log("commentNo",commentNo);
 					
-					// 대댓글을 포함하는 상위 요소를 찾기
-					const child = $('.child');
-						
-					// 대댓글을 찾기 commentNo와 같은
-					const childComments = child.find('[data-commentno="' + commentNo + '"]');
+					fetchProjectTaskComment(taskNo);
 					
-					// 대댓글을 숨기거나 표시합니다.
-					childComments.removeClass('hidden');
-					
-					$("#taskCommentChildInput").val('');
-			
 				},
 				error:function(error) {
 					console.log("댓글추가 오류 발생",error);
@@ -1040,49 +1066,49 @@ $(document).ready(function() {
 		});
 	/* 프로젝트 작업 대댓글 추가 끝 */
 	/* 프로젝트 작업 댓글 삭제 */
-	// 댓글
-	$(".taskComment").on("click", "#delTaskComment", function() {
-		const taskCommentNo = $(this).data('commentno');
-		console.log("댓글 번호", taskCommentNo);
-		Swal.fire({
-			title: '댓글을 삭제하시겠습니까?',
-			text: "삭제된 댓글은 되돌릴 수 없으며 대댓글도 함께 삭제됩니다.",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#8BC541',
-			cancelButtonColor: '#888',
-			confirmButtonText: '완료',
-			cancelButtonText: '취소'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					delComments(taskCommentNo);
+		// 댓글
+		$(".taskComment").on("click", "#delTaskComment", function() {
+			const taskCommentNo = $(this).data('commentno');
+			console.log("댓글 번호", taskCommentNo);
+			Swal.fire({
+				title: '댓글을 삭제하시겠습니까?',
+				text: "삭제된 댓글은 되돌릴 수 없으며 대댓글도 함께 삭제됩니다.",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#8BC541',
+				cancelButtonColor: '#888',
+				confirmButtonText: '완료',
+				cancelButtonText: '취소'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						delComments(taskCommentNo);
+					}
+				});
+			
+		});
+		// 대댓글
+		$(".taskComment").on("click", "#delTaskCommentChild", function() {
+			const taskCommentNo = $(this).data('commentno');
+			console.log("댓글 번호", taskCommentNo);
+			
+			delComments(taskCommentNo)
+		});
+		
+		function delComments(taskCommentNo) {
+			$.ajax({
+				type: "POST",
+				url: "/JoinTree/project/removeTaskComment",
+				data: {taskCommentNo : taskCommentNo},
+				success:function(response){
+					//console.log("response",response);
+					
+					fetchProjectTaskComment(taskNo);
+				},
+				error:function(error) {
+					console.log("댓글삭제 오류 발생",error);
 				}
 			});
-		
-	});
-	// 대댓글
-	$(".taskComment").on("click", "#delTaskCommentChild", function() {
-		const taskCommentNo = $(this).data('commentno');
-		console.log("댓글 번호", taskCommentNo);
-		
-		delComments(taskCommentNo)
-	});
-	
-	function delComments(taskCommentNo) {
-		$.ajax({
-			type: "POST",
-			url: "/JoinTree/project/removeTaskComment",
-			data: {taskCommentNo : taskCommentNo},
-			success:function(response){
-				//console.log("response",response);
-				
-				fetchProjectTaskComment(taskNo);
-			},
-			error:function(error) {
-				console.log("댓글삭제 오류 발생",error);
-			}
-		});
-	}
+		}
 	/* 프로젝트 작업 댓글 삭제 끝 */
 /* 프로젝트 작업 댓글 끝 */
 }); // 마지막
