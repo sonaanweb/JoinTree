@@ -72,7 +72,7 @@ public class TodoController {
         int update = todoService.updateTodoStatus(todoNo, todoStatus);
         
         if (update > 0) {
-	        return "success";
+	        return "redirect:/home";
 	    } else {
 	        return "failure";
 	    }

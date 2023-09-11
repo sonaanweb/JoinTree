@@ -245,15 +245,14 @@
 	                    isChecked: isChecked
 	                }),
 	                success: function(data) {
-	                    
-	                    
+	                	getTodoList(); // Todo 리스트 업데이트
 	                },
 	                error: function(error) {
 	                    console.error('Error updating todo status', error);
 	                }
 	            });
 	            
-	            getTodoList(); // Todo 리스트 업데이트
+	            
 	        });
 	     	
 	     	// 버튼 클릭 이벤트 처리
@@ -265,7 +264,16 @@
 	     
 	     	// TODO 추가 버튼 클릭 이벤트
 	        $('#addTodoBtn').click(function() {
-	            const todoContent = $('#todoContent').val();
+	            const todoContent = $('#todoContent').val()
+
+	            if (!todoContent) {
+			        Swal.fire(
+			            'Error',
+			            '내용은 필수 입력 사항입니다.',
+			            'error'
+			        );
+			        return; // 함수를 여기서 종료
+			    }
 	            
 	            $.ajax({
 	                type: 'POST',
@@ -341,12 +349,14 @@
 							timer: 1000
 						});
 	                	
-						getTodoList(); 
+						
 	                },
 	                error: function(error) {
 	                    console.error('Error removing todo', error);
 	                }
 	            });
+	            
+	            getTodoList(); 
 	        }
 		});
 	</script>
