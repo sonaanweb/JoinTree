@@ -92,15 +92,14 @@
     	AND MONTH(leave_start_date) = #{targetMonth}
 	</select>
 	
-	<!-- 사원 입사일 조회 -->
+	<!-- 입사일 조회 -->
 	<select id="getEmpHireDate"
 			parameterType="int" resultType="com.goodee.JoinTree.vo.EmpInfo">
 		
 		SELECT 
-			emp_name empName,
-			emp_hire_date empHireDate 
+		    emp_hire_date empHireDate
 		FROM 
-			emp_info 
+		    emp_info 
 		WHERE 
 			emp_no = #{empNo}
 	</select>

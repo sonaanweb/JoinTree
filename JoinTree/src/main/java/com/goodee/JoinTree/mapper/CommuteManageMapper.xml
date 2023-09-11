@@ -27,10 +27,136 @@
 	<select id="searchAnnualLeaveList"
 			parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT 
-			e.emp_no empNo, 
-			e.emp_name empName, 
-			dc.code_name dept, 
-			SUM(al.annual_count) annualCount
+		    e.emp_no empNo, 
+		    e.emp_name empName, 
+		    dc.code_name dept, 
+		    COALESCE(SUM(al.add_annual_count), 0) - COALESCE(SUM(al.take_annual_count), 0) annualCount,
+		    <![CDATA[
+		    -- 근속 연수
+			 YEAR(NOW()) - YEAR(e.emp_hire_date) - 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(e.emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(e.emp_hire_date) AND DAY(NOW()) < DAY(e.emp_hire_date)) 
+		        THEN 1 
+		        ELSE 0 
+		    END workYears,
+		    
+		    -- 근속 개월수
+			 MONTH(NOW()) - MONTH(e.emp_hire_date) + 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(e.emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(e.emp_hire_date) AND DAY(NOW()) < DAY(e.emp_hire_date)) 
+		        THEN 12 
+		        ELSE 0 
+		    END workMonths,
+		    ]]>	
+			( -- 첫 달 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e2
+		        LEFT OUTER JOIN commute c ON e2.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN e2.emp_hire_date AND DATE_ADD(e2.emp_hire_date, INTERVAL 1 MONTH)
+		            AND e2.emp_no = e.emp_no
+		        GROUP BY e2.emp_no
+		    ) totalFirstMonthWorkTime,
+		    
+		    ( -- 한달 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e3
+		        LEFT OUTER JOIN commute c ON e3.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN 
+		                (SELECT MAX(add_annual_date) FROM annual_leave) 
+		                AND DATE_ADD((SELECT MAX(add_annual_date) FROM annual_leave), INTERVAL 1 MONTH)
+		            AND e3.emp_no = e.emp_no
+		        GROUP BY e3.emp_no
+		    ) totalMonthWorkTime,
+		    
+		    ( -- 첫 해 1년 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e4
+		        LEFT OUTER JOIN commute c ON e4.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN e4.emp_hire_date AND DATE_ADD(e4.emp_hire_date, INTERVAL 1 YEAR)
+		            AND e4.emp_no = e.emp_no
+		        GROUP BY e4.emp_no
+		    ) totalFristYearWorkTime,
+		    
+		    ( -- 1년 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e5
+		        LEFT OUTER JOIN commute c ON e5.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN 
+		                (SELECT MAX(add_annual_date) FROM annual_leave) 
+		                AND DATE_ADD((SELECT MAX(add_annual_date) FROM annual_leave), INTERVAL 1 YEAR)
+		            AND e5.emp_no = e.emp_no
+		        GROUP BY e5.emp_no
+		    ) totalYearWorkTime,
+		     
+		    ( -- 첫 달 평일 근로 소정 시간
+			    SELECT 
+			        TIME_FORMAT(
+			            SEC_TO_TIME(
+			                (DATEDIFF(
+			                    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH),  
+			                    e.emp_hire_date  -- 입사일
+			                ) - (DATEDIFF(
+			                    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH),  
+			                    e.emp_hire_date  
+			                ) DIV 7 * 2)) * 3600 * 8
+			            ), '%H:%i:%s'
+			        ) workTimeInOneFirstMonth
+			) workTimeInOneFirstMonth,
+		    
+		    ( -- 1달 평일 근로 소정 시간
+		        
+		        SELECT 
+		            TIME_FORMAT(
+							SEC_TO_TIME(
+			                (DATEDIFF(
+			                    DATE_ADD(
+			                        (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no),
+			                        INTERVAL 1 MONTH
+			                    ),
+			                    (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no) 
+			                ) - (DATEDIFF(
+			                    DATE_ADD(
+			                        (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no),
+			                        INTERVAL 1 MONTH
+			                    ), 
+			                    (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no)  
+			                ) DIV 7 * 2)) * 3600 * 8
+		                ), '%H:%i:%s'
+		            ) workTimeInOneMonth
+		    ) workTimeInOneMonth,
+		    
+			( -- 1년 평일 근로 소정 시간
+		    SELECT 
+		        TIME_FORMAT(
+					  SEC_TO_TIME(
+				          (DATEDIFF(
+				              DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR), 
+				              e.emp_hire_date 
+				          ) - (DATEDIFF(
+				              DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR), 
+				              e.emp_hire_date  
+				          ) DIV 7 * 2)) * 3600 * 8
+						 ), '%H:%i:%s'            
+		        ) workTimeInYear
+			) workTimeInYear,
+			
+			-- 입사한지 한 달 후의 날짜
+		    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH) oneMonthAfterHireDate,
+		    
+		    -- 마지막 연차 지급일 부터의 한 달 후의 날짜
+		    DATE_ADD(al.add_annual_date, INTERVAL 1 MONTH) oneMonthAfterAddAnnualDate,
+		    
+		    -- 입사한지 1년 후의 날짜
+		    DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR) oneYearAfterHireDate,
+		    
+		    -- 마지막 연차 지급일 부터의 1년 후의 날짜
+		    DATE_ADD(al.add_annual_date, INTERVAL 1 YEAR) oneYearAfterAddAnnualDate		 
 		FROM emp_info e 
 		LEFT OUTER JOIN annual_leave al ON e.emp_no = al.emp_no
 		LEFT OUTER JOIN account_list alist ON e.emp_no = alist.emp_no
@@ -48,8 +174,9 @@
 		     	AND dc.code = #{dept}
 		    </if>
 		GROUP BY e.emp_no     
-		ORDER BY e.emp_no DESC
-		LIMIT #{beginRow}, #{rowPerPage}     
+		ORDER BY e.emp_no ASC
+		LIMIT #{beginRow}, #{rowPerPage}
+		    
 	</select>
 	
 	<!-- 검색 조건별 행의 수 (연가 목록) -->
@@ -124,7 +251,7 @@
 		    <if test="active != null and active != ''">
 		    	AND al.active = #{active}
 		    </if>
-		ORDER BY ei.emp_no DESC
+		ORDER BY lr.createdate DESC
 		LIMIT #{beginRow}, #{rowPerPage}  
 	</select>
 	
@@ -157,7 +284,6 @@
 		    	AND c.emp_on_off_date BETWEEN #{startDate} AND #{endDate}
 		    </if>
 	</select>
-	
 	
 	<!-- 전체사원 출퇴근 목록 조회 -->
 	<select id="searchCommuteFullList"
@@ -196,6 +322,178 @@
 		LIMIT #{beginRow}, #{rowPerPage}  
 	</select>
 	
+	<!-- 사원별 연차 정보 조회 -->
+	<select id="getEmpAnnualLeaveInfo"
+			parameterType="int" resultType="java.util.Map">
+		
+		SELECT
+			e.emp_no empNo, 
+		    emp_name empName,
+		    emp_hire_date empHireDate,
+		    <![CDATA[
+		    -- 근속일수
+		    DATEDIFF(NOW(), emp_hire_date) + 1 - 
+		    (2 * (FLOOR(DATEDIFF(NOW(), emp_hire_date) / 7) + 
+		    CASE 
+		        WHEN WEEKDAY(emp_hire_date) <= 4 THEN 1 
+		        ELSE 0 
+		    END)) workDays,
+		    
+		    -- 근속년수
+		    YEAR(NOW()) - YEAR(emp_hire_date) - 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(emp_hire_date) AND DAY(NOW()) < DAY(emp_hire_date)) 
+		        THEN 1 
+		        ELSE 0 
+		    END workYears,
+		    
+		    -- 근속 개월수
+		    MONTH(NOW()) - MONTH(emp_hire_date) + 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(emp_hire_date) AND DAY(NOW()) < DAY(emp_hire_date)) 
+		        THEN 12 
+		        ELSE 0 
+		    END workMonths,
+		    ]]>
+		    ( -- 첫 달 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e2
+		        LEFT OUTER JOIN commute c ON e2.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN e2.emp_hire_date AND DATE_ADD(e2.emp_hire_date, INTERVAL 1 MONTH)
+		            AND e2.emp_no = e.emp_no
+		        GROUP BY e2.emp_no
+		    ) totalFirstMonthWorkTime,
+		    
+		    ( -- 한달 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e3
+		        LEFT OUTER JOIN commute c ON e3.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN 
+		                (SELECT MAX(add_annual_date) FROM annual_leave) 
+		                AND DATE_ADD((SELECT MAX(add_annual_date) FROM annual_leave), INTERVAL 1 MONTH)
+		            AND e3.emp_no = e.emp_no
+		        GROUP BY e3.emp_no
+		    ) totalMonthWorkTime,
+		    
+		    ( -- 첫 해 1년 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e4
+		        LEFT OUTER JOIN commute c ON e4.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN e4.emp_hire_date AND DATE_ADD(e4.emp_hire_date, INTERVAL 1 YEAR)
+		            AND e4.emp_no = e.emp_no
+		        GROUP BY e4.emp_no
+		    ) totalFristYearWorkTime,
+		    
+		    ( -- 1년 근로 시간
+		        SELECT TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(c.emp_off_time) - TIME_TO_SEC(c.emp_on_time))), '%H:%i:%s') 
+		        FROM emp_info e5
+		        LEFT OUTER JOIN commute c ON e5.emp_no = c.emp_no
+		        WHERE 
+		            c.emp_on_off_date BETWEEN 
+		                (SELECT MAX(add_annual_date) FROM annual_leave) 
+		                AND DATE_ADD((SELECT MAX(add_annual_date) FROM annual_leave), INTERVAL 1 YEAR)
+		            AND e5.emp_no = e.emp_no
+		        GROUP BY e5.emp_no
+		    ) totalYearWorkTime,
+		     
+		    ( -- 첫 달 평일 근로 소정 시간
+			    SELECT 
+			        TIME_FORMAT(
+			            SEC_TO_TIME(
+			                (DATEDIFF(
+			                    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH),  
+			                    e.emp_hire_date  -- 입사일
+			                ) - (DATEDIFF(
+			                    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH),  
+			                    e.emp_hire_date  
+			                ) DIV 7 * 2)) * 3600 * 8
+			            ), '%H:%i:%s'
+			        ) workTimeInOneFirstMonth
+			) workTimeInOneFirstMonth,
+		    
+		    ( -- 1달 평일 근로 소정 시간
+		        
+		        SELECT 
+		            TIME_FORMAT(
+							SEC_TO_TIME(
+			                (DATEDIFF(
+			                    DATE_ADD(
+			                        (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no),
+			                        INTERVAL 1 MONTH
+			                    ),
+			                    (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no) 
+			                ) - (DATEDIFF(
+			                    DATE_ADD(
+			                        (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no),
+			                        INTERVAL 1 MONTH
+			                    ), 
+			                    (SELECT MAX(add_annual_date) FROM annual_leave WHERE emp_no = e.emp_no)  
+			                ) DIV 7 * 2)) * 3600 * 8
+		                ), '%H:%i:%s'
+		            ) workTimeInOneMonth
+		    ) workTimeInOneMonth,
+		    
+			( -- 1년 평일 근로 소정 시간
+		    SELECT 
+		        TIME_FORMAT(
+					  SEC_TO_TIME(
+				          (DATEDIFF(
+				              DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR), 
+				              e.emp_hire_date 
+				          ) - (DATEDIFF(
+				              DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR), 
+				              e.emp_hire_date  
+				          ) DIV 7 * 2)) * 3600 * 8
+						 ), '%H:%i:%s'            
+		        ) workTimeInYear
+			) workTimeInYear,
+			
+			-- 입사한지 한 달 후의 날짜
+		    DATE_ADD(e.emp_hire_date, INTERVAL 1 MONTH) oneMonthAfterHireDate,
+		    
+		    -- 마지막 연차 지급일 부터의 한 달 후의 날짜
+		    DATE_ADD(al.add_annual_date, INTERVAL 1 MONTH) oneMonthAfterAddAnnualDate,
+		    
+		    -- 입사한지 1년 후의 날짜
+		    DATE_ADD(e.emp_hire_date, INTERVAL 1 YEAR) oneYearAfterHireDate,
+		    
+		    -- 마지막 연차 지급일 부터의 1년 후의 날짜
+		    DATE_ADD(al.add_annual_date, INTERVAL 1 YEAR) oneYearAfterAddAnnualDate		
+		FROM 
+		    emp_info e
+		    LEFT OUTER JOIN annual_leave al ON e.emp_no = al.emp_no
+			LEFT OUTER JOIN account_list alist ON e.emp_no = alist.emp_no
+		WHERE 
+			e.emp_no = #{empNo}
+		GROUP BY e.emp_no 		
+	</select>
+	
+	<!-- 발생연차, 사용연차, 잔여연차 조회 -->
+	<select id="getAnnualLeaveCnt">
+		SELECT 
+			COALESCE(SUM(add_annual_count), 0) addAnnualConut, -- 발생연차
+			COALESCE(SUM(take_annual_count), 0) takeAnnualCount, -- 사용연차
+			COALESCE(SUM(add_annual_count), 0) - COALESCE(SUM(take_annual_count), 0) annualCount -- 잔여연차
+		FROM annual_leave
+		WHERE emp_no = #{empNo}	
+		GROUP BY e.emp_no 
+	</select>
+	
+	<!-- 사원별 연차 테이블 count 조회 -->
+	<select id="getEmpAnnualLeaveCnt" resultType="java.lang.Integer">
+		SELECT 
+			IFNULL(COUNT(annual_leave.emp_no), 0)
+		FROM annual_leave
+		LEFT JOIN (SELECT DISTINCT emp_no FROM annual_leave) emp
+		ON annual_leave.emp_no = emp.emp_no
+		WHERE annual_leave.emp_no = #{empNo};
+	</select>
+	
 	<!-- 연가 사용 입력 -->
 	<insert id="addLeaveRecode">
 		INSERT INTO leave_recode (
@@ -224,7 +522,28 @@
 		)
 	</insert>
 	
-	<!-- 연차 업데이트 -->
-	
+	<!-- 발생연차 등록 -->
+	<insert id="addAnnualLeave" parameterType="java.util.Map">
+		INSERT INTO annual_leave (
+			emp_no, 
+			add_annual_count,
+			take_annual_count,
+			add_annual_date,
+			createdate, 
+			updatedate, 
+			create_id, 
+			update_id
+			)
+		VALUES (
+			#{docEmpNo},
+			#{addAnnualCount},
+			#{docLeavePeriodDate},
+			#{addAnnualDate},
+			NOW(),
+			NOW(),
+			#{empNo}, -- 생성자
+			#{empNo} -- 수정자
+		)
+	</insert>
 
 </mapper>

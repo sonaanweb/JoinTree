@@ -327,8 +327,11 @@ public class DocumentController {
 	    			
 	    			documentLeave = new HashMap<>();
 	    			documentLeave = documentService.getDocumentLeave(docNo); // DocumentLeave 값 저장
+	    			documentLeave.put("docEmpNo", docEmpNo); // 기안문서 사번
+	    			documentLeave.put("empNo", empNo); // 생성자, 수정자
 	    			
-	    			int addLeaveRecoderow = commuteManageService.addLeaveRecode(empNo,docEmpNo, documentLeave); // 연가 기록 등록
+	    			commuteManageService.addLeaveRecode(empNo, docEmpNo, documentLeave); // 연가 기록 등록
+	    			commuteManageService.addAnnualLeave(documentLeave); // 사용연차 등록
 	    		}
 	    	}
 	    	

@@ -28,7 +28,7 @@ public interface CommuteMapper {
 	List<Commute> getCommuteTimeList(Map<String, Object> paramMap);
 	
 	// 사원별 입사일 조회
-	EmpInfo getEmpHireDate(int empNo);
+	EmpInfo getEmpHireDate (int empNo);
 	
 	// 월 별 근로시간 통계 조회
 	List<Map<String, Object>> getMonthWorkTimeDate(Map<String, Object> monthWorkTimeDataMap);

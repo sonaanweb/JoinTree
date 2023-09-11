@@ -28,5 +28,16 @@ public interface CommuteManageMapper {
 	
 	// 연가 기록 등록
 	int addLeaveRecode(Map<String, Object> addLeaveRecodeMap);
-
+	
+	// 사원별 연차 정보 조회
+	Map<String, Object> getEmpAnnualLeaveInfo(int empNo);
+	
+	// 잔여연차, 사용연차 조회
+	Map<String, Object> getAnnualLeaveCnt(int empNo);
+	
+	// 사원별 연차 테이블 count 조회
+	int getEmpAnnualLeaveCnt(int empNo);
+	
+	// 발생 연차 등록
+	int addAnnualLeave(Map<String, Object> annualInfo);
 }

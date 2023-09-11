@@ -1,9 +1,6 @@
 package com.goodee.JoinTree.service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.goodee.JoinTree.mapper.CommuteManageMapper;
 import com.goodee.JoinTree.mapper.CommuteMapper;
-import com.goodee.JoinTree.vo.DocumentDefault;
-import com.goodee.JoinTree.vo.EmpInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +17,6 @@ public class CommuteManageService {
 	
 	@Autowired
 	private CommuteManageMapper commuteManageMapper;
-	@Autowired 
-	private CommuteMapper commuteMapper;
 	
 	// 검색별 연차 목록 조회
 	public Map<String, Object> searchAnnualLeaveList(Map<String, Object> searchAnnualLeaveList) {
@@ -68,6 +61,9 @@ public class CommuteManageService {
 		List<Map<String, Object>> searchAnnualLeaveListByPage = commuteManageMapper.searchAnnualLeaveList(searchAnnualLeaveList);
 		log.debug(searchAnnualLeaveListByPage+"<-- CommuteService searchAnnualLeaveList");
 		
+		// 현재날짜
+		LocalDate currentDate = LocalDate.now();
+		
 		Map<String, Object> searchAnnualLeaveListResult = new HashMap<>();
 		searchAnnualLeaveListResult.put("searchAnnualLeaveListByPage", searchAnnualLeaveListByPage);
 		searchAnnualLeaveListResult.put("startPage", startPage);
@@ -75,6 +71,8 @@ public class CommuteManageService {
 		searchAnnualLeaveListResult.put("lastPage", lastPage);
 		searchAnnualLeaveListResult.put("pageLength", pageLength);
 		searchAnnualLeaveListResult.put("currentPage", currentPage);
+		searchAnnualLeaveListResult.put("currentDate", currentDate);
+		searchAnnualLeaveListResult.put("currentDate", currentDate);
 		
 		return searchAnnualLeaveListResult;
 	}
@@ -205,37 +203,40 @@ public class CommuteManageService {
 		return addLeaveRecodeRow;
 	}
 	
-	// 사원 근로일 수 조회
-	public Map<String, Object> getWorkDay(int empNo) {
+	// 사원별 연차 정보 조회
+	public Map<String, Object> getAnnualLeaveInfo(int empNo) {
 		
-		// 사원 정보 조회
-		EmpInfo empInfo = commuteMapper.getEmpHireDate(empNo);
-		String empHireDate = empInfo.getEmpHireDate(); // 입사일
-		String empName = empInfo.getEmpName(); // 사원명
-		
-		// 입사일 LocalDate로 변환
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 사용하는 날짜 형식에 맞게 포맷 설정
-		LocalDate hireDate = LocalDate.parse((CharSequence) empHireDate, formatter);
-		
-		// 현재 날짜 조회
+		// 현재날짜
 		LocalDate currentDate = LocalDate.now();
 		
-		// 근로일 수 계산
-	    int getWorkDay = 0;
-	    while (hireDate.isBefore(currentDate)) {
-	        if (hireDate.getDayOfWeek() != DayOfWeek.SATURDAY && hireDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
-	            // 주말이 아닌 경우에만 근로일로 간주
-	        	getWorkDay++;
-	        }
-	        hireDate = hireDate.plusDays(1); // 다음 날짜로 이동
-	    }
-	    
-	    Map<String, Object> annualInfo = new HashMap<>();
-	    annualInfo.put("empHireDate", empHireDate);
-	    annualInfo.put("empName", empName);
-	    annualInfo.put("getWorkDay", getWorkDay);
+		//사원별 연차 테이블 count 조회
+		int getEmpAnnualLeaveCnt = commuteManageMapper.getEmpAnnualLeaveCnt(empNo);
 		
-		return annualInfo;
+		// 사원별 연차 정보 조회
+		Map<String, Object> getEmpAnnualLeaveInfo = commuteManageMapper.getEmpAnnualLeaveInfo(empNo);
+		getEmpAnnualLeaveInfo.put("currentDate", currentDate);
+		getEmpAnnualLeaveInfo.put("empAnnualLeaveCnt", getEmpAnnualLeaveCnt);
+		log.debug(getEmpAnnualLeaveInfo+"<--CommuteManageService getEmpAnnualLeaveInfo");
+		
+		return getEmpAnnualLeaveInfo;
+	}
+	
+	// 사원별 발생연차, 사용연차, 잔여연차 조회
+	public Map<String, Object> getAnnualLeaveCnt(int empNo){
+		
+		Map<String, Object> getAnnualLeaveCnt = commuteManageMapper.getAnnualLeaveCnt(empNo);
+		log.debug(getAnnualLeaveCnt+"<-- CommuteManageService getAnnualLeaveCnt");
+		
+		return getAnnualLeaveCnt;
+	}
+	
+	// 발생 연차 등록
+	public int addAnnualLeave(Map<String, Object> annualInfo) {
+		
+		int addAnnualLeaveRow = commuteManageMapper.addAnnualLeave(annualInfo);
+		log.debug(addAnnualLeaveRow+"<-- CommuteManageService addAnnualLeaveRow");
+		
+		return addAnnualLeaveRow;
 	}
 
 }

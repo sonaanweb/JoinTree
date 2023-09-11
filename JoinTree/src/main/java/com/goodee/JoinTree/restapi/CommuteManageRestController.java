@@ -58,10 +58,10 @@ public class CommuteManageRestController {
 	}
 	
 	// 사원 연차 정보 조회
-	@GetMapping("/commuteManage/getWorkDay")
-	public Map<String, Object> getWorkDay (@RequestParam int empNo) {
+	@GetMapping("/commuteManage/getAnnualLeaveInfo")
+	public Map<String, Object> getAnnualLeaveInfo (@RequestParam int empNo) {
 		
-		Map<String, Object> annualInfo = commuteManageService.getWorkDay(empNo);
+		Map<String, Object> annualInfo = commuteManageService.getAnnualLeaveInfo(empNo);
 		
 		return annualInfo;
 	}
