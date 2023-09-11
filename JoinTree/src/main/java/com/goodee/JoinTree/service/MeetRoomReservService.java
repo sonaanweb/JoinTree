@@ -38,7 +38,7 @@ public class MeetRoomReservService {
 		return meetRoomReservMapper.updateMeetCal(reservation);
 	}
 	
-	// 회의실 예약 목록 (사원)
+	// 회의실 예약 목록 조회 (사원)
 	public List<Reservation> getReservations(Map<String, Object> map){
 		return meetRoomReservMapper.selectMeetReserved(map);
 	}

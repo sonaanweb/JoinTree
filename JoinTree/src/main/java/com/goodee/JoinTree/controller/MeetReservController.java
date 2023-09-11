@@ -121,6 +121,10 @@ public class MeetReservController {
         LocalDateTime newStartTime = newReservation.getRevStartTime();
         LocalDateTime newEndTime = newReservation.getRevEndTime();
         
+        log.debug(AN+"newStartTime:"+newStartTime+RE);
+        log.debug(AN+"newEndTime:"+newEndTime+RE);
+        
+        
         // 해당 roomNo 기존 예약 정보 조회
         List<Reservation> existingReservations = meetRoomReservService.getMeetRoomReservCal(newReservation.getEquipNo());
         
@@ -217,9 +221,7 @@ public class MeetReservController {
         }
     }
 
-    
-    
-    // 사원 회의실 예약 관리(경영지원팀) view + 페이징 추가하기
+    // 경영지원팀의 모든 예약 조회
     @GetMapping("/reservation/adminMeetRoomReservList")
 	public String empAllMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){

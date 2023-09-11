@@ -26,8 +26,11 @@ public interface MeetRoomReservMapper {
 	// 회의실 예약 조회(emp)
 	List<Reservation> selectMeetReserved(Map<String, Object> map);
 	
-	// 경영지원팀 예약 관리 리스트 조회(dept -- 구분을 위한 메서드)
+	// 경영지원팀 예약 관리 조회
 	List<Reservation> selectAllMeetReserved(Map<String, Object> map);
+		
+	// (관리자)검색 조건별 cnt 메서드
+	int searchCnt(Map<String, Object> map);
 	
 	// 예약 목록 검색 메서드
 	List<Reservation> getSearchReservation(Map<String, Object> SearchReservations);
@@ -35,6 +38,4 @@ public interface MeetRoomReservMapper {
 	// 회의실 예약 날짜 검색 메서드(사원)
 	List<Reservation> getEmpSearchReservation(Map<String, Object> SearchEmpReservations);
 
-	//----------------------------------------------------
-	
 }

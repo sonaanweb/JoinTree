@@ -18,9 +18,9 @@
 	<div class="col-lg-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<div>
-				    <label class="adminsearch">회의실명</label>
-				    <input type="text" id="searchRoomName" name="roomName" placeholder="회의실 이름을 입력해주세요">
+				<div class="wrapper">
+				    <label class="col-form-label">회의실명</label>
+				    <input type="text" class="form-control margin10" style="width: 20%" id="searchRoomName" name="roomName" placeholder="회의실 이름을 입력해주세요">
 				    <button id="searchButton" class="btn btn-success btn-sm margin10">검색</button>
 				</div>
 			</div>

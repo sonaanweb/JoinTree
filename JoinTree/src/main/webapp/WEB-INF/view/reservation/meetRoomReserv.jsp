@@ -16,7 +16,7 @@
     border: none;
 }
 #calendar {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 40px auto;
 }
 .fc .fc-button-primary {
@@ -70,6 +70,11 @@
 			            <div class="modal-content">
 			                <div class="modal-header">
 			                    <h4 class="modal-title" id="exampleModalLabel">회의실 예약하기</h4>
+			                    			                
+			                	<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span>×</span>
+								</button>
+         
 			                </div>
 			                <div class="modal-body">
 			                    <div class="form-group">
@@ -128,8 +133,7 @@
 			                    </div>
 			                </div>
 			                <div class="modal-footer">
-			                    <button type="button" class="btn btn-warning" id="addCalendar">추가</button>
-			                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                    <button type="button" class="btn btn-success" id="addCalendar">추가</button>
 			                </div>
 			            </div>
 			        </div>

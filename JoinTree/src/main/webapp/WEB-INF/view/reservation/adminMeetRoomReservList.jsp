@@ -24,17 +24,33 @@
 		            <label class="adminsearch">예약일시</label>
 		            <input type="date" name="revStartTime"> ~ <input type="date" name="revEndTime">
 		        </div>
+		        <div class="wrapper">
+		        <label class="adminsearch col-form-label">예약상태</label>
 		        <div class="form-check form-check-success">
-		            <label class="adminsearch">예약상태</label>
+		        	<label class="form-check-label">
 		            <input type="radio" name="revStatus" value=""> 전체
+		            </label>
+		       	</div>
+		       	<div class="form-check form-check-success margin-left10">
+		            <label class="form-check-label">
 		            <input type="radio" name="revStatus" value="A0301"> 예약완료
-		            <input type="radio" name="revStatus" value="A0302"> 예약취소
-		            <input type="radio" name="revStatus" value="A0303"> 사용완료
+		            </label>
 		        </div>
-		        <div>
+		        <div class="form-check form-check-success margin-left10">
+		            <label class="form-check-label">
+		            <input type="radio" name="revStatus" value="A0302"> 예약취소
+		            </label>
+		        </div>
+		        <div class="form-check form-check-success margin-left10">
+		            <label class="form-check-label">
+		            <input type="radio" name="revStatus" value="A0303"> 사용완료
+		            </label>
+		        </div>
+		        </div>
+		        <div class="wrapper">
 		        	<label class="adminsearch">예약자</label>
-		        	<input type="text" name="empName" placeholder="예약자 성명을 입력해주세요">
-		        	<button id="searchButton" class="btn btn-success btn-sm margin10">검색</button>
+		        	<input type="text" name="empName" placeholder="예약자 성명을 입력해주세요" class="form-control" style="width: 20%; margin-right: 10px;" >
+		        	<button id="searchButton" class="btn btn-success btn-sm">검색</button>
 		        </div>
 		        
 			</div>
@@ -68,7 +84,8 @@
 		                        <td>${r.revNo}</td>
 		                        <td>${r.empName}(${r.empNo})</td>
 		                        <td>${r.roomName}</td>
-		                        <td>${r.revStartTime.toString().substring(0, 16)} ~ ${r.revEndTime.toString().substring(10, 16)}</td>
+		                        <td>${r.revStartTime.toString().substring(0, 10)}  ${r.revStartTime.toString().substring(11, 16)}
+		                         ~ ${r.revEndTime.toString().substring(11, 16)}</td>
 		                        <td>${r.revReason}</td>
 		                        <td>${r.createdate.substring(0,10)}</td>
 		                        <td>
@@ -98,6 +115,9 @@
 		                </c:forEach>
 		            </tbody>
 		        </table>
+			        		<div class="center pagination" id="paging">
+									<!-- 페이징 버튼이 표시되는 부분 -->
+							</div>
 			</div>
 		</div>
 	</div>

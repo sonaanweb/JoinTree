@@ -41,7 +41,9 @@ $(document).ready(function () {
                         '<td>' + reservation.revNo + '</td>' +
                         '<td>' + reservation.empName + '(' + reservation.empNo + ')</td>' +
                         '<td>' + reservation.roomName + '</td>' +
-                        '<td>' + reservation.revStartTime.toString().substring(0, 16) + ' ~ ' + reservation.revEndTime.toString().substring(10, 16) + '</td>' +
+                        '<td>' + reservation.revStartTime.toString().substring(0, 10) +
+						   ' ' + reservation.revStartTime.toString().substring(11, 16) +
+						 ' ~ ' + reservation.revEndTime.toString().substring(11, 16) + '</td>' +
                         '<td>' + reservation.revReason + '</td>' +
                         '<td>' + reservation.createdate.substring(0, 10) + '</td>' +
                         '<td>' + getStatusText(reservation.revStatus) + '</td>' +
