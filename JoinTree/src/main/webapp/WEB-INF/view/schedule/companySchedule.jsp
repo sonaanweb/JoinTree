@@ -9,10 +9,6 @@
   margin: 40px auto;
 }
 
-.fc .fc-button-primary {
-	border: none;
-	background-color: #C8E4B2;
-}
 
 </style>
 	<!-- header -->
@@ -33,7 +29,6 @@
 				<div class="col-12 grid-margin">
 					<div class="card">
  						<div class="card-body">
-                  			<h4 class="card-title">전사일정</h4>
 							<!-- 달력 출력 -->
 							<div id='caslendar-container'>
 						    	<div id='calendar'></div>

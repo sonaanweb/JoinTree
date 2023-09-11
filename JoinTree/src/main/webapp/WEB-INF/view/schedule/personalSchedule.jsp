@@ -9,11 +9,6 @@
   margin: 40px auto;
 }
 
-.fc .fc-button-primary {
-	border: none;
-	background-color: #C8E4B2;
-}
-
 </style>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/inc/header.jsp"/> 
@@ -33,7 +28,6 @@
 				<div class="col-12 grid-margin">
 					<div class="card">
  						<div class="card-body">
-                  			<h4 class="card-title">개인일정</h4>
 							<!-- 달력 출력 -->
 							<div id='caslendar-container'>
 						    	<div id='calendar'></div>
