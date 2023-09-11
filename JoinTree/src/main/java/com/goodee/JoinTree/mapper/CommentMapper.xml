@@ -9,7 +9,8 @@
         FROM
             `comment` c1
         LEFT JOIN
-            `comment` c2 ON c1.parent_comment_no = c2.comment_no
+            `comment` c2 
+        ON c1.parent_comment_no = c2.comment_no
         WHERE
             c1.board_no = #{boardNo}
         ORDER BY

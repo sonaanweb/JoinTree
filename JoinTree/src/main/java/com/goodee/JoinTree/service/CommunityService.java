@@ -175,8 +175,6 @@ public Map<String, Object> getCommList(String category, int currentPage, int row
 		return map;
 	}
 	
-	
-	
 	// 이전 글 조회
 	public Board getPreBoard(String category, int boardNo) {
 		Map<String, Object> params = new HashMap<>();
@@ -188,7 +186,6 @@ public Map<String, Object> getCommList(String category, int currentPage, int row
 		
 		return preBoard;
 	}
-	
 	
 	// 다음 글 조회
 	public Board getNextBoard(String category, int boardNo) {

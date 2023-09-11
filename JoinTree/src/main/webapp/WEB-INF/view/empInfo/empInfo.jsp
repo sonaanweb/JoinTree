@@ -38,7 +38,7 @@
 					</tr>
 					<tr>
 						<td>사번</td>
-						<td>${empInfo.empNo}</td>
+						<td><span id="empNo" data-empno="${empInfo.empNo}">${empInfo.empNo}</span></td>
 					</tr>
 					<tr>
 						<td>이름</td>
@@ -70,7 +70,7 @@
 					</tr>
 					<tr>
 						<td>입사일</td>
-						<td>${empInfo.empHireDate}</td>
+						<td>${empInfo.empHireDate} (근속일수: <span id="workDay"></span>일 / <span id="duration"></span>)</td>
 					</tr>
 					<tr>
 						<td>정보수정일</td>
@@ -105,4 +105,6 @@
 	
 		</div>
 	</div>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 </html>
