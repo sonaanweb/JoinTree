@@ -60,6 +60,9 @@ public interface ProjectMapper {
 	/* 프로젝트 하위작업 끝 */
 	
 	/* 프로젝트 댓글&대댓글 */
+	// 대댓글 카운트
+	int taskCommentChildCnt(int commentParentNo);
+	
 	// 댓글 리스트
 	List<TaskComment> selectTaskComment(int taskNo);
 	

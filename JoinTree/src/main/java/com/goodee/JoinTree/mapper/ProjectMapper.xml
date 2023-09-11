@@ -405,6 +405,16 @@
 	<!-- 1) tc1.comment_parent_no가 null이면 댓글로 정렬, 
 		2) 그렇지 않으면 대댓글로 정렬 
 		3) 댓글은 생성일로 정렬-->
+	<select id="taskCommentChildCnt">
+		SELECT 
+			COUNT(r.task_comment_no) tcChildCnt
+		FROM 
+			task_comment c
+		LEFT JOIN 
+			task_comment r ON c.task_comment_no = r.comment_parent_no
+		WHERE
+			c.task_comment_no = #{commentParentNo}
+	</select>
 	<select id="selectTaskComment"
 			resultType="com.goodee.JoinTree.vo.TaskComment">
 		SELECT

@@ -305,7 +305,11 @@ $(document).ready(function() {
 			};
 			
 			if(!projectName || !projectColor || !projectStartDate || !projectEndDate || !projectContent) {
-				alert("값 넣어줘 ");
+				Swal.fire(
+					'Error',
+					'모든 값을 입력해주세요.',
+					'error'
+				)
 				return;
 			};
 			
@@ -325,7 +329,7 @@ $(document).ready(function() {
 				success : function(response) {
 					console.log("response",response);
 					if (response === 0) {
-						alert("프로젝트 추가 실패");
+						console.log("프로젝트 추가 실패");
 						return;
 					}
 					//alert("성공");
@@ -349,15 +353,14 @@ $(document).ready(function() {
 						success : function(response) {
 							console.log("response",response);
 							fetchProjectListAndUpdate(selectedTab);
-							alert("프로젝트와 멤버 추가 성공");
 						},
 						error: function() {
-							alert("프로젝트 멤버 추가 실패");
+							console.log("프로젝트 멤버 추가 실패");
 						}
 					});
 				},
 				error: function() {
-					alert("프로젝트 추가 실패");
+					console.log("프로젝트 추가 실패");
 				}
 			});
 			

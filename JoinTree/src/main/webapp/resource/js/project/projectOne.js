@@ -148,7 +148,6 @@ $(document).ready(function() {
 					$(this).css("border", "none"); // 포커스 효과 추가
 				})
 				
-
 			// 이전 값 받아오기
 			currentProjectName = $("#projectName").val();
 			currentProjectContent = $("#projectContent").val();
@@ -212,7 +211,7 @@ $(document).ready(function() {
 					if(response === "success") {
 						Swal.fire({
 							icon: 'success',
-							title: '프로젝트 정보가 수정되었습니다',
+							title: '프로젝트 정보가 수정되었습니다.',
 							showConfirmButton: false,
 							timer: 1000
 						})
@@ -249,7 +248,7 @@ $(document).ready(function() {
 								if(response === "success") {
 									Swal.fire({
 										icon: 'success',
-										title: '프로젝트가 완료처리 되었습니다',
+										title: '프로젝트가 완료처리 되었습니다.',
 										showConfirmButton: false,
 										timer: 1500
 									})
@@ -336,7 +335,11 @@ $(document).ready(function() {
 				console.log("selectedMembers",selectedMembers);
 				sendDataToServer(selectedMemberNo); // 사번만 전송
 			} else {
-				alert("이미 선택한 사원입니다.");
+				Swal.fire(
+					'Error',
+					'이미 선택한 사원입니다.',
+					'error'
+				)
 			}
 		});
 		
@@ -371,10 +374,13 @@ $(document).ready(function() {
 					if (response === "success") {
 						console.log("데이터가 성공적으로 전송되었습니다.");
 						fetchProjectData();
-					} else if (response === "fail") {
-						alert("데이터 전송 중 오류가 발생했습니다.");
 					} else if (response === "duplicate") {
-						alert("이미 선택한 사원을 제외하고 추가합니다.");
+						Swal.fire({
+							icon: 'success',
+							title: '프로젝트 정보가 수정되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						})
 						fetchProjectData();
 					}
 				},
@@ -619,7 +625,11 @@ $(document).ready(function() {
 			const selectedFile = event.target.files[0];
 			
 			if (selectedFile && selectedFile.size > maxFileSize) {
-				alert("파일 크기가 너무 큽니다. " + (maxFileSize / (1024 * 1024)) + "MB 이하의 파일만 업로드 가능합니다.");
+				Swal.fire(
+					'Error',
+					'"파일 크기가 너무 큽니다. " + (maxFileSize / (1024 * 1024)) + "MB 이하의 파일만 업로드 가능합니다.")',
+					'error'
+				)
 				$(this).val("");
 			}
 		});
@@ -644,7 +654,11 @@ $(document).ready(function() {
 				return; // 추가 작업 중단
 			}
 			if(!taskTitle || !taskStartDate || !taskEndDate || !taskContent){
-				alert("값 넣어줘 ");
+				Swal.fire(
+					'Error',
+					'모든 값을 넣어주세요.',
+					'error'
+				)
 				return;
 			} 
 			
@@ -664,10 +678,17 @@ $(document).ready(function() {
 				success : function(response) {
 					console.log("response",response);
 					if (response === 0) {
-						alert("프로젝트 작업 추가 실패");
+						console.log("프로젝트 작업 추가 실패");
 						return;
+					} else {
+						Swal.fire({
+							icon: 'success',
+							title: '프로젝트 작업이 추가되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						})
 					}
-					alert("성공");
+					
 					
 					$("#addProjectTaskModal").modal("hide");
 					
@@ -683,7 +704,7 @@ $(document).ready(function() {
 					fetchProjectTaskData();
 					
 				},error: function(error) {
-					alert("프로젝트 작업 추가 실패",error);
+					console.log("프로젝트 작업 추가 실패",error);
 				}
 			});
 		});
@@ -722,11 +743,11 @@ $(document).ready(function() {
 						$("#taskOriginFilename").val('');
 						fetchProjectTaskData();
 					} else {
-						alert("업로드 실패");
+						console.log("업로드 실패");
 					}
 				},
 				error : function() {
-					alert("업로드 실패");
+					console.log("업로드 실패");
 				}
 			});
 		}
@@ -760,6 +781,7 @@ $(document).ready(function() {
 										timer: 1500
 									})
 									fetchProjectTaskData();
+									$(".taskComment").empty();
 								}
 							}
 						});
@@ -800,6 +822,7 @@ $(document).ready(function() {
 									})								
 									fetchProjectData();
 									fetchProjectTaskData();
+									$(".taskComment").empty();
 								}
 							}
 						});
@@ -809,6 +832,7 @@ $(document).ready(function() {
 	/* 프로젝트 작업 삭제 끝 */
 /* 프로젝트 작업 끝 */
 /* 프로젝트 작업 */
+	/* 대댓글 카운트 */ 
 	/* 프로젝트 작업 댓글 리스트 */
 		function fetchProjectTaskComment(taskNo) {
 			console.log("taskNo",taskNo);
@@ -818,6 +842,7 @@ $(document).ready(function() {
 				data : {taskNo: taskNo},
 				success: function(taskCommentList) {
 					console.log("taskCommentList",taskCommentList);
+					let commentParentNo = 0;
 					$(".taskComment").empty();
 					//alert("댓글리스트 성공");
 					taskCommentList.forEach(function (comment) {
@@ -832,14 +857,33 @@ $(document).ready(function() {
 											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div></div>'+
 											'<div>' + comment.taskCommentContent +'</div>'+
 											'<div class="wrapper right"><button id="addTaskComment" class="btn btn-success btn-sm">댓글작성</button>'+
-											'<button data-commentno=' + comment.taskCommentNo + ' id="delTaskComment" class="btn btn-success btn-sm margin-left10">삭제</button>'+
-											'<button data-commentno=' + comment.taskCommentNo + ' class="tcShowandhideBtn btn btn-success btn-sm margin-left10">대댓글 보기</button></div>' +
+											'<button id="delTaskComment" class="btn btn-success btn-sm margin-left10" data-commentno=' + comment.taskCommentNo + '>삭제</button>'+
+											'<button data-commentno=' + comment.taskCommentNo + ' data-parentno='+ comment.commentParentNo + ' class="tcShowandhideBtn btn btn-success btn-sm margin-left10">대댓글 보기<span id="childCommentCnt"></span></button></div>' +
 										'</div>' +
 									'</div>'+
 								'</div>'
 							)
+							$.ajax({
+								type: "GET",
+								url: "/JoinTree/project/taskCommentChildCnt",
+								data: { commentParentNo: comment.taskCommentNo },
+								success: function (data) {
+									console.log("data",data);
+									if (data > 0) {
+										// 대댓글 수를 해당 버튼 옆의 span에 표시
+										$(".tcShowandhideBtn[data-commentno='" + comment.taskCommentNo + "']").append('<span class="childCommentCount">' + data + '</span>');
+									} else {
+										// 대댓글이 없는 경우 해당 버튼 숨김
+										$(".tcShowandhideBtn[data-commentno='" + comment.taskCommentNo + "']").hide();
+									}
+								},
+								error: function (error) {
+									console.log("error", error);
+								}
+							});
 						// 대댓글
 						} else if(comment.commentParentNo !== 0){
+							commentParentNo = comment.commentParentNo;
 							$(".taskComment").append(
 								'<div class="child">'+
 								'<div class="stretch-card childComment hidden" data-commentno=' + comment.commentParentNo + '>' +
@@ -849,17 +893,17 @@ $(document).ready(function() {
 											'<div><b>'+ comment.empName + "(" + comment.empNo + ")</b>" +
 											'<div class="floatR">' + comment.createdate.substring(0,10) +'</div>' +
 											'<div>' + comment.taskCommentContent +'</div>' +
-											'<div class="right"><button data-commentno=' + comment.taskCommentNo + 'id="delTaskCommentChild" class="btn btn-success btn-sm">삭제</button></div>'+
+											'<div class="right"><button id="delTaskCommentChild" class="btn btn-success btn-sm" data-commentno=' + comment.taskCommentNo + '>삭제</button></div>'+
 										'</div>' +
 									'</div>'+
 								'</div></div>'
 							)
+							
 						}
-					});
+					}); // foreach
 				},
 				error: function(error){
 					console.log("error",error);
-					alert("댓글리스트 실패");
 				}
 			});
 		}
@@ -869,7 +913,11 @@ $(document).ready(function() {
 			const taskCommentContent =  $("#taskCommentInput").val();
 			
 			if(!taskCommentContent) {
-				alert("댓글을 작성해주세요");
+				Swal.fire(
+					'Error',
+					'댓글을 입력해주세요.',
+					'error'
+				)
 				$("#taskCommentInput").focus();
 				return;
 			}
@@ -888,7 +936,6 @@ $(document).ready(function() {
 				},
 				success:function(response){
 					console.log("response",response);
-					alert("성공");
 					$("#taskCommentInput").val('');
 					fetchProjectTaskComment(taskNo);
 				},
@@ -908,12 +955,12 @@ $(document).ready(function() {
 				 // 이미 존재하는 인풋 필드를 찾습니다.
 			
 			const addCard = $('<div class="stretch-card grid-margin childComment">' +
+			'<div class="floatL"><i class="mdi mdi-arrow-right"></i></div>' + 
 				'<div class="card">' +
 					'<div class="card-body">' +
-						'<div>' + empName + "(" + loginEmpNo + ') </div>'+
-						'<div><input type="text" id="taskCommentChildInput"></input></div>' +
-						'<div><button type="button" class="taskCommentChildInputBtn" data-commentno=' + commentNo + '>등록</button></div>' +
-						'<div><button type="button" class="taskCommentChildEndBtn">취소</button></div>' +
+						'<div><b>' + empName + "(" + loginEmpNo + ')</b></div>'+						
+						'<div class="wrapper"><textarea id="taskCommentChildInput" class="form-control"></textarea>' +
+						'<button type="button" class="taskCommentChildInputBtn btn btn-success btn-sm" data-commentno=' + commentNo + '>등록</button></div>' +
 					'</div>' +
 				'</div>'
 			);
@@ -921,13 +968,6 @@ $(document).ready(function() {
 			
 			$("#taskCommentChildInput").focus();
 		});
-		
-		// 댓글 추가 취소 버튼
-		$(".taskComment").on("click", ".taskCommentChildEndBtn", function() {
-			$("#taskCommentChildInput").val('');
-			
-			fetchProjectTaskComment(taskNo);
-		})
 		
 		// 등록을 눌렀을때
 		$(".taskComment").on("click", ".taskCommentChildInputBtn", function() {
@@ -938,7 +978,11 @@ $(document).ready(function() {
 				//console.log("commentNo",commentNo);
 				//console.log("taskCommentContent",taskCommentContent);
 			if(!taskCommentContent) {
-				alert("댓글을 작성해주세요");
+				Swal.fire(
+					'Error',
+					'댓글을 입력해주세요.',
+					'error'
+				)
 				$("#taskCommentChildInput").focus();
 				return;
 			}
@@ -955,8 +999,19 @@ $(document).ready(function() {
 				},
 				success:function(response){
 					console.log("response",response);
-					alert("성공");
-					fetchProjectTaskComment(taskNo);
+					console.log("commentNo",commentNo);
+					
+					// 대댓글을 포함하는 상위 요소를 찾기
+					const child = $('.child');
+						
+					// 대댓글을 찾기 commentNo와 같은
+					const childComments = child.find('[data-commentno="' + commentNo + '"]');
+					
+					// 대댓글을 숨기거나 표시합니다.
+					childComments.removeClass('hidden');
+					
+					$("#taskCommentChildInput").val('');
+			
 				},
 				error:function(error) {
 					console.log("댓글추가 오류 발생",error);
@@ -968,15 +1023,15 @@ $(document).ready(function() {
 		function toggleChildComments(commentNo) {
 			// 대댓글을 포함하는 상위 요소를 찾기
 			const child = $('.child');
-	
+				
 			// 대댓글을 찾기 commentNo와 같은
 			const childComments = child.find('[data-commentno="' + commentNo + '"]');
-	
+			
 			// 대댓글을 숨기거나 표시합니다.
 			childComments.toggleClass('hidden');
 		}
 		
-		// 댓글 보기 클릭 시 
+		// 대댓글 보기 클릭 시 
 		$(".taskComment").on("click", ".tcShowandhideBtn", function() {
 			//console.log("버튼이 클릭");
 			const commentNo = $(this).data('commentno');
@@ -1012,14 +1067,15 @@ $(document).ready(function() {
 		
 		delComments(taskCommentNo)
 	});
+	
 	function delComments(taskCommentNo) {
 		$.ajax({
 			type: "POST",
 			url: "/JoinTree/project/removeTaskComment",
 			data: {taskCommentNo : taskCommentNo},
 			success:function(response){
-				console.log("response",response);
-				alert("성공");
+				//console.log("response",response);
+				
 				fetchProjectTaskComment(taskNo);
 			},
 			error:function(error) {

@@ -39,6 +39,7 @@ public class ProjectController {
 	private OrgChartService orgChartService;
 	@Autowired
 	private ProjectMapper projectMapper;
+	
 	String yellow = "\u001B[33m";
 	String reset = "\u001B[0m";
 	
@@ -248,6 +249,14 @@ public class ProjectController {
 	}
 	/* 프로젝트 하위작업 끝 */
 	/* 프로젝트 하위작업 댓글 */
+	// 대댓글 카운트 
+	@GetMapping("project/taskCommentChildCnt")
+	@ResponseBody
+	public int taskCommentChildCnt(@RequestParam(name="commentParentNo") int commentParentNo) {
+		int taskCommentChildCnt = projectMapper.taskCommentChildCnt(commentParentNo);
+		
+		return taskCommentChildCnt;
+	}
 	// 댓글 리스트
 	@GetMapping("project/selectTaskComment")
 	@ResponseBody

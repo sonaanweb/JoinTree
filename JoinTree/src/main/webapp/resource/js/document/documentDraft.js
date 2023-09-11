@@ -379,7 +379,6 @@
 			const docStamp1 = $("#docStamp1").val();
 				console.log("docStamp1:",docStamp1);
 				
-	
 			// 작성자
 			const createId = $("#createId").val();
 				console.log("createId:",createId);
