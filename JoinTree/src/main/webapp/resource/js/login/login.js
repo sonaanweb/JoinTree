@@ -2,9 +2,17 @@ $(document).ready(function() {
 	const urlParams = new URL(location.href).searchParams;
 	const msg = urlParams.get("msg");
 		if (msg != null) {
-			// alert(msg);
+			let icon;
+			
+			// 메시지 내용에 따라 아이콘 변경
+			if (msg.includes("로그아웃") || msg.includes("다시")) {
+				icon = 'success'; // 성공 아이콘
+			} else {
+				icon = 'warning'; // 경고 아이콘
+			} 
+			
 			Swal.fire({
-				icon: 'success',
+				icon: icon,
 				title: msg,
 				showConfirmButton: false,
 				timer: 1000
