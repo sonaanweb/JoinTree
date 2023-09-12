@@ -1,16 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<style>
-	.selected-page {
-	    font-weight: bold;
-	    background-color: #D4F4FA;
-	    pointer-events: none; /* 버튼 클릭 불가 */
-	}
-	.selectde-tr:hover {
-		cursor: pointer;
-		background-color: #F9F9F9;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="/JoinTree/resource/css/custom.css">
 <!-- header -->
 <jsp:include page="/WEB-INF/view/inc/header.jsp"/>
 <div class="container-fluid page-body-wrapper">
@@ -121,23 +111,27 @@
 		</div>
 	</div>
 	
-<script src="/JoinTree/resource/js/docListAndOne.js"></script>	
-<script>
-	// docList tr click 이벤트 : docOneModal 열기
-	$('#docList').on('click', 'tr', async function () {
-	    let documentNo = $(this).find('td:eq(0)').text();
-	    let documentCode = $(this).data('docCode');
-	    console.log(documentCode+"<-- documentCode");
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/inc/footer.jsp"/>
 	
-	    try {
-	        await updateDocumentOneForm(documentCode); // 상세 문서양식 폼 업데이트 비동기 처리
-	        await getDocOne(documentNo, documentCode); // 문서 상세내용 조회 비동기 처리
-	
-	        // 모든 비동기 작업이 완료된 후에 모달창을 열어줌
-	        $('#docOneModal').modal('show');
-	    } catch (error) {
-	        console.error(error);
-	    }
-	});
-</script>
+	<!-- script -->
+	<script src="/JoinTree/resource/js/document/docListAndOne.js"></script>	
+	<script>
+		// docList tr click 이벤트 : docOneModal 열기
+		$('#docList').on('click', 'tr', async function () {
+		    let documentNo = $(this).find('td:eq(0)').text();
+		    let documentCode = $(this).data('docCode');
+		    console.log(documentCode+"<-- documentCode");
+		
+		    try {
+		        await updateDocumentOneForm(documentCode); // 상세 문서양식 폼 업데이트 비동기 처리
+		        await getDocOne(documentNo, documentCode); // 문서 상세내용 조회 비동기 처리
+		
+		        // 모든 비동기 작업이 완료된 후에 모달창을 열어줌
+		        $('#docOneModal').modal('show');
+		    } catch (error) {
+		        console.error(error);
+		    }
+		});
+	</script>
 </html>

@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<style>
-.empOne {display:none}
-</style>
-
+<link rel="stylesheet" type="text/css" href="/JoinTree/resource/css/custom.css">
  <div id="empOneInfoModalContent">
 	 <!-- Modal Header -->
 	 <div class="modal-header d-flex align-items-center">

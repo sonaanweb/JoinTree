@@ -11,5 +11,8 @@
 			<jsp:include page="./boardList.jsp"></jsp:include>
 			
 		</div>
-	</div>	
+	</div>
+	
+	<!-- footer -->
+    <jsp:include page="/WEB-INF/view/inc/footer.jsp"/>	
 </html>
