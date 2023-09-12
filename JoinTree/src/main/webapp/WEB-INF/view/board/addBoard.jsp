@@ -118,9 +118,6 @@
 			
 			if(file){
 				
-				const reader = new FileReader(); // FileReader 객체 생성
-				reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기 시작
-				
 				// 파일 크기 검사
 				const fileSize = file.size; // 파일 크기
 				const maxSize = 3 * 1024 * 1024; // 최대 파일 크기 3MB
@@ -132,7 +129,7 @@
 						showConfirmButton: false,
 						timer: 1000
 					});
-                	fileInput.val(''); // 파일 선택 초기화
+					boardFile.val(''); // 파일 선택 초기화
 				} else{
 					// 파일 선택 시 파일 삭제 버튼 표시
 					removeFileBtn.show();
