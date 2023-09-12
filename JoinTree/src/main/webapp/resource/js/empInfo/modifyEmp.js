@@ -104,12 +104,12 @@ $(document).ready(function(){
 							icon: 'success',
 							title: '사진이 등록되었습니다.',
 							showConfirmButton: false,
-							timer: 2000
-						});
-		    			
-		    			// 서버에서 새로 업데이트된 이미지 경로로 뷰 업데이트
-		                $("#currentImage").attr("src", response.newImagePath);
-		    			location.reload(); // 현재 메인 페이지 새로고침
+							timer: 1000
+       				  	 }).then(() => {
+	                        // 서버에서 새로 업데이트된 이미지 경로로 뷰 업데이트
+	                        $("#currentImage").attr("src", response.newImagePath);
+	                        location.reload(); // 현재 메인 페이지 새로고침
+	                    });
 		    		} else {		
     	 				Swal.fire({
 							icon: 'warning',
@@ -157,14 +157,15 @@ $(document).ready(function(){
                               icon: 'success',
                               title: '사진이 삭제되었습니다.',
                               showConfirmButton: false,
-                              timer: 3000
-                           });
-                            // 서버에서 삭제된 이미지 경로로 뷰 업데이트
-	                        $("#currentImage").attr("src", "");
-	                        $("#currentImage").hide();
-	                        $("#currentImageTxt").hide();
-	                        
-	                        location.reload(); // 페이지 새로고침
+                              timer: 1000
+                        	 }).then(() => {
+	                            // 서버에서 삭제된 이미지 경로로 뷰 업데이트
+	                            $("#currentImage").attr("src", "");
+	                            $("#currentImage").hide();
+	                            $("#currentImageTxt").hide();
+	
+	                            location.reload(); // 페이지 새로고침
+                       		 });
                         } else {
 							Swal.fire({
 								icon: 'warning',
@@ -180,36 +181,6 @@ $(document).ready(function(){
                   });
                }
             });
-		/*
-    	if (confirm("사진이 완전히 삭제됩니다.")) {
-    		 $.ajax({
-	                url: "/JoinTree/empInfo/modifyEmp/removeEmpImg", 
-	                type: "POST",
-	                success: function(response) {
-	                    console.log(response);
-	                    if (response === "success") {
-	                        alert("사진이 삭제되었습니다.");
-	                        // 서버에서 삭제된 이미지 경로로 뷰 업데이트
-	                        $("#currentImage").attr("src", "");
-	                        $("#currentImage").hide();
-	                        $("#currentImageTxt").hide();
-	                        
-	                        location.reload(); // 페이지 새로고침
-	                    } else {
-                        	Swal.fire({
-								icon: 'warning',
-								title: '사진 삭제 중 오류가 발생했습니다.',
-								showConfirmButton: false,
-								timer: 1000
-							});
-	                    }
-	                },
-	                error: function(error) {
-	                    alert("서버 오류 발생");
-	                }
-	            });
-    		}
-    		*/
     });
    	  
 	// 이름 칸은 문자만 입력 허용
@@ -405,8 +376,8 @@ $(document).ready(function(){
 		                    icon: 'success',
 		                    title: '서명 저장 성공 ' + jsonData,
 		                    showConfirmButton: false,
-		                    timer: 1500
-		                     }).then(() => {
+		                    timer: 1000
+	                     }).then(() => {
                     location.reload(); // 알림창이 사라진 후에 화면 리로드
                 });
             }
