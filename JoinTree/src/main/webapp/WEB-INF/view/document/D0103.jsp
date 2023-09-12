@@ -91,8 +91,8 @@
 					<input type="hidden" id="empNo" name="empNo" readonly="readonly" value="${empInfo.empNo}">
 					<input type="text" id="empName" name="writer" readonly="readonly" value="${empInfo.empName}&nbsp;${empInfo.position}">
 				</td>
-				<td class="sign1"><input type="text" id="signer1" readonly="readonly"></td>
-				<td class="sign2"><input type="text" id="signer2" readonly="readonly"></td>
+				<td class="sign1 hidden"><input type="text" id="signer1" readonly="readonly"></td>
+				<td class="sign2 hidden"><input type="text" id="signer2" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td class="blank"></td>
