@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.goodee.JoinTree.service.CommuteManageService;
 import com.goodee.JoinTree.service.EmpInfoService;
 import com.goodee.JoinTree.service.LoginService;
 import com.goodee.JoinTree.vo.AccountList;
@@ -32,6 +33,9 @@ public class EmpInfoController {
 	String msg = "";
 	@Autowired 
 	private EmpInfoService empInfoService;
+	
+	@Autowired
+	private CommuteManageService commuteManageService;
 	
 	// 비밀번호 변경 페이지로 이동
 	@GetMapping("/empInfo/modifyPw")
@@ -75,10 +79,18 @@ public class EmpInfoController {
 		int empNo = loginAccount.getEmpNo();
 		
 		Map<String, Object> map = empInfoService.getEmpOne(empNo);
+		Map<String, Object> annualLeave = commuteManageService.getAnnualLeaveCnt(empNo);
+		Map<String, Object> getWorkDays = commuteManageService.getWorkDays(empNo);
+		
+		
 		
 		log.debug(CYAN + map + " <-- map(EmpInfoController-empInfo)" + RESET);
+		log.debug(CYAN + annualLeave + " <-- annualLeave(EmpInfoController-empInfo)" + RESET);
+		log.debug(CYAN + getWorkDays + " <-- getWorkDays(EmpInfoController-empInfo)" + RESET);
 		
 		model.addAttribute("empInfo", map);
+		model.addAttribute("annualLeave", annualLeave);
+		model.addAttribute("getWorkDays", getWorkDays);
 		
 	    return "/empInfo/empInfo"; // 나의 정보 페이지로 이동
 	}

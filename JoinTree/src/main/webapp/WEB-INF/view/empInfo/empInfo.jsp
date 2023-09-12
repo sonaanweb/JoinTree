@@ -24,7 +24,7 @@
 				
 				<table class="table" >
 					<tr>
-						<td>사원이미지</td>
+						<th>사원이미지</th>
 						<td>
 							<c:choose>
 								<c:when test="${empty empInfo.empSaveImgName or empInfo.empSaveImgName eq '이미지 없음'}">
@@ -37,48 +37,52 @@
 						</td>
 					</tr>
 					<tr>
-						<td>사번</td>
+						<th>사번</th>
 						<td><span id="empNo" data-empno="${empInfo.empNo}">${empInfo.empNo}</span></td>
 					</tr>
 					<tr>
-						<td>이름</td>
+						<th>이름</th>
 						<td>${empInfo.empName}</td>
 					</tr>
 					<tr>
-						<td>주소</td>
+						<th>주소</th>
 						<td>${empInfo.empAddress}</td>
 					</tr>
 					<tr>
-						<td>주민등록번호</td>
+						<th>주민등록번호</th>
 						<td>${empInfo.empJuminNo}</td>
 					</tr>
 					<tr>
-						<td>연락처</td>
+						<th>연락처</th>
 						<td>${empInfo.empPhone}</td>
 					</tr>
 					<tr>
-						<td>내선번호</td>
+						<th>내선번호</th>
 						<td>${empInfo.empExtensionNo}</td>
 					</tr>
 					<tr>
-						<td>부서</td>
+						<th>부서</th>
 						<td>${empInfo.dept}</td>
 					</tr>
 					<tr>
-						<td>직급</td>
+						<th>직급</th>
 						<td>${empInfo.position}</td>
 					</tr>
 					<tr>
-						<td>입사일</td>
-						<td>${empInfo.empHireDate} (근속일수: <span id="workDay"></span>일 / <span id="duration"></span>)</td>
+						<th>입사일</th>
+						<td>${empInfo.empHireDate} (근속일수: ${getWorkDays.workDays}일 / ${getWorkDays.workYears}년 ${getWorkDays.workMonths} 개월)</td>
 					</tr>
 					<tr>
-						<td>정보수정일</td>
+						<th>정보수정일</th>
 						<td>${empInfo.updatedate.toString().substring(0, 19)}</td> <!--timestamp이므로 String 변환 후 자르기  -->
 						<%-- <td>${empInfo.updatedate}</td> --%>
 					</tr>
 					<tr>
-						<td>서명</td>
+						<th>잔여 연차</th>
+						<td>${annualLeave.annualCount}</td>
+					</tr>
+					<tr>
+						<th>서명</th>
 						<td>
 							<c:choose>
 								<c:when test="${empty empInfo.signSaveImgName or empInfo.signSaveImgName eq '이미지 없음'}">
