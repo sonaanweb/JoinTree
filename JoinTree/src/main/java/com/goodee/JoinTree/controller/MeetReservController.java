@@ -1,6 +1,7 @@
 package com.goodee.JoinTree.controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -291,14 +293,13 @@ public class MeetReservController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//date 시간 타입
 
             for (Reservation reservation : reservations) {
-                LocalDateTime endTime = LocalDateTime.parse(reservation.getRevEndTime(), formatter);
+            	LocalDateTime endTime = reservation.getRevEndTime(); // 이미 LocalDateTime 객체를 반환
                 LocalDateTime currentDateTime = currentTime;
 
-                if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면(현재 시간의 이전이면)
-                    if (reservation.getRevStatus().equals("A0302")) { // 예약 완료 상태인 건은
-                        reservation.setRevStatus("A0304"); // 사용완료 상태로 변경
-                        meetRoomReservServi
-                        ce.modifyMeetRoomCal(reservation);
+                if (endTime.isBefore(currentDateTime)) { // 현재 시간이 종료시간 이후면
+                    if (reservation.getRevStatus().equals("A0301")) {
+                        reservation.setRevStatus("A0303"); // 사용완료 상태로 변경
+                        meetRoomReservService.modifyMeetRoomCal(reservation);
                     }
                 }
             }
