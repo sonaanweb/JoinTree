@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     	    	
     	timeZone: 'Asia/Seoul',
     	locale: 'ko',
-        initialView : 'timeGridWeek',
+        initialView : 'timeGridWeek',   
         headerToolbar : {
             start : 'prev next today',
             center : 'title',
@@ -19,6 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
             var formattedDate = date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
             return formattedDate + ' - ' + roomName + ' 예약현황';
         },
+        
+        dayHeaderContent: function(arg) {
+            var classNames = ['fc-day-header']; // 기본 클래스
+
+            if (arg.date.getDay() === 0) { // 일요일
+                classNames.push('red-text'); // 빨간색 폰트 클래스 추가
+            } else if (arg.date.getDay() === 6) { // 토요일
+                classNames.push('blue-text'); // 파란색 폰트 클래스 추가
+            }
+
+            return {
+                html: '<span class="' + classNames.join(' ') + '">' + arg.text + '</span>' // 새로운 HTML 요소 반환
+            };
+        },
+   
         selectOverlap: false, // 중복 불가
         selectable : true,
         droppable : true,
@@ -35,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hour: 'numeric',
             hour12: true
         },
+        
         events: function(info, successCallback, failureCallback) {
             $.ajax({
                 url: '/JoinTree/meetRoomReserv?roomNo=' + roomNo,
@@ -56,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         },
-        
+
         select: function(info) {
         	
         	// 중복검사
@@ -70,6 +86,15 @@ document.addEventListener('DOMContentLoaded', function() {
        	     
        		// --------------------------------------------------------------------------------------------
        		// 캘린더 자체에서 클릭할 때 액션
+       		if (selectedStart.day() === 0 || selectedStart.day() === 6) { // moment -> 0 = 일요일 & 6 = 토요일
+		        Swal.fire(
+		            'Error',
+		            '주말에는 예약할 수 없습니다.',
+		            'error'
+		        );
+		        return;
+		    }
+       		    		
        	    // 선택한 날짜와 시간 둘 다 이전인 경우
        	    if (selectedStart.isBefore(now)) {
        	       Swal.fire(
@@ -235,6 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        
+      
         var reservationInfo = {
             equipNo: roomNo,
 		/* revStartTime: $('#selectedDate').val() + ' ' + $('#revStartTime').val(),

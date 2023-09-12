@@ -33,6 +33,16 @@
 .today-slot {
     background-color: black;
 }
+.red-text {
+    color: red;
+}
+
+.blue-text {
+    color: blue;
+}
+.weekend-cell {
+    background-color: red;
+}
 </style>
 </head>
 <!-- header -->
