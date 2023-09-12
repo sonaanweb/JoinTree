@@ -115,9 +115,9 @@
 		                </c:forEach>
 		            </tbody>
 		        </table>
-			        		<div class="center pagination" id="paging">
-									<!-- 페이징 버튼이 표시되는 부분 -->
-							</div>
+			        		<!-- <div class="center pagination" id="paging">
+							페이징 버튼이 표시되는 부분
+							</div> -->
 			</div>
 		</div>
 	</div>
