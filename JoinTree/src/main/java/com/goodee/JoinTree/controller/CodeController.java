@@ -42,8 +42,7 @@ public class CodeController {
 	// 상위 코드 목록을 전달하는 컨트롤러
 	@GetMapping("code/upCodeList")
 	@ResponseBody
-	public List<CommonCode> upCodeInfo(Model model
-						) {
+	public List<CommonCode> upCodeInfo(Model model) {
 		// 서비스 레이어에서 상위 코드 목록을 조회하여 CommonCode타입으로 가져오기
 		List<CommonCode> upCodeList = codeService.selectUpCode();
 		
@@ -56,51 +55,47 @@ public class CodeController {
 	@GetMapping("code/childCodeList")
 	// 아래 내용을 비동기로 호출하면 json 형태로 보내야함 -> @ResponseBody사용
 	@ResponseBody // 이 컨트롤러 메서드의 반환값을 HTTP 응답의 본문으로 사용
-    public List<CommonCode> childCodeList(@RequestParam(name = "upCode") String upCode) {
-	    
+	public List<CommonCode> childCodeList(@RequestParam(name = "upCode") String upCode) {
 		// 서비스 레이어에서 하위 코드 목록을 조회하여 리스트로 받아옴
 		List<CommonCode> childCodeList = codeService.selectChildCode(upCode);
 		// log.debug(yellow + "childCodeList:" + childCodeList + reset); 
 		
-	    // @ResponseBody로 인해 호출 시 하위 코드 목록을 JSON 형태로 응답
-        return childCodeList;
-    }
+		// @ResponseBody로 인해 호출 시 하위 코드 목록을 JSON 형태로 응답
+		return childCodeList;
+	}
 	
 	// 상위코드 상세내용 출력 
 	@GetMapping("code/upCodeOne")
 	@ResponseBody
 	public List<CommonCode> upCodeOneList(@RequestParam(name = "code") String code) {
-	    
 		// 서비스 레이어에서 상위코드에 해당하는 상세 내용을 조회하여 리스트로 받아옴
 		List<CommonCode> upCodeOneList = codeService.selectUpCodeOne(code);
 		
 		log.debug(yellow + "upCodeOneList:" + upCodeOneList + reset); 
 		
-	    // @ResponseBody로 인해 호출 시 상위 코드 목록을 JSON 형태로 응답
-        return upCodeOneList;
-    }
+		// @ResponseBody로 인해 호출 시 상위 코드 목록을 JSON 형태로 응답
+		return upCodeOneList;
+	}
 	
 	// 하위코드 상세내용 출력 
 	@GetMapping("code/codeOne")
 	@ResponseBody
 	public List<CommonCode> codeOneList(@RequestParam(name = "code") String code) {
-	    
 		// 서비스 레이어에서 하위코드에 해당하는 상세 내용을 조회하여 리스트로 받아옴
 		List<CommonCode> codeOneList = codeService.selectCodeOne(code);
 		
-		log.debug(yellow + "codeOneList:" + codeOneList + reset); 
+		//log.debug(yellow + "codeOneList:" + codeOneList + reset); 
 		
-	    // @ResponseBody로 인해 호출 시 하위 코드 목록을 JSON 형태로 응답
-        return codeOneList;
-    }
+		// @ResponseBody로 인해 호출 시 하위 코드 목록을 JSON 형태로 응답
+		return codeOneList;
+	}
 	
 	// 상위코드 추가
 	@PostMapping("code/addUpCommonCode")
 	@ResponseBody
 	public String addUpCommonCode(CommonCode commonCode, HttpSession session) {
-
-			// log.debug(yellow + "code:" + code + reset); 
-			// log.debug(yellow + "codeName:" + codeName + reset); 
+		// log.debug(yellow + "code:" + code + reset); 
+		// log.debug(yellow + "codeName:" + codeName + reset); 
 
 		int row = codeService.addUpCommonCode(commonCode);
 			log.debug(yellow + "row:" + row + reset); 
@@ -115,7 +110,6 @@ public class CodeController {
 	@PostMapping("code/addCommonCode")
 	@ResponseBody
 	public String addCommonCode(CommonCode commonCode, HttpSession session) {
-
 		// log.debug(yellow + "upCode:" + upCode + reset); 
 		// log.debug(yellow + "code:" + code + reset); 
 		// log.debug(yellow + "codeName:" + codeName + reset); 

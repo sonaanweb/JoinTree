@@ -30,8 +30,8 @@ $(document).ready(function() {
 						$("#upCodeList").append(row); // 행을 테이블에 추가
 					});
 				},
-				error: function() {
-					alert("fail");
+				error: function(error) {
+					conosole.log("상위코드 리스트 error",error);
 				}
 			});
 		}
@@ -44,7 +44,7 @@ $(document).ready(function() {
 				dataType: "json",
 				data: { upCode: upCode },
 				success: function(data) {
-					console.log("Response Data:", data);
+					//console.log("Response Data:", data);
 			
 					$("#childCodeList").empty(); // 초기화
 					
@@ -95,14 +95,14 @@ $(document).ready(function() {
 					data.forEach(function(upCodeOne) {
 						currentUpCode= upCodeOne.code; // 전역변수에 값 넣기
 						currentUpCodeName = upCodeOne.codeName;// 전역변수에 값 넣기
-						console.log("currentUpCodeName",currentUpCodeName);
+						//console.log("currentUpCodeName",currentUpCodeName);
 						 // 현재 상세보기 코드 업데이트
 						$("#upCodeOneList1").append(upCodeOne.upCode);
 						$("#upCodeOneList2").append(upCodeOne.code);
 						$("#upCodeOneList3").append("<input type=text id=upCodeNameInput value=" + upCodeOne.codeName + "></input>");
 						const toggleValue = upCodeOne.status;
 						
-						console.log("upCodetoggleValue",toggleValue);
+						//console.log("upCodetoggleValue",toggleValue);
 						const toggleCell = $(
 								'<label class="switch">' +
 								'<input type="checkbox" class="toggleSwitch"' + (toggleValue === "1" ? 'checked' : '') + '>' +
@@ -145,7 +145,7 @@ $(document).ready(function() {
 					data.forEach(function(codeOne) {
 						currentCode = codeOne.code; // 전역변수에 값 넣기
 						currentCodeName = codeOne.codeName;// 전역변수에 값 넣기
-						console.log("currentCodeName",currentCodeName);
+						//console.log("currentCodeName",currentCodeName);
 						 // 현재 상세보기 코드 업데이트
 						$("#chileCodeOneList1").append(codeOne.upCode);
 						$("#chileCodeOneList2").append(codeOne.code);
@@ -184,9 +184,9 @@ $(document).ready(function() {
 		$(document).on("click", ".upCodeLink", function() {// 여러 개의 요소를 선택하기 위해 클래스를 사용
 			// 아래에 지정한 data-code에 값을 가져와서 upCode에 저장
 			upCode = $(this).data("code");
-				console.log("Clicked upCode:", upCode); // 디버깅용 로그
-				const code = $(this).find("td:first").text(); // 클릭된 행의 첫 번째 td에 있는 코드 가져오기
-
+				//console.log("Clicked upCode:", upCode); // 디버깅용 로그
+				
+				// 하위코드리스트
 				updateCodeList(upCode);
 				// 상세보기 
 				updateUpCodeDetailView(upCode);
@@ -235,7 +235,6 @@ $(document).ready(function() {
 		// 상위코드 추가 폼 값 저장
 		$("#saveUpCodeBtn").on("click", function() {
 			// 새로운 행에서 데이터를 가져와 변수에 저장
-			const parentRow = $(this).closest("tr");
 			const newUpCode = $("#newUpCode").val().toUpperCase().trim();
 			const newUpCodeName = $("#newUpCodeName").val().toUpperCase().trim();
 				//console.log("newUpCode:" + newUpCode);
@@ -243,19 +242,28 @@ $(document).ready(function() {
 		
 			// 빈 값 검사
 			if (!newUpCode || !newUpCodeName) {
-				alert("상위코드, 상위코드명을 모두 입력해주세요.");
+					Swal.fire(
+						'Error',
+						'상위코드, 상위코드명을 모두 입력해주세요.',
+						'error'
+					);
 				return; // 사용되지 않은 경우 함수 종료
 			}
 		
 			// 입력한 upCode가 DB에 upCode에 있는 값인지 중복 확인
-			const inputUpCode = $("#newUpCode").val()
+			const inputUpCode = $("#newUpCode").val().toUpperCase();
 			const usedUpCodes = [];
 			$(".upCodeLink").each(function() {
 				usedUpCodes.push($(this).data("code"));
 			});
-			
+			//console.log("usedUpCodes",usedUpCodes);
+			//console.log("inputUpCode",inputUpCode);
 			if (usedUpCodes.includes(inputUpCode)) {
-				alert("이미 존재하는 상위코드입니다.");
+					Swal.fire(
+						'Error',
+						'이미 존재하는 상위코드입니다.',
+						'error'
+					);
 				return; // 사용되지 않은 경우 함수 종료
 			}
 		
@@ -270,7 +278,7 @@ $(document).ready(function() {
 					updateId : loginId
 				},
 				success: function(response) {
-					console.log("response:", response);
+					//console.log("response:", response);
 					
 					// 이전 리스트 삭제
 					$("#upCodeList").empty();
@@ -285,9 +293,19 @@ $(document).ready(function() {
 					// 입력창 숨기기
 					$("#newUpCode").closest("tr").hide();
 
-					//실패시
-					if(response === "fail") {
-						alert("fail");
+					// 성공시
+					if(response === "success") {
+						Swal.fire({
+							icon: 'success',
+							title: '상위코드가 추가되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						})
+						updateUpCodeDetailView(newUpCode);
+						$("#saveUpCodeBtn").hide();
+						$("#saveUpCodeOneBtn").show();
+					} else {
+						console.log("상위코드 추가 실패");
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -310,7 +328,7 @@ $(document).ready(function() {
 					// 입력 필드 초기화
 					$("#newCode").val('');
 					$("#newCodeName").val('');
-					   
+					
 					// 테이블에 새로운 행 생성
 					const newRow = $("<tr>").addClass("newRow");
 					
@@ -326,7 +344,11 @@ $(document).ready(function() {
 				}
 				$("#newCode").focus();
 			 } else {
-				 alert("상위코드를 먼저 선택해주세요");
+				Swal.fire(
+					'Error',
+					'상위코드를 먼저 선택해주세요.',
+					'error'
+				);
 			 }
 			
 		});
@@ -334,30 +356,37 @@ $(document).ready(function() {
 		// 하위코드 추가
 		$("#saveCodeBtn").on("click", function() {
 			// 새로운 행에서 데이터를 가져와 변수에 저장
-			const parentRow = $(this).closest("tr");
 			const newCode = $("#newCode").val().toUpperCase().trim();
 			const newCodeName = $("#newCodeName").val().toUpperCase().trim();
-				console.log("newCode:" + newCode);
-				console.log("newCodeName:" + newCodeName);
+				//console.log("newCode:" + newCode);
+				//console.log("newCodeName:" + newCodeName);
 		
 			// 빈 값 검사
 			if (!newCode || !newCodeName) {
-				alert("코드, 코드명을 모두 입력해주세요.");
+				Swal.fire(
+					'Error',
+					'코드, 코드명을 모두 입력해주세요.',
+					'error'
+				);
 				return; // 사용되지 않은 경우 함수 종료
 			}
 			
 			// 입력한 code가 DB에 code에 있는 값인지 중복 확인
-			const inputCode = $("#newCode").val()
+			const inputCode = $("#newCode").val().toUpperCase();
 			const usedCodes = [];
 			$(".codeOneLink").each(function() {
 				usedCodes.push($(this).data("code"));
 			});
 			
 			if (usedCodes.includes(inputCode)) {
-				alert("이미 존재하는 코드입니다.");
+				Swal.fire(
+					'Error',
+					'이미 존재하는 코드입니다.',
+					'error'
+				);
 				return; // 사용되지 않은 경우 함수 종료
 			}
-			console.log("하위코드 추가 upCode:",upCode);
+			//console.log("하위코드 추가 upCode:",upCode);
 			// 데이터를 서버에 저장하기 전에 필요한 유효성 검사를 수행합니다.
 			$.ajax({
 				url: "/JoinTree/code/addCommonCode",
@@ -370,7 +399,7 @@ $(document).ready(function() {
 					updateId : loginId
 				},
 				success: function(response) {
-					console.log("response:", response);
+					//console.log("response:", response);
 					
 					// 이전 리스트 삭제
 					$("#childCodeList").empty();
@@ -386,8 +415,18 @@ $(document).ready(function() {
 					$("#newCode").closest("tr").hide();
 					
 					//실패시
-					if(response === "fail") {
-						alert("fail");
+					if(response === "success") {
+						Swal.fire({
+							icon: 'success',
+							title: '하위코드가 추가되었습니다.',
+							showConfirmButton: false,
+							timer: 1000
+						})
+						updateCodeDetailView(newCode);
+						$("#saveCodeBtn").hide();
+						$("#saveCodeOneBtn").show();
+					} else {
+						console.log("하위코드 추가 실패");
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -407,14 +446,19 @@ $(document).ready(function() {
 			const updateUpChecked = $("#upCodeOneList4 .toggleSwitch").prop("checked");
 			
 			const valueChanged = currentUpCodeName !== updatedUpCodeName || currentUpChecked !== updateUpChecked;
-			console.log(" currentChecked", currentChecked);
-			console.log(" updateChecked", updateUpChecked);
+			//console.log(" currentChecked", currentChecked);
+			//console.log(" updateChecked", updateUpChecked);
 			if (valueChanged) {
-				alert("변경되었습니다.");
-				console.log("currentUpCodeName", currentUpCodeName);
-				console.log("updatedUpCodeName", updatedUpCodeName);
-				console.log("valueChanged currentUpChecked", currentUpChecked);
-				console.log("valueChanged updateUpChecked", updateUpChecked);
+					Swal.fire({
+						icon: 'success',
+						title: '상위코드가 수정되었습니다.',
+						showConfirmButton: false,
+						timer: 1000
+					})
+				//console.log("currentUpCodeName", currentUpCodeName);
+				//console.log("updatedUpCodeName", updatedUpCodeName);
+				//console.log("valueChanged currentUpChecked", currentUpChecked);
+				//console.log("valueChanged updateUpChecked", updateUpChecked);
 				currentUpCodeName = updatedUpCodeName; // 변경된 경우에만 변수 갱신
 				$.ajax({
 					url: "/JoinTree/code/modifyCommonCode",
@@ -426,13 +470,13 @@ $(document).ready(function() {
 						updateId : loginId
 					},
 					success: function(response) {
-							console.log("response:", response);
+							//console.log("response:", response);
 					
 							if (response === "success") {
 								updateUpCodeList();
 								updateUpCodeDetailView(currentUpCode);
 							} else {
-								alert("fail");
+								console.log("상위코드 수정실패");
 							}
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
@@ -450,14 +494,19 @@ $(document).ready(function() {
 			const updateChecked = $("#chileCodeOneList4 .toggleSwitch").prop("checked");
 			
 			const valueChanged = currentCodeName !== updatedCodeName || currentChecked !== updateChecked;
-			console.log(" currentChecked", currentChecked);
-			console.log(" updateChecked", updateChecked);
+			//console.log(" currentChecked", currentChecked);
+			//console.log(" updateChecked", updateChecked);
 			if (valueChanged) {
-				alert("변경되었습니다.");
-				console.log("updatedCodeName", updatedCodeName);
-				console.log("currentCodeName", currentCodeName);
-				console.log("valueChanged currentChecked", currentChecked);
-				console.log("valueChanged updateChecked", updateChecked);
+					Swal.fire({
+						icon: 'success',
+						title: '하위코드가 수정되었습니다.',
+						showConfirmButton: false,
+						timer: 1000
+					})
+				//console.log("updatedCodeName", updatedCodeName);
+				//console.log("currentCodeName", currentCodeName);
+				//console.log("valueChanged currentChecked", currentChecked);
+				//console.log("valueChanged updateChecked", updateChecked);
 				currentCodeName = updatedCodeName; // 변경된 경우에만 변수 갱신
 				$.ajax({
 					url: "/JoinTree/code/modifyCommonCode",
@@ -469,21 +518,21 @@ $(document).ready(function() {
 						updateId : loginId
 					},
 					success: function(response) {
-							console.log("response:", response);
+							//console.log("response:", response);
 					
 							if (response === "success") {
 								updateCodeDetailView(currentCode);
 								updateCodeList(upCode);
 							} else {
-								alert("fail");
+								console.log("하위코드 수정 실패");
 							}
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
-							console.log("Error:", textStatus, errorThrown);
+							console.log("하위코드 수정 Error:", textStatus, errorThrown);
 						}
 					});
 			} else {
-				console.log("No change in values.");
+				console.log("변경된 값이 없음");
 			}
 		});
 	/* --------- 수정 끝 --------- */

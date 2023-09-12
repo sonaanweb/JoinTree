@@ -57,10 +57,10 @@
 				
 				if(selectedEmpNo === loginEmpNo) {
 					Swal.fire(
-		                'Error',
-		                '본인은 선택할 수 없습니다.',
-		                'error'
-	            	);
+						'Error',
+						'본인은 선택할 수 없습니다.',
+						'error'
+					);
 					return;
 				}
 				// 이미 참조자로 선택된 사원인지 확인
@@ -388,59 +388,71 @@
 
 			// 결재자 1 사번
 			let empSignerLevel1 = ""; // 레벨
-			let signer1 = "";
-			if(signerSelectedEmps[0]) {
-				signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
-				empSignerLevel1 = "1"
+			let signer1 =  $("#signer1").val();;
+			
+			if(signer1 === "") {
+				Swal.fire(
+						'Error',
+						'결재자를 추가해주세요.',
+						'error'
+					);
+				return;
+			} else {
+				if(signerSelectedEmps[0]) {
+					signer1 = signerSelectedEmps[0].substring(signerSelectedEmps[0].indexOf('(')+1,signerSelectedEmps[0].indexOf(')'));
+					empSignerLevel1 = "1"
+				}
 			}
 			console.log("signer1:",signer1);
 			
 			// 결재자 2 사번
 			let empSignerLevel2 = ""; // 레벨
 			let signer2 = "";
+				
 			if(signerSelectedEmps[1]) {
 				signer2 = signerSelectedEmps[1].substring(signerSelectedEmps[1].indexOf('(')+1,signerSelectedEmps[1].indexOf(')'));
 				empSignerLevel2 = "2"
 			}
-				console.log("signer2:",signer2);
+			
+			console.log("signer2:",signer2);
 				
 			// 필수 입력값 유효성 검사
-		    if (docStamp1 === null || docStamp1 === "") {
+			if (docStamp1 === null || docStamp1 === "") {
 				Swal.fire(
-	                'Error',
-	                '서명을 먼저 등록해주세요.',
-	                'error'
-            	);
-		        return;
-		    }
+					'Error',
+					'서명을 먼저 등록해주세요.',
+					'error'
+				);
+				return;
+			}
 			
 			if(category == "D0101" || category == "D0104"){
 				if (!docTitle || !reference || !receiverTeam ||!signer1) {
 					Swal.fire(
-		                'Error',
-		                '모든 필수 정보를 입력해주세요.',
-		                'error'
-	            	);
+						'Error',
+						'모든 필수 정보를 입력해주세요.',
+						'error'
+					);
 					return;
 				}
 			}
 			if(category == "D0102"){
 				if(!docTitle || !reference || !receiverTeam ||!signer1 || !leaveCate || !docLeaveStartDate || !docLeaveEndDate || !docLeavePeriodDate || !docLeaveTel){
 					Swal.fire(
-		                'Error',
-		                '모든 필수 정보를 입력해주세요.',
-		                'error'
-	            	);
+						'Error',
+						'모든 필수 정보를 입력해주세요.',
+						'error'
+					);
 					return;
 				}
 			}
 			if(category == "D0103"){
 				if(!docTitle || !reference || !receiverTeam ||!signer1 || !docReshuffleDate || !docReshuffleTask || !docReshuffleResult || !docReshuffleDept || !docReshufflePosition){
 					Swal.fire(
-		                'Error',
-		                '모든 필수 정보를 입력해주세요.',
-		                'error'
-	            	);
+						'Error',
+						'모든 필수 정보를 입력해주세요.',
+						'error'
+					);
 					return;
 				}
 			}
@@ -487,15 +499,16 @@
 					if(category === 'D0103') {
 						submitReshuffleDocument(docNo, docReshuffleDate, docReshuffleTask, docReshuffleResult, docReshuffleDept, docReshufflePosition, createId, updateId);
 					}
-					/*					
+									
 					Swal.fire({
 							icon: 'success',
 							title: '기안이 완료되었습니다.',
 							showConfirmButton: false,
 							timer: 1000
+						}).then(function() {
+							window.location.href = '/JoinTree/document/draftDocList'; // 홈 페이지 URL로 변경					
 						});
-					*/
-					window.location.href = '/JoinTree/document/draftDocList'; // 홈 페이지 URL로 변경					
+					
 				},
 				error: function(textStatus, errorThrown) {
 					console.log("Error:", textStatus, errorThrown);
