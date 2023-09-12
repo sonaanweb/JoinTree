@@ -406,10 +406,11 @@ $(document).ready(function(){
 		                    title: '서명 저장 성공 ' + jsonData,
 		                    showConfirmButton: false,
 		                    timer: 1500
-		                });
-		                location.reload(); // 현재 화면 새로고침
-			            }
-        	});
+		                     }).then(() => {
+                    location.reload(); // 알림창이 사라진 후에 화면 리로드
+                });
+            }
+    	});
     }
 });
 		}
