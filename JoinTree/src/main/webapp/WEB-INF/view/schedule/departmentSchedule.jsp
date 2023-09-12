@@ -131,7 +131,7 @@
 	    </div>
 	</div>
 
-	<input type="text" readonly="readonly" data-empno="${loginAccount.empNo}" id="empNo">
+	<input type="hidden" readonly="readonly" data-empno="${loginAccount.empNo}" id="empNo">
 	<script src="/JoinTree/resource/js/schedule/departmentSchedule.js"></script>
 	
 </html>

@@ -131,9 +131,9 @@
 	    </div>
 	</div>
 	
-	<input type="text" readonly="readonly" data-empno="${loginAccount.empNo}" id="empNo">
-	<input type="text" readonly="readonly" data-empdept="${dept}" id="empDept">
-	<input type="text" readonly="readonly" data-empname="${empName}" id="empName">
+	<input type="hidden" readonly="readonly" data-empno="${loginAccount.empNo}" id="empNo">
+	<input type="hidden" readonly="readonly" data-empdept="${dept}" id="empDept">
+	<input type="hidden" readonly="readonly" data-empname="${empName}" id="empName">
 	<script src="/JoinTree/resource/js/schedule/companySchedule.js"></script>
 
 </html>
