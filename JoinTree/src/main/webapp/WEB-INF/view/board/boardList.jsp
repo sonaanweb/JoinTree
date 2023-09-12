@@ -189,7 +189,7 @@
 		        let dateOnly = pinned.createdate.split("T")[0]; // 날짜 값만 저장
 		        row.append($('<td class="text-center">').text(dateOnly)); // 작성일
 		        
-		        row.append($('<tdclass="text-center">').text(pinned.boardCount)); // 조회수
+		        row.append($('<td class="text-center">').text(pinned.boardCount)); // 조회수
 		        thead.append(row);
 		    }
 		}

@@ -161,6 +161,14 @@
 		    return false;
 		}
 		
+		// 제목 엔터 키 눌렀을 때 동작 중지
+		$('#boardTitle').keypress(function(event){
+			if(event.key == 'Enter'){
+				event.preventDefault(); // 엔터 키 기본 동작 중지
+				$('#boardTitle').val(''); // 제목 필드 값 삭제
+			}
+		});
+		
 		// 등록(addBoard) 버튼 클릭
 		$('#addBoardBtn').on('click', function(){
 			
