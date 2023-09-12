@@ -221,6 +221,15 @@ public class CommuteManageService {
 		return getEmpAnnualLeaveInfo;
 	}
 	
+	// 사원별 근속일수 조회
+	public Map<String, Object> getWorkDays(int empNo){
+		
+		Map<String, Object> getWorkDays = commuteManageMapper.getWorkDays(empNo);
+		log.debug(getWorkDays+"<-- CommuteManageService getWorkDays");
+		
+		return getWorkDays;
+	}
+	
 	// 사원별 발생연차, 사용연차, 잔여연차 조회
 	public Map<String, Object> getAnnualLeaveCnt(int empNo){
 		

@@ -35,6 +35,9 @@ public interface CommuteManageMapper {
 	// 잔여연차, 사용연차 조회
 	Map<String, Object> getAnnualLeaveCnt(int empNo);
 	
+	// 사원별 근속일수 조회
+	Map<String, Object> getWorkDays(int empNo);
+	
 	// 사원별 연차 테이블 count 조회
 	int getEmpAnnualLeaveCnt(int empNo);
 	

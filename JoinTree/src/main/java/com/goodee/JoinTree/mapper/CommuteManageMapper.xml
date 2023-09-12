@@ -467,10 +467,47 @@
 		FROM 
 		    emp_info e
 		    LEFT OUTER JOIN annual_leave al ON e.emp_no = al.emp_no
-			LEFT OUTER JOIN account_list alist ON e.emp_no = alist.emp_no
 		WHERE 
 			e.emp_no = #{empNo}
 		GROUP BY e.emp_no 		
+	</select>
+	
+	<!-- 근속일수 조회 -->
+	<select id="getWorkDays" resultType="java.util.Map">
+		SELECT
+			 <![CDATA[
+		    -- 근속일수
+		    DATEDIFF(NOW(), emp_hire_date) + 1 - 
+		    (2 * (FLOOR(DATEDIFF(NOW(), emp_hire_date) / 7) + 
+		    CASE 
+		        WHEN WEEKDAY(emp_hire_date) <= 4 THEN 1 
+		        ELSE 0 
+		    END)) workDays,
+		    
+		    -- 근속년수
+		    YEAR(NOW()) - YEAR(emp_hire_date) - 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(emp_hire_date) AND DAY(NOW()) < DAY(emp_hire_date)) 
+		        THEN 1 
+		        ELSE 0 
+		    END workYears,
+		    
+		    -- 근속 개월수
+		    MONTH(NOW()) - MONTH(emp_hire_date) + 
+		    CASE 
+		        WHEN MONTH(NOW()) < MONTH(emp_hire_date) OR 
+		             (MONTH(NOW()) = MONTH(emp_hire_date) AND DAY(NOW()) < DAY(emp_hire_date)) 
+		        THEN 12 
+		        ELSE 0 
+		    END workMonths
+		     ]]>   		
+		FROM 
+		    emp_info 
+
+		WHERE 
+			emp_no = #{empNo}	
+		GROUP BY emp_no 	
 	</select>
 	
 	<!-- 발생연차, 사용연차, 잔여연차 조회 -->
@@ -481,7 +518,7 @@
 			COALESCE(SUM(add_annual_count), 0) - COALESCE(SUM(take_annual_count), 0) annualCount -- 잔여연차
 		FROM annual_leave
 		WHERE emp_no = #{empNo}	
-		GROUP BY e.emp_no 
+		GROUP BY emp_no 
 	</select>
 	
 	<!-- 사원별 연차 테이블 count 조회 -->
