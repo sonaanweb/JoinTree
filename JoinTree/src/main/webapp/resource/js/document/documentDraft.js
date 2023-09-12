@@ -99,13 +99,22 @@
 				const selectedEmpPosition = $(this).data("position");
 				const selectedEmpInfo = selectedEmpName + " " + selectedEmpPosition + "(" + selectedEmpNo + ")";
 				
+				// 참조가가 나일경우
+				if(selectedEmpNo === loginEmpNo) {
+					Swal.fire(
+						'Error',
+						'본인은 선택할 수 없습니다.',
+						'error'
+					);
+					return;
+				}
 				// 이미 결제자로 선택된 사원인지 확인
-			    if (signerSelectedEmps.includes(selectedEmpInfo)) {
-			        Swal.fire(
-			            'Error',
-			            '이미 선택한 결제자는 참조자로 선택할 수 없습니다.',
-			            'error'
-			        );
+				if (signerSelectedEmps.includes(selectedEmpInfo)) {
+			 		Swal.fire(
+						'Error',
+						'이미 선택한 결제자는 참조자로 선택할 수 없습니다.',
+						'error'
+					);
 				
 				} else if (!referSelectedEmps.includes(selectedEmpInfo)) {
 					referSelectedEmps.splice(0, 1, selectedEmpInfo);
@@ -116,10 +125,10 @@
 					
 				} else if (referSelectedEmps.includes(selectedEmpInfo)) {
 					Swal.fire(
-		                'Error',
-		                '이미 선택한 참조자 입니다.',
-		                'error'
-	            	);
+						'Error',
+						'이미 선택한 참조자 입니다.',
+						'error'
+					);
 				}
 			
 			});
@@ -174,7 +183,7 @@
 					updateSignerFields();
 				}
 			});
-	
+			
 			// 아래로 버튼을 클릭하면 선택한 사원을 아래로 이동하는 기능 추가
 			$("#moveDownBtn").on("click", function() {
 				const selectedEmp = $(".empCheckbox:checked").data("no");
@@ -359,7 +368,6 @@
 			const docReshufflePosition = $("input[name='docReshufflePosition']:checked").val();
 			console.log("docReshufflePosition:",docReshufflePosition);
 			
-			
 			// 공통
 			// 파일
 			const docOriginFilename = $("#docOriginFilename").val();
@@ -388,7 +396,7 @@
 
 			// 결재자 1 사번
 			let empSignerLevel1 = ""; // 레벨
-			let signer1 =  $("#signer1").val();;
+			let signer1 = $("#signer1").val();
 			
 			if(signer1 === "") {
 				Swal.fire(
