@@ -77,7 +77,7 @@
 					<ul id="addMemberList">
 						<c:forEach var="dept" items="${deptList}">
 							<li>
-								<span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}<button class="memberAllClick">전체선택</button></span>
+								<span class="empTree folder code" data-dept="${dept.code}" data-deptname="${dept.codeName}">${dept.codeName}<button class="memberAllClick btn btn-sm btn-success">전체선택</button></span>
 								<ul>
 									<!-- 여기에 데이터를 추가하는 부분 -->
 								</ul>
