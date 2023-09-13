@@ -56,6 +56,8 @@
 	<%-- <script src="${pageContext.request.contextPath}/resource/js/ckeditor.js"></script> --%>
 	<!-- CKEditor 초기화 및 설정 -->
     <script>
+    //let editor;
+    
     ClassicEditor
     .create(document.querySelector('#boardContent'), {
     	// 에디터 구성 옵션 설정
