@@ -81,7 +81,13 @@
                        } else {
                            // 세션 연장 처리가 실패한 경우 처리
                            // 예를 들어, 오류 메시지 출력 등의 작업 수행
-                           alert("세션이 연장되지 않았습니다.");
+                    	   Swal.fire({
+								icon: 'warning',
+								title: '세션이 연장되지 않았습니다.',
+								showConfirmButton: false,
+								timer: 1000
+						   });
+                           // alert("세션이 연장되지 않았습니다.");
                            isTimerRunning = false; // 실패한 경우 다시 실행 가능하도록 플래그 변경
                        }
                    },
@@ -133,7 +139,13 @@
 	    }
 		
         function showSessionExpirationAlert() {
-        	alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        	// alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+			Swal.fire({
+				icon: 'warning',
+				title: '세션이 만료되었습니다. 다시 로그인해주세요.',
+				showConfirmButton: false,
+				timer: 1000
+			});
         }
        });
    </script>
