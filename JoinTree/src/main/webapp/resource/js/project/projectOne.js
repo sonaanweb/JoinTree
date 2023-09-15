@@ -38,7 +38,6 @@ $(document).ready(function() {
 						
 					// projectMemeber에 있는 요소 m을 순환하면서 아래 스펜으로 가공
 					const teamMembers = projectMemeber.map(m =>
-						
 						'<div class="memberName" ' +
 							'data-empno="' + m.empNo + '" ' +
 							'data-name="' + m.empName + '"><p>' +
@@ -47,7 +46,6 @@ $(document).ready(function() {
 							(empNoToDel ? '<span class="deleteMember" style="display: none;" data-empno="' + m.empNo + '">×</span>' : '') 
 						: "")+
 						'</p></div>'
-						
 					);
 					
 					// 서버로부터 받아온 데이터를 이용하여 해당 요소들에 추가

@@ -298,10 +298,10 @@ $(document).ready(function() {
 				$("#projectStartDate").val('');
 				$("#projectEndDate").val('');
 				Swal.fire(
-						'Error',
-						'종료일자는 시작일자보다 커야합니다.',
-						'error'
-					)
+					'Error',
+					'종료일자는 시작일자보다 커야합니다.',
+					'error'
+				)
 				return; // 수정 작업 중단
 			};
 			
@@ -377,9 +377,32 @@ $(document).ready(function() {
 		$("#projectData").on("click", '[data-pjNo]', function() {
 			const projectNo = $(this).data("pjno");
 			//console.log("projectNo",projectNo);
-			// 프로젝트 상세창으로
-			window.location.href = '/JoinTree/project/projectOne?projectNo=' + projectNo;
+			
+			$.ajax({
+				url: '/JoinTree/project/projectMemberDup',
+				type: 'POST',
+				data: { 	
+					empNo : loginEmpNo,
+					projectNo : projectNo
+				},
+				success: function(response) {
+					console.log("response",response);
+					if(response === "success") {
+						// 프로젝트 상세창으로
+						window.location.href = '/JoinTree/project/projectOne?projectNo=' + projectNo;
+					} else {
+						Swal.fire(
+							'Error',
+							'프로젝트 내용은 팀원이 아니면 열람할 수 없습니다.',
+							'error'
+						)
+					}
+				},
+				error: function(errer) {
+					console.log("팀원 확인 데이터 오류",errer);
+				}
+			});		
 		});
 	/* 프로젝트 상세창 끝 */
-	}); // 마지막 
+}); // 마지막 
 	

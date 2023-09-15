@@ -302,6 +302,21 @@ public class ProjectController {
 	}
 	/* 프로젝트 하위작업 댓글 끝 */
 	/* 프로젝트 멤버 */
+	// 프로젝트 멤버 포함되는지 확인
+	@PostMapping("project/projectMemberDup")
+	@ResponseBody
+	public String projectMemberDup(@RequestParam(name = "empNo") int empNo,
+									@RequestParam(name="projectNo") int projectNo) {
+			
+		// memberNo 리스트에 있는 각각의 사원 번호를 empNo에 저장하며 반복
+			// 프로젝트 멤버 테이블에서 해당 사원번호와 프로젝트 번호의 중복 여부 확인
+			int empCnt = projectMapper.checkDuplicateProjectMember(empNo, projectNo);
+			
+			if (empCnt == 0) { // 프로젝트 내 내가 존재하지 않을경우
+				return "fail";
+			}
+		return "success";
+	}
 	// 프로젝트 멤버 추가
 	@PostMapping("project/addProjectMember")
 	@ResponseBody
@@ -346,8 +361,6 @@ public class ProjectController {
 		}
 	}
 	// 프로젝트 멤버 삭제 
-	
-	/* 프로젝트 멤버 끝 */
 	@PostMapping("project/removeProjectMemeber")
 	@ResponseBody
 	public String removeProjectMemeber(@RequestParam(value = "empNo[]") List<Integer> memberNo,
@@ -369,4 +382,6 @@ public class ProjectController {
 			return "fail";
 		}
 	}
+	/* 프로젝트 멤버 끝 */
+
 }
