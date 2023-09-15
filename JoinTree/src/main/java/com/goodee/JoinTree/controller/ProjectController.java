@@ -308,13 +308,12 @@ public class ProjectController {
 	public String projectMemberDup(@RequestParam(name = "empNo") int empNo,
 									@RequestParam(name="projectNo") int projectNo) {
 			
-		// memberNo 리스트에 있는 각각의 사원 번호를 empNo에 저장하며 반복
-			// 프로젝트 멤버 테이블에서 해당 사원번호와 프로젝트 번호의 중복 여부 확인
-			int empCnt = projectMapper.checkDuplicateProjectMember(empNo, projectNo);
-			
-			if (empCnt == 0) { // 프로젝트 내 내가 존재하지 않을경우
-				return "fail";
-			}
+		// 프로젝트 멤버 테이블에서 해당 사원번호와 프로젝트 번호의 중복 여부 확인
+		int empCnt = projectMapper.checkDuplicateProjectMember(empNo, projectNo);
+		
+		if (empCnt == 0) { // 프로젝트 내 내가 존재하지 않을경우
+			return "fail";
+		}
 		return "success";
 	}
 	// 프로젝트 멤버 추가
