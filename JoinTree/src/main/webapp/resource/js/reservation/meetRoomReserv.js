@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('예약 추가 실패');
                 Swal.fire(
 					'Error',
-					'이미 예약된 시간이 포함되어 있습니다 (새로고침하여 확인해주세요)',
+					'다른 사용자가 이미 예약한 시간대입니다.',
 					'error'
 				)
             }

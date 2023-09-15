@@ -134,7 +134,7 @@ $(document).ready(function () {
                                 Swal.fire({
                                     icon: 'error',
                                     title: '예약 취소 실패',
-                                    text: '예약 취소를 실패하였습니다.',
+                                    text: '경영지원팀이 아니면 다른 사용자의 예약은 취소할 수 없습니다.',
                                 });
                             }
                         },

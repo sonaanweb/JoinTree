@@ -145,7 +145,7 @@ public class MeetReservController {
     
     
     
-    // (emp) 예약한 회의실 조회(예약 취소 가능) + 페이징 추가하기
+    // (emp) 예약한 회의실 조회(예약 취소 가능)
     @GetMapping("/reservation/empMeetRoomReservedList")
 	public String empMeetReserved(HttpSession session, Model model, 
 			@RequestParam(name="equip_category", defaultValue = "E0101") String equipCategory){
