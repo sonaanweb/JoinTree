@@ -49,7 +49,7 @@
 	// 게시글 기존 첨부파일 삭제
 	$('#removeExistingFileBtn').click(function(){
 		
-		let boardNo = '${board.boardNo}'; // 문서번호 저장
+		let boardNo = $('#boardNo').val(); // 문서번호 저장
 		let existingFileDiv = $('#existingFile'); // 기존 첨부파일 Div
 		
 		$.ajax({
@@ -79,7 +79,7 @@
 				// existingFileDiv 업데이트
 				existingFileDiv.load('/JoinTree/board/modifyBoardForm?boardNo=' + boardNo + ' #existingFile');
 			},
-			error: function(){
+			error: function(error){
 				console.log('modifyBoard removeExistingFileBtn click : '+error);
 			}
 		});

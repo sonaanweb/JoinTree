@@ -16,7 +16,7 @@
 						<!-- 게시글 수정 폼 -->
 						<form id="modifyBoardForm" enctype="multipart/form-data" method="post">
 							
-							<input type="hidden" name="boardNo" value="${board.boardNo}">
+							<input type="hidden" id="boardNo" name="boardNo" value="${board.boardNo}">
 							<div class="row">
 								<div class="col d-flex align-items-center">
 									<h3 class="">&#91;${board.boardCategory}&#93;&nbsp;&nbsp;글 수정</h3>
