@@ -30,6 +30,10 @@
 <summary> 프로젝트 세부 일정 </summary>
   <img src=https://github.com/user-attachments/assets/42cc741a-92a6-4ff4-a4c9-8943b0a1cbca>
 </details>
+<details>
+<summary> ERD</summary>
+  <img src=https://github.com/user-attachments/assets/69c56fe8-b58a-48a3-b62f-a4cd75da324e>
+</details>
 
 ### 👩🏻‍💻 팀 구성
 
