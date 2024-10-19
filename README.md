@@ -24,7 +24,8 @@
 <br>
 
 #### 프로젝트 기간 및 설계
-🗓️ 기간: 2023-07-24 ~ 2023-09-08 [배포 만료]
+🗓️ 기간: 2023-07-24 ~ 2023-09-08 <br>
+🖱️Website: [Jointree](http://3.37.94.201/JoinTree/login/login) [배포종료]
 
 <details>
 <summary> 프로젝트 세부 일정 </summary>
