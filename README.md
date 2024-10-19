@@ -21,7 +21,9 @@
 <div align=left> 
   <img src="https://img.shields.io/badge/spring tool suite4-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
   <img src="https://img.shields.io/badge/git-000000?style=for-the-badge&logo=git&logoColor=white"> </div>
-<br>
+<div align=left>
+  <img src="https://img.shields.io/badge/aws-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+</div>
 
 #### 프로젝트 기간 및 설계
 🗓️ 기간: 2023-07-24 ~ 2023-09-08 <br>
